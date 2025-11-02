@@ -1,0 +1,80 @@
+未加密response
+{
+    "request": {
+        "hts_code": "8501.10.40.40",
+        "country_of_origin": "CN",
+        "entry_date": "2025-10-20",
+        "date_of_landing": "2025-10-18",
+        "import_value": "200000.0",
+        "measurements": {
+            "kg": "1250.5",
+            "usd": "200000.0"
+        }
+    },
+    "modules": [
+        {
+            "module_id": "301",
+            "module_name": "Section 301 Tariffs",
+            "ch99_list": [
+                {
+                    "ch99_id": "9903.88.01",
+                    "alias": "List 1",
+                    "general_rate": "0.25",
+                    "ch99_description": "Products of China subject to additional duties as provided in U.S. note 20(b) to this subchapter and listed in Annex A."
+                },
+                {
+                    "ch99_id": "9903.88.02",
+                    "alias": "List 2",
+                    "general_rate": "0.25",
+                    "ch99_description": "Products of China subject to additional duties as provided in U.S. note 20(d) to this subchapter and listed in Annex B."
+                },
+                {
+                    "ch99_id": "9903.88.03",
+                    "alias": "List 3",
+                    "general_rate": "0.25",
+                    "ch99_description": "Products of China subject to additional duties as provided in U.S. note 20(f) to this subchapter and listed in Annex C."
+                },
+                {
+                    "ch99_id": "9903.88.15",
+                    "alias": "List 4A",
+                    "general_rate": "0.075",
+                    "ch99_description": "Except as provided in headings 9903.88.39... 9903.88.69, articles the product of China, as provided for in U.S. note 20(r)..."
+                }
+            ],
+            "notes": [
+                "Section 301 duty calculation is mocked; integrate real logic when data is available."
+            ],
+            "applicable": false,
+            "amount": "0",
+            "currency": "USD",
+            "rate": null
+        }
+    ],
+    "meta": {
+        "currency": "USD",
+        "rate_type": "ad_valorem_fraction",
+        "evaluated_at": "2025-11-02T18:31:48.471174+08:00",
+        "disclaimer": "Rates and applicability depend on full legal context and notes; confirm before filing.",
+        "calculated": true,
+        "basic_duty_amount": "8800.0000",
+        "formula": "0.044000 * usd",
+        "required_units": [
+            "usd"
+        ],
+        "provided_inputs": {
+            "usd": "200000.0"
+        },
+        "notes": []
+    }
+}
+
+
+加密后的response
+{
+    "version": 1,
+    "algorithm": "AES-256-GCM",
+    "ciphertext": "yTTbqQ6M6hH9vgD12EZIKNDokAOXYI-iu5AQ3ttpS2u0EQbZEtkfXZzwe4loBvFP0E2Nf4uPlbAHvrhon1I3o1jhIKzBk1NkWnENdKmkRBvwTNlape-OVNZ-6LEgLVrJKYH_s9nokq7tDf1uqUc9_ZJ0KCFfI7rZn1ObjDl4JlrUA6ykLat7j7oLiFjpmynCbdfXWyD9eR6UQBWymIRqNWHgD1LzTBtVT4t1R2q1jBDw-8IDNDbMmDZNghhFBR8v_Bis-j6QNPpSdok275rhASvseNlQbp2w8gQWeE5lFkCKlL_do8RDJ2-5UmM2AFtbip7RxlYzPdt7qGbbjYnh0gOhYwmM3VvznmDw96zZziMZBeM-XdWC-OJqL60t7EezTDcxTpFwiRqS61tYROVGe4aBxFEBxWwPoIOSFlwHbCDVVEjETw1V3XASTOgZrbwNsX3IMazfRRYgvfh95ciMNqd9z5vVH5lJ5NrRbX2Eb8-MLzoOgYPQsL9kpLb-UNe78y9XkMTjcuwPTH39eRv1wCJ9AqgypIsJVUSzikVadpWejKicn9XV2epxLtQAXnZjEgXVYydJr-0Aqo4TV1rdzpwwL8HxQIihFNEmxyY4ZZF9RvO_Kc0uuvI2K-OOH0tnIPk3m_4PyTCCs96TFQeFjUkDFrEf6wsNeIcjz3OjVgr0XAmQX4E732qjS5FhYsld0klV_Ln7uarW1FL5LzdGvT2__ZHGB8IQyO5l4JxVR4nt_XGkk2yRHJEmIg3wp-V0lNhChi-JbMusVI3nqZyb7TSa9GYHdXlsOW9p31XHJC9W96sMms6sp4cybdmAi6rZr2v8UtmPzlPcopejCodi0LezhDXsShA8Gue-_rL0_P3HhBKueIOZaYyQiR4i73E1wM3tlZ1uqIGYHl3DN_ysUW_IRYjKuBp5RBwiisN75iuA-Q9MMFXAdySsxX_ydJwxrch6oD8ZK1YlqbNSw92YvbAGgyEXkW_-16jhxZkOkdnMyr0L3HejMPCyIznKRU3xDZ1Q04cfhIocAIsz9n_TO3td5Ue9ortdGRLtTgXkXycoYjEr6gIeA6fU2k06FXahc1djP4YrYPpd12GIhQigRS383Ze78iQ6dkKKYyqVMTdBA4b6P2e5AdZxxvwAWaQ4wAZyPjj0lvz9vu3-9998bpa7bETyNYXu8C7iuCSzbUfRrpoMpgP3SrfZsdUaTh-cJrTip2uTyfLYexmx88rKh3sUtIlMcCg09yIIAscvS_nwURTlQL3trpDz0HtNPJc_rc1FUIVxTqe8DLK7vCwul9tsvXLE5uvQrPXGSxO8-s6qdBGq0Nvvj_vlnY-BkGnAmSgpNFGdJykrhNOkeAOQVfP5J3_7t_LxESi56WrxGarWkDCq0KG_FF5iiSoWNt34Zx9vgWLbGtRDpqIa9_uGqOla32p2HIuhlDRMnY-wkhvU0EausWOgkkGTddLx03qCJ0ZAmAdUrN3G-lUjp3Aka3zvJo6nnM5Ubi44036BQlwFAMoYcXPFqvneRmsYGgkgtWw9B14ALByHVnU2FShQqsEatLS1FpPFYf70KqAR1NKwbFS65pfUSO12vwE8WJe_YnGiAG6noOA_QjpiMaYIrAxpFSsBVVXMSF8ut39tMgsk3HlIUVDADNcSK71OB5pws4xnRLsmTQBgsyGC6QzVa_6XogTjxifpWkNtBWGhi8ktlD_nH72PBWVSpgMSOg_6U4VbjDdu_mYk_rqeKQvY9X_gqRzA39Mnz6C2k9XkkM-AcOLGrImqkq7rnHND8XGc3YD2CiMj0GscrsyrBGdZ2r29SGiOmByOuziZR1AYRZP5zyVQAP4fWbkzAEIQpzCh2ERC2dUbHyowjIs1gaeII300DeXE_Qhlyq18zSLtJtl7QRs7rSiDbyonJFl_NZvUMubrvs3IdnpRcWKHJklJyc8DlqfUfCDn3l45H7cXrXXsAszxKoRgx6ov_ciqe7Oyp-1C7IuCGSGigoE6VqReZZznFVbEMmxWKkaXpkaqOdohHojR5bmb-7cqqBL_Kgx9QpTLNg8zZfqKqgTba44TxzOCEI1FcrLLrMOjAUyB7KVhcAaNzXRKEmWCpBOxZCAsF1Y518ITdhXyEkPtiZWt-Sc5APA0q2uHeT9puK8Z9gSI1IVf-IcqEDDqOQyYOcmVGUIBrgpVElmHdQ==",
+    "nonce": "1sXsc5hKaqE9O-sF",
+    "issued_at": "2025-11-02T13:27:07.541100Z",
+    "key_id": "primary"
+}

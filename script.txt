@@ -1,0 +1,9 @@
+执行初始化basic hts code,全量插入hts code到hts_codes表中
+python agent/basic-hts-agent/basic_hts_agent.py --dsn postgresql://postgres:Xylx1.t123@34.129.224.77:5432/tariff-simulate --data-dir agent/basic-hts-agent/
+
+执行初始化chapter99 note解析
+python agent/chapter99note-agent/notes_agent.py --dsn postgresql://postgres:Xylx1.t123@34.129.224.77:5432/tariff-simulate
+测试notes_agent
+python agent/chapter99note-agent/test_notes_agent.py --dsn postgresql://postgres:Xylx1.t123@34.129.224.77:5432/tariff-simulate
+
+

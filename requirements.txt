@@ -1,0 +1,41 @@
+# IEEPA Programmatic Package - Python Dependencies
+# This package requires Python 3.8+
+
+# Database connectivity
+psycopg2-binary==2.9.10
+
+# Web API framework
+Flask==3.0.0
+Flask-CORS==4.0.0
+
+# Production WSGI server
+gunicorn==21.2.0
+
+# Automation & Spreadsheet utilities
+selenium==4.14.0
+openpyxl==3.1.5
+
+# Note: The following packages are part of Python standard library
+# and do not need to be installed separately:
+# - argparse (built-in since Python 3.2)
+# - csv (built-in)
+# - datetime (built-in)
+# - json (built-in)
+# - pathlib (built-in since Python 3.4)
+# - sys (built-in)
+# - subprocess (built-in)
+# - uuid (built-in)
+# - logging (built-in)
+
+# Development dependencies (optional)
+# Uncomment if needed for development/testing:
+# pytest==7.4.3
+# pytest-cov==4.1.0
+# black==23.12.1
+# flake8==6.1.0
+# mypy==1.7.1
+requests==2.31.0  # For testing API endpoints
+beautifulsoup4==4.14.2
+fastapi==0.120.4
+uvicorn==0.38.0
+cryptography==43.0.1

@@ -1,0 +1,66 @@
+做一个关于HTS 301关税的aiagent
+aiagent1（做数据预处理）：
+1、从POSTGRE database获取(301)hts code信息
+1、阅读hts code描述(例如9903.88.01  Except as provided in headings 9903.88.05, 9903.88.06, 9903.88.07, 9903.88.08, 9903.88.10, 9903.88.11, 9903.88.14, 9903.88.19, 9903.88.50, 9903.88.52, 9903.88.58, 9903.88.60, 9903.88.62, 9903.88.66, 9903.88.67, 9903.88.68, or 9903.88.69, articles the product of China, as provided for in U.S. note 20(a) to this subchapter and as provided for in the subheadings enumerated in U.S. note 20(b) [to this subchapter]))
+2、LLM根据描述分成except和scope,except包含9903.88.05, 9903.88.06, 9903.88.07, 9903.88.08, 9903.88.10, 9903.88.11, 9903.88.14, 9903.88.19, 9903.88.50, 9903.88.52, 9903.88.58, 9903.88.60, 9903.88.62, 9903.88.66, 9903.88.67, 9903.88.68, or 9903.88.69，scope note 20(b)
+3、分别对except和scope进行数据整理，得到9903.88.01的具体规则,例如 except提到的hts9903.88.05,note 20(b)分别处理hts和note的逻辑，note可以从数据库中获取，下面有example（note(20)(a),note(20)(b)）,根据note的信息整理出具体的规则
+aiagent2：
+1、实时分析CSMS,FEDRARGIGSTER网站
+2、一条新闻对301有修改，更新301的具体数据
+
+当前数据库中已经存在的表结构
+CREATE TABLE "public"."hts_codes" (
+  "id" int4 NOT NULL DEFAULT nextval('hts_codes_id_seq'::regclass),
+  "hts_number" text COLLATE "pg_catalog"."default",
+  "indent" int4 NOT NULL,
+  "description" text COLLATE "pg_catalog"."default",
+  "unit_of_quantity" text COLLATE "pg_catalog"."default",
+  "general_rate_of_duty" text COLLATE "pg_catalog"."default",
+  "special_rate_of_duty" text COLLATE "pg_catalog"."default",
+  "column_2_rate_of_duty" text COLLATE "pg_catalog"."default",
+  "quota_quantity" text COLLATE "pg_catalog"."default",
+  "additional_duties" text COLLATE "pg_catalog"."default",
+  "status" text COLLATE "pg_catalog"."default",
+  "parent_hts_number" text COLLATE "pg_catalog"."default",
+  "row_order" int4 NOT NULL,
+  "parent_row_order" int4,
+  CONSTRAINT "hts_codes_pkey" PRIMARY KEY ("id")
+)
+;
+ALTER TABLE "public"."hts_codes" 
+  OWNER TO "postgres";
+
+CREATE TABLE "public"."hts_notes" (
+  "id" int8 NOT NULL DEFAULT nextval('hts_notes_id_seq'::regclass),
+  "chapter" int4 NOT NULL,
+  "subchapter" text COLLATE "pg_catalog"."default",
+  "label" text COLLATE "pg_catalog"."default" NOT NULL,
+  "path" text[] COLLATE "pg_catalog"."default" NOT NULL,
+  "parent_label" text COLLATE "pg_catalog"."default",
+  "content" text COLLATE "pg_catalog"."default" NOT NULL,
+  "raw_html" text COLLATE "pg_catalog"."default" NOT NULL,
+  CONSTRAINT "hts_notes_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "hts_notes_chapter_subchapter_label_key" UNIQUE ("chapter", "subchapter", "label")
+)
+;
+ALTER TABLE "public"."hts_notes" 
+  OWNER TO "postgres";
+CREATE INDEX "idx_hts_notes_label" ON "public"."hts_notes" USING btree (
+  "label" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+CREATE INDEX "idx_hts_notes_path_gin" ON "public"."hts_notes" USING gin (
+  "path" COLLATE "pg_catalog"."default" "pg_catalog"."array_ops"
+);
+
+hts_notes表中可以获取到note20(a)，note20(b)的数据
+note20(a):
+For the purposes of heading 9903.88.01, products of China, as provided for in this note, shall be subject to an additional 25 percent ad valorem rate of duty. The products of China that are subject to an additional 25 percent ad valorem rate of duty under heading 9903.88.01 are products of China that are classified in the subheadings enumerated in U.S. note 20(b) to subchapter III. All products of China that are classified in the subheadings enumerated in U.S. note 20(b) to subchapter III are subject to the additional 25 percent ad valorem rate of duty imposed by heading 9903.88.01, except products of China granted an exclusion by the U.S. Trade Representative and provided for in: (1) heading 9903.88.05 and U.S. note 20(h) to subchapter III of chapter 99; (2) heading 9903.88.06 and U.S. note 20(i) to subchapter III of chapter 99; (3) heading 9903.88.07 and U.S. note 20(j) to subchapter III of chapter 99; (4) heading 9903.88.08 and U.S. note 20(k) to subchapter III of chapter 99; (5) heading 9903.88.10 and U.S. note 20(m) to subchapter III of chapter 99; (6) heading 9903.88.11 and U.S. note 20(n) to subchapter III of chapter 99; (7) heading 9903.88.14 and U.S. note 20(q) to subchapter III of chapter 99; (8) heading 9903.88.19 and U.S. note 20(x) to subchapter III of chapter 99; (9) heading 9903.88.50 and U.S. note 20(ccc) to subchapter III of chapter 99; (10) heading 9903.88.52 and U.S. note 20(eee) to subchapter III of chapter 99; (11) heading 9903.88.58 and U.S. note 20(kkk) to subchapter III of chapter 99; (12) heading 9903.88.60 and U.S. note 20(mmm) to subchapter III of chapter 99; (13) heading 9903.88.62 and U.S. note 20(ooo) to subchapter III of chapter 99; (14) heading 9903.88.66 and U.S. note 20(sss)(i) to subchapter III of chapter 99; (15) heading 9903.88.67 and U.S. note 20(ttt)(i) to subchapter III of chapter 99; (16) heading 9903.88.68 and U.S. note 20(uuu)(i) to subchapter III of chapter 99; or (17) heading 9903.88.69 and U.S. note 20(vvv)(i) to subchapter III of chapter 99. [Compiler's note: only subdivisions (vvv) and (www)of this note indicating exclusions are now in effect; consult Customs for more information.] Notwithstanding U.S. note 1 to this subchapter, all products of China that are subject to the additional 25 percent ad valorem rate of duty imposed by heading 9903.88.01 shall also be subject to the general rates of duty imposed on products of China classified in the subheadings enumerated in U.S. note 20(b) to subchapter III. Products of China that are classified in the subheadings enumerated in U.S. note 20(b) to subchapter III and that are eligible for special tariff treatment under general note 3(c)(i) to the HTSUS, or that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional 25 percent ad valorem rate of duty imposed by heading 9903.88.01. The additional duties imposed by heading 9903.88.01 do not apply to goods for which entry is properly claimed under a provision of chapter 98 of the HTSUS, except for goods entered under subheadings 9802.00.40, 9802.00.50, and 9802.00.60, and heading 9802.00.80. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed abroad, as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article less the cost or value of such products of the United States, as described in heading 9802.00.80. Products of China that are provided for in heading 9903.88.01 and classified in one of the subheadings enumerated in U.S. note 20(b) to subchapter III shall continue to be subject to antidumping, countervailing, or other duties, fees, exactions and charges that apply to such products, as well as to the additional 25 percent ad valorem rate of duty imposed by heading 9903.88.01.
+
+note20(b):
+Heading 9903.88.01 applies to all products of China that are classified in the following 8-digit subheadings, except products of China granted an exclusion by the U.S. Trade Representative and provided for in: (1) heading 9903.88.05 and U.S. note 20(h) to subchapter III of chapter 99; (2) heading 9903.88.06 and U.S. note 20(i) to subchapter III of chapter 99; (3) heading 9903.88.07 and U.S. note 20(j) to subchapter III of chapter 99; (4) heading 9903.88.08 and U.S. note 20(k) to subchapter III of chapter 99; (5) heading 9903.88.10 and U.S. note 20(m) to subchapter III of chapter 99; (6) heading 9903.88.11 and U.S. note 20(n) to subchapter III of chapter 99; (7) heading 9903.88.14 and U.S. note 20(q) to subchapter III of chapter 99; (8) heading 9903.88.19 and U.S. note 20(x) to subchapter III of chapter 99; (9) heading 9903.88.50 and U.S. note 20(ccc) to subchapter III of chapter 99; (10) heading 9903.88.52 and U.S. note 20(eee) to subchapter III of chapter 99; (11) heading 9903.88.58 and U.S. note 20(kkk) to subchapter III of chapter 99; (12) heading 9903.88.60 and U.S. note 20(mmm) to subchapter III of chapter 99; (13) heading 9903.88.62 and U.S. note 20(ooo) to subchapter III of chapter 99; (14) heading 9903.88.66 and U.S. note 20(sss)(i) to subchapter III of chapter 99; (15) heading 9903.88.67 and U.S. note 20(ttt)(i) to subchapter III of chapter 99; (16) heading 9903.88.68 and U.S. note 20(uuu)(i) to subchapter III of chapter 99; or (17) heading 9903.88.69 and U.S. note 20(vvv)(i) to subchapter III of chapter 99. [ Compiler's note: Only subdivisions (vvv) and (www) are now in effect. The list of subheadings may begin on following page; read numbers from left to right. ]
+
+需求：
+* 可以根据hts + country + entrydate获取到301需要缴纳的关税细节,agent1和agent2都是做301关税数据预处理的
+梳理：
+- 当前的AIAGENT设计是否合理,如果不合理有哪些改进的流程
+- 根据此流程，给出301关税相关的数据库表设计
