@@ -15,6 +15,7 @@ import json
 from typing import Dict, List, Optional, Sequence, Any
 import requests
 from bs4 import BeautifulSoup
+from bs4.element import NavigableString, Tag
 from urllib.parse import urljoin
 import psycopg2
 import psycopg2.extras as pgx
@@ -166,6 +167,25 @@ def strip_self_text(li_tag):
     return li.get_text(" ", strip=True)
 
 
+def absorb_stray_list_content(list_tag):
+    """把列表中游离的节点（如 table、文本）并入前一个 <li>."""
+    last_li: Optional[Tag] = None
+    for child in list(list_tag.children):
+        if isinstance(child, NavigableString):
+            if not child.strip() or last_li is None:
+                continue
+            last_li.append(child.extract())
+            continue
+        if not isinstance(child, Tag):
+            continue
+        if child.name == "li":
+            last_li = child
+            continue
+        if last_li is None:
+            continue
+        last_li.append(child.extract())
+
+
 def tokens_from_value(value: Optional[str]) -> Optional[List[tuple[str, str]]]:
     if not value:
         return None
@@ -261,6 +281,7 @@ def parse_html_to_notes(chapter_html: str, chapter=99):
         # 3) 递归解析列表
         def rec_list(list_tag, subchapter_name, path_tokens: List[str]):
             parent_label = build_label_from_tokens(path_tokens) if path_tokens else None
+            absorb_stray_list_content(list_tag)
             for li in list_tag.find_all("li", recursive=False):
                 text_self = strip_self_text(li)
                 token_entries = tokens_from_value(li.get("value"))

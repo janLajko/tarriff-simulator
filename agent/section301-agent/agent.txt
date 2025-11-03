@@ -1,66 +1,97 @@
-做一个关于HTS 301关税的aiagent
-aiagent1（做数据预处理）：
-1、从POSTGRE database获取(301)hts code信息
-1、阅读hts code描述(例如9903.88.01  Except as provided in headings 9903.88.05, 9903.88.06, 9903.88.07, 9903.88.08, 9903.88.10, 9903.88.11, 9903.88.14, 9903.88.19, 9903.88.50, 9903.88.52, 9903.88.58, 9903.88.60, 9903.88.62, 9903.88.66, 9903.88.67, 9903.88.68, or 9903.88.69, articles the product of China, as provided for in U.S. note 20(a) to this subchapter and as provided for in the subheadings enumerated in U.S. note 20(b) [to this subchapter]))
-2、LLM根据描述分成except和scope,except包含9903.88.05, 9903.88.06, 9903.88.07, 9903.88.08, 9903.88.10, 9903.88.11, 9903.88.14, 9903.88.19, 9903.88.50, 9903.88.52, 9903.88.58, 9903.88.60, 9903.88.62, 9903.88.66, 9903.88.67, 9903.88.68, or 9903.88.69，scope note 20(b)
-3、分别对except和scope进行数据整理，得到9903.88.01的具体规则,例如 except提到的hts9903.88.05,note 20(b)分别处理hts和note的逻辑，note可以从数据库中获取，下面有example（note(20)(a),note(20)(b)）,根据note的信息整理出具体的规则
-aiagent2：
-1、实时分析CSMS,FEDRARGIGSTER网站
-2、一条新闻对301有修改，更新301的具体数据
+1、从当前数据库表hts_codes表中获取9903.88.01，9903.88.02，9903.88.03，9903.88.04，9903.88.15这几个301关税相关的hts信息
+2、逐个解析9903.88.01，9903.88.02，9903.88.03，9903.88.04，9903.88.15
+2.1 例如9903.88.01，从hts_codes查询hts数据，往s301_measures插入数据，作为measure_id，LLM分析从hts_codes表返回的description字段，
+  You are a legal text structure analyzer. From the following text, extract:
+  1. **Except sections**: all heading numbers listed after the phrase “Except as provided in headings”.
+  2. **Include sections**: all notes or subheadings mentioned after phrases like “as provided for in” or “as provided for in the subheadings enumerated in”.
+  3. **Effective period**: any date range describing when the rule is in effect, typically following phrases like “Effective with respect to entries on or after” or “through”.
 
-当前数据库中已经存在的表结构
-CREATE TABLE "public"."hts_codes" (
-  "id" int4 NOT NULL DEFAULT nextval('hts_codes_id_seq'::regclass),
-  "hts_number" text COLLATE "pg_catalog"."default",
-  "indent" int4 NOT NULL,
-  "description" text COLLATE "pg_catalog"."default",
-  "unit_of_quantity" text COLLATE "pg_catalog"."default",
-  "general_rate_of_duty" text COLLATE "pg_catalog"."default",
-  "special_rate_of_duty" text COLLATE "pg_catalog"."default",
-  "column_2_rate_of_duty" text COLLATE "pg_catalog"."default",
-  "quota_quantity" text COLLATE "pg_catalog"."default",
-  "additional_duties" text COLLATE "pg_catalog"."default",
-  "status" text COLLATE "pg_catalog"."default",
-  "parent_hts_number" text COLLATE "pg_catalog"."default",
-  "row_order" int4 NOT NULL,
-  "parent_row_order" int4,
-  CONSTRAINT "hts_codes_pkey" PRIMARY KEY ("id")
-)
-;
-ALTER TABLE "public"."hts_codes" 
-  OWNER TO "postgres";
+  Input text:
+  "Effective with respect to entries on or after June 15, 2024 and through November 29, 2025, articles the product of China, as provided for in U.S. note 20(vvv) to this subchapter, each covered by an exclusion granted by the U.S. Trade Representative."
 
-CREATE TABLE "public"."hts_notes" (
-  "id" int8 NOT NULL DEFAULT nextval('hts_notes_id_seq'::regclass),
-  "chapter" int4 NOT NULL,
-  "subchapter" text COLLATE "pg_catalog"."default",
-  "label" text COLLATE "pg_catalog"."default" NOT NULL,
-  "path" text[] COLLATE "pg_catalog"."default" NOT NULL,
-  "parent_label" text COLLATE "pg_catalog"."default",
-  "content" text COLLATE "pg_catalog"."default" NOT NULL,
-  "raw_html" text COLLATE "pg_catalog"."default" NOT NULL,
-  CONSTRAINT "hts_notes_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "hts_notes_chapter_subchapter_label_key" UNIQUE ("chapter", "subchapter", "label")
-)
-;
-ALTER TABLE "public"."hts_notes" 
-  OWNER TO "postgres";
-CREATE INDEX "idx_hts_notes_label" ON "public"."hts_notes" USING btree (
-  "label" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
-CREATE INDEX "idx_hts_notes_path_gin" ON "public"."hts_notes" USING gin (
-  "path" COLLATE "pg_catalog"."default" "pg_catalog"."array_ops"
-);
+  Output format:
+  {
+    "except": [],
+    "include": ["20(vvv)"],
+    "effective_period": {
+      "start_date": "June 15, 2024",
+      "end_date": "November 29, 2025"
+    }
+  }
 
-hts_notes表中可以获取到note20(a)，note20(b)的数据
-note20(a):
-For the purposes of heading 9903.88.01, products of China, as provided for in this note, shall be subject to an additional 25 percent ad valorem rate of duty. The products of China that are subject to an additional 25 percent ad valorem rate of duty under heading 9903.88.01 are products of China that are classified in the subheadings enumerated in U.S. note 20(b) to subchapter III. All products of China that are classified in the subheadings enumerated in U.S. note 20(b) to subchapter III are subject to the additional 25 percent ad valorem rate of duty imposed by heading 9903.88.01, except products of China granted an exclusion by the U.S. Trade Representative and provided for in: (1) heading 9903.88.05 and U.S. note 20(h) to subchapter III of chapter 99; (2) heading 9903.88.06 and U.S. note 20(i) to subchapter III of chapter 99; (3) heading 9903.88.07 and U.S. note 20(j) to subchapter III of chapter 99; (4) heading 9903.88.08 and U.S. note 20(k) to subchapter III of chapter 99; (5) heading 9903.88.10 and U.S. note 20(m) to subchapter III of chapter 99; (6) heading 9903.88.11 and U.S. note 20(n) to subchapter III of chapter 99; (7) heading 9903.88.14 and U.S. note 20(q) to subchapter III of chapter 99; (8) heading 9903.88.19 and U.S. note 20(x) to subchapter III of chapter 99; (9) heading 9903.88.50 and U.S. note 20(ccc) to subchapter III of chapter 99; (10) heading 9903.88.52 and U.S. note 20(eee) to subchapter III of chapter 99; (11) heading 9903.88.58 and U.S. note 20(kkk) to subchapter III of chapter 99; (12) heading 9903.88.60 and U.S. note 20(mmm) to subchapter III of chapter 99; (13) heading 9903.88.62 and U.S. note 20(ooo) to subchapter III of chapter 99; (14) heading 9903.88.66 and U.S. note 20(sss)(i) to subchapter III of chapter 99; (15) heading 9903.88.67 and U.S. note 20(ttt)(i) to subchapter III of chapter 99; (16) heading 9903.88.68 and U.S. note 20(uuu)(i) to subchapter III of chapter 99; or (17) heading 9903.88.69 and U.S. note 20(vvv)(i) to subchapter III of chapter 99. [Compiler's note: only subdivisions (vvv) and (www)of this note indicating exclusions are now in effect; consult Customs for more information.] Notwithstanding U.S. note 1 to this subchapter, all products of China that are subject to the additional 25 percent ad valorem rate of duty imposed by heading 9903.88.01 shall also be subject to the general rates of duty imposed on products of China classified in the subheadings enumerated in U.S. note 20(b) to subchapter III. Products of China that are classified in the subheadings enumerated in U.S. note 20(b) to subchapter III and that are eligible for special tariff treatment under general note 3(c)(i) to the HTSUS, or that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional 25 percent ad valorem rate of duty imposed by heading 9903.88.01. The additional duties imposed by heading 9903.88.01 do not apply to goods for which entry is properly claimed under a provision of chapter 98 of the HTSUS, except for goods entered under subheadings 9802.00.40, 9802.00.50, and 9802.00.60, and heading 9802.00.80. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed abroad, as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article less the cost or value of such products of the United States, as described in heading 9802.00.80. Products of China that are provided for in heading 9903.88.01 and classified in one of the subheadings enumerated in U.S. note 20(b) to subchapter III shall continue to be subject to antidumping, countervailing, or other duties, fees, exactions and charges that apply to such products, as well as to the additional 25 percent ad valorem rate of duty imposed by heading 9903.88.01.
 
-note20(b):
-Heading 9903.88.01 applies to all products of China that are classified in the following 8-digit subheadings, except products of China granted an exclusion by the U.S. Trade Representative and provided for in: (1) heading 9903.88.05 and U.S. note 20(h) to subchapter III of chapter 99; (2) heading 9903.88.06 and U.S. note 20(i) to subchapter III of chapter 99; (3) heading 9903.88.07 and U.S. note 20(j) to subchapter III of chapter 99; (4) heading 9903.88.08 and U.S. note 20(k) to subchapter III of chapter 99; (5) heading 9903.88.10 and U.S. note 20(m) to subchapter III of chapter 99; (6) heading 9903.88.11 and U.S. note 20(n) to subchapter III of chapter 99; (7) heading 9903.88.14 and U.S. note 20(q) to subchapter III of chapter 99; (8) heading 9903.88.19 and U.S. note 20(x) to subchapter III of chapter 99; (9) heading 9903.88.50 and U.S. note 20(ccc) to subchapter III of chapter 99; (10) heading 9903.88.52 and U.S. note 20(eee) to subchapter III of chapter 99; (11) heading 9903.88.58 and U.S. note 20(kkk) to subchapter III of chapter 99; (12) heading 9903.88.60 and U.S. note 20(mmm) to subchapter III of chapter 99; (13) heading 9903.88.62 and U.S. note 20(ooo) to subchapter III of chapter 99; (14) heading 9903.88.66 and U.S. note 20(sss)(i) to subchapter III of chapter 99; (15) heading 9903.88.67 and U.S. note 20(ttt)(i) to subchapter III of chapter 99; (16) heading 9903.88.68 and U.S. note 20(uuu)(i) to subchapter III of chapter 99; or (17) heading 9903.88.69 and U.S. note 20(vvv)(i) to subchapter III of chapter 99. [ Compiler's note: Only subdivisions (vvv) and (www) are now in effect. The list of subheadings may begin on following page; read numbers from left to right. ]
+2.2 分别解析except和include
+2.2.1 解析的对象有两种情况
+2.2.1.1 如果是 9903.88.05，表示是一个hts，首先需要在s301_measures表中检索是否已经存在，如果已经存在，则查询s301_scope中9903.88.05作为key的所有行，这里所有行可能会有include和exclude,保存在内存中，如果不存在，那么还需要去数据库中hts_codes查询它的description 和status,
+如果status是expired，则代表过期数据，不需要处理，如果不是expired，采用2.1中对于hts description的prompt
+例如 9903.88.69 
+{
+  "except": [],
+  "include": ["note20(vvv)"],
+  "effective_period": {
+    "start_date": "June 15, 2024",
+    "end_date": "November 29, 2025"
+  }
+}
 
-需求：
-* 可以根据hts + country + entrydate获取到301需要缴纳的关税细节,agent1和agent2都是做301关税数据预处理的
-梳理：
-- 当前的AIAGENT设计是否合理,如果不合理有哪些改进的流程
-- 根据此流程，给出301关税相关的数据库表设计
+2.2.1.2 如果是 ["note20(a)","note20(b)"] 表示需要解析note,那么就从hts_notes表中获取所有的notes,获取notes可以参考 @test_notes_agent.py get_note function,然后提交给LLM
+这是prompt
+You are a structured extractor for HTSUS Section 301 notes.
+Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
+
+Objective:
+From the input legal note text, produce three outputs:
+1. **input_htscode** – the heading(s) that the note applies to (from phrases like “For the purposes of heading …”).
+2. **scope** – all headings or HTS8 codes that fall under the effective scope of those input headings.
+3. **except** – all headings or HTS8 codes explicitly excluded (“except … provided for in …”).
+
+Each object in scope or except must match the `s301_scope` table schema:
+
+- key                  // exact heading or HTS8 code, e.g. "9903.88.05" or "8501.10.40"
+- key_type             // "heading" or "hts8" (never "note")
+- country_iso2         // "CN" if “products of China” appears, else null
+- source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
+- effective_start_date // ISO date; use context.fallback_start_date if not stated
+- effective_end_date   // ISO date or null
+
+Extraction rules:
+A. Identify **input_htscode** from the leading clause “For the purposes of heading …”.
+B. Identify all **scope** items:
+   - For headings: include every 9903.xx.xx printed under “applies to…” or similar.
+   - For HTS8: include every 8-digit subheading printed in the list.
+   - Do NOT include `input_htscode` again.
+C. Identify all **except** items:
+   - Items explicitly listed after “except … provided for in …”.
+   - Mark their source_label with “-exclusion”.
+D. Use “CN” as country_iso2 if “products of China” is mentioned.
+E. Use context.fallback_start_date for start_date if no effective period is found.
+F. Remove duplicates.
+
+Context (provided by caller):
+{
+  "country_iso2": "CN",
+  "fallback_start_date": "1900-01-01",
+  "source_label_prefix": ""
+}
+
+Input:
+<PASTE NOTE TEXT HERE>
+
+Output JSON format:
+{
+  "input_htscode": ["9903.88.01"],
+  "scope": [
+    { "key": "2845.20.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null },
+    { "key": "2845.30.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null }
+    /* … every printed HTS8 in the list … */
+  ],
+  "except": [
+    { "key": "9903.88.05", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(a)-exclusion", "effective_start_date": "1900-01-01", "effective_end_date": null },
+    { "key": "9903.88.06", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(a)-exclusion", "effective_start_date": "1900-01-01", "effective_end_date": null }
+    /* … all other excluded headings … */
+  ]
+}
+
+根据大模型的返回值把scope和except返回的记录插到s301_scope并维护s301_scope_measure_map表数据
+特别需要注意的是如果scope和except中出现的key是99开头的，应该进一步解析，例如{ "key": "9903.88.05", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(a)-exclusion", "effective_start_date": "1900-01-01", "effective_end_date": null }
+则回到2.1对于hts的处理逻辑中

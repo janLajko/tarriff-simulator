@@ -1,0 +1,53 @@
+CREATE TABLE s301_measures(
+  id BIGSERIAL PRIMARY KEY,
+  heading TEXT NOT NULL,                       -- 例如 '9903.88.01'
+  country_iso2 TEXT NOT NULL,                  -- 例如 'CN'
+  ad_valorem_rate NUMERIC(6,3) NOT NULL,       -- ad valorem 百分比，25% 记 25.000
+  value_basis TEXT NOT NULL,                   -- 计征口径，如 'customs_value' 或 'increment_9802'
+  notes JSONB,                                 -- 补充口径，如 98章特殊算法
+  effective_start_date DATE NOT NULL,          -- 税率生效起
+  effective_end_date DATE                      -- 税率生效止，NULL 表示仍有效
+);
+
+-- 用唯一索引代替 UNIQUE 约束
+CREATE UNIQUE INDEX idx_measures_unique 
+  ON s301_measures(heading, country_iso2, effective_start_date, COALESCE(effective_end_date, DATE '9999-12-31'));
+
+CREATE INDEX idx_measures_heading_country_date
+  ON s301_measures(heading, country_iso2, effective_start_date, effective_end_date);
+
+CREATE TABLE s301_scope (
+  id BIGSERIAL PRIMARY KEY,
+  key TEXT NOT NULL,                           -- 例如 '8501.10.40' 或 'note20(b)'
+  key_type TEXT NOT NULL CHECK (key_type IN ('hts8','heading','note')),
+  country_iso2 TEXT,                           -- 可选；为空表示不限定国家
+  source_label TEXT,                           -- 如 'note20(b)'、'compiler:seed'
+  effective_start_date DATE NOT NULL,          -- 范围生效起
+  effective_end_date DATE                      -- 范围生效止
+);
+
+-- 用唯一索引代替 UNIQUE 约束
+CREATE UNIQUE INDEX idx_scope_unique 
+  ON s301_scope(key, key_type, COALESCE(country_iso2, ''), effective_start_date, COALESCE(effective_end_date, DATE '9999-12-31'));
+
+CREATE INDEX idx_scope_key ON s301_scope(key, key_type);
+CREATE INDEX idx_scope_dates ON s301_scope(effective_start_date, effective_end_date);
+
+CREATE TABLE s301_scope_measure_map (
+  id BIGSERIAL PRIMARY KEY,
+  scope_id BIGINT NOT NULL REFERENCES s301_scope(id) ON DELETE CASCADE,
+  measure_id BIGINT NOT NULL REFERENCES s301_measures(id) ON DELETE CASCADE,
+  relation TEXT NOT NULL CHECK (relation IN ('include','exclude')),
+  note_label TEXT,                              -- 如 '20(h)'，可空
+  text_criteria TEXT,                           -- 原文条件或备注
+  effective_start_date DATE NOT NULL,           -- 关系生效起（可与 scope 不同）
+  effective_end_date DATE                       -- 关系生效止
+);
+
+-- 用唯一索引代替 UNIQUE 约束
+CREATE UNIQUE INDEX idx_map_unique 
+  ON s301_scope_measure_map(scope_id, measure_id, relation, effective_start_date, COALESCE(effective_end_date, DATE '9999-12-31'));
+
+CREATE INDEX idx_map_scope ON s301_scope_measure_map(scope_id);
+CREATE INDEX idx_map_measure ON s301_scope_measure_map(measure_id, relation);
+CREATE INDEX idx_map_dates ON s301_scope_measure_map(effective_start_date, effective_end_date);
