@@ -60,32 +60,5 @@ def compute_section301_duty(
                     "to this subchapter and listed in Annex A."
                 ),
             ),
-            Section301Ch99(
-                ch99_id="9903.88.02",
-                alias="List 2",
-                general_rate=Decimal("0.25"),
-                ch99_description=(
-                    "Products of China subject to additional duties as provided in U.S. note 20(d) "
-                    "to this subchapter and listed in Annex B."
-                ),
-            ),
-            Section301Ch99(
-                ch99_id="9903.88.03",
-                alias="List 3",
-                general_rate=Decimal("0.25"),
-                ch99_description=(
-                    "Products of China subject to additional duties as provided in U.S. note 20(f) "
-                    "to this subchapter and listed in Annex C."
-                ),
-            ),
-            Section301Ch99(
-                ch99_id="9903.88.15",
-                alias="List 4A",
-                general_rate=Decimal("0.075"),
-                ch99_description=(
-                    "Except as provided in headings 9903.88.39... 9903.88.69, articles the product of China, "
-                    "as provided for in U.S. note 20(r)..."
-                ),
-            ),
         ],
     )
