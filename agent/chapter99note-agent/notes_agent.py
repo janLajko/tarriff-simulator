@@ -233,6 +233,13 @@ def strip_tokens_from_content(text_self: str, tokens: Sequence[tuple[str, str]])
     stripped = remaining.strip()
     return stripped if stripped else text_self.strip()
 
+def remove_leading_specific_token(text: str, token: Optional[str]) -> str:
+    if not token:
+        return text
+    pattern = re.compile(rf"^\s*\(\s*{re.escape(token)}\s*\)\s*", re.IGNORECASE)
+    m = pattern.match(text)
+    return text[m.end():] if m else text
+
 def parse_html_to_notes(chapter_html: str, chapter=99):
     soup = BeautifulSoup(chapter_html, "html.parser")
 
@@ -294,7 +301,7 @@ def parse_html_to_notes(chapter_html: str, chapter=99):
                 label = build_label_from_tokens(new_tokens)
                 content = strip_tokens_from_content(text_self, token_entries)
 
-                results.append({
+                node = {
                     "chapter": chapter,
                     "subchapter": subchapter_name,
                     "label": label,
@@ -302,10 +309,18 @@ def parse_html_to_notes(chapter_html: str, chapter=99):
                     "parent_label": parent_label,
                     "content": content,
                     "raw_html": str(li)
-                })
+                }
+                results.append(node)
 
-                sub = li.find(["ul", "ol"], recursive=False)
-                if sub:
+                consumed_lists: set[int] = set()
+                if new_tokens and new_tokens[0] == "20":
+                    consumed_lists = handle_note20_complex_children(
+                        li, chapter, subchapter_name, new_tokens, node, results, rec_list
+                    )
+
+                for sub in li.find_all(["ul", "ol"], recursive=False):
+                    if id(sub) in consumed_lists:
+                        continue
                     rec_list(sub, subchapter_name, new_tokens)
 
         for root_list in top_lists:
@@ -317,12 +332,122 @@ def parse_html_to_notes(chapter_html: str, chapter=99):
         n["label"] = normalize_label(n["label"])
         n["path"]  = normalize_path_from_label(n["label"])
         cleaned.append(n)
+    cleaned = fix_note20_nested_children(cleaned)
     return merge_dedup(cleaned)
 
 def normalize_path_from_label(label:str):
     lab = normalize_label(label)
     parts = re.findall(r'\(\s*([^)]+?)\s*\)', lab)
     return ["note"] + parts
+
+def fix_note20_nested_children(notes: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Flatten mis-nested entries under note(20)(d) so (e), (f)... sit beside (d)."""
+    fixed: List[Dict[str, Any]] = []
+    for node in notes:
+        tokens = node["path"][1:]  # drop leading 'note'
+        if len(tokens) >= 3 and tokens[0] == "20" and tokens[1] == "d":
+            new_tokens = [tokens[0]] + tokens[2:]
+            adjusted = node.copy()
+            adjusted["label"] = build_label_from_tokens(new_tokens)
+            adjusted["path"] = ["note"] + new_tokens
+            adjusted["parent_label"] = (
+                build_label_from_tokens(new_tokens[:-1]) if len(new_tokens) > 1 else None
+            )
+            fixed.append(adjusted)
+            continue
+        fixed.append(node)
+    return fixed
+
+def handle_note20_complex_children(
+    li_tag: Tag,
+    chapter: int,
+    subchapter_name: str,
+    parent_tokens: List[str],
+    parent_node: Dict[str, Any],
+    results: List[Dict[str, Any]],
+    rec_list_func,
+) -> set[int]:
+    """
+    Within note 20 there are blocks like (vvv) containing inline (i)/(ii)... segments
+    expressed as miscellaneous tags instead of nested <li>. Convert them into proper
+    child notes so downstream consumers receive a consistent tree.
+    """
+    if not parent_tokens or parent_tokens[0] != "20":
+        return set()
+
+    segments: List[Dict[str, Any]] = []
+    last_segment: Optional[Dict[str, Any]] = None
+    parent_token = parent_tokens[-1] if parent_tokens else None
+
+    for child in li_tag.children:
+        if isinstance(child, NavigableString):
+            raw = str(child)
+            if not raw or not raw.strip():
+                continue
+            trimmed = remove_leading_specific_token(raw, parent_token)
+            mt = PAREN_TOKEN_RE.match(trimmed)
+            if not mt:
+                continue
+            child_token = mt.group(1).strip()
+            content = strip_tokens_from_content(trimmed, [(child_token, "paren")]).strip()
+            segment = {
+                "token": child_token,
+                "content": content,
+                "raw_html": trimmed.strip(),
+                "lists": [],
+            }
+            segments.append(segment)
+            last_segment = segment
+            continue
+
+        if not isinstance(child, Tag):
+            continue
+
+        if child.name in ("ul", "ol"):
+            if last_segment is not None:
+                last_segment.setdefault("lists", []).append(child)
+            continue
+
+        text = child.get_text(" ", strip=False)
+        trimmed = remove_leading_specific_token(text, parent_token)
+        mt = PAREN_TOKEN_RE.match(trimmed)
+        if not mt:
+            continue
+        child_token = mt.group(1).strip()
+        content = strip_tokens_from_content(trimmed, [(child_token, "paren")]).strip()
+        segment = {
+            "token": child_token,
+            "content": content,
+            "raw_html": str(child),
+            "lists": [],
+        }
+        segments.append(segment)
+        last_segment = segment
+
+    if not segments:
+        return set()
+
+    consumed_lists: set[int] = set()
+    parent_node["content"] = ""
+
+    for segment in segments:
+        child_tokens = parent_tokens + [segment["token"]]
+        label = build_label_from_tokens(child_tokens)
+        raw_html = segment["raw_html"] + "".join(str(lst) for lst in segment["lists"])
+        results.append({
+            "chapter": chapter,
+            "subchapter": subchapter_name,
+            "label": label,
+            "path": ["note"] + child_tokens,
+            "parent_label": build_label_from_tokens(parent_tokens),
+            "content": segment["content"],
+            "raw_html": raw_html,
+        })
+        for lst in segment["lists"]:
+            consumed_lists.add(id(lst))
+            rec_list_func(lst, subchapter_name, child_tokens)
+
+    return consumed_lists
 
 def merge_dedup(items):
     # 去重：以 (chapter, subchapter, label) 为键，保留最长内容的记录

@@ -131,6 +131,19 @@ def _evaluate_formula(formula: str, values: Mapping[str, Decimal]) -> Decimal:
             if key not in values:
                 raise FormulaEvaluationError(f"Unknown variable referenced in formula: {node.id}")
             return values[key]
+        if isinstance(node, ast.Call):
+            if not isinstance(node.func, ast.Name):
+                raise FormulaEvaluationError(f"Unsupported callable in formula: {ast.dump(node.func)}")
+            function_name = node.func.id.lower()
+            if node.keywords:
+                raise FormulaEvaluationError("Keyword arguments are not supported in formulas.")
+            args = [_eval(arg) for arg in node.args]
+            if function_name == "max":
+                if not args:
+                    raise FormulaEvaluationError("Function 'max' requires at least one argument.")
+                return max(args)
+            # TODO: extend supported functions if new formulas require them.
+            raise FormulaEvaluationError(f"Unsupported function call in formula: {node.func.id}")
         raise FormulaEvaluationError(f"Unsupported expression element: {ast.dump(node)}")
 
     return _eval(tree)

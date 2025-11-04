@@ -286,6 +286,8 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         meta=meta_info,
     ).model_dump(mode="json")
 
+    print(envelope_payload)
+
     try:
         encrypted = encrypt_payload(envelope_payload)
     except (EncryptionConfigError, EncryptionExecutionError) as exc:

@@ -31,11 +31,13 @@ import requests
 try:
     import psycopg2
     from psycopg2.extras import Json, RealDictCursor
+    from psycopg2 import errors as pg_errors
 except ImportError as exc:  # pragma: no cover - allows linting without psycopg2
     psycopg2 = None  # type: ignore
     Json = None  # type: ignore
     RealDictCursor = None  # type: ignore
     _PSYCOPG2_IMPORT_ERROR = exc
+    pg_errors = None  # type: ignore
 else:
     _PSYCOPG2_IMPORT_ERROR = None
 
@@ -43,11 +45,12 @@ else:
 LOGGER = logging.getLogger("section301_agent")
 
 DEFAULT_HEADINGS = [
+    # "9903.88.69",
     "9903.88.01",
-    "9903.88.02",
-    "9903.88.03",
-    "9903.88.04",
-    "9903.88.15",
+    # "9903.88.02",
+    # "9903.88.03",
+    # "9903.88.04",
+    # "9903.88.15",
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer. From the following text, extract:
@@ -98,7 +101,10 @@ C. Identify all **except** items:
    - Items explicitly listed after “except … provided for in …”.
    - Mark their source_label with “-exclusion”.
 D. Use “CN” as country_iso2 if “products of China” is mentioned.
-E. Use context.fallback_start_date for start_date if no effective period is found.
+E. Only populate effective_start_date and effective_end_date when explicit "effective" or date ranges appear in the text.  
+   - Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"  
+   - Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"  
+   - If no explicit "effective" or date reference appears, leave both fields null. Do not use fallback_start_date.
 F. Remove duplicates.
 G. When multiple note blocks are provided, treat each block independently and set `source_label` using that note label (e.g. "note20(a)" or "note20(b)-exclusion"). Use the provided `context.note_labels` array (same order as the blocks) if you need the human-readable label.
 
@@ -269,21 +275,55 @@ class Section301Database:
         """
         payload_notes = Json(notes) if notes is not None else None
         with self._conn.cursor() as cur:
-            cur.execute(
-                query_insert,
-                (
-                    heading,
-                    country_iso2,
-                    ad_valorem_rate,
-                    value_basis,
-                    payload_notes,
-                    start_date,
-                    end_date,
-                ),
-            )
-            measure_id = cur.fetchone()[0]
+            cur.execute("SAVEPOINT sp_measure_insert")
+            try:
+                cur.execute(
+                    query_insert,
+                    (
+                        heading,
+                        country_iso2,
+                        ad_valorem_rate,
+                        value_basis,
+                        payload_notes,
+                        start_date,
+                        end_date,
+                    ),
+                )
+                measure_id = cur.fetchone()[0]
+            except Exception as exc:
+                if pg_errors and isinstance(exc, pg_errors.UniqueViolation):
+                    cur.execute("ROLLBACK TO SAVEPOINT sp_measure_insert")
+                    cur.execute("RELEASE SAVEPOINT sp_measure_insert")
+                    LOGGER.info("Duplicate measure detected for %s; skipping insert", heading)
+                    with self._conn.cursor() as cur_lookup:
+                        cur_lookup.execute(
+                            query_select,
+                            (heading, country_iso2, ad_valorem_rate, value_basis, start_date, end_date),
+                        )
+                        row = cur_lookup.fetchone()
+                        if row:
+                            return row[0]
+                    LOGGER.warning("Failed to locate existing measure for %s after duplicate conflict", heading)
+                    return None
+                raise
+            else:
+                cur.execute("RELEASE SAVEPOINT sp_measure_insert")
         LOGGER.info("Created measure %s for heading %s", measure_id, heading)
         return measure_id
+
+    def find_existing_measure_id(self, heading: str, country_iso2: str) -> Optional[int]:
+        query = """
+            SELECT id
+            FROM s301_measures
+            WHERE heading = %s
+              AND country_iso2 = %s
+            ORDER BY effective_start_date DESC, id DESC
+            LIMIT 1
+        """
+        with self._conn.cursor() as cur:
+            cur.execute(query, (heading, country_iso2))
+            row = cur.fetchone()
+            return row[0] if row else None
 
     def ensure_scope(self, record: ScopeRecord) -> int:
         query_select = """
@@ -319,18 +359,44 @@ class Section301Database:
             RETURNING id
         """
         with self._conn.cursor() as cur:
-            cur.execute(
-                query_insert,
-                (
-                    record.key,
-                    record.key_type,
-                    record.country_iso2,
-                    record.source_label,
-                    record.effective_start_date,
-                    record.effective_end_date,
-                ),
-            )
-            scope_id = cur.fetchone()[0]
+            cur.execute("SAVEPOINT sp_scope_insert")
+            try:
+                cur.execute(
+                    query_insert,
+                    (
+                        record.key,
+                        record.key_type,
+                        record.country_iso2,
+                        record.source_label,
+                        record.effective_start_date,
+                        record.effective_end_date,
+                    ),
+                )
+                scope_id = cur.fetchone()[0]
+            except Exception as exc:
+                if pg_errors and isinstance(exc, pg_errors.UniqueViolation):
+                    cur.execute("ROLLBACK TO SAVEPOINT sp_scope_insert")
+                    cur.execute("RELEASE SAVEPOINT sp_scope_insert")
+                    LOGGER.info("Duplicate scope detected for key %s; skipping insert", record.key)
+                    with self._conn.cursor() as cur_lookup:
+                        cur_lookup.execute(
+                            query_select,
+                            (
+                                record.key,
+                                record.key_type,
+                                record.country_iso2,
+                                record.effective_start_date,
+                                record.effective_end_date,
+                            ),
+                        )
+                        row = cur_lookup.fetchone()
+                        if row:
+                            return row[0]
+                    LOGGER.warning("Failed to locate existing scope for key %s after duplicate conflict", record.key)
+                    return None
+                raise
+            else:
+                cur.execute("RELEASE SAVEPOINT sp_scope_insert")
         LOGGER.info("Created scope %s for key %s", scope_id, record.key)
         return scope_id
 
@@ -341,9 +407,11 @@ class Section301Database:
         relation: str,
         note_label: Optional[str],
         text_criteria: Optional[str],
-        start_date: date,
-        end_date: Optional[date],
+        start_date: Optional[date] = None,
+        end_date: Optional[date] = None,
     ) -> int:
+        start_date = None
+        end_date = None
         query_select = """
             SELECT id FROM s301_scope_measure_map
             WHERE scope_id = %s
@@ -381,19 +449,56 @@ class Section301Database:
             RETURNING id
         """
         with self._conn.cursor() as cur:
-            cur.execute(
-                query_insert,
-                (
-                    scope_id,
-                    measure_id,
-                    relation,
-                    note_label,
-                    text_criteria,
-                    start_date,
-                    end_date,
-                ),
-            )
-            map_id = cur.fetchone()[0]
+            cur.execute("SAVEPOINT sp_scope_map_insert")
+            try:
+                cur.execute(
+                    query_insert,
+                    (
+                        scope_id,
+                        measure_id,
+                        relation,
+                        note_label,
+                        text_criteria,
+                        start_date,
+                        end_date,
+                    ),
+                )
+                map_id = cur.fetchone()[0]
+            except Exception as exc:
+                if pg_errors and isinstance(exc, pg_errors.UniqueViolation):
+                    cur.execute("ROLLBACK TO SAVEPOINT sp_scope_map_insert")
+                    cur.execute("RELEASE SAVEPOINT sp_scope_map_insert")
+                    LOGGER.info(
+                        "Duplicate scope↔measure relation skipped (scope=%s, measure=%s, relation=%s)",
+                        scope_id,
+                        measure_id,
+                        relation,
+                    )
+                    with self._conn.cursor() as cur_lookup:
+                        cur_lookup.execute(
+                            query_select,
+                            (
+                                scope_id,
+                                measure_id,
+                                relation,
+                                note_label,
+                                text_criteria,
+                                start_date,
+                                end_date,
+                            ),
+                        )
+                        row = cur_lookup.fetchone()
+                        if row:
+                            return row[0]
+                    LOGGER.warning(
+                        "Failed to locate existing scope↔measure relation after duplicate conflict (scope=%s, measure=%s)",
+                        scope_id,
+                        measure_id,
+                    )
+                    return None
+                raise
+            else:
+                cur.execute("RELEASE SAVEPOINT sp_scope_map_insert")
         LOGGER.info(
             "Created scope↔measure relation %s (scope=%s, measure=%s, %s)",
             map_id,
@@ -404,14 +509,69 @@ class Section301Database:
         return map_id
 
     def fetch_note_rows(self, label: str) -> List[Dict[str, Any]]:
-        query = """
-            SELECT subchapter, label, content, raw_html, path
+        """Fetch a note and all of its descendant rows, mirroring get_note()."""
+        base_query = """
+            SELECT chapter, subchapter, label, content, raw_html, path
             FROM hts_notes
             WHERE lower(label) = lower(%s)
             ORDER BY subchapter, array_length(path, 1), path
         """
         with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(query, (label,))
+            cur.execute(base_query, (label,))
+            anchor = cur.fetchone()
+            if not anchor:
+                return []
+
+            cur.execute(
+                """
+                SELECT chapter, subchapter, label, content, raw_html, path
+                FROM hts_notes
+                WHERE chapter=%s AND subchapter=%s AND path[1:%s] = %s
+                ORDER BY id, path
+                """,
+                (
+                    anchor["chapter"],
+                    anchor["subchapter"],
+                    len(anchor["path"]),
+                    anchor["path"],
+                ),
+            )
+            rows = cur.fetchall()
+            if not rows:
+                # fallback to the anchor row so caller sees something
+                return [anchor]
+            return rows
+
+    def fetch_scope_relations(
+        self,
+        measure_id: int,
+        relation: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
+        base_query = """
+            SELECT
+                map.id AS map_id,
+                map.relation,
+                map.note_label,
+                map.text_criteria,
+                map.effective_start_date AS relation_start_date,
+                map.effective_end_date AS relation_end_date,
+                scope.id AS scope_id,
+                scope.key,
+                scope.key_type,
+                scope.country_iso2,
+                scope.source_label,
+                scope.effective_start_date,
+                scope.effective_end_date
+            FROM s301_scope_measure_map AS map
+            JOIN s301_scope AS scope ON scope.id = map.scope_id
+            WHERE map.measure_id = %s
+        """
+        params: List[Any] = [measure_id]
+        if relation:
+            base_query += " AND map.relation = %s"
+            params.append(relation)
+        with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(base_query, params)
             return cur.fetchall()
 
 
@@ -423,9 +583,9 @@ class Section301LLM:
         model: Optional[str] = None,
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
-        timeout: int = 120,
+        timeout: int = 3600,
     ):
-        self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        self.model = model or os.getenv("OPENAI_MODEL", "gpt-5")
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.base_url = base_url or os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
         self.timeout = timeout
@@ -441,7 +601,7 @@ class Section301LLM:
         }
         payload = {
             "model": self.model,
-            "temperature": 0,
+            # "temperature": 0,
             "response_format": {"type": "json_object"},
             "messages": [
                 {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
@@ -480,7 +640,9 @@ class Section301LLM:
             note_text=note_text.strip(),
             context_json=context_json,
         )
+        LOGGER.info("message:%s", message)
         raw = self._post(message)
+        LOGGER.info("raw:%s", raw)
         try:
             payload = json.loads(raw)
         except json.JSONDecodeError as exc:
@@ -501,68 +663,95 @@ class Section301Agent:
         self.db = db
         self.llm = llm
         self.country_iso2 = country_iso2
-        self._processed_headings: set[str] = set()
         self._note_cache: Dict[Tuple[str, ...], Dict[str, Any]] = {}
+        self._measure_cache: Dict[str, Optional[int]] = {}
+        self._in_progress: set[str] = set()
 
     def run(self, headings: Sequence[str]) -> None:
         for heading in headings:
             self.process_heading(heading)
 
-    def process_heading(self, heading: str) -> None:
+    def process_heading(self, heading: str) -> Optional[int]:
         normalized = heading.strip()
         if not normalized:
-            return
-        if normalized in self._processed_headings:
-            LOGGER.debug("Heading %s already processed; skipping", normalized)
-            return
+            return None
+        if normalized in self._measure_cache:
+            LOGGER.debug("Heading %s already processed; reusing measure id %s", normalized, self._measure_cache[normalized])
+            return self._measure_cache[normalized]
+        if normalized in self._in_progress:
+            LOGGER.warning("Heading %s is already being processed; skipping to avoid recursion", normalized)
+            return None
+
+        existing_measure_id = self.db.find_existing_measure_id(normalized, self.country_iso2)
+        if existing_measure_id:
+            LOGGER.info(
+                "Heading %s already present in s301_measures (id=%s); reusing existing scope",
+                normalized,
+                existing_measure_id,
+            )
+            self._measure_cache[normalized] = existing_measure_id
+            return existing_measure_id
+
         LOGGER.info("Processing heading %s", normalized)
-
-        row = self.db.fetch_hts_code(normalized)
-        if not row:
-            LOGGER.warning("Heading %s not found in hts_codes; skipping", normalized)
-            return
-
-        status = (row.get("status") or "").strip().lower()
-        if status == "expired":
-            LOGGER.info("Heading %s is marked expired; skipping", normalized)
-            return
-
-        description = (row.get("description") or "").strip()
-        if not description:
-            LOGGER.warning("Heading %s has empty description; skipping", normalized)
-            return
-
-        analysis = self.llm.extract_measure(description)
-        LOGGER.info("analysis : %s", analysis)
-        start_date = analysis.effective_start or date(1900, 1, 1)
-        end_date = analysis.effective_end
-        rate = self._derive_rate(description)
-
-        measure_id = self.db.ensure_measure(
-            heading=normalized,
-            country_iso2=self.country_iso2,
-            ad_valorem_rate=rate,
-            value_basis="customs_value",
-            notes=None,
-            start_date=start_date,
-            end_date=end_date,
-        )
-
-        self._processed_headings.add(normalized)
+        self._in_progress.add(normalized)
         try:
-            self._apply_scope_links(
+            row = self.db.fetch_hts_code(normalized)
+            if not row:
+                LOGGER.warning("Heading %s not found in hts_codes; skipping", normalized)
+                self._measure_cache[normalized] = None
+                return None
+
+            status = (row.get("status") or "").strip().lower()
+            if status == "expired":
+                LOGGER.info("Heading %s is marked expired; skipping", normalized)
+                self._measure_cache[normalized] = None
+                return None
+
+            description = (row.get("description") or "").strip()
+            if not description:
+                LOGGER.warning("Heading %s has empty description; skipping", normalized)
+                self._measure_cache[normalized] = None
+                return None
+
+            analysis = self.llm.extract_measure(description)
+            LOGGER.info("analysis : %s", analysis)
+            start_date = analysis.effective_start or date(1900, 1, 1)
+            end_date = analysis.effective_end
+            rate = self._derive_rate(description)
+
+            measure_id = self.db.ensure_measure(
                 heading=normalized,
-                measure_id=measure_id,
+                country_iso2=self.country_iso2,
+                ad_valorem_rate=rate,
+                value_basis="customs_value",
+                notes=None,
                 start_date=start_date,
                 end_date=end_date,
-                includes=analysis.include,
-                excludes=analysis.exclude,
             )
-            self.db.commit()
-        except Exception:
-            self.db.rollback()
-            self._processed_headings.discard(normalized)
-            raise
+            if not measure_id:
+                LOGGER.warning("Failed to ensure measure for %s; skipping scope linkage", normalized)
+                self.db.rollback()
+                self._measure_cache[normalized] = None
+                return None
+
+            try:
+                self._apply_scope_links(
+                    heading=normalized,
+                    measure_id=measure_id,
+                    start_date=start_date,
+                    end_date=end_date,
+                    includes=analysis.include,
+                    excludes=analysis.exclude,
+                )
+                self.db.commit()
+            except Exception:
+                self.db.rollback()
+                raise
+
+            self._measure_cache[normalized] = measure_id
+            return measure_id
+        finally:
+            self._in_progress.discard(normalized)
 
     def _derive_rate(self, description: str) -> Decimal:
         match = re.search(r"(\d+(?:\.\d+)?)\s*percent", description, re.IGNORECASE)
@@ -666,6 +855,18 @@ class Section301Agent:
             return
 
         key_type = classify_code_type(ref)
+        if ref.startswith("99"):
+            self._link_child_heading(
+                child_heading=ref,
+                relation=relation,
+                parent_heading=heading,
+                parent_measure_id=measure_id,
+                note_label=f"{heading}-description",
+                fallback_start=start_date,
+                fallback_end=end_date,
+            )
+            return
+
         scope = ScopeRecord(
             key=ref,
             key_type=key_type,
@@ -675,14 +876,14 @@ class Section301Agent:
             effective_end_date=end_date,
         )
         scope_id = self.db.ensure_scope(scope)
+        if not scope_id:
+            return
         self.db.ensure_scope_measure_map(
             scope_id=scope_id,
             measure_id=measure_id,
             relation=relation,
             note_label=scope.source_label,
             text_criteria=None,
-            start_date=start_date,
-            end_date=end_date,
         )
         if scope.key.startswith("99"):
             self.process_heading(scope.key)
@@ -711,10 +912,28 @@ class Section301Agent:
             if not note_rows:
                 LOGGER.warning("Note %s not found in hts_notes; skipping", normalized)
                 continue
-            combined_text = "\n".join(
-                row["content"] for row in note_rows if row.get("content")
-            ).strip()
+            LOGGER.info(
+                "Loaded %d note rows for %s (first path=%s)",
+                len(note_rows),
+                normalized,
+                note_rows[0].get("path") if note_rows else None,
+            )
+            block_lines: List[str] = []
+            for row in note_rows:
+                label_text = (row.get("label") or "").strip()
+                content_text = (row.get("content") or "").strip()
+                parts: List[str] = []
+                if label_text:
+                    parts.append(label_text)
+                if content_text:
+                    parts.append(content_text)
+                line = " ".join(parts).strip()
+                if line:
+                    block_lines.append(line)
+
+            combined_text = "\n".join(block_lines).strip()
             if not combined_text:
+                LOGGER.warning("Note %s rows present but content is empty", normalized)
                 continue
             note_blocks.append((original, normalized, combined_text))
 
@@ -737,6 +956,7 @@ class Section301Agent:
             note_input = "\n\n".join(
                 f"{block[0]}\n{block[2]}" for block in note_blocks
             )
+            # LOGGER.info("note_input:%s", note_input)
             self._note_cache[cache_key] = self.llm.extract_note(note_input, context)
         payload = self._note_cache[cache_key]
 
@@ -747,13 +967,13 @@ class Section301Agent:
             default_scope_label = ",".join(block[1] for block in note_blocks)
             default_except_label = ",".join(f"{block[1]}-exclusion" for block in note_blocks)
 
-        scope_records = self._convert_note_entries(
+        scope_records, scope_children = self._convert_note_entries(
             payload.get("scope", []),
             default_label=default_scope_label,
             fallback_start=fallback_start,
             fallback_end=fallback_end,
         )
-        except_records = self._convert_note_entries(
+        except_records, except_children = self._convert_note_entries(
             payload.get("except", []),
             default_label=default_except_label,
             fallback_start=fallback_start,
@@ -762,31 +982,49 @@ class Section301Agent:
 
         for scope in scope_records:
             scope_id = self.db.ensure_scope(scope)
+            if not scope_id:
+                continue
             self.db.ensure_scope_measure_map(
                 scope_id=scope_id,
                 measure_id=measure_id,
                 relation="include",
                 note_label=scope.source_label,
                 text_criteria=None,
-                start_date=scope.effective_start_date,
-                end_date=scope.effective_end_date,
             )
-            if scope.key.startswith("99"):
-                self.process_heading(scope.key)
 
         for scope in except_records:
             scope_id = self.db.ensure_scope(scope)
+            if not scope_id:
+                continue
             self.db.ensure_scope_measure_map(
                 scope_id=scope_id,
                 measure_id=measure_id,
                 relation="exclude",
                 note_label=scope.source_label,
                 text_criteria=None,
-                start_date=scope.effective_start_date,
-                end_date=scope.effective_end_date,
             )
-            if scope.key.startswith("99"):
-                self.process_heading(scope.key)
+
+        for child in scope_children:
+            self._link_child_heading(
+                child_heading=child["key"],
+                relation="include",
+                parent_heading=heading,
+                parent_measure_id=measure_id,
+                note_label=child["label"],
+                fallback_start=child["start"],
+                fallback_end=child["end"],
+            )
+
+        for child in except_children:
+            self._link_child_heading_reference(
+                child_heading=child["key"],
+                relation="exclude",
+                parent_heading=heading,
+                parent_measure_id=measure_id,
+                note_label=child["label"],
+                fallback_start=child["start"],
+                fallback_end=child["end"],
+            )
 
     def _convert_note_entries(
         self,
@@ -795,8 +1033,9 @@ class Section301Agent:
         default_label: str,
         fallback_start: date,
         fallback_end: Optional[date],
-    ) -> List[ScopeRecord]:
+    ) -> Tuple[List[ScopeRecord], List[Dict[str, Any]]]:
         records: List[ScopeRecord] = []
+        child_refs: List[Dict[str, Any]] = []
         for entry in entries:
             key = entry.get("key")
             if not key:
@@ -809,6 +1048,18 @@ class Section301Agent:
 
             start = parse_date(entry.get("effective_start_date")) or fallback_start
             end = parse_date(entry.get("effective_end_date")) or fallback_end
+            # skip inserting 99-series headings into scope; process separately
+            if key.startswith("99"):
+                child_label = key
+                child_refs.append(
+                    {
+                        "key": key,
+                        "label": child_label,
+                        "start": start,
+                        "end": end,
+                    }
+                )
+                continue
             record = ScopeRecord(
                 key=key,
                 key_type=key_type,
@@ -818,7 +1069,104 @@ class Section301Agent:
                 effective_end_date=end,
             )
             records.append(record)
-        return records
+        return records, child_refs
+
+    def _link_child_heading(
+        self,
+        *,
+        child_heading: str,
+        relation: str,
+        parent_heading: str,
+        parent_measure_id: int,
+        note_label: Optional[str],
+        fallback_start: date,
+        fallback_end: Optional[date],
+    ) -> None:
+        child_measure_id = self.process_heading(child_heading)
+        if not child_measure_id:
+            LOGGER.info(
+                "Child heading %s could not be processed; skipping linkage to %s",
+                child_heading,
+                parent_heading,
+            )
+            return
+
+        child_scopes = self.db.fetch_scope_relations(child_measure_id, relation="include")
+        if not child_scopes:
+            LOGGER.info(
+                "Child heading %s has no include scopes to propagate to %s",
+                child_heading,
+                parent_heading,
+            )
+            return
+
+        for row in child_scopes:
+            scope_id = row.get("scope_id")
+            if not scope_id:
+                continue
+            label = note_label or row.get("note_label") or row.get("source_label")
+            text_criteria = row.get("text_criteria")
+            created_id = self.db.ensure_scope_measure_map(
+                scope_id=scope_id,
+                measure_id=parent_measure_id,
+                relation=relation,
+                note_label=label,
+                text_criteria=text_criteria,
+            )
+            if created_id:
+                LOGGER.info(
+                    "Linked child heading %s scope (scope_id=%s) to %s as %s",
+                    child_heading,
+                    scope_id,
+                    parent_heading,
+                    relation,
+                )
+
+    def _link_child_heading_reference(
+        self,
+        *,
+        child_heading: str,
+        relation: str,
+        parent_heading: str,
+        parent_measure_id: int,
+        note_label: Optional[str],
+        fallback_start: date,
+        fallback_end: Optional[date],
+    ) -> None:
+        child_measure_id = self.process_heading(child_heading)
+        if not child_measure_id:
+            LOGGER.info(
+                "Child heading %s could not be processed; skipping reference linkage to %s",
+                child_heading,
+                parent_heading,
+            )
+            return
+
+        scope = ScopeRecord(
+            key=child_heading,
+            key_type="heading",
+            country_iso2=self.country_iso2,
+            source_label=note_label or child_heading,
+            effective_start_date=fallback_start,
+            effective_end_date=fallback_end,
+        )
+        scope_id = self.db.ensure_scope(scope)
+        if not scope_id:
+            return
+
+        self.db.ensure_scope_measure_map(
+            scope_id=scope_id,
+            measure_id=parent_measure_id,
+            relation=relation,
+            note_label=scope.source_label,
+            text_criteria=None,
+        )
+        LOGGER.info(
+            "Recorded child heading reference %s → %s as %s",
+            parent_heading,
+            child_heading,
+            relation,
+        )
 
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:

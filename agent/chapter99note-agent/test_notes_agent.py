@@ -68,7 +68,7 @@ def main():
     conn = db_connect(args.dsn)
     # db_init(conn)
 
-    hit = get_note(conn, "note(20)(b)", "SUBCHAPTER III")
+    hit = get_note(conn, "note(20)(vvv)", "SUBCHAPTER III")
     if hit:
         print(f"found {len(hit)} rows for note(16)(a)")
         for r in hit[:]:
