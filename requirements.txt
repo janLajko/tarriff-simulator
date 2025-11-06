@@ -39,3 +39,4 @@ beautifulsoup4==4.14.2
 fastapi==0.120.4
 uvicorn==0.38.0
 cryptography==43.0.1
+pytest==8.4.2

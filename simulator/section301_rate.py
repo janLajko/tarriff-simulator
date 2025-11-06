@@ -243,7 +243,29 @@ def compute_section301_duty(
             if evaluator.measure_covers(measure["id"], hts_number):
                 applicable_measures.append(measure)
 
-    if not applicable_measures:
+    chargeable_measures: List[Dict] = []
+    zero_rate_matches: List[Dict] = []
+    for measure in applicable_measures:
+        raw_rate = measure.get("ad_valorem_rate")
+        if raw_rate is None:
+            zero_rate_matches.append(measure)
+            continue
+        rate = raw_rate if isinstance(raw_rate, Decimal) else Decimal(str(raw_rate))
+        if rate > 0:
+            chargeable_measures.append(measure)
+        else:
+            zero_rate_matches.append(measure)
+
+    if not chargeable_measures:
+        notes = [
+            "No active Section 301 measures matched the provided HTS number on the given entry date."
+        ]
+        if zero_rate_matches:
+            zero_headings = ", ".join(m["heading"] for m in zero_rate_matches)
+            notes.append(
+                "Section 301 headings matched but have zero ad valorem rate: "
+                f"{zero_headings}."
+            )
         return Section301Computation(
             module_id="301",
             module_name="Section 301 Tariffs",
@@ -251,13 +273,11 @@ def compute_section301_duty(
             amount=Decimal("0"),
             currency="USD",
             rate=None,
-            notes=[
-                "No active Section 301 measures matched the provided HTS number on the given entry date."
-            ],
+            notes=notes,
         )
 
     total_rate = sum(
-        ((m["ad_valorem_rate"] or Decimal("0")) for m in applicable_measures),
+        ((m["ad_valorem_rate"] or Decimal("0")) for m in chargeable_measures),
         Decimal("0"),
     )
     ch99_list = [
@@ -267,13 +287,13 @@ def compute_section301_duty(
             general_rate=m["ad_valorem_rate"],
             ch99_description=m.get("description") or "",
         )
-        for m in applicable_measures
+        for m in chargeable_measures
     ]
 
     rate_display = f"{total_rate.normalize()}%" if total_rate else None
 
     notes = [
-        "Applied Section 301 measures: " + ", ".join(m["heading"] for m in applicable_measures)
+        "Applied Section 301 measures: " + ", ".join(m["heading"] for m in chargeable_measures)
     ]
 
     return Section301Computation(

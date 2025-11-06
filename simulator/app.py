@@ -264,6 +264,8 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         basic_computation = compute_basic_duty(
             canonical_hts,
             measurements,
+            country_of_origin=country,
+            special_rate_of_duty=record.get("special_rate_of_duty"),
         )
     except MissingMeasurementError as exc:
         raise HTTPException(

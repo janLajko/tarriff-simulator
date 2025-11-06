@@ -1,0 +1,1370 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.5, pytest-8.4.2, pluggy-1.6.0
+rootdir: /Users/jan/Documents/7788/tariff-simulate-v2
+plugins: anyio-4.11.0
+collected 491 items
+
+simulator/test/test_basic_hts_rate.py basic_rate_test.csv:2: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:3: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:4: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:5: BasicRateComputation(calculated=True, amount=Decimal('68.0000'), currency='USD', formula='0.068 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:6: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:7: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country LS; qualifying program codes: A+ (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:8: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:9: BasicRateComputation(calculated=True, amount=Decimal('45.0000'), currency='USD', formula='0.045 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:10: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:11: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:12: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:13: BasicRateComputation(calculated=True, amount=Decimal('48.0000'), currency='USD', formula='0.048 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:14: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:15: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:16: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:17: BasicRateComputation(calculated=True, amount=Decimal('18.0000000000000020000'), currency='USD', formula='0.018000000000000002 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:18: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:19: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:20: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:21: BasicRateComputation(calculated=True, amount=Decimal('264.0000'), currency='USD', formula='0.264 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:22: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:23: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:24: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:25: BasicRateComputation(calculated=True, amount=Decimal('1.00'), currency='USD', formula='0.01 * kg', required_units=['kg'], provided_inputs={'kg': Decimal('100')}, notes=[])
+.basic_rate_test.csv:26: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:27: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:28: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:29: BasicRateComputation(calculated=True, amount=Decimal('2.00'), currency='USD', formula='0.02 * kg', required_units=['kg'], provided_inputs={'kg': Decimal('100')}, notes=[])
+.basic_rate_test.csv:30: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:31: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:32: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:33: BasicRateComputation(calculated=True, amount=Decimal('4.400000000000000400'), currency='USD', formula='0.044000000000000004 * kg', required_units=['kg'], provided_inputs={'kg': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:34: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GW; qualifying program codes: A+ (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:35: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:36: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:37: BasicRateComputation(calculated=True, amount=Decimal('1.399999999999999900'), currency='USD', formula='0.013999999999999999 * kg', required_units=['kg'], provided_inputs={'kg': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:38: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:39: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:40: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CW; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:41: BasicRateComputation(calculated=True, amount=Decimal('0.699999999999999900'), currency='USD', formula='0.006999999999999999 * kg', required_units=['kg'], provided_inputs={'kg': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:42: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:43: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:44: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:45: BasicRateComputation(calculated=True, amount=Decimal('0.450000000000000050'), currency='USD', formula='0.009000000000000001 * no', required_units=['no'], provided_inputs={'no': Decimal('50')}, notes=[])
+Fbasic_rate_test.csv:46: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CW; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:47: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:48: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:49: BasicRateComputation(calculated=True, amount=Decimal('14.50'), currency='USD', formula='0.29 * no', required_units=['no'], provided_inputs={'no': Decimal('50')}, notes=[])
+.basic_rate_test.csv:50: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:51: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:52: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:53: BasicRateComputation(calculated=True, amount=Decimal('12.50'), currency='USD', formula='0.25 * no', required_units=['no'], provided_inputs={'no': Decimal('50')}, notes=[])
+.basic_rate_test.csv:54: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:55: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:56: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:57: BasicRateComputation(calculated=True, amount=Decimal('28.50'), currency='USD', formula='0.57 * no', required_units=['no'], provided_inputs={'no': Decimal('50')}, notes=[])
+.basic_rate_test.csv:58: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:59: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:60: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:61: BasicRateComputation(calculated=True, amount=Decimal('45.0'), currency='USD', formula='0.9 * no', required_units=['no'], provided_inputs={'no': Decimal('50')}, notes=[])
+.basic_rate_test.csv:62: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GW; qualifying program codes: A+ (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:63: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:64: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:65: BasicRateComputation(calculated=True, amount=Decimal('1.985'), currency='USD', formula='0.397 * t', required_units=['t'], provided_inputs={'t': Decimal('5')}, notes=[])
+.basic_rate_test.csv:66: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:67: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:68: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:69: BasicRateComputation(calculated=True, amount=Decimal('6.20'), currency='USD', formula='1.24 * t', required_units=['t'], provided_inputs={'t': Decimal('5')}, notes=[])
+.basic_rate_test.csv:70: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:71: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:72: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:73: BasicRateComputation(calculated=True, amount=Decimal('24.75'), currency='USD', formula='4.95 * t', required_units=['t'], provided_inputs={'t': Decimal('5')}, notes=[])
+.basic_rate_test.csv:74: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:75: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:76: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:77: BasicRateComputation(calculated=True, amount=Decimal('6.25'), currency='USD', formula='1.25 * t', required_units=['t'], provided_inputs={'t': Decimal('5')}, notes=[])
+.basic_rate_test.csv:78: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:79: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:80: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:81: BasicRateComputation(calculated=True, amount=Decimal('51.500'), currency='USD', formula='0.015 * kg + 0.05 * usd', required_units=['kg', 'usd'], provided_inputs={'kg': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:82: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:83: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:84: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:85: BasicRateComputation(calculated=True, amount=Decimal('51.700'), currency='USD', formula='0.017 * kg + 0.05 * usd', required_units=['kg', 'usd'], provided_inputs={'kg': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:86: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GW; qualifying program codes: A+ (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:87: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:88: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:89: BasicRateComputation(calculated=True, amount=Decimal('35.7000'), currency='USD', formula='0.017 * kg + 0.034 * usd', required_units=['kg', 'usd'], provided_inputs={'kg': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:90: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:91: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:92: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:93: BasicRateComputation(calculated=True, amount=Decimal('84.89999999999999700'), currency='USD', formula='0.33899999999999997 * kg + 0.051 * usd', required_units=['kg', 'usd'], provided_inputs={'kg': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:94: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:95: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:96: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:97: BasicRateComputation(calculated=True, amount=Decimal('144.000000000000010000'), currency='USD', formula='0.4 * kg + 0.10400000000000001 * usd', required_units=['kg', 'usd'], provided_inputs={'kg': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:98: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:99: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A* (Generalized System of Preferences)."])
+.basic_rate_test.csv:100: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:101: BasicRateComputation(calculated=True, amount=Decimal('3.55726000'), currency='USD', formula='max(0.03143854, 0.036606 - 0.00020668 * (100 - degree)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('95')}, notes=[])
+Fbasic_rate_test.csv:102: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:103: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A* (Generalized System of Preferences)."])
+.basic_rate_test.csv:104: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:105: BasicRateComputation(calculated=True, amount=Decimal('3.66060000'), currency='USD', formula='max(0.03143854, 0.036606 - 0.00020668 * (100 - degree)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('100')}, notes=[])
+.basic_rate_test.csv:106: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:107: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:108: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:109: BasicRateComputation(calculated=True, amount=Decimal('3.76394000'), currency='USD', formula='max(0.03143854, 0.036606 - 0.00020668 * (100 - degree)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('105')}, notes=[])
+Fbasic_rate_test.csv:110: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:111: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A* (Generalized System of Preferences)."])
+.basic_rate_test.csv:112: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:113: BasicRateComputation(calculated=True, amount=Decimal('1.35726000'), currency='USD', formula='max(0.00943854, 0.014606 - 0.00020668 * (100 - degree)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('95')}, notes=[])
+Fbasic_rate_test.csv:114: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:115: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A* (Generalized System of Preferences)."])
+.basic_rate_test.csv:116: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:117: BasicRateComputation(calculated=True, amount=Decimal('1.46060000'), currency='USD', formula='max(0.00943854, 0.014606 - 0.00020668 * (100 - degree)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('100')}, notes=[])
+.basic_rate_test.csv:118: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:119: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:120: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A* (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:121: BasicRateComputation(calculated=True, amount=Decimal('1.56394000'), currency='USD', formula='max(0.00943854, 0.014606 - 0.00020668 * (100 - degree)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('105')}, notes=[])
+Fbasic_rate_test.csv:122: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:123: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:124: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:125: BasicRateComputation(calculated=True, amount=Decimal('67.89999999999999800'), currency='USD', formula='0.16899999999999998 * kg_of_total_sugars + 0.051 * usd', required_units=['kg_of_total_sugars', 'usd'], provided_inputs={'kg_of_total_sugars': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:126: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:127: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:128: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:129: BasicRateComputation(calculated=True, amount=Decimal('84.89999999999999700'), currency='USD', formula='0.33899999999999997 * kg_of_total_sugars + 0.051 * usd', required_units=['kg_of_total_sugars', 'usd'], provided_inputs={'kg_of_total_sugars': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:130: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:131: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:132: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:133: BasicRateComputation(calculated=True, amount=Decimal('3.660600'), currency='USD', formula='0.036606 * kg_of_total_sugars', required_units=['kg_of_total_sugars'], provided_inputs={'kg_of_total_sugars': Decimal('100')}, notes=[])
+.basic_rate_test.csv:134: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:135: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:136: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:137: BasicRateComputation(calculated=True, amount=Decimal('0.0100'), currency='USD', formula='0.0001 * kg_of_total_sugars', required_units=['kg_of_total_sugars'], provided_inputs={'kg_of_total_sugars': Decimal('100')}, notes=[])
+.basic_rate_test.csv:138: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:139: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:140: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:141: BasicRateComputation(calculated=True, amount=Decimal('0.2624999999999999700'), currency='USD', formula='0.0034999999999999996 * liter', required_units=['liter'], provided_inputs={'liter': Decimal('75')}, notes=[])
+Fbasic_rate_test.csv:142: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:143: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:144: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:145: BasicRateComputation(calculated=True, amount=Decimal('2.400'), currency='USD', formula='0.032 * liter', required_units=['liter'], provided_inputs={'liter': Decimal('75')}, notes=[])
+.basic_rate_test.csv:146: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:147: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:148: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:149: BasicRateComputation(calculated=True, amount=Decimal('5.8875'), currency='USD', formula='0.0785 * liter', required_units=['liter'], provided_inputs={'liter': Decimal('75')}, notes=[])
+.basic_rate_test.csv:150: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:151: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:152: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:153: BasicRateComputation(calculated=True, amount=Decimal('3.375'), currency='USD', formula='0.045 * liter', required_units=['liter'], provided_inputs={'liter': Decimal('75')}, notes=[])
+.basic_rate_test.csv:154: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:155: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CW; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:156: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:157: BasicRateComputation(calculated=True, amount=Decimal('5.925'), currency='USD', formula='0.079 * liter', required_units=['liter'], provided_inputs={'liter': Decimal('75')}, notes=[])
+.basic_rate_test.csv:158: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:159: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:160: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:161: BasicRateComputation(calculated=True, amount=Decimal('91.0000'), currency='USD', formula='0.06 * kg_on_drained_weight + 0.085 * usd', required_units=['kg_on_drained_weight', 'usd'], provided_inputs={'kg_on_drained_weight': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:162: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:163: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:164: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:165: BasicRateComputation(calculated=True, amount=Decimal('85.700'), currency='USD', formula='0.057 * kg_on_drained_weight + 0.08 * usd', required_units=['kg_on_drained_weight', 'usd'], provided_inputs={'kg_on_drained_weight': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:166: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:167: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:168: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:169: BasicRateComputation(calculated=True, amount=Decimal('2.100'), currency='USD', formula='0.021 * kg_on_entire_contents_of_container', required_units=['kg_on_entire_contents_of_container'], provided_inputs={'kg_on_entire_contents_of_container': Decimal('100')}, notes=[])
+.basic_rate_test.csv:170: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:171: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:172: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:173: BasicRateComputation(calculated=True, amount=Decimal('1.500'), currency='USD', formula='0.015 * kg_on_entire_contents_of_container', required_units=['kg_on_entire_contents_of_container'], provided_inputs={'kg_on_entire_contents_of_container': Decimal('100')}, notes=[])
+.basic_rate_test.csv:174: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:175: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:176: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:177: BasicRateComputation(calculated=True, amount=Decimal('0.800'), currency='USD', formula='0.008 * kg_on_entire_contents_of_container', required_units=['kg_on_entire_contents_of_container'], provided_inputs={'kg_on_entire_contents_of_container': Decimal('100')}, notes=[])
+.basic_rate_test.csv:178: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A* (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:179: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A* (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:180: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:181: BasicRateComputation(calculated=True, amount=Decimal('5.400000000000000600'), currency='USD', formula='0.054000000000000006 * kg_on_drained_weight', required_units=['kg_on_drained_weight'], provided_inputs={'kg_on_drained_weight': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:182: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:183: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:184: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:185: BasicRateComputation(calculated=True, amount=Decimal('3.700000000000000500'), currency='USD', formula='0.037000000000000005 * kg_on_drained_weight', required_units=['kg_on_drained_weight'], provided_inputs={'kg_on_drained_weight': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:186: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:187: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:188: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:189: BasicRateComputation(calculated=True, amount=Decimal('6.900'), currency='USD', formula='0.069 * kg_on_drained_weight', required_units=['kg_on_drained_weight'], provided_inputs={'kg_on_drained_weight': Decimal('100')}, notes=[])
+.basic_rate_test.csv:190: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A* (Generalized System of Preferences)."])
+.basic_rate_test.csv:191: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:192: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:193: BasicRateComputation(calculated=True, amount=Decimal('8.600'), currency='USD', formula='0.086 * kg_on_drained_weight', required_units=['kg_on_drained_weight'], provided_inputs={'kg_on_drained_weight': Decimal('100')}, notes=[])
+.basic_rate_test.csv:194: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:195: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CW; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:196: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:197: BasicRateComputation(calculated=True, amount=Decimal('9.30000000000000100'), currency='USD', formula='0.09300000000000001 * kg_on_drained_weight', required_units=['kg_on_drained_weight'], provided_inputs={'kg_on_drained_weight': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:198: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A* (Generalized System of Preferences)."])
+.basic_rate_test.csv:199: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MX; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:200: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A* (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:201: BasicRateComputation(calculated=True, amount=Decimal('18.89999999999999700'), currency='USD', formula='0.18899999999999997 * pf_liter', required_units=['pf_liter'], provided_inputs={'pf_liter': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:202: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:203: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:204: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:205: BasicRateComputation(calculated=True, amount=Decimal('23.700'), currency='USD', formula='0.237 * pf_liter', required_units=['pf_liter'], provided_inputs={'pf_liter': Decimal('100')}, notes=[])
+.basic_rate_test.csv:206: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:207: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:208: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:209: BasicRateComputation(calculated=True, amount=Decimal('21.10000000000000200'), currency='USD', formula='0.21100000000000002 * pf_liter', required_units=['pf_liter'], provided_inputs={'pf_liter': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:210: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:211: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:212: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:213: BasicRateComputation(calculated=True, amount=Decimal('0.500'), currency='USD', formula='0.005 * pf_liter', required_units=['pf_liter'], provided_inputs={'pf_liter': Decimal('100')}, notes=[])
+.basic_rate_test.csv:214: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:215: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:216: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:217: BasicRateComputation(calculated=True, amount=Decimal('1.700'), currency='USD', formula='0.017 * kg_on_lead_content', required_units=['kg_on_lead_content'], provided_inputs={'kg_on_lead_content': Decimal('100')}, notes=[])
+.basic_rate_test.csv:218: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:219: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:220: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:221: BasicRateComputation(calculated=True, amount=Decimal('1.100000000000000100'), currency='USD', formula='0.011000000000000001 * kg_on_lead_content', required_units=['kg_on_lead_content'], provided_inputs={'kg_on_lead_content': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:222: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:223: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CW; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:224: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:225: BasicRateComputation(calculated=True, amount=Decimal('0.800'), currency='USD', formula='0.008 * kg_on_lead_content', required_units=['kg_on_lead_content'], provided_inputs={'kg_on_lead_content': Decimal('100')}, notes=[])
+.basic_rate_test.csv:226: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:227: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:228: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:229: BasicRateComputation(calculated=True, amount=Decimal('30.8000'), currency='USD', formula='0.128 * kg_on_molybdenum_content + 0.018 * usd', required_units=['kg_on_molybdenum_content', 'usd'], provided_inputs={'kg_on_molybdenum_content': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:230: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:231: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:232: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:233: BasicRateComputation(calculated=True, amount=Decimal('21.1000'), currency='USD', formula='0.091 * kg_on_molybdenum_content + 0.012 * usd', required_units=['kg_on_molybdenum_content', 'usd'], provided_inputs={'kg_on_molybdenum_content': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:234: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GW; qualifying program codes: A+ (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:235: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:236: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:237: BasicRateComputation(calculated=True, amount=Decimal('32.9000'), currency='USD', formula='0.139 * kg_on_molybdenum_content + 0.019 * usd', required_units=['kg_on_molybdenum_content', 'usd'], provided_inputs={'kg_on_molybdenum_content': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:238: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:239: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:240: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:241: BasicRateComputation(calculated=True, amount=Decimal('1.0500'), currency='USD', formula='0.0525 * bbl', required_units=['bbl'], provided_inputs={'bbl': Decimal('20')}, notes=[])
+.basic_rate_test.csv:242: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:243: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:244: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:245: BasicRateComputation(calculated=True, amount=Decimal('2.100'), currency='USD', formula='0.105 * bbl', required_units=['bbl'], provided_inputs={'bbl': Decimal('20')}, notes=[])
+.basic_rate_test.csv:246: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:247: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:248: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:249: BasicRateComputation(calculated=True, amount=Decimal('10.500'), currency='USD', formula='0.525 * bbl', required_units=['bbl'], provided_inputs={'bbl': Decimal('20')}, notes=[])
+.basic_rate_test.csv:250: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:251: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:252: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:253: BasicRateComputation(calculated=True, amount=Decimal('16.80'), currency='USD', formula='0.84 * bbl', required_units=['bbl'], provided_inputs={'bbl': Decimal('20')}, notes=[])
+.basic_rate_test.csv:254: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A* (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:255: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:256: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A* (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:257: BasicRateComputation(calculated=True, amount=Decimal('895.9999999999999000'), currency='USD', formula='0.8959999999999999 * 1000', required_units=['1000'], provided_inputs={'1000': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:258: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:259: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:260: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:261: BasicRateComputation(calculated=True, amount=Decimal('384.000'), currency='USD', formula='0.384 * 1000', required_units=['1000'], provided_inputs={'1000': Decimal('100')}, notes=[])
+.basic_rate_test.csv:262: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:263: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:264: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A* (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:265: BasicRateComputation(calculated=True, amount=Decimal('557.000'), currency='USD', formula='0.557 * 1000', required_units=['1000'], provided_inputs={'1000': Decimal('100')}, notes=[])
+.basic_rate_test.csv:266: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:267: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A* (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:268: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:269: BasicRateComputation(calculated=True, amount=Decimal('1340.00'), currency='USD', formula='1.34 * 1000', required_units=['1000'], provided_inputs={'1000': Decimal('100')}, notes=[])
+.basic_rate_test.csv:270: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:271: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:272: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:273: BasicRateComputation(calculated=True, amount=Decimal('192.000'), currency='USD', formula='0.192 * 1000', required_units=['1000'], provided_inputs={'1000': Decimal('100')}, notes=[])
+.basic_rate_test.csv:274: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:275: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:276: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:277: BasicRateComputation(calculated=True, amount=Decimal('18.700'), currency='USD', formula='0.187 * clean_kg', required_units=['clean_kg'], provided_inputs={'clean_kg': Decimal('100')}, notes=[])
+.basic_rate_test.csv:278: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:279: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:280: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:281: BasicRateComputation(calculated=True, amount=Decimal('20.60000000000000200'), currency='USD', formula='0.20600000000000002 * clean_kg', required_units=['clean_kg'], provided_inputs={'clean_kg': Decimal('100')}, notes=[])
+Fbasic_rate_test.csv:282: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:283: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MX; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:284: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:285: BasicRateComputation(calculated=True, amount=Decimal('5.100'), currency='USD', formula='0.051 * clean_kg', required_units=['clean_kg'], provided_inputs={'clean_kg': Decimal('100')}, notes=[])
+.basic_rate_test.csv:286: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:287: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:288: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:289: BasicRateComputation(calculated=True, amount=Decimal('5.00'), currency='USD', formula='0.05 * clean_kg', required_units=['clean_kg'], provided_inputs={'clean_kg': Decimal('100')}, notes=[])
+.basic_rate_test.csv:290: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:291: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CW; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:292: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:293: BasicRateComputation(calculated=True, amount=Decimal('327.600'), currency='USD', formula='0.76 * pr + 0.32 * usd', required_units=['pr', 'usd'], provided_inputs={'pr': Decimal('10'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:294: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:295: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:296: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:297: BasicRateComputation(calculated=True, amount=Decimal('177.600'), currency='USD', formula='0.76 * pr + 0.17 * usd', required_units=['pr', 'usd'], provided_inputs={'pr': Decimal('10'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:298: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:299: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:300: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:301: BasicRateComputation(calculated=True, amount=Decimal('384.0000'), currency='USD', formula='0.9 * pr + 0.375 * usd', required_units=['pr', 'usd'], provided_inputs={'pr': Decimal('10'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:302: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:303: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:304: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:305: BasicRateComputation(calculated=True, amount=Decimal('209.00'), currency='USD', formula='0.9 * pr + 0.2 * usd', required_units=['pr', 'usd'], provided_inputs={'pr': Decimal('10'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:306: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:307: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:308: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:309: BasicRateComputation(calculated=True, amount=Decimal('268.3000'), currency='USD', formula='0.63 * pr + 0.262 * usd', required_units=['pr', 'usd'], provided_inputs={'pr': Decimal('10'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:310: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:311: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:312: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:313: BasicRateComputation(calculated=True, amount=Decimal('109.9999999999999990000'), currency='USD', formula='0.96 * doz + 0.013999999999999999 * usd', required_units=['doz', 'usd'], provided_inputs={'doz': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:314: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:315: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CW; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:316: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:317: BasicRateComputation(calculated=True, amount=Decimal('68.0000'), currency='USD', formula='0.34 * doz + 0.034 * usd', required_units=['doz', 'usd'], provided_inputs={'doz': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:318: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:319: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:320: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A* (Generalized System of Preferences)."])
+.basic_rate_test.csv:321: BasicRateComputation(calculated=True, amount=Decimal('140.0000'), currency='USD', formula='0.94 * doz + 0.046 * usd', required_units=['doz', 'usd'], provided_inputs={'doz': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:322: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GT; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:323: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:324: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AI; qualifying program codes: A (Generalized System of Preferences)."])
+.basic_rate_test.csv:325: BasicRateComputation(calculated=True, amount=Decimal('67.0000'), currency='USD', formula='0.12 * doz + 0.055 * usd', required_units=['doz', 'usd'], provided_inputs={'doz': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:326: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:327: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:328: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:329: BasicRateComputation(calculated=True, amount=Decimal('9.350'), currency='USD', formula='0.187 * m2', required_units=['m2'], provided_inputs={'m2': Decimal('50')}, notes=[])
+.basic_rate_test.csv:330: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:331: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:332: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:333: BasicRateComputation(calculated=True, amount=Decimal('7.250'), currency='USD', formula='0.145 * m2', required_units=['m2'], provided_inputs={'m2': Decimal('50')}, notes=[])
+.basic_rate_test.csv:334: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:335: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GT; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:336: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AI; qualifying program codes: A (Generalized System of Preferences)."])
+.basic_rate_test.csv:337: BasicRateComputation(calculated=True, amount=Decimal('14.55000000000000200'), currency='USD', formula='0.29100000000000004 * m2', required_units=['m2'], provided_inputs={'m2': Decimal('50')}, notes=[])
+Fbasic_rate_test.csv:338: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:339: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GD; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:340: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:341: BasicRateComputation(calculated=True, amount=Decimal('28.25'), currency='USD', formula='1.13 * m3', required_units=['m3'], provided_inputs={'m3': Decimal('25')}, notes=[])
+.basic_rate_test.csv:342: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:343: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:344: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:345: BasicRateComputation(calculated=True, amount=Decimal('45.0'), currency='USD', formula='1.8 * m3', required_units=['m3'], provided_inputs={'m3': Decimal('25')}, notes=[])
+.basic_rate_test.csv:346: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:347: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:348: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:349: BasicRateComputation(calculated=True, amount=Decimal('28.4999999999999970000'), currency='USD', formula='0.01 * no + 0.027999999999999997 * usd', required_units=['no', 'usd'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:350: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:351: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:352: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GD; qualifying program codes: A (Generalized System of Preferences), E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:353: BasicRateComputation(calculated=True, amount=Decimal('52.0000'), currency='USD', formula='0.02 * no + 0.051 * usd', required_units=['no', 'usd'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:354: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MX; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:355: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:356: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:357: BasicRateComputation(calculated=True, amount=Decimal('64.2000'), currency='USD', formula='0.004 * no + 0.064 * usd', required_units=['no', 'usd'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:358: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GT; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:359: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:360: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:361: BasicRateComputation(calculated=True, amount=Decimal('68.2000'), currency='USD', formula='0.004 * no + 0.068 * usd', required_units=['no', 'usd'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:362: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:363: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:364: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MX; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:365: BasicRateComputation(calculated=True, amount=Decimal('106.450000000000000050'), currency='USD', formula='0.009000000000000001 * no + 0.106 * usd', required_units=['no', 'usd'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:366: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:367: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:368: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:369: BasicRateComputation(calculated=True, amount=Decimal('33.5200'), currency='USD', formula='0.17 * no + 0.025 * usd + 0.01 * jewel', required_units=['no', 'usd', 'jewel'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0'), 'jewel': Decimal('2')}, notes=[])
+.basic_rate_test.csv:370: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:371: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SO; qualifying program codes: A+ (Generalized System of Preferences)."])
+.basic_rate_test.csv:372: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:373: BasicRateComputation(calculated=True, amount=Decimal('74.0400'), currency='USD', formula='0.36 * no + 0.056 * usd + 0.02 * jewel', required_units=['no', 'usd', 'jewel'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0'), 'jewel': Decimal('2')}, notes=[])
+.basic_rate_test.csv:374: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:375: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:376: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:377: BasicRateComputation(calculated=True, amount=Decimal('30.5160'), currency='USD', formula='0.15 * no + 0.023 * usd + 0.008 * jewel', required_units=['no', 'usd', 'jewel'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0'), 'jewel': Decimal('2')}, notes=[])
+.basic_rate_test.csv:378: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BR; qualifying program codes: A (Generalized System of Preferences)."])
+.basic_rate_test.csv:379: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:380: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:381: BasicRateComputation(calculated=True, amount=Decimal('47.550'), currency='USD', formula='0.15 * no + 0.04 * usd + 0.025 * jewel', required_units=['no', 'usd', 'jewel'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0'), 'jewel': Decimal('2')}, notes=[])
+.basic_rate_test.csv:382: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:383: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GT; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:384: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:385: BasicRateComputation(calculated=True, amount=Decimal('86.5500'), currency='USD', formula='0.45 * no + 0.064 * usd + 0.025 * jewel', required_units=['no', 'usd', 'jewel'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0'), 'jewel': Decimal('2')}, notes=[])
+.basic_rate_test.csv:386: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GD; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:387: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MX; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:388: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:389: BasicRateComputation(calculated=True, amount=Decimal('216.00'), currency='USD', formula='2.16 * each', required_units=['each'], provided_inputs={'each': Decimal('100')}, notes=[])
+.basic_rate_test.csv:390: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:391: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:392: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GT; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:393: BasicRateComputation(calculated=True, amount=Decimal('180.0'), currency='USD', formula='1.8 * each', required_units=['each'], provided_inputs={'each': Decimal('100')}, notes=[])
+.basic_rate_test.csv:394: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:395: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:396: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:397: BasicRateComputation(calculated=True, amount=Decimal('144.00'), currency='USD', formula='1.44 * each', required_units=['each'], provided_inputs={'each': Decimal('100')}, notes=[])
+.basic_rate_test.csv:398: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:399: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:400: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MX; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:401: BasicRateComputation(calculated=True, amount=Decimal('150.0'), currency='USD', formula='1.5 * each', required_units=['each'], provided_inputs={'each': Decimal('100')}, notes=[])
+.basic_rate_test.csv:402: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:403: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:404: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GD; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:405: BasicRateComputation(calculated=True, amount=Decimal('172.00'), currency='USD', formula='1.72 * each', required_units=['each'], provided_inputs={'each': Decimal('100')}, notes=[])
+.basic_rate_test.csv:406: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SO; qualifying program codes: A+ (Generalized System of Preferences)."])
+.basic_rate_test.csv:407: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:408: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country HN; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:409: BasicRateComputation(calculated=True, amount=Decimal('43.2340'), currency='USD', formula='0.043 * usd + 0.017 * jewel + 0.002 * piece', required_units=['usd', 'jewel', 'piece'], provided_inputs={'usd': Decimal('1000.0'), 'jewel': Decimal('2'), 'piece': Decimal('100')}, notes=[])
+.basic_rate_test.csv:410: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:411: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:412: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CA; qualifying program codes: B (Automotive Products Trade Act), S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:413: BasicRateComputation(calculated=True, amount=Decimal('60.246'), currency='USD', formula='0.06 * usd + 0.023 * jewel + 0.002 * piece', required_units=['usd', 'jewel', 'piece'], provided_inputs={'usd': Decimal('1000.0'), 'jewel': Decimal('2'), 'piece': Decimal('100')}, notes=[])
+.basic_rate_test.csv:414: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MX; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:415: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:416: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:417: BasicRateComputation(calculated=True, amount=Decimal('43.500'), currency='USD', formula='0.047 * rifle_value + 0.20 * sight_value', required_units=['rifle_value', 'sight_value'], provided_inputs={'rifle_value': Decimal('500'), 'sight_value': Decimal('100')}, notes=[])
+.basic_rate_test.csv:418: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:419: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CI; qualifying program codes: A (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:420: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BR; qualifying program codes: A (Generalized System of Preferences)."])
+.basic_rate_test.csv:421: BasicRateComputation(calculated=True, amount=Decimal('29.000'), currency='USD', formula='0.038 * rifle_value + 0.10 * sight_value', required_units=['rifle_value', 'sight_value'], provided_inputs={'rifle_value': Decimal('500'), 'sight_value': Decimal('100')}, notes=[])
+.basic_rate_test.csv:422: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:423: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:424: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country HN; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:425: BasicRateComputation(calculated=True, amount=Decimal('28.500'), currency='USD', formula='0.031 * rifle_value + 0.13 * sight_value', required_units=['rifle_value', 'sight_value'], provided_inputs={'rifle_value': Decimal('500'), 'sight_value': Decimal('100')}, notes=[])
+.basic_rate_test.csv:426: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country GD; qualifying program codes: A* (Generalized System of Preferences), E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:427: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:428: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country HN; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:429: BasicRateComputation(calculated=True, amount=Decimal('57.0000'), currency='USD', formula='0.14 * gross + 0.043 * usd', required_units=['gross', 'usd'], provided_inputs={'gross': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:430: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:431: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BR; qualifying program codes: A (Generalized System of Preferences)."])
+.basic_rate_test.csv:432: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:433: BasicRateComputation(calculated=True, amount=Decimal('34.40000000000000200'), currency='USD', formula='0.14400000000000002 * gross + 0.02 * usd', required_units=['gross', 'usd'], provided_inputs={'gross': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:434: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:435: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country LC; qualifying program codes: A (Generalized System of Preferences), E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:436: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country LS; qualifying program codes: A (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:437: BasicRateComputation(calculated=True, amount=Decimal('74.80000000000000300'), currency='USD', formula='0.28800000000000003 * gross + 0.046 * usd', required_units=['gross', 'usd'], provided_inputs={'gross': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+Fbasic_rate_test.csv:438: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country LC; qualifying program codes: A* (Generalized System of Preferences), E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:439: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:440: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:441: BasicRateComputation(calculated=True, amount=Decimal('22.7000000000000000000'), currency='USD', formula='0.09699999999999999 * gross + 0.013000000000000001 * usd', required_units=['gross', 'usd'], provided_inputs={'gross': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:442: BasicRateComputation(calculated=True, amount=Decimal('0'), currency='USD', formula='0', required_units=[], provided_inputs={}, notes=[])
+.basic_rate_test.csv:443: BasicRateComputation(calculated=True, amount=Decimal('0'), currency='USD', formula='0', required_units=[], provided_inputs={}, notes=[])
+.basic_rate_test.csv:444: BasicRateComputation(calculated=True, amount=Decimal('0'), currency='USD', formula='0', required_units=[], provided_inputs={}, notes=[])
+.basic_rate_test.csv:445: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:446: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country IL; qualifying program codes: IL (United States-Israel Free Trade Area)."])
+.basic_rate_test.csv:447: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country LC; qualifying program codes: A* (Generalized System of Preferences), E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:448: BasicRateComputation(calculated=True, amount=Decimal('2500.0000'), currency='USD', formula='0.025 * usd * lead_percentage', required_units=['usd', 'lead_percentage'], provided_inputs={'usd': Decimal('1000.0'), 'lead_percentage': Decimal('100')}, notes=[])
+.basic_rate_test.csv:449: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country LS; qualifying program codes: A (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:450: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:451: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:452: BasicRateComputation(calculated=True, amount=Decimal('2500.0000'), currency='USD', formula='0.025 * usd * lead_percentage', required_units=['usd', 'lead_percentage'], provided_inputs={'usd': Decimal('1000.0'), 'lead_percentage': Decimal('100')}, notes=[])
+.basic_rate_test.csv:453: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country VG; qualifying program codes: A (Generalized System of Preferences), E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:454: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:455: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:456: BasicRateComputation(calculated=True, amount=Decimal('2500.0000'), currency='USD', formula='0.025 * usd * lead_percentage', required_units=['usd', 'lead_percentage'], provided_inputs={'usd': Decimal('1000.0'), 'lead_percentage': Decimal('100')}, notes=[])
+.basic_rate_test.csv:457: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PE; qualifying program codes: PE (United States-Peru Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:458: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:459: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SG; qualifying program codes: SG (United States-Singapore Free Trade Agreement)."])
+.basic_rate_test.csv:460: BasicRateComputation(calculated=True, amount=Decimal('6.80'), currency='USD', formula='0.68 * head', required_units=['head'], provided_inputs={'head': Decimal('10')}, notes=[])
+.basic_rate_test.csv:461: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:462: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country EG; qualifying program codes: A (Generalized System of Preferences)."])
+.basic_rate_test.csv:463: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:464: BasicRateComputation(calculated=True, amount=Decimal('5.00'), currency='USD', formula='0.05 * kg_on_contents_and_container', required_units=['kg_on_contents_and_container'], provided_inputs={'kg_on_contents_and_container': Decimal('100')}, notes=[])
+.basic_rate_test.csv:465: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:466: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country LS; qualifying program codes: A (Generalized System of Preferences), D (African Growth and Opportunity Act)."])
+.basic_rate_test.csv:467: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MX; qualifying program codes: S (United States-Mexico-Canada Agreement)."])
+.basic_rate_test.csv:468: BasicRateComputation(calculated=True, amount=Decimal('5.00'), currency='USD', formula='0.05 * kg_on_contents_and_container', required_units=['kg_on_contents_and_container'], provided_inputs={'kg_on_contents_and_container': Decimal('100')}, notes=[])
+.basic_rate_test.csv:469: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country PA; qualifying program codes: PA (United States-Panama Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:470: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country KR; qualifying program codes: KR (United States-Korea Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:471: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:472: BasicRateComputation(calculated=True, amount=Decimal('166.6250'), currency='USD', formula='0.235 * liter + 0.149 * usd', required_units=['liter', 'usd'], provided_inputs={'liter': Decimal('75'), 'usd': Decimal('1000.0')}, notes=[])
+.basic_rate_test.csv:473: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country SO; qualifying program codes: A+ (Generalized System of Preferences)."])
+.basic_rate_test.csv:474: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:475: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country OM; qualifying program codes: OM (United States-Oman Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:476: BasicRateComputation(calculated=True, amount=Decimal('34.700'), currency='USD', formula='0.044 * liter + 0.314 * pf_liter', required_units=['liter', 'pf_liter'], provided_inputs={'liter': Decimal('75'), 'pf_liter': Decimal('100')}, notes=[])
+.basic_rate_test.csv:477: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country VG; qualifying program codes: E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:478: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CO; qualifying program codes: CO (United States-Colombia Trade Promotion Agreement Implementation Act)."])
+.basic_rate_test.csv:479: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:480: BasicRateComputation(calculated=True, amount=Decimal('24.425'), currency='USD', formula='0.031 * liter + 0.221 * pf_liter_on_ethyl_alcohol_content', required_units=['liter', 'pf_liter_on_ethyl_alcohol_content'], provided_inputs={'liter': Decimal('75'), 'pf_liter_on_ethyl_alcohol_content': Decimal('100')}, notes=[])
+.basic_rate_test.csv:481: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:482: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CR; qualifying program codes: P (Dominican Republic-Central America-United States Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:483: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country MA; qualifying program codes: MA (United States-Morocco Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:484: BasicRateComputation(calculated=True, amount=Decimal('1.400'), currency='USD', formula='0.007 * kg_on_copper_content + 0.007 * kg_on_lead_content', required_units=['kg_on_copper_content', 'kg_on_lead_content'], provided_inputs={'kg_on_copper_content': Decimal('100'), 'kg_on_lead_content': Decimal('100')}, notes=[])
+.basic_rate_test.csv:485: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AU; qualifying program codes: AU (United States-Australia Free Trade Agreement)."])
+.basic_rate_test.csv:486: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country JO; qualifying program codes: A (Generalized System of Preferences), JO (United States-Jordan Free Trade Area Implementation Act)."])
+.basic_rate_test.csv:487: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country EG; qualifying program codes: A (Generalized System of Preferences)."])
+.basic_rate_test.csv:488: BasicRateComputation(calculated=True, amount=Decimal('1.400'), currency='USD', formula='0.007 * kg_on_copper_content + 0.007 * kg_on_lead_content', required_units=['kg_on_copper_content', 'kg_on_lead_content'], provided_inputs={'kg_on_copper_content': Decimal('100'), 'kg_on_lead_content': Decimal('100')}, notes=[])
+.basic_rate_test.csv:489: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country CL; qualifying program codes: CL (United States-Chile Free Trade Agreement)."])
+.basic_rate_test.csv:490: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country VG; qualifying program codes: A (Generalized System of Preferences), E (Caribbean Basin Economic Recovery Act)."])
+.basic_rate_test.csv:491: BasicRateComputation(calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BH; qualifying program codes: BH (United States-Bahrain Free Trade Agreement Implementation Act)."])
+.basic_rate_test.csv:492: BasicRateComputation(calculated=True, amount=Decimal('1.400'), currency='USD', formula='0.007 * kg_on_copper_content + 0.007 * kg_on_lead_content', required_units=['kg_on_copper_content', 'kg_on_lead_content'], provided_inputs={'kg_on_copper_content': Decimal('100'), 'kg_on_lead_content': Decimal('100')}, notes=[])
+.
+
+=================================== FAILURES ===================================
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:17] __________
+
+case = {'expected': Decimal('18.0'), 'hts_code': '0106.31.00.00', 'id': 'basic_rate_test.csv:17', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '0106.31.00.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:17: unexpected duty amount
+E       assert Decimal('18.0000000000000020000') == Decimal('18.0')
+E        +  where Decimal('18.0000000000000020000') = BasicRateComputation(calculated=True, amount=Decimal('18.0000000000000020000'), currency='USD', formula='0.018000000000000002 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:33] __________
+
+case = {'expected': Decimal('4.4'), 'hts_code': '0201.10.05.10', 'id': 'basic_rate_test.csv:33', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '0201.10.05.10', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:33: unexpected duty amount
+E       assert Decimal('4.400000000000000400') == Decimal('4.4')
+E        +  where Decimal('4.400000000000000400') = BasicRateComputation(calculated=True, amount=Decimal('4.400000000000000400'), currency='USD', formula='0.044000000000000004 * kg', required_units=['kg'], provided_inputs={'kg': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:37] __________
+
+case = {'expected': Decimal('1.4'), 'hts_code': '0203.12.10.10', 'id': 'basic_rate_test.csv:37', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '0203.12.10.10', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:37: unexpected duty amount
+E       assert Decimal('1.399999999999999900') == Decimal('1.4')
+E        +  where Decimal('1.399999999999999900') = BasicRateComputation(calculated=True, amount=Decimal('1.399999999999999900'), currency='USD', formula='0.013999999999999999 * kg', required_units=['kg'], provided_inputs={'kg': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:41] __________
+
+case = {'expected': Decimal('0.7'), 'hts_code': '0204.10.00.00', 'id': 'basic_rate_test.csv:41', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '0204.10.00.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:41: unexpected duty amount
+E       assert Decimal('0.699999999999999900') == Decimal('0.7')
+E        +  where Decimal('0.699999999999999900') = BasicRateComputation(calculated=True, amount=Decimal('0.699999999999999900'), currency='USD', formula='0.006999999999999999 * kg', required_units=['kg'], provided_inputs={'kg': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:45] __________
+
+case = {'expected': Decimal('0.45'), 'hts_code': '0105.11.00.10', 'id': 'basic_rate_test.csv:45', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '0105.11.00.10', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:45: unexpected duty amount
+E       assert Decimal('0.450000000000000050') == Decimal('0.45')
+E        +  where Decimal('0.450000000000000050') = BasicRateComputation(calculated=True, amount=Decimal('0.450000000000000050'), currency='USD', formula='0.009000000000000001 * no', required_units=['no'], provided_inputs={'no': Decimal('50')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:93] __________
+
+case = {'expected': Decimal('84.9'), 'hts_code': '1701.91.48.00', 'id': 'basic_rate_test.csv:93', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '1701.91.48.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:93: unexpected duty amount
+E       assert Decimal('84.89999999999999700') == Decimal('84.9')
+E        +  where Decimal('84.89999999999999700') = BasicRateComputation(calculated=True, amount=Decimal('84.89999999999999700'), currency='USD', formula='0.3389999999999...0.051 * usd', required_units=['kg', 'usd'], provided_inputs={'kg': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:97] __________
+
+case = {'expected': Decimal('144.0'), 'hts_code': '1704.90.58.00', 'id': 'basic_rate_test.csv:97', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '1704.90.58.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:97: unexpected duty amount
+E       assert Decimal('144.000000000000010000') == Decimal('144.0')
+E        +  where Decimal('144.000000000000010000') = BasicRateComputation(calculated=True, amount=Decimal('144.000000000000010000'), currency='USD', formula='0.4 * kg + 0....00001 * usd', required_units=['kg', 'usd'], provided_inputs={'kg': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:101] _________
+
+case = {'expected': Decimal('3.5573'), 'hts_code': '1701.12.05.00', 'id': 'basic_rate_test.csv:101', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '1701.12.05.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:101: unexpected duty amount
+E       assert Decimal('3.55726000') == Decimal('3.5573')
+E        +  where Decimal('3.55726000') = BasicRateComputation(calculated=True, amount=Decimal('3.55726000'), currency='USD', formula='max(0.03143854, 0.036606 ...ee)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('95')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:109] _________
+
+case = {'expected': Decimal('3.7639'), 'hts_code': '1701.12.05.00', 'id': 'basic_rate_test.csv:109', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '1701.12.05.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:109: unexpected duty amount
+E       assert Decimal('3.76394000') == Decimal('3.7639')
+E        +  where Decimal('3.76394000') = BasicRateComputation(calculated=True, amount=Decimal('3.76394000'), currency='USD', formula='max(0.03143854, 0.036606 ...e)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('105')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:113] _________
+
+case = {'expected': Decimal('1.3573'), 'hts_code': '1701.13.05.00', 'id': 'basic_rate_test.csv:113', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '1701.13.05.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:113: unexpected duty amount
+E       assert Decimal('1.35726000') == Decimal('1.3573')
+E        +  where Decimal('1.35726000') = BasicRateComputation(calculated=True, amount=Decimal('1.35726000'), currency='USD', formula='max(0.00943854, 0.014606 ...ee)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('95')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:121] _________
+
+case = {'expected': Decimal('1.5639'), 'hts_code': '1701.13.05.00', 'id': 'basic_rate_test.csv:121', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '1701.13.05.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:121: unexpected duty amount
+E       assert Decimal('1.56394000') == Decimal('1.5639')
+E        +  where Decimal('1.56394000') = BasicRateComputation(calculated=True, amount=Decimal('1.56394000'), currency='USD', formula='max(0.00943854, 0.014606 ...e)) * kg', required_units=['kg', 'degree'], provided_inputs={'kg': Decimal('100'), 'degree': Decimal('105')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:125] _________
+
+case = {'expected': Decimal('67.9'), 'hts_code': '1702.20.28.10', 'id': 'basic_rate_test.csv:125', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '1702.20.28.10', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:125: unexpected duty amount
+E       assert Decimal('67.89999999999999800') == Decimal('67.9')
+E        +  where Decimal('67.89999999999999800') = BasicRateComputation(calculated=True, amount=Decimal('67.89999999999999800'), currency='USD', formula='0.1689999999999...g_of_total_sugars', 'usd'], provided_inputs={'kg_of_total_sugars': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:129] _________
+
+case = {'expected': Decimal('84.9'), 'hts_code': '1702.40.28.00', 'id': 'basic_rate_test.csv:129', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '1702.40.28.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:129: unexpected duty amount
+E       assert Decimal('84.89999999999999700') == Decimal('84.9')
+E        +  where Decimal('84.89999999999999700') = BasicRateComputation(calculated=True, amount=Decimal('84.89999999999999700'), currency='USD', formula='0.3389999999999...g_of_total_sugars', 'usd'], provided_inputs={'kg_of_total_sugars': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:141] _________
+
+case = {'expected': Decimal('0.2625'), 'hts_code': '1702.90.35.00', 'id': 'basic_rate_test.csv:141', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '1702.90.35.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:141: unexpected duty amount
+E       assert Decimal('0.2624999999999999700') == Decimal('0.2625')
+E        +  where Decimal('0.2624999999999999700') = BasicRateComputation(calculated=True, amount=Decimal('0.2624999999999999700'), currency='USD', formula='0.0034999999999999996 * liter', required_units=['liter'], provided_inputs={'liter': Decimal('75')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:181] _________
+
+case = {'expected': Decimal('5.4'), 'hts_code': '2005.70.02.30', 'id': 'basic_rate_test.csv:181', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '2005.70.02.30', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:181: unexpected duty amount
+E       assert Decimal('5.400000000000000600') == Decimal('5.4')
+E        +  where Decimal('5.400000000000000600') = BasicRateComputation(calculated=True, amount=Decimal('5.400000000000000600'), currency='USD', formula='0.0540000000000...d_weight', required_units=['kg_on_drained_weight'], provided_inputs={'kg_on_drained_weight': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:185] _________
+
+case = {'expected': Decimal('3.7'), 'hts_code': '2005.70.04.30', 'id': 'basic_rate_test.csv:185', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '2005.70.04.30', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:185: unexpected duty amount
+E       assert Decimal('3.700000000000000500') == Decimal('3.7')
+E        +  where Decimal('3.700000000000000500') = BasicRateComputation(calculated=True, amount=Decimal('3.700000000000000500'), currency='USD', formula='0.0370000000000...d_weight', required_units=['kg_on_drained_weight'], provided_inputs={'kg_on_drained_weight': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:197] _________
+
+case = {'expected': Decimal('9.3'), 'hts_code': '2005.70.50.30', 'id': 'basic_rate_test.csv:197', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '2005.70.50.30', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:197: unexpected duty amount
+E       assert Decimal('9.30000000000000100') == Decimal('9.3')
+E        +  where Decimal('9.30000000000000100') = BasicRateComputation(calculated=True, amount=Decimal('9.30000000000000100'), currency='USD', formula='0.09300000000000...d_weight', required_units=['kg_on_drained_weight'], provided_inputs={'kg_on_drained_weight': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:201] _________
+
+case = {'expected': Decimal('18.9'), 'hts_code': '2207.10.30.00', 'id': 'basic_rate_test.csv:201', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '2207.10.30.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:201: unexpected duty amount
+E       assert Decimal('18.89999999999999700') == Decimal('18.9')
+E        +  where Decimal('18.89999999999999700') = BasicRateComputation(calculated=True, amount=Decimal('18.89999999999999700'), currency='USD', formula='0.18899999999999997 * pf_liter', required_units=['pf_liter'], provided_inputs={'pf_liter': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:209] _________
+
+case = {'expected': Decimal('21.1'), 'hts_code': '2208.90.80.10', 'id': 'basic_rate_test.csv:209', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '2208.90.80.10', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:209: unexpected duty amount
+E       assert Decimal('21.10000000000000200') == Decimal('21.1')
+E        +  where Decimal('21.10000000000000200') = BasicRateComputation(calculated=True, amount=Decimal('21.10000000000000200'), currency='USD', formula='0.21100000000000002 * pf_liter', required_units=['pf_liter'], provided_inputs={'pf_liter': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:221] _________
+
+case = {'expected': Decimal('1.1'), 'hts_code': '2607.00.00.10', 'id': 'basic_rate_test.csv:221', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '2607.00.00.10', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:221: unexpected duty amount
+E       assert Decimal('1.100000000000000100') == Decimal('1.1')
+E        +  where Decimal('1.100000000000000100') = BasicRateComputation(calculated=True, amount=Decimal('1.100000000000000100'), currency='USD', formula='0.0110000000000...lead_content', required_units=['kg_on_lead_content'], provided_inputs={'kg_on_lead_content': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:257] _________
+
+case = {'expected': Decimal('896.0'), 'hts_code': '0601.10.15.00', 'id': 'basic_rate_test.csv:257', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '0601.10.15.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:257: unexpected duty amount
+E       assert Decimal('895.9999999999999000') == Decimal('896.0')
+E        +  where Decimal('895.9999999999999000') = BasicRateComputation(calculated=True, amount=Decimal('895.9999999999999000'), currency='USD', formula='0.8959999999999999 * 1000', required_units=['1000'], provided_inputs={'1000': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:281] _________
+
+case = {'expected': Decimal('20.6'), 'hts_code': '5101.21.40.30', 'id': 'basic_rate_test.csv:281', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '5101.21.40.30', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:281: unexpected duty amount
+E       assert Decimal('20.60000000000000200') == Decimal('20.6')
+E        +  where Decimal('20.60000000000000200') = BasicRateComputation(calculated=True, amount=Decimal('20.60000000000000200'), currency='USD', formula='0.20600000000000002 * clean_kg', required_units=['clean_kg'], provided_inputs={'clean_kg': Decimal('100')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:313] _________
+
+case = {'expected': Decimal('110.0'), 'hts_code': '6501.00.60.00', 'id': 'basic_rate_test.csv:313', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '6501.00.60.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:313: unexpected duty amount
+E       assert Decimal('109.9999999999999990000') == Decimal('110.0')
+E        +  where Decimal('109.9999999999999990000') = BasicRateComputation(calculated=True, amount=Decimal('109.9999999999999990000'), currency='USD', formula='0.96 * doz +...999 * usd', required_units=['doz', 'usd'], provided_inputs={'doz': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:337] _________
+
+case = {'expected': Decimal('14.55'), 'hts_code': '7005.30.00.00', 'id': 'basic_rate_test.csv:337', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '7005.30.00.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:337: unexpected duty amount
+E       assert Decimal('14.55000000000000200') == Decimal('14.55')
+E        +  where Decimal('14.55000000000000200') = BasicRateComputation(calculated=True, amount=Decimal('14.55000000000000200'), currency='USD', formula='0.29100000000000004 * m2', required_units=['m2'], provided_inputs={'m2': Decimal('50')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:349] _________
+
+case = {'expected': Decimal('28.5'), 'hts_code': '8201.50.00.00', 'id': 'basic_rate_test.csv:349', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '8201.50.00.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:349: unexpected duty amount
+E       assert Decimal('28.4999999999999970000') == Decimal('28.5')
+E        +  where Decimal('28.4999999999999970000') = BasicRateComputation(calculated=True, amount=Decimal('28.4999999999999970000'), currency='USD', formula='0.01 * no + 0...999997 * usd', required_units=['no', 'usd'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:365] _________
+
+case = {'expected': Decimal('106.45'), 'hts_code': '8211.91.30.00', 'id': 'basic_rate_test.csv:365', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '8211.91.30.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:365: unexpected duty amount
+E       assert Decimal('106.450000000000000050') == Decimal('106.45')
+E        +  where Decimal('106.450000000000000050') = BasicRateComputation(calculated=True, amount=Decimal('106.450000000000000050'), currency='USD', formula='0.00900000000... 0.106 * usd', required_units=['no', 'usd'], provided_inputs={'no': Decimal('50'), 'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:433] _________
+
+case = {'expected': Decimal('34.4'), 'hts_code': '9615.11.10.00', 'id': 'basic_rate_test.csv:433', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '9615.11.10.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:433: unexpected duty amount
+E       assert Decimal('34.40000000000000200') == Decimal('34.4')
+E        +  where Decimal('34.40000000000000200') = BasicRateComputation(calculated=True, amount=Decimal('34.40000000000000200'), currency='USD', formula='0.1440000000000...* usd', required_units=['gross', 'usd'], provided_inputs={'gross': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+_________ test_compute_basic_duty_against_csv[basic_rate_test.csv:437] _________
+
+case = {'expected': Decimal('74.8'), 'hts_code': '9615.11.30.00', 'id': 'basic_rate_test.csv:437', 'payload': {'country_of_origin': 'CN', 'date_of_landing': '2025-10-18', 'entry_date': '2025-10-20', 'hts_code': '9615.11.30.00', ...}}
+special_rate_lookup = {'0101': None, '0101.21.00': 'Free', '0101.21.00.10': 'Free', '0101.21.00.20': 'Free', ...}
+
+    @pytest.mark.parametrize("case", CSV_CASES, ids=lambda info: info["id"])
+    def test_compute_basic_duty_against_csv(
+        case: dict, special_rate_lookup: Dict[str, Optional[str]]
+    ):
+        payload = case["payload"]
+        measurements = _prepare_measurements(payload)
+        country = _normalize_country(payload.get("country_of_origin"))
+    
+        special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
+    
+        result = basic_hts_rate.compute_basic_duty(
+            case["hts_code"],
+            measurements,
+            country_of_origin=country,
+            special_rate_of_duty=special_rate,
+        )
+    
+        print(f"{case['id']}: {result}")
+    
+>       assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+E       AssertionError: basic_rate_test.csv:437: unexpected duty amount
+E       assert Decimal('74.80000000000000300') == Decimal('74.8')
+E        +  where Decimal('74.80000000000000300') = BasicRateComputation(calculated=True, amount=Decimal('74.80000000000000300'), currency='USD', formula='0.2880000000000...* usd', required_units=['gross', 'usd'], provided_inputs={'gross': Decimal('100'), 'usd': Decimal('1000.0')}, notes=[]).amount
+
+simulator/test/test_basic_hts_rate.py:161: AssertionError
+=========================== short test summary info ============================
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:17]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:33]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:37]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:41]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:45]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:93]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:97]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:101]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:109]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:113]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:121]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:125]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:129]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:141]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:181]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:185]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:197]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:201]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:209]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:221]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:257]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:281]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:313]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:337]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:349]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:365]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:433]
+FAILED simulator/test/test_basic_hts_rate.py::test_compute_basic_duty_against_csv[basic_rate_test.csv:437]
+======================== 28 failed, 463 passed in 6.89s ========================

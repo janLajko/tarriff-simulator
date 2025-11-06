@@ -1,0 +1,33 @@
+NFO:section301_agent:Created scope↔measure relation 11069 (scope=10019, measure=45, include)
+INFO:section301_agent:Created scope 10020 for key 9403.82.00
+INFO:section301_agent:Created scope↔measure relation 11070 (scope=10020, measure=45, include)
+INFO:section301_agent:Created scope 10021 for key 9403.83.00
+INFO:section301_agent:Created scope↔measure relation 11071 (scope=10021, measure=45, include)
+INFO:section301_agent:Created scope 10022 for key 9403.89.30
+INFO:section301_agent:Created scope↔measure relation 11072 (scope=10022, measure=45, include)
+INFO:section301_agent:Created scope 10023 for key 9403.89.60
+INFO:section301_agent:Created scope↔measure relation 11073 (scope=10023, measure=45, include)
+INFO:section301_agent:Created scope 10024 for key 9403.91.00
+INFO:section301_agent:Created scope↔measure relation 11074 (scope=10024, measure=45, include)
+INFO:section301_agent:Created scope 10025 for key 9403.99.10
+INFO:section301_agent:Created scope↔measure relation 11075 (scope=10025, measure=45, include)
+INFO:section301_agent:Created scope 10026 for key 9403.99.20
+INFO:section301_agent:Created scope↔measure relation 11076 (scope=10026, measure=45, include)
+INFO:section301_agent:Created scope 10027 for key 9403.99.30
+INFO:section301_agent:Created scope↔measure relation 11077 (scope=10027, measure=45, include)
+INFO:section301_agent:Created scope 10028 for key 9403.99.40
+
+
+INFO:section301_agent:Linked child heading 9903.88.69 scope (scope_id=2105) to 9903.88.03 as exclude
+INFO:section301_agent:Created scope↔measure relation 11307 (scope=2106, measure=45, exclude)
+INFO:section301_agent:Linked child heading 9903.88.69 scope (scope_id=2106) to 9903.88.03 as exclude
+INFO:section301_agent:Created scope↔measure relation 11308 (scope=2107, measure=45, exclude)
+INFO:section301_agent:Linked child heading 9903.88.69 scope (scope_id=2107) to 9903.88.03 as exclude
+INFO:section301_agent:Created scope↔measure relation 11309 (scope=2108, measure=45, exclude)
+INFO:section301_agent:Linked child heading 9903.88.69 scope (scope_id=2108) to 9903.88.03 as exclude
+INFO:section301_agent:Created scope↔measure relation 11310 (scope=2109, measure=45, exclude)
+INFO:section301_agent:Linked child heading 9903.88.69 scope (scope_id=2109) to 9903.88.03 as exclude
+INFO:section301_agent:Created scope↔measure relation 11311 (scope=2110, measure=45, exclude)
+INFO:section301_agent:Linked child heading 9903.88.69 scope (scope_id=2110) to 9903.88.03 as exclude
+INFO:section301_agent:Created scope↔measure relation 11312 (scope=2111, measure=45, exclude)
+INFO:section301_agent:Linked child heading 9903.88.69 scope (scope_id=2111) to 9903.88.03 as exclude

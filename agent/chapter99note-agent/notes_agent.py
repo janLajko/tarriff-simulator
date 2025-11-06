@@ -425,10 +425,15 @@ def handle_note20_complex_children(
         last_segment = segment
 
     if not segments:
-        return set()
+        # even if there are no inline segments with explicit tokens we still want to
+        # check for trailing paragraphs (rendered as standalone divs) that belong to
+        # the current note.
+        consumed_lists = set()
+    else:
+        consumed_lists: set[int] = set()
 
-    consumed_lists: set[int] = set()
-    parent_node["content"] = ""
+    if segments:
+        parent_node["content"] = ""
 
     for segment in segments:
         child_tokens = parent_tokens + [segment["token"]]
@@ -446,6 +451,47 @@ def handle_note20_complex_children(
         for lst in segment["lists"]:
             consumed_lists.add(id(lst))
             rec_list_func(lst, subchapter_name, child_tokens)
+
+    # Some chapter 99 notes (e.g. note(20)(g)) include additional explanatory blocks
+    # rendered as <div class="misc_paragraph"> immediately under the same <li>.
+    # Treat each paragraph as a synthetic child so downstream consumers can fetch
+    # them via the structured tree.
+    paragraph_divs: List[Tag] = [
+        div
+        for div in li_tag.find_all(
+            "div",
+            class_=lambda c: c and "misc_paragraph" in c.split(),
+            recursive=False,
+        )
+    ]
+
+    if paragraph_divs:
+        # Remove paragraph bodies from the parent node content if we already have
+        # it populated to keep the parent description focused on the headline text.
+        content = parent_node.get("content") or ""
+        for div in paragraph_divs:
+            text = div.get_text(" ", strip=True)
+            if text and text in content:
+                content = content.replace(text, "").strip()
+        parent_node["content"] = content
+
+        for idx, div in enumerate(paragraph_divs, start=1):
+            paragraph_text = div.get_text(" ", strip=True)
+            if not paragraph_text:
+                continue
+            paragraph_token = f"para{idx}"
+            paragraph_tokens = parent_tokens + [paragraph_token]
+            results.append(
+                {
+                    "chapter": chapter,
+                    "subchapter": subchapter_name,
+                    "label": build_label_from_tokens(paragraph_tokens),
+                    "path": ["note"] + paragraph_tokens,
+                    "parent_label": build_label_from_tokens(parent_tokens),
+                    "content": paragraph_text,
+                    "raw_html": str(div),
+                }
+            )
 
     return consumed_lists
 

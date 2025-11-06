@@ -48,9 +48,9 @@ DEFAULT_HEADINGS = [
     # "9903.88.69",
     # "9903.88.01",
     # "9903.88.02",
-    # "9903.88.03",
+    "9903.88.03",
     # "9903.88.04",
-    "9903.88.15",
+    # "9903.88.15",
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer. From the following text, extract:
@@ -72,20 +72,75 @@ Return JSON only using this structure:
 }}
 """
 
+
+# LLM_NOTE_PROMPT = """You are a structured extractor for HTSUS Section 301 notes.
+# Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
+
+# Objective:
+# From the input legal note text, produce three outputs:
+# 1. **input_htscode** – the heading(s) that the note applies to (from phrases like “For the purposes of heading …”).
+# 2. **scope** – all headings or HTS8 codes that fall under the effective scope of those input headings.
+# 3. **except** – all headings or HTS8 codes explicitly excluded (“except … provided for in …”).
+
+# Each object in scope or except must match the `s301_scope` table schema:
+
+# - key                  // exact heading or HTS8 code, e.g. "9903.88.05" or "8501.10.40"
+# - key_type             // "heading" or "hts8" (never "note")
+# - country_iso2         // "CN" if “products of China” appears, else null
+# - source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
+# - effective_start_date // ISO date; use context.fallback_start_date if not stated
+# - effective_end_date   // ISO date or null
+
+# Extraction rules:
+# A. Identify **input_htscode** from the leading clause “For the purposes of heading …”.
+# B. Identify all **scope** items:
+#    - For headings: include every 9903.xx.xx printed under “applies to…” or similar.
+#    - For HTS8: include every 8-digit subheading printed in the list.
+#    - Do NOT include `input_htscode` again.
+# C. Identify all **except** items:
+#    - Items explicitly listed after “except … provided for in …”.
+#    - Mark their source_label with “-exclusion”.
+# D. Use “CN” as country_iso2 if “products of China” is mentioned.
+# E. Only populate effective_start_date and effective_end_date when explicit "effective" or date ranges appear in the text.  
+#    - Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"  
+#    - Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"  
+#    - If no explicit "effective" or date reference appears, leave both fields null. Do not use fallback_start_date.
+# F. Remove duplicates.
+# G. When multiple note blocks are provided, treat each block independently and set `source_label` using that note label (e.g. "note20(a)" or "note20(b)-exclusion"). Use the provided `context.note_labels` array (same order as the blocks) if you need the human-readable label.
+
+# Context (provided by caller):
+# {context_json}
+
+# Input (one or more note blocks, each beginning with its note label on the first line):
+# \"\"\"{note_text}\"\"\"
+
+# Output JSON format:
+# {{
+#   "input_htscode": ["9903.88.01"],
+#   "scope": [
+#     {{ "key": "2845.20.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null }},
+#     {{ "key": "2845.30.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null }}
+#   ],
+#   "except": [
+#     {{ "key": "9903.88.05", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(a)-exclusion", "effective_start_date": "1900-01-01", "effective_end_date": null }}
+#   ]
+# }}
+# """
+
 LLM_NOTE_PROMPT = """You are a structured extractor for HTSUS Section 301 notes.
 Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
 
 Objective:
 From the input legal note text, produce three outputs:
 1. **input_htscode** – the heading(s) that the note applies to (from phrases like "For the purposes of heading …").
-2. **scope** – all headings, HTS8, or HTS10 codes that fall under the effective scope of those input headings.
-3. **except** – all headings, HTS8, or HTS10 codes explicitly excluded ("except … provided for in …").
+2. **scope** – all headings or HTS8 codes that fall under the effective scope of those input headings.
+3. **except** – all headings or HTS8 codes explicitly excluded ("except … provided for in …").
 
 Each object in scope or except must match the `s301_scope` table schema:
 
 - keys                 // comma-separated exact heading or HTS8 codes (e.g. "0203.29.20,0203.29.40,0206.10.00") when conditions are identical
 - key                  // single exact heading or HTS8 code (e.g. "9903.88.05" or "8501.10.40") when used alone
-- key_type             // one of: "heading" (e.g., 9903.88.05 or a 4-digit heading), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
+- key_type             // "heading" or "hts8" (never "note")
 - country_iso2         // "CN" if "products of China" appears, else null
 - source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
 - effective_start_date // ISO date; use context.fallback_start_date if not stated
@@ -96,11 +151,6 @@ A. Identify **input_htscode** from the leading clause "For the purposes of headi
 B. Identify all **scope** items:
    - For headings: include every 9903.xx.xx printed under "applies to…" or similar.
    - For HTS8: include every 8-digit subheading printed in the list.
-   - For HTS10: include every 10-digit "statistical reporting number" printed in the scope text (only if explicitly listed as in-scope).
-   - Items explicitly listed after "except … provided for in …".
-   - This includes any 10-digit "statistical reporting number(s)" printed in exceptions (e.g., "except … provided for in statistical reporting number 8517.62.0090").
-   - Mark their source_label with "-exclusion".
-   - Apply the same combination rule as in scope, grouping only within the same key_type.
    - Do NOT include `input_htscode` again.
    - **When multiple HTS codes share identical conditions (same key_type, country_iso2, source_label, effective_start_date, effective_end_date), combine them using "keys" field with comma-separated values instead of creating separate objects.**
 C. Identify all **except** items:
@@ -133,67 +183,6 @@ Output JSON format (note the use of "keys" for combined codes and "key" for sing
   ]
 }}
 """
-
-# LLM_NOTE_PROMPT = """You are a structured extractor for HTSUS Section 301 notes.
-# Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
-
-# Objective:
-# From the input legal note text, produce three outputs:
-
-# 1. **input_htscode** – the heading(s) that the note applies to (from phrases like "For the purposes of heading …").
-# 2. **scope** – all headings, HTS8, or HTS10 codes that fall under the effective scope of those input headings.
-# 3. **except** – all headings, HTS8, or HTS10 codes explicitly excluded ("except … provided for in …").
-
-# Each object in scope or except must match the `s301_scope` table schema:
-
-# * keys                 // comma-separated exact codes when conditions are identical. Codes must be of the same key_type. Example: "0203.29.20,0203.29.40,0206.10.00"
-# * key                  // single exact code when used alone. Example: "9903.88.05" or "8501.10.40" or "8517.62.0090"
-# * key_type             // one of: "heading" (e.g., 9903.88.05 or a 4-digit heading), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
-# * country_iso2         // "CN" if "products of China" appears, else null
-# * source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
-# * effective_start_date // ISO date; only if the text states an explicit effective date; otherwise null
-# * effective_end_date   // ISO date; only if the text states an explicit end date; otherwise null
-
-# Extraction rules:
-# A. Identify **input_htscode** from the leading clause "For the purposes of heading …".
-# B. Identify all **scope** items:
-
-# * For headings: include every 9903.xx.xx printed under "applies to…" or similar.
-# * For HTS8: include every 8-digit subheading printed in the list.
-# * For HTS10: include every 10-digit "statistical reporting number" printed in the scope text (only if explicitly listed as in-scope).
-# * Do NOT include `input_htscode` again.
-# * When multiple codes share identical conditions (same key_type, country_iso2, source_label, effective_start_date, effective_end_date), combine them using "keys" with comma-separated values instead of creating separate objects.
-#   C. Identify all **except** items:
-# * Items explicitly listed after "except … provided for in …".
-# * This includes any 10-digit "statistical reporting number(s)" printed in exceptions (e.g., "except … provided for in statistical reporting number 8517.62.0090").
-# * Mark their source_label with "-exclusion".
-# * Apply the same combination rule as in scope, grouping only within the same key_type.
-#   D. Use "CN" as country_iso2 if "products of China" is mentioned.
-#   E. Only populate effective_start_date and effective_end_date when explicit "effective" dates or date ranges appear in the text.
-# * Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"
-# * Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"
-# * If no explicit date appears, leave both fields null. Do not use any fallback date.
-#   F. Remove duplicates.
-#   G. When multiple note blocks are provided, treat each block independently and set `source_label` using that note label (e.g. "note20(a)" or "note20(b)-exclusion"). Use the provided `context.note_labels` array (same order as the blocks) if you need the human-readable label. If `context.source_label_prefix` is provided, use it as the base and append "-exclusion" for the except items.
-
-# Context (provided by caller):
-# {context_json}
-
-# Input (one or more note blocks, each beginning with its note label on the first line):
-# \"\"\"{note_text}\"\"\"
-
-# Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
-# {
-# "input_htscode": ["9903.88.04"],
-# "scope": [
-# { "keys": "2931.90.90,8517.62.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(g)", "effective_start_date": null, "effective_end_date": null }
-# ],
-# "except": [
-# { "keys": "9903.88.33,9903.88.34", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(g)-exclusion", "effective_start_date": null, "effective_end_date": null },
-# { "key": "8517.62.0090", "key_type": "hts10", "country_iso2": "CN", "source_label": "note20(g)-exclusion", "effective_start_date": null, "effective_end_date": null }
-# ]
-# }
-# """
 
 
 NOTE_TOKEN_RE = re.compile(r"\(\s*([^)]+?)\s*\)")

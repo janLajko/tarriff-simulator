@@ -261,6 +261,7 @@ def normalize_rows(csv_paths: Sequence[Path]) -> List[NormalizedRow]:
                                 "row_order": filler.get("row_order"),
                                 "hts_number": filler.get("hts_number"),
                                 "general_rate_of_duty": filler.get("general_rate_of_duty"),
+                                "special_rate_of_duty": filler.get("special_rate_of_duty"),
                                 "column_2_rate_of_duty": filler.get("column_2_rate_of_duty"),
                             }
                         )
@@ -272,6 +273,7 @@ def normalize_rows(csv_paths: Sequence[Path]) -> List[NormalizedRow]:
 
             general_rate = clean_field(row.get("General Rate of Duty"))
             column2_rate = clean_field(row.get("Column 2 Rate of Duty"))
+            special_rate = clean_field(row.get("Special Rate of Duty"))
 
             if not general_rate:
                 for ancestor in reversed(hierarchy_stack):
@@ -283,6 +285,13 @@ def normalize_rows(csv_paths: Sequence[Path]) -> List[NormalizedRow]:
                     if ancestor["column_2_rate_of_duty"]:
                         column2_rate = ancestor["column_2_rate_of_duty"]
                         break
+            if not special_rate:
+                for ancestor in reversed(hierarchy_stack):
+                    if ancestor.get("special_rate_of_duty"):
+                        special_rate = ancestor["special_rate_of_duty"]
+                        break
+            if not special_rate:
+                special_rate = general_rate
 
             normalized_hts = normalize_hts_number(row.get("HTS Number"))
 
@@ -294,7 +303,7 @@ def normalize_rows(csv_paths: Sequence[Path]) -> List[NormalizedRow]:
                 description=clean_field(row.get("Description")),
                 unit_of_quantity=clean_field(row.get("Unit of Quantity")),
                 general_rate_of_duty=general_rate,
-                special_rate_of_duty=clean_field(row.get("Special Rate of Duty")),
+                special_rate_of_duty=special_rate,
                 column_2_rate_of_duty=column2_rate,
                 quota_quantity=clean_field(row.get("Quota Quantity")),
                 additional_duties=clean_field(row.get("Additional Duties")),
@@ -307,6 +316,7 @@ def normalize_rows(csv_paths: Sequence[Path]) -> List[NormalizedRow]:
                 "row_order": normalized_row.row_order,
                 "hts_number": normalized_row.hts_number,
                 "general_rate_of_duty": normalized_row.general_rate_of_duty,
+                "special_rate_of_duty": normalized_row.special_rate_of_duty,
                 "column_2_rate_of_duty": normalized_row.column_2_rate_of_duty,
             }
             hierarchy_stack.append(current_context)

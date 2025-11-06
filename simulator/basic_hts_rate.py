@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ast
 import json
+import re
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from functools import lru_cache
@@ -15,6 +16,7 @@ import psycopg2.extras as pgx
 
 DATA_DIR = Path(__file__).resolve().parent
 HTS_UNIT_PATH = DATA_DIR / "hts_unit.json"
+SPI_PATH = DATA_DIR / "spi.json"
 CURRENCY = "USD"
 
 
@@ -62,23 +64,175 @@ def _load_unit_config() -> Dict[str, Dict[str, object]]:
         raise FileNotFoundError(f"HTS unit configuration not found: {HTS_UNIT_PATH}")
     with HTS_UNIT_PATH.open("r", encoding="utf-8") as handle:
         raw_entries = json.load(handle)
+
     config: Dict[str, Dict[str, object]] = {}
-    for entry in raw_entries:
+
+    def _ingest(hts: object, value: object) -> None:
+        if not isinstance(value, dict):
+            return
+        code = str(hts or "").strip()
+        if not code:
+            return
+        units = value.get("unit") or []
+        normalized_units = [str(item).strip().lower() for item in units if str(item).strip()]
+        config[code] = {
+            "units": normalized_units,
+            "formula": (value.get("formula") or "").strip(),
+            "general_rate_of_duty": value.get("general_rate_of_duty"),
+            "hts_general": value.get("hts_general"),
+            "notes": value.get("notes"),
+        }
+
+    if isinstance(raw_entries, dict):
+        for hts, value in raw_entries.items():
+            _ingest(hts, value)
+    elif isinstance(raw_entries, list):
+        for entry in raw_entries:
+            if not isinstance(entry, dict):
+                continue
+            for hts, value in entry.items():
+                _ingest(hts, value)
+
+    return config
+
+
+@lru_cache(maxsize=1)
+def _load_spi_programs() -> Dict[str, tuple[str, frozenset[str]]]:
+    if not SPI_PATH.exists():
+        return {}
+    with SPI_PATH.open("r", encoding="utf-8") as handle:
+        payload = json.load(handle)
+
+    entries = payload.get("special_program_indicators") if isinstance(payload, dict) else None
+    if not isinstance(entries, list):
+        return {}
+
+    program_index: Dict[str, tuple[str, frozenset[str]]] = {}
+    for entry in entries:
         if not isinstance(entry, dict):
             continue
-        for hts, value in entry.items():
-            if not isinstance(value, dict):
-                continue
-            units = value.get("unit") or []
-            normalized_units = [str(item).strip().lower() for item in units if str(item).strip()]
-            config[hts] = {
-                "units": normalized_units,
-                "formula": (value.get("formula") or "").strip(),
-                "general_rate_of_duty": value.get("general_rate_of_duty"),
-                "hts_general": value.get("hts_general"),
-                "notes": value.get("notes"),
-            }
-    return config
+        code = str(entry.get("code") or "").strip().upper()
+        if not code:
+            continue
+        name = str(entry.get("program_name") or "").strip()
+        raw_countries = entry.get("countries")
+        iso_codes: set[str] = set()
+        if isinstance(raw_countries, list):
+            for country in raw_countries:
+                if not isinstance(country, dict):
+                    continue
+                iso_alpha2 = country.get("iso_alpha2")
+                if not isinstance(iso_alpha2, str):
+                    continue
+                normalized_iso = iso_alpha2.strip().upper()
+                if normalized_iso:
+                    iso_codes.add(normalized_iso)
+        program_index[code] = (name, frozenset(iso_codes))
+    return program_index
+
+
+_FREE_CODES_PATTERN = re.compile(r"free\s*\(([^()]*)\)", re.IGNORECASE)
+_PROGRAM_CODE_CLEANER = re.compile(r"[^A-Z0-9+*]")
+
+
+def _normalize_country_code(country: Optional[str]) -> Optional[str]:
+    if not country or not isinstance(country, str):
+        return None
+    cleaned = "".join(ch for ch in country.strip().upper() if ch.isalnum())
+    if len(cleaned) < 2:
+        return None
+    return cleaned
+
+
+def _extract_free_program_codes(special_rate: str) -> list[str]:
+    codes: list[str] = []
+    seen: set[str] = set()
+    for match in _FREE_CODES_PATTERN.finditer(special_rate):
+        raw_block = match.group(1)
+        for raw_code in raw_block.split(","):
+            cleaned = _PROGRAM_CODE_CLEANER.sub("", raw_code.upper())
+            if cleaned and cleaned not in seen:
+                seen.add(cleaned)
+                codes.append(cleaned)
+    return codes
+
+
+def _resolve_program_countries(program_code: str, program_index: Dict[str, tuple[str, frozenset[str]]]) -> set[str]:
+    normalized_code = str(program_code or "").strip().upper()
+    if not normalized_code:
+        return set()
+
+    candidates = [normalized_code]
+    trimmed = normalized_code.rstrip("*+")
+    if trimmed and trimmed != normalized_code:
+        candidates.append(trimmed)
+
+    for candidate in candidates:
+        program = program_index.get(candidate)
+        if program:
+            countries = program[1]
+            if countries:
+                return set(countries)
+
+    if len(normalized_code) == 2 and normalized_code.isalpha():
+        return {normalized_code}
+    return set()
+
+
+def _describe_program(program_code: str, program_index: Dict[str, tuple[str, frozenset[str]]]) -> str:
+    normalized_code = str(program_code or "").strip().upper()
+    if not normalized_code:
+        return ""
+    program = program_index.get(normalized_code)
+    if program and program[0]:
+        return f"{normalized_code} ({program[0]})"
+    trimmed = normalized_code.rstrip("*+")
+    if trimmed and trimmed != normalized_code:
+        fallback = program_index.get(trimmed)
+        if fallback and fallback[0]:
+            return f"{normalized_code} ({fallback[0]})"
+    return normalized_code
+
+
+def _build_special_free_note(country: Optional[str], special_rate: Optional[str]) -> Optional[str]:
+    normalized_country = _normalize_country_code(country)
+    if not normalized_country:
+        return None
+
+    if not special_rate or not isinstance(special_rate, str):
+        return None
+
+    if "free" not in special_rate.lower():
+        return None
+
+    codes = _extract_free_program_codes(special_rate)
+    if not codes:
+        return None
+
+    program_index = _load_spi_programs()
+
+    matched_codes: list[str] = []
+    for code in codes:
+        countries = _resolve_program_countries(code, program_index)
+        if normalized_country in countries:
+            matched_codes.append(code)
+
+    if not matched_codes:
+        return None
+
+    descriptions = []
+    seen_desc: set[str] = set()
+    for code in matched_codes:
+        description = _describe_program(code, program_index) or code
+        if description not in seen_desc:
+            seen_desc.add(description)
+            descriptions.append(description)
+
+    detail = ", ".join(descriptions)
+    return (
+        f"Special rate 'Free' applies for country {normalized_country}; "
+        f"qualifying program codes: {detail}."
+    )
 
 
 @lru_cache(maxsize=1)
@@ -149,7 +303,13 @@ def _evaluate_formula(formula: str, values: Mapping[str, Decimal]) -> Decimal:
     return _eval(tree)
 
 
-def compute_basic_duty(hts_number: str, measurements: Mapping[str, object]) -> BasicRateComputation:
+def compute_basic_duty(
+    hts_number: str,
+    measurements: Mapping[str, object],
+    *,
+    country_of_origin: Optional[str] = None,
+    special_rate_of_duty: Optional[str] = None,
+) -> BasicRateComputation:
     """Compute the basic duty for the supplied HTS number.
 
     Parameters
@@ -159,14 +319,23 @@ def compute_basic_duty(hts_number: str, measurements: Mapping[str, object]) -> B
     measurements:
         Mapping of unit name → numeric value supplied by the client. Keys are
         matched case-insensitively against the configured unit list.
+    country_of_origin:
+        Optional ISO-3166 alpha-2 country code for evaluating special program
+        eligibility when a duty-free rate is available.
+    special_rate_of_duty:
+        Raw ``Special Rate of Duty`` text used to determine whether the
+        provided country qualifies for a duty-free program.
     """
 
     config = get_unit_config(hts_number)
-    normalized_inputs = {str(key).strip().lower(): _decimal(value) for key, value in (measurements or {}).items()}
     notes: list[str] = []
+    special_note = _build_special_free_note(country_of_origin, special_rate_of_duty)
+    special_applies = special_note is not None
+    if special_note:
+        notes.append(special_note)
 
     if not config:
-        notes.append("HTS not present in configuration; no basic duty applies.")
+        notes.append("HTS not present in configuration; no basic duty applies(" + hts_number + ")")
         return BasicRateComputation(
             calculated=False,
             amount=Decimal("0"),
@@ -182,6 +351,21 @@ def compute_basic_duty(hts_number: str, measurements: Mapping[str, object]) -> B
     config_notes = config.get("notes")
     if config_notes:
         notes.append(str(config_notes))
+
+    if special_applies:
+        return BasicRateComputation(
+            calculated=False,
+            amount=Decimal("0"),
+            currency=CURRENCY,
+            formula=None,
+            required_units=[],
+            provided_inputs={},
+            notes=notes,
+        )
+
+    normalized_inputs = {
+        str(key).strip().lower(): _decimal(value) for key, value in (measurements or {}).items()
+    }
 
     if not required_units:
         # No units required; treat constant formula if numeric else assume zero.
