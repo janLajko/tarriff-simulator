@@ -11,6 +11,7 @@ from typing import Dict, List, Optional
 
 import psycopg2
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
 from .basic_hts_rate import (
@@ -136,6 +137,19 @@ class EncryptedEnvelope(BaseModel):
 
 
 app = FastAPI(title="Tariff Simulator API", version="0.3.0")
+
+allowed_origins = ["https://tariff-simulator-frontend.vercel.app"]
+runtime_origin = os.getenv("SIMULATOR_FRONTEND_ORIGIN")
+if runtime_origin:
+    allowed_origins.append(runtime_origin)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
