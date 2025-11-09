@@ -149,16 +149,28 @@ def test_compute_basic_duty_against_csv(
 
     special_rate = _find_special_rate(case["hts_code"], special_rate_lookup)
 
-    result = basic_hts_rate.compute_basic_duty(
+    computations = basic_hts_rate.compute_basic_duty(
         case["hts_code"],
         measurements,
         country_of_origin=country,
         special_rate_of_duty=special_rate,
     )
 
-    print(f"{case['id']}: {result}")
+    assert computations, f"{case['id']}: expected at least one computation"
+    general_result = next(
+        (
+            comp
+            for comp in computations
+            if comp.case_id == basic_hts_rate.GENERAL_RATE_CASE_ID
+        ),
+        computations[0],
+    )
 
-    assert result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
-    assert result.currency == basic_hts_rate.CURRENCY, f"{case['id']}: unexpected currency"
+    print(f"{case['id']}: {general_result}")
+
+    assert general_result.amount == case["expected"], f"{case['id']}: unexpected duty amount"
+    assert (
+        general_result.currency == basic_hts_rate.CURRENCY
+    ), f"{case['id']}: unexpected currency"
     if case["expected"] > 0:
-        assert result.calculated is True, f"{case['id']}: expected calculated duty"
+        assert general_result.calculated is True, f"{case['id']}: expected calculated duty"

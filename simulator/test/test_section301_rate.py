@@ -27,7 +27,7 @@ pytestmark = [
 ]
 
 CSV_DIR = Path(__file__).parent
-CSV_PATTERN = "99038804_*.csv"
+CSV_PATTERN = "99038815_*.csv"
 DEFAULT_ENTRY_DATE = date(2024, 7, 1)
 
 _NORMALIZE = section301_rate._normalize_hts
@@ -110,14 +110,22 @@ def test_compute_section301_duty_against_fixture(row_info: dict):
     expected_duty = row_info["duty"]
     expected_heading = row_info["expected_heading"]
 
-    if row_info["country"] != "CN" or expected_duty == 0:
+    if row_info["country"] != "CN":
         assert result.applicable is False, f"{row_info['id']}: expected no Section 301 duty"
         assert result.rate in (None, "0%"), f"{row_info['id']}: unexpected rate display"
         assert not result.ch99_list, f"{row_info['id']}: expected no CH99 entries"
         return
 
+    total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+    assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+
+    if not result.ch99_list:
+        assert expected_duty == 0, f"{row_info['id']}: expected zero duty when no CH99 entries"
+        assert result.applicable is False, f"{row_info['id']}: expected module to be inactive"
+        assert result.rate in (None, "0%"), f"{row_info['id']}: unexpected rate display"
+        return
+
     assert result.applicable is True, f"{row_info['id']}: expected duty to apply"
-    assert result.ch99_list, f"{row_info['id']}: expected CH99 entries"
     assert any(
         ch.ch99_id == expected_heading for ch in result.ch99_list
     ), f"{row_info['id']}: missing expected CH99 heading {expected_heading}"

@@ -18,6 +18,8 @@ DATA_DIR = Path(__file__).resolve().parent
 HTS_UNIT_PATH = DATA_DIR / "hts_unit.json"
 SPI_PATH = DATA_DIR / "spi.json"
 CURRENCY = "USD"
+GENERAL_RATE_CASE_ID = "GENERAL_RATE"
+SPECIAL_RATE_FREE_CASE_ID = "SPECIAL_RATE_FREE"
 
 
 class BasicRateError(Exception):
@@ -41,6 +43,7 @@ class FormulaEvaluationError(BasicRateError):
 class BasicRateComputation:
     """Represents the result of evaluating the basic duty formula."""
 
+    case_id: str
     calculated: bool
     amount: Decimal
     currency: str
@@ -303,13 +306,43 @@ def _evaluate_formula(formula: str, values: Mapping[str, Decimal]) -> Decimal:
     return _eval(tree)
 
 
+def _finalize_basic_rate_results(
+    general_result: BasicRateComputation,
+    *,
+    special_applies: bool,
+    special_note: Optional[str],
+) -> list[BasicRateComputation]:
+    """Attach a special-rate entry when applicable and return all computations."""
+
+    results: list[BasicRateComputation] = [general_result]
+    if not special_applies:
+        return results
+
+    special_notes = list(general_result.notes)
+    if special_note and special_note not in special_notes:
+        special_notes.append(special_note)
+
+    special_result = BasicRateComputation(
+        case_id=SPECIAL_RATE_FREE_CASE_ID,
+        calculated=False,
+        amount=Decimal("0"),
+        currency=CURRENCY,
+        formula=None,
+        required_units=[],
+        provided_inputs={},
+        notes=special_notes,
+    )
+    results.append(special_result)
+    return results
+
+
 def compute_basic_duty(
     hts_number: str,
     measurements: Mapping[str, object],
     *,
     country_of_origin: Optional[str] = None,
     special_rate_of_duty: Optional[str] = None,
-) -> BasicRateComputation:
+) -> list[BasicRateComputation]:
     """Compute the basic duty for the supplied HTS number.
 
     Parameters
@@ -331,19 +364,23 @@ def compute_basic_duty(
     notes: list[str] = []
     special_note = _build_special_free_note(country_of_origin, special_rate_of_duty)
     special_applies = special_note is not None
-    if special_note:
-        notes.append(special_note)
 
     if not config:
         notes.append("HTS not present in configuration; no basic duty applies(" + hts_number + ")")
-        return BasicRateComputation(
+        general_result = BasicRateComputation(
+            case_id=GENERAL_RATE_CASE_ID,
             calculated=False,
             amount=Decimal("0"),
             currency=CURRENCY,
             formula=None,
             required_units=[],
             provided_inputs={},
-            notes=notes,
+            notes=list(notes),
+        )
+        return _finalize_basic_rate_results(
+            general_result,
+            special_applies=special_applies,
+            special_note=special_note,
         )
 
     required_units: list[str] = list(config.get("units") or [])
@@ -352,17 +389,6 @@ def compute_basic_duty(
     if config_notes:
         notes.append(str(config_notes))
 
-    if special_applies:
-        return BasicRateComputation(
-            calculated=False,
-            amount=Decimal("0"),
-            currency=CURRENCY,
-            formula=None,
-            required_units=[],
-            provided_inputs={},
-            notes=notes,
-        )
-
     normalized_inputs = {
         str(key).strip().lower(): _decimal(value) for key, value in (measurements or {}).items()
     }
@@ -370,78 +396,135 @@ def compute_basic_duty(
     if not required_units:
         # No units required; treat constant formula if numeric else assume zero.
         if not formula:
-            return BasicRateComputation(
+            general_result = BasicRateComputation(
+                case_id=GENERAL_RATE_CASE_ID,
                 calculated=False,
                 amount=Decimal("0"),
                 currency=CURRENCY,
                 formula=None,
                 required_units=[],
                 provided_inputs={},
-                notes=notes,
+                notes=list(notes),
+            )
+            return _finalize_basic_rate_results(
+                general_result,
+                special_applies=special_applies,
+                special_note=special_note,
             )
         try:
             amount = _evaluate_formula(formula, {})
-            return BasicRateComputation(
+            general_result = BasicRateComputation(
+                case_id=GENERAL_RATE_CASE_ID,
                 calculated=True,
                 amount=amount,
                 currency=CURRENCY,
                 formula=formula,
                 required_units=[],
                 provided_inputs={},
-                notes=notes,
+                notes=list(notes),
+            )
+            return _finalize_basic_rate_results(
+                general_result,
+                special_applies=special_applies,
+                special_note=special_note,
             )
         except FormulaEvaluationError:
             notes.append("Formula requires manual handling.")
-            return BasicRateComputation(
+            general_result = BasicRateComputation(
+                case_id=GENERAL_RATE_CASE_ID,
                 calculated=False,
                 amount=Decimal("0"),
                 currency=CURRENCY,
                 formula=formula,
                 required_units=[],
                 provided_inputs={},
-                notes=notes,
+                notes=list(notes),
+            )
+            return _finalize_basic_rate_results(
+                general_result,
+                special_applies=special_applies,
+                special_note=special_note,
             )
 
     missing_units = [unit for unit in required_units if unit not in normalized_inputs]
     if missing_units:
+        if special_applies:
+            missing_error = MissingMeasurementError(missing_units)
+            notes.append(str(missing_error))
+            available_inputs = {
+                unit: normalized_inputs[unit] for unit in required_units if unit in normalized_inputs
+            }
+            general_result = BasicRateComputation(
+                case_id=GENERAL_RATE_CASE_ID,
+                calculated=False,
+                amount=Decimal("0"),
+                currency=CURRENCY,
+                formula=formula or None,
+                required_units=required_units,
+                provided_inputs=available_inputs,
+                notes=list(notes),
+            )
+            return _finalize_basic_rate_results(
+                general_result,
+                special_applies=True,
+                special_note=special_note,
+            )
         raise MissingMeasurementError(missing_units)
 
     ordered_inputs = {unit: normalized_inputs[unit] for unit in required_units}
 
     if not formula or formula.lower() in {"see notes", "free"}:
         notes.append("Formula unavailable for automatic calculation.")
-        return BasicRateComputation(
+        general_result = BasicRateComputation(
+            case_id=GENERAL_RATE_CASE_ID,
             calculated=False,
             amount=Decimal("0"),
             currency=CURRENCY,
             formula=formula or None,
             required_units=required_units,
             provided_inputs=ordered_inputs,
-            notes=notes,
+            notes=list(notes),
+        )
+        return _finalize_basic_rate_results(
+            general_result,
+            special_applies=special_applies,
+            special_note=special_note,
         )
 
     try:
         amount = _evaluate_formula(formula, ordered_inputs)
     except FormulaEvaluationError as exc:
         notes.append(str(exc))
-        return BasicRateComputation(
+        general_result = BasicRateComputation(
+            case_id=GENERAL_RATE_CASE_ID,
             calculated=False,
             amount=Decimal("0"),
             currency=CURRENCY,
             formula=formula,
             required_units=required_units,
             provided_inputs=ordered_inputs,
-            notes=notes,
+            notes=list(notes),
+        )
+        return _finalize_basic_rate_results(
+            general_result,
+            special_applies=special_applies,
+            special_note=special_note,
         )
 
-    return BasicRateComputation(
+    general_result = BasicRateComputation(
+        case_id=GENERAL_RATE_CASE_ID,
         calculated=True,
         amount=amount,
         currency=CURRENCY,
         formula=formula,
         required_units=required_units,
         provided_inputs=ordered_inputs,
-        notes=notes,
+        notes=list(notes),
+    )
+    return _finalize_basic_rate_results(
+        general_result,
+        special_applies=special_applies,
+        special_note=special_note,
     )
 
 

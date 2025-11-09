@@ -70,7 +70,7 @@ class Section301Evaluator:
             m["heading"]: m for m in self.measures
         }
         self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
-        self.match_cache: Dict[Tuple[int, str], bool] = {}
+        self.match_cache: Dict[Tuple[int, str], Tuple[bool, List[str]]] = {}
 
     def _load_measures(self) -> List[Dict]:
         query = """
@@ -154,7 +154,7 @@ class Section301Evaluator:
 
     def measure_covers(
         self, measure_id: int, hts_code: str, visited: Optional[set[int]] = None
-    ) -> bool:
+    ) -> Tuple[bool, List[str]]:
         key = (measure_id, _normalize_hts(hts_code))
         if key in self.match_cache:
             return self.match_cache[key]
@@ -187,21 +187,26 @@ class Section301Evaluator:
                 child_id = self._measure_id_for_heading(key_value)
                 if not child_id:
                     return False
-                return self.measure_covers(child_id, hts_code, visited.copy())
+                child_match, _ = self.measure_covers(child_id, hts_code, visited.copy())
+                return child_match
             return _code_matches(key_value, hts_code)
 
         include_hit = any(matches_scope(scope, True) for scope in includes)
         if not include_hit:
-            self.match_cache[key] = False
-            return False
+            self.match_cache[key] = (False, [])
+            return False, []
 
+        matched_exclusions: List[str] = []
         for scope in excludes:
             if matches_scope(scope, True):
-                self.match_cache[key] = False
-                return False
+                matched_exclusions.append(str(scope.get("key") or ""))
 
-        self.match_cache[key] = True
-        return True
+        if matched_exclusions:
+            self.match_cache[key] = (False, matched_exclusions)
+            return False, matched_exclusions
+
+        self.match_cache[key] = (True, [])
+        return True, []
 
 
 def compute_section301_duty(
@@ -239,33 +244,84 @@ def compute_section301_duty(
     with psycopg2.connect(dsn) as conn:
         evaluator = Section301Evaluator(conn, entry_date, origin)
         applicable_measures: List[Dict] = []
+        excluded_measures: List[Tuple[Dict, List[str]]] = []
         for measure in evaluator.measures:
-            if evaluator.measure_covers(measure["id"], hts_number):
+            covers, exclusions = evaluator.measure_covers(measure["id"], hts_number)
+            if covers:
                 applicable_measures.append(measure)
+            elif exclusions:
+                excluded_measures.append((measure, exclusions))
 
-    chargeable_measures: List[Dict] = []
+    rated_measures: List[Dict] = []
     zero_rate_matches: List[Dict] = []
-    for measure in applicable_measures:
-        raw_rate = measure.get("ad_valorem_rate")
+
+    def _coerce_rate(raw_rate: Optional[object]) -> Optional[Decimal]:
         if raw_rate is None:
+            return None
+        if isinstance(raw_rate, Decimal):
+            return raw_rate
+        return Decimal(str(raw_rate))
+
+    for measure in applicable_measures:
+        rate = _coerce_rate(measure.get("ad_valorem_rate"))
+        if rate is None or rate == 0:
             zero_rate_matches.append(measure)
             continue
-        rate = raw_rate if isinstance(raw_rate, Decimal) else Decimal(str(raw_rate))
-        if rate > 0:
-            chargeable_measures.append(measure)
-        else:
-            zero_rate_matches.append(measure)
+        measure_with_rate = dict(measure)
+        measure_with_rate["ad_valorem_rate"] = rate
+        rated_measures.append(measure_with_rate)
 
-    if not chargeable_measures:
+    offset_heading_hits: set[str] = set()
+    for measure, exclusions in excluded_measures:
+        rate = _coerce_rate(measure.get("ad_valorem_rate"))
+        if rate is None or rate == 0:
+            zero_rate_matches.append(measure)
+            continue
+
+        direct_exclusions = [
+            heading for heading in exclusions if heading and not heading.startswith("99")
+        ]
+        if direct_exclusions:
+            # Direct HTS-level exclusion; do not surface paired entries.
+            continue
+
+        ref_exclusions = [
+            heading for heading in exclusions if heading and heading.startswith("99")
+        ]
+        if not ref_exclusions:
+            continue
+
+        measure_with_rate = dict(measure)
+        measure_with_rate["ad_valorem_rate"] = rate
+        rated_measures.append(measure_with_rate)
+
+        for heading in ref_exclusions:
+            offset_heading_hits.add(heading)
+            offset_measure = evaluator.heading_to_measure.get(heading, {})
+            rated_measures.append(
+                {
+                    "heading": heading,
+                    "alias": heading,
+                    "ad_valorem_rate": -rate,
+                    "description": offset_measure.get("description") or "",
+                }
+            )
+
+    if not rated_measures:
         notes = [
             "No active Section 301 measures matched the provided HTS number on the given entry date."
         ]
         if zero_rate_matches:
-            zero_headings = ", ".join(m["heading"] for m in zero_rate_matches)
-            notes.append(
-                "Section 301 headings matched but have zero ad valorem rate: "
-                f"{zero_headings}."
+            zero_headings = ", ".join(
+                m["heading"]
+                for m in zero_rate_matches
+                if m.get("heading") not in offset_heading_hits
             )
+            if zero_headings:
+                notes.append(
+                    "Section 301 headings matched but have zero ad valorem rate: "
+                    f"{zero_headings}."
+                )
         return Section301Computation(
             module_id="301",
             module_name="Section 301 Tariffs",
@@ -276,10 +332,7 @@ def compute_section301_duty(
             notes=notes,
         )
 
-    total_rate = sum(
-        ((m["ad_valorem_rate"] or Decimal("0")) for m in chargeable_measures),
-        Decimal("0"),
-    )
+    total_rate = sum((m["ad_valorem_rate"] for m in rated_measures), Decimal("0"))
     ch99_list = [
         Section301Ch99(
             ch99_id=m["heading"],
@@ -287,14 +340,34 @@ def compute_section301_duty(
             general_rate=m["ad_valorem_rate"],
             ch99_description=m.get("description") or "",
         )
-        for m in chargeable_measures
+        for m in rated_measures
     ]
 
-    rate_display = f"{total_rate.normalize()}%" if total_rate else None
+    normalized_total = total_rate.normalize()
+    rate_display = f"{normalized_total}%"
 
+    def _format_rate(rate: Decimal) -> str:
+        normalized = rate.normalize()
+        prefix = "+" if normalized > 0 else ""
+        return f"{prefix}{normalized}%"
+
+    applied_details = ", ".join(
+        f"{m['heading']} ({_format_rate(m['ad_valorem_rate'])})" for m in rated_measures
+    )
     notes = [
-        "Applied Section 301 measures: " + ", ".join(m["heading"] for m in chargeable_measures)
+        "Applied Section 301 measures: " + applied_details
     ]
+    if zero_rate_matches:
+        zero_headings = ", ".join(
+            m["heading"]
+            for m in zero_rate_matches
+            if m.get("heading") not in offset_heading_hits
+        )
+        if zero_headings:
+            notes.append(
+                "Additional Section 301 headings matched with zero rate: "
+                + zero_headings
+            )
 
     return Section301Computation(
         module_id="301",

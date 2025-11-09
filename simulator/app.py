@@ -16,6 +16,7 @@ from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
 from .basic_hts_rate import (
     BasicRateComputation,
+    GENERAL_RATE_CASE_ID,
     MissingMeasurementError,
     compute_basic_duty,
     fetch_basic_hts_record,
@@ -121,10 +122,37 @@ class MetaInfo(BaseModel):
     notes: List[str] = Field(default_factory=list)
 
 
+class BasicRateComputationPayload(BaseModel):
+    case_id: str
+    calculated: bool
+    amount: Decimal
+    currency: str
+    formula: Optional[str] = None
+    required_units: List[str] = Field(default_factory=list)
+    provided_inputs: Dict[str, Decimal] = Field(default_factory=dict)
+    notes: List[str] = Field(default_factory=list)
+
+    @classmethod
+    def from_dataclass(
+        cls, computation: BasicRateComputation
+    ) -> "BasicRateComputationPayload":
+        return cls(
+            case_id=computation.case_id,
+            calculated=computation.calculated,
+            amount=computation.amount,
+            currency=computation.currency,
+            formula=computation.formula,
+            required_units=list(computation.required_units),
+            provided_inputs=dict(computation.provided_inputs),
+            notes=list(computation.notes),
+        )
+
+
 class SimulationResponse(BaseModel):
     request: RequestEcho
     modules: List[TariffModule]
     meta: MetaInfo
+    basic_rate_computations: List[BasicRateComputationPayload] = Field(default_factory=list)
 
 
 class EncryptedEnvelope(BaseModel):
@@ -275,12 +303,13 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
 
     canonical_hts = str(record["hts_number"])
     try:
-        basic_computation = compute_basic_duty(
+        basic_computations = compute_basic_duty(
             canonical_hts,
             measurements,
             country_of_origin=country,
             special_rate_of_duty=record.get("special_rate_of_duty"),
         )
+        print(basic_computations)
     except MissingMeasurementError as exc:
         raise HTTPException(
             status_code=422,
@@ -291,7 +320,15 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         ) from exc
 
     unit_config_raw = get_unit_config(canonical_hts) or {}
-    meta_info = _build_meta_info(basic_computation, unit_config_raw)
+    general_basic_computation = next(
+        (comp for comp in basic_computations if comp.case_id == GENERAL_RATE_CASE_ID),
+        basic_computations[0],
+    )
+    meta_info = _build_meta_info(general_basic_computation, unit_config_raw)
+    basic_rate_payloads = [
+        BasicRateComputationPayload.from_dataclass(computation)
+        for computation in basic_computations
+    ]
     section_301_result = compute_section301_duty(canonical_hts, country, entry)
     modules = _build_modules(section_301_result)
     request_echo = _build_request_echo(payload, measurements, canonical_hts, entry)
@@ -300,6 +337,7 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         request=request_echo,
         modules=modules,
         meta=meta_info,
+        basic_rate_computations=basic_rate_payloads,
     ).model_dump(mode="json")
 
     print(envelope_payload)
