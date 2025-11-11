@@ -1,0 +1,310 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.5, pytest-8.4.2, pluggy-1.6.0
+rootdir: /Users/jan/Documents/7788/tariff-simulate-v2
+plugins: anyio-4.11.0
+collected 29 items
+
+simulator/test/test_section232_rate.py 99038192_testcases.csv:2: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:3: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:4: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:5: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:6: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:7: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:8: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:9: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:10: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:11: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:12: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='5E+1%', ch99_list=[Section232Ch99(ch99_id='9903.81.90', alias='9903.81.90', general_rate=Decimal('50.000'), ch99_description='Except as provided in heading 9903.81.92, derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision (m) of note 16 to this subchapter.')], notes=['Applied Section 232 measures: 9903.81.90 (+5E+1%)'])
+F99038192_testcases.csv:13: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='5E+1%', ch99_list=[Section232Ch99(ch99_id='9903.81.90', alias='9903.81.90', general_rate=Decimal('50.000'), ch99_description='Except as provided in heading 9903.81.92, derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision (m) of note 16 to this subchapter.')], notes=['Applied Section 232 measures: 9903.81.90 (+5E+1%)'])
+F99038192_testcases.csv:14: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='5E+1%', ch99_list=[Section232Ch99(ch99_id='9903.81.90', alias='9903.81.90', general_rate=Decimal('50.000'), ch99_description='Except as provided in heading 9903.81.92, derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision (m) of note 16 to this subchapter.')], notes=['Applied Section 232 measures: 9903.81.90 (+5E+1%)'])
+F99038192_testcases.csv:15: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='5E+1%', ch99_list=[Section232Ch99(ch99_id='9903.81.90', alias='9903.81.90', general_rate=Decimal('50.000'), ch99_description='Except as provided in heading 9903.81.92, derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision (m) of note 16 to this subchapter.')], notes=['Applied Section 232 measures: 9903.81.90 (+5E+1%)'])
+F99038192_testcases.csv:16: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='5E+1%', ch99_list=[Section232Ch99(ch99_id='9903.81.90', alias='9903.81.90', general_rate=Decimal('50.000'), ch99_description='Except as provided in heading 9903.81.92, derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision (m) of note 16 to this subchapter.')], notes=['Applied Section 232 measures: 9903.81.90 (+5E+1%)'])
+F99038192_testcases.csv:17: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=False, amount=Decimal('0'), currency='USD', rate=None, ch99_list=[], notes=['No active Section 232 measures matched the provided HTS number on the given entry date.'])
+.99038192_testcases.csv:18: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='5E+1%', ch99_list=[Section232Ch99(ch99_id='9903.81.91', alias='9903.81.91', general_rate=Decimal('50.000'), ch99_description='Except as provided in heading 9903.81.92, derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision (n) of note 16 to this subchapter.')], notes=['Applied Section 232 measures: 9903.81.91 (+5E+1%)'])
+F99038192_testcases.csv:19: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='5E+1%', ch99_list=[Section232Ch99(ch99_id='9903.81.91', alias='9903.81.91', general_rate=Decimal('50.000'), ch99_description='Except as provided in heading 9903.81.92, derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision (n) of note 16 to this subchapter.')], notes=['Applied Section 232 measures: 9903.81.91 (+5E+1%)'])
+F99038192_testcases.csv:20: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='5E+1%', ch99_list=[Section232Ch99(ch99_id='9903.81.91', alias='9903.81.91', general_rate=Decimal('50.000'), ch99_description='Except as provided in heading 9903.81.92, derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision (n) of note 16 to this subchapter.')], notes=['Applied Section 232 measures: 9903.81.91 (+5E+1%)'])
+F99038192_testcases.csv:21: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='5E+1%', ch99_list=[Section232Ch99(ch99_id='9903.81.91', alias='9903.81.91', general_rate=Decimal('50.000'), ch99_description='Except as provided in heading 9903.81.92, derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision (n) of note 16 to this subchapter.')], notes=['Applied Section 232 measures: 9903.81.91 (+5E+1%)'])
+F99038192_testcases.csv:22: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:23: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:24: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:25: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:26: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:27: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:28: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:29: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.99038192_testcases.csv:30: Section232Computation(module_id='232', module_name='Section 232 Tariffs', applicable=True, amount=Decimal('0'), currency='USD', rate='0%', ch99_list=[Section232Ch99(ch99_id='9903.81.92', alias='9903.81.92', general_rate=Decimal('0'), ch99_description='Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.')], notes=['Applied Section 232 measures: 9903.81.92 (0%)'])
+.
+
+=================================== FAILURES ===================================
+___ test_compute_section232_duty_against_fixture[99038192_testcases.csv:12] ____
+
+row_info = {'ambiguous': False, 'country': 'CN', 'duty': Decimal('0'), 'entry_date': datetime.date(2025, 7, 1), ...}
+
+    @pytest.mark.parametrize("row_info", RAW_ROWS, ids=_fixture_id)
+    def test_compute_section232_duty_against_fixture(row_info: dict):
+        if row_info.get("ambiguous"):
+            pytest.skip(
+                f"{row_info['id']} has multiple expected duty outcomes for identical inputs."
+            )
+    
+        result = section232_rate.compute_section232_duty(
+            row_info["input_hts"],
+            row_info["country"],
+            row_info["entry_date"],
+            row_info["melt_origin"],
+        )
+    
+        print(f"{row_info['id']}: {result}")
+    
+        expected_duty = row_info["duty"]
+        expected_heading = row_info["expected_heading"]
+    
+        total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+>       assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+E       AssertionError: 99038192_testcases.csv:12: unexpected summed duty rate
+E       assert Decimal('50.000') == Decimal('0')
+
+simulator/test/test_section232_rate.py:126: AssertionError
+___ test_compute_section232_duty_against_fixture[99038192_testcases.csv:13] ____
+
+row_info = {'ambiguous': False, 'country': 'CN', 'duty': Decimal('0'), 'entry_date': datetime.date(2025, 7, 15), ...}
+
+    @pytest.mark.parametrize("row_info", RAW_ROWS, ids=_fixture_id)
+    def test_compute_section232_duty_against_fixture(row_info: dict):
+        if row_info.get("ambiguous"):
+            pytest.skip(
+                f"{row_info['id']} has multiple expected duty outcomes for identical inputs."
+            )
+    
+        result = section232_rate.compute_section232_duty(
+            row_info["input_hts"],
+            row_info["country"],
+            row_info["entry_date"],
+            row_info["melt_origin"],
+        )
+    
+        print(f"{row_info['id']}: {result}")
+    
+        expected_duty = row_info["duty"]
+        expected_heading = row_info["expected_heading"]
+    
+        total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+>       assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+E       AssertionError: 99038192_testcases.csv:13: unexpected summed duty rate
+E       assert Decimal('50.000') == Decimal('0')
+
+simulator/test/test_section232_rate.py:126: AssertionError
+___ test_compute_section232_duty_against_fixture[99038192_testcases.csv:14] ____
+
+row_info = {'ambiguous': False, 'country': 'CN', 'duty': Decimal('0'), 'entry_date': datetime.date(2025, 8, 1), ...}
+
+    @pytest.mark.parametrize("row_info", RAW_ROWS, ids=_fixture_id)
+    def test_compute_section232_duty_against_fixture(row_info: dict):
+        if row_info.get("ambiguous"):
+            pytest.skip(
+                f"{row_info['id']} has multiple expected duty outcomes for identical inputs."
+            )
+    
+        result = section232_rate.compute_section232_duty(
+            row_info["input_hts"],
+            row_info["country"],
+            row_info["entry_date"],
+            row_info["melt_origin"],
+        )
+    
+        print(f"{row_info['id']}: {result}")
+    
+        expected_duty = row_info["duty"]
+        expected_heading = row_info["expected_heading"]
+    
+        total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+>       assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+E       AssertionError: 99038192_testcases.csv:14: unexpected summed duty rate
+E       assert Decimal('50.000') == Decimal('0')
+
+simulator/test/test_section232_rate.py:126: AssertionError
+___ test_compute_section232_duty_against_fixture[99038192_testcases.csv:15] ____
+
+row_info = {'ambiguous': False, 'country': 'CN', 'duty': Decimal('0'), 'entry_date': datetime.date(2025, 8, 15), ...}
+
+    @pytest.mark.parametrize("row_info", RAW_ROWS, ids=_fixture_id)
+    def test_compute_section232_duty_against_fixture(row_info: dict):
+        if row_info.get("ambiguous"):
+            pytest.skip(
+                f"{row_info['id']} has multiple expected duty outcomes for identical inputs."
+            )
+    
+        result = section232_rate.compute_section232_duty(
+            row_info["input_hts"],
+            row_info["country"],
+            row_info["entry_date"],
+            row_info["melt_origin"],
+        )
+    
+        print(f"{row_info['id']}: {result}")
+    
+        expected_duty = row_info["duty"]
+        expected_heading = row_info["expected_heading"]
+    
+        total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+>       assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+E       AssertionError: 99038192_testcases.csv:15: unexpected summed duty rate
+E       assert Decimal('50.000') == Decimal('0')
+
+simulator/test/test_section232_rate.py:126: AssertionError
+___ test_compute_section232_duty_against_fixture[99038192_testcases.csv:16] ____
+
+row_info = {'ambiguous': False, 'country': 'CN', 'duty': Decimal('0'), 'entry_date': datetime.date(2025, 3, 20), ...}
+
+    @pytest.mark.parametrize("row_info", RAW_ROWS, ids=_fixture_id)
+    def test_compute_section232_duty_against_fixture(row_info: dict):
+        if row_info.get("ambiguous"):
+            pytest.skip(
+                f"{row_info['id']} has multiple expected duty outcomes for identical inputs."
+            )
+    
+        result = section232_rate.compute_section232_duty(
+            row_info["input_hts"],
+            row_info["country"],
+            row_info["entry_date"],
+            row_info["melt_origin"],
+        )
+    
+        print(f"{row_info['id']}: {result}")
+    
+        expected_duty = row_info["duty"]
+        expected_heading = row_info["expected_heading"]
+    
+        total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+>       assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+E       AssertionError: 99038192_testcases.csv:16: unexpected summed duty rate
+E       assert Decimal('50.000') == Decimal('0')
+
+simulator/test/test_section232_rate.py:126: AssertionError
+___ test_compute_section232_duty_against_fixture[99038192_testcases.csv:18] ____
+
+row_info = {'ambiguous': False, 'country': 'CN', 'duty': Decimal('0'), 'entry_date': datetime.date(2025, 3, 10), ...}
+
+    @pytest.mark.parametrize("row_info", RAW_ROWS, ids=_fixture_id)
+    def test_compute_section232_duty_against_fixture(row_info: dict):
+        if row_info.get("ambiguous"):
+            pytest.skip(
+                f"{row_info['id']} has multiple expected duty outcomes for identical inputs."
+            )
+    
+        result = section232_rate.compute_section232_duty(
+            row_info["input_hts"],
+            row_info["country"],
+            row_info["entry_date"],
+            row_info["melt_origin"],
+        )
+    
+        print(f"{row_info['id']}: {result}")
+    
+        expected_duty = row_info["duty"]
+        expected_heading = row_info["expected_heading"]
+    
+        total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+>       assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+E       AssertionError: 99038192_testcases.csv:18: unexpected summed duty rate
+E       assert Decimal('50.000') == Decimal('0')
+
+simulator/test/test_section232_rate.py:126: AssertionError
+___ test_compute_section232_duty_against_fixture[99038192_testcases.csv:19] ____
+
+row_info = {'ambiguous': False, 'country': 'CN', 'duty': Decimal('0'), 'entry_date': datetime.date(2025, 3, 12), ...}
+
+    @pytest.mark.parametrize("row_info", RAW_ROWS, ids=_fixture_id)
+    def test_compute_section232_duty_against_fixture(row_info: dict):
+        if row_info.get("ambiguous"):
+            pytest.skip(
+                f"{row_info['id']} has multiple expected duty outcomes for identical inputs."
+            )
+    
+        result = section232_rate.compute_section232_duty(
+            row_info["input_hts"],
+            row_info["country"],
+            row_info["entry_date"],
+            row_info["melt_origin"],
+        )
+    
+        print(f"{row_info['id']}: {result}")
+    
+        expected_duty = row_info["duty"]
+        expected_heading = row_info["expected_heading"]
+    
+        total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+>       assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+E       AssertionError: 99038192_testcases.csv:19: unexpected summed duty rate
+E       assert Decimal('50.000') == Decimal('0')
+
+simulator/test/test_section232_rate.py:126: AssertionError
+___ test_compute_section232_duty_against_fixture[99038192_testcases.csv:20] ____
+
+row_info = {'ambiguous': False, 'country': 'CN', 'duty': Decimal('0'), 'entry_date': datetime.date(2025, 6, 23), ...}
+
+    @pytest.mark.parametrize("row_info", RAW_ROWS, ids=_fixture_id)
+    def test_compute_section232_duty_against_fixture(row_info: dict):
+        if row_info.get("ambiguous"):
+            pytest.skip(
+                f"{row_info['id']} has multiple expected duty outcomes for identical inputs."
+            )
+    
+        result = section232_rate.compute_section232_duty(
+            row_info["input_hts"],
+            row_info["country"],
+            row_info["entry_date"],
+            row_info["melt_origin"],
+        )
+    
+        print(f"{row_info['id']}: {result}")
+    
+        expected_duty = row_info["duty"]
+        expected_heading = row_info["expected_heading"]
+    
+        total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+>       assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+E       AssertionError: 99038192_testcases.csv:20: unexpected summed duty rate
+E       assert Decimal('50.000') == Decimal('0')
+
+simulator/test/test_section232_rate.py:126: AssertionError
+___ test_compute_section232_duty_against_fixture[99038192_testcases.csv:21] ____
+
+row_info = {'ambiguous': False, 'country': 'CN', 'duty': Decimal('0'), 'entry_date': datetime.date(2025, 8, 18), ...}
+
+    @pytest.mark.parametrize("row_info", RAW_ROWS, ids=_fixture_id)
+    def test_compute_section232_duty_against_fixture(row_info: dict):
+        if row_info.get("ambiguous"):
+            pytest.skip(
+                f"{row_info['id']} has multiple expected duty outcomes for identical inputs."
+            )
+    
+        result = section232_rate.compute_section232_duty(
+            row_info["input_hts"],
+            row_info["country"],
+            row_info["entry_date"],
+            row_info["melt_origin"],
+        )
+    
+        print(f"{row_info['id']}: {result}")
+    
+        expected_duty = row_info["duty"]
+        expected_heading = row_info["expected_heading"]
+    
+        total_rate = sum((ch.general_rate for ch in result.ch99_list), Decimal("0"))
+>       assert total_rate == expected_duty, f"{row_info['id']}: unexpected summed duty rate"
+E       AssertionError: 99038192_testcases.csv:21: unexpected summed duty rate
+E       assert Decimal('50.000') == Decimal('0')
+
+simulator/test/test_section232_rate.py:126: AssertionError
+=========================== short test summary info ============================
+FAILED simulator/test/test_section232_rate.py::test_compute_section232_duty_against_fixture[99038192_testcases.csv:12]
+FAILED simulator/test/test_section232_rate.py::test_compute_section232_duty_against_fixture[99038192_testcases.csv:13]
+FAILED simulator/test/test_section232_rate.py::test_compute_section232_duty_against_fixture[99038192_testcases.csv:14]
+FAILED simulator/test/test_section232_rate.py::test_compute_section232_duty_against_fixture[99038192_testcases.csv:15]
+FAILED simulator/test/test_section232_rate.py::test_compute_section232_duty_against_fixture[99038192_testcases.csv:16]
+FAILED simulator/test/test_section232_rate.py::test_compute_section232_duty_against_fixture[99038192_testcases.csv:18]
+FAILED simulator/test/test_section232_rate.py::test_compute_section232_duty_against_fixture[99038192_testcases.csv:19]
+FAILED simulator/test/test_section232_rate.py::test_compute_section232_duty_against_fixture[99038192_testcases.csv:20]
+FAILED simulator/test/test_section232_rate.py::test_compute_section232_duty_against_fixture[99038192_testcases.csv:21]
+=================== 9 failed, 20 passed in 154.92s (0:02:34) ===================

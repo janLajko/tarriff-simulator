@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Section 301 processing agent.
+"""Section 232 processing agent.
 
 This module implements the workflow described in ``agent.txt``:
 
-1. Read the 301 HTS headings (e.g. 9903.88.01) from ``hts_codes``.
-2. Insert or update records in ``s301_measures`` for those headings.
+1. Read the Section 232 HTS headings (e.g. 9903.88.01) from ``hts_codes``.
+2. Insert or update records in ``s232_measures`` for those headings.
 3. Use an LLM to structure the descriptions and notes into include / exclude
    scopes with their effective periods.
-4. Persist the scopes in ``s301_scope`` and link them to measures via
-   ``s301_scope_measure_map``.
+4. Persist the scopes in ``s232_scope`` and link them to measures via
+   ``s232_scope_measure_map``.
 
 The code is intentionally straightforward—no elaborate abstractions—so the data
 flow is easy to follow when extending or debugging.
@@ -42,37 +42,76 @@ else:
     _PSYCOPG2_IMPORT_ERROR = None
 
 
-LOGGER = logging.getLogger("section301_agent")
+LOGGER = logging.getLogger("section232_agent")
 
 DEFAULT_HEADINGS = [
-    # "9903.88.69",
-    # "9903.88.01",
-    # "9903.88.02",
-    # "9903.88.03",
-    # "9903.88.04",
-    "9903.88.16",
+    # "9903.81.87",
+    # "9903.81.88",
+    # "9903.81.89",
+    # "9903.81.90",
+    # "9903.81.91",
+    "9903.81.92",
+    # "9903.81.93",
+    # "9903.81.94",
+    # "9903.81.95",
+    # "9903.81.96",
+    # "9903.81.97",
+    # "9903.81.98",
+    # "9903.81.99"
 ]
 
-LLM_MEASURE_PROMPT = """You are a legal text structure analyzer. From the following text, extract:
-1. **Except sections**: all heading numbers listed after the phrase “Except as provided in headings”.
-2. **Include sections**: all notes or subheadings mentioned after phrases like “as provided for in” or “as provided for in the subheadings enumerated in”.
-3. **Effective period**: any date range describing when the rule is in effect, typically following phrases like “Effective with respect to entries on or after” or “through”.
+LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section 232 derivative steel measures.
+From the following text, extract:
+1. **Except sections** – heading numbers listed after phrases like “Except as provided in headings …”.
+2. **Include sections** – notes or subheadings mentioned after phrases such as “as provided for in …”.
+3. **Effective period** – explicit start / end dates (e.g., “Effective with respect to entries on or after …” or “through …”).
+4. **country_iso2** – ISO-2 code for the products covered by the measure. Use null when the measure applies to every country other than the excluded origins.
+5. **melt_pour_origin_iso2** – ISO-2 code for where the steel must be melted and poured (e.g., “US” when the text says “melted and poured in the United States”). Use null if not stated.
+6. **origin_exclude_iso2** – an array of ISO-2 codes for origin countries explicitly excluded (e.g., ["UK"]). When the text implies “all countries except the United Kingdom” for derivative products made from U.S.-melted steel, output ["UK"] even if the exclusion is implicit.
 
 Input text:
 \"\"\"{description}\"\"\"
 
-Return JSON only using this structure:
+Return JSON only. Use this schema:
 {{
   "except": [],
-  "include": ["note20(vvv)"],
+  "include": ["note16(m)"],
   "effective_period": {{
     "start_date": "June 15, 2024",
     "end_date": "November 29, 2025"
-  }}
+  }},
+  "country_iso2": "UK",
+  "melt_pour_origin_iso2": "US",
+  "origin_exclude_iso2": ["UK"]
+}}
+
+Examples:
+1. Input:
+\"\"\"Derivative iron or steel products provided for in the tariff subheadings enumerated in subdivision subdivisions (m), (n), (t) or (u) of note 16 to this subchapter, where the derivative iron or steel product was processed in another country from steel articles that were melted and poured in the United States.\"\"\"
+Output:
+{{
+  "except": [],
+  "include": ["note16(m)", "note16(n)", "note16(t)", "note16(u)"],
+  "effective_period": {{"start_date": null, "end_date": null}},
+  "country_iso2": null,
+  "melt_pour_origin_iso2": "US",
+  "origin_exclude_iso2": ["UK"]
+}}
+
+2. Input:
+\"\"\"Except for derivative iron or steel products described in headings 9903.81.96, 9903.81.97 or 9903.81.98, products of iron or steel of the United Kingdom provided for in the tariff headings or subheadings enumerated in subdivision (q) of note 16 to this subchapter.\"\"\"
+Output:
+{{
+  "except": ["9903.81.96", "9903.81.97", "9903.81.98"],
+  "include": ["note16(q)"],
+  "effective_period": {{"start_date": null, "end_date": null}},
+  "country_iso2": "UK",
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": []
 }}
 """
 
-LLM_NOTE_PROMPT = """You are a structured extractor for HTSUS Section 301 notes.
+LLM_NOTE_PROMPT = """You are a structured extractor for HTSUS Section 232 notes.
 Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
 
 Objective:
@@ -81,12 +120,12 @@ From the input legal note text, produce three outputs:
 2. **scope** – all headings, HTS8, or HTS10 codes that fall under the effective scope of those input headings.
 3. **except** – all headings, HTS8, or HTS10 codes explicitly excluded ("except … provided for in …").
 
-Each object in scope or except must match the `s301_scope` table schema:
+Each object in scope or except must match the `s232_scope` table schema:
 
 - keys                 // comma-separated exact heading or HTS8 codes (e.g. "0203.29.20,0203.29.40,0206.10.00") when conditions are identical
 - key                  // single exact heading or HTS8 code (e.g. "9903.88.05" or "8501.10.40") when used alone
 - key_type             // one of: "heading" (e.g., 9903.88.05 or a 4-digit heading), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
-- country_iso2         // "CN" if "products of China" appears, else null
+- country_iso2         // ISO-2 country code mentioned in the text (e.g. "UK"), else null
 - source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
 - effective_start_date // ISO date; use context.fallback_start_date if not stated
 - effective_end_date   // ISO date or null
@@ -107,15 +146,23 @@ C. Identify all **except** items:
    - Items explicitly listed after "except … provided for in …".
    - Mark their source_label with "-exclusion".
    - Apply the same combination rule as scope items when conditions are identical.
-D. Use "CN" as country_iso2 if "products of China" is mentioned.
+D. Set country_iso2 to the ISO-2 code for the country named in the text (e.g. "UK" for “products of the United Kingdom”). If no country is mentioned, leave it null.
 E. Only populate effective_start_date and effective_end_date when explicit "effective" or date ranges appear in the text.  
    - Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"  
    - Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"  
    - If no explicit "effective" or date reference appears, leave both fields null. Do not use fallback_start_date.
 F. Remove duplicates.
-G. When multiple note blocks are provided, treat each block independently and set `source_label` using that note label (e.g. "note20(a)" or "note20(b)-exclusion"). Use the provided `context.note_labels` array (same order as the blocks) if you need the human-readable label.
+G. When multiple note blocks are provided, use `context.note_labels` (same order as the input blocks) for their labels. `context.primary_note_labels` lists the notes that actually triggered this extraction. `context.supporting_note_labels` lists subdivisions that were included only because a primary note referenced them (e.g., "subdivision (l)"). For supporting notes:
+   - Treat any HTS codes printed inside those blocks as exclusions for the referencing primary note unless the supporting block clearly introduces a different heading of its own.
+   - Use the primary note label with "-exclusion" for the `source_label` (e.g., `note16(m)-exclusion`).
+   - Do NOT add supporting-block codes to the scope of the current heading unless the text explicitly says they apply to that heading.
+
+H. If a supporting block explicitly states a different heading (e.g., "The rates … in heading 9903.81.89"), you may output its own scope entries but keep the source_label equal to that supporting note label.
 
 Context (provided by caller):
+// context.note_labels → labels for each input block (in order)
+// context.primary_note_labels → subset that actually triggered extraction
+// context.supporting_note_labels → subdivisions referenced only to describe exclusions for the primaries
 {context_json}
 
 Input (one or more note blocks, each beginning with its note label on the first line):
@@ -134,7 +181,7 @@ Output JSON format (note the use of "keys" for combined codes and "key" for sing
 }}
 """
 
-# LLM_NOTE_PROMPT = """You are a structured extractor for HTSUS Section 301 notes.
+# LLM_NOTE_PROMPT = """You are a structured extractor for HTSUS Section 232 notes.
 # Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
 
 # Objective:
@@ -144,12 +191,12 @@ Output JSON format (note the use of "keys" for combined codes and "key" for sing
 # 2. **scope** – all headings, HTS8, or HTS10 codes that fall under the effective scope of those input headings.
 # 3. **except** – all headings, HTS8, or HTS10 codes explicitly excluded ("except … provided for in …").
 
-# Each object in scope or except must match the `s301_scope` table schema:
+# Each object in scope or except must match the `s232_scope` table schema:
 
 # * keys                 // comma-separated exact codes when conditions are identical. Codes must be of the same key_type. Example: "0203.29.20,0203.29.40,0206.10.00"
 # * key                  // single exact code when used alone. Example: "9903.88.05" or "8501.10.40" or "8517.62.0090"
 # * key_type             // one of: "heading" (e.g., 9903.88.05 or a 4-digit heading), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
-# * country_iso2         // "CN" if "products of China" appears, else null
+# * country_iso2         // ISO-2 country code mentioned in the text (e.g. "UK"), else null
 # * source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
 # * effective_start_date // ISO date; only if the text states an explicit effective date; otherwise null
 # * effective_end_date   // ISO date; only if the text states an explicit end date; otherwise null
@@ -168,7 +215,7 @@ Output JSON format (note the use of "keys" for combined codes and "key" for sing
 # * This includes any 10-digit "statistical reporting number(s)" printed in exceptions (e.g., "except … provided for in statistical reporting number 8517.62.0090").
 # * Mark their source_label with "-exclusion".
 # * Apply the same combination rule as in scope, grouping only within the same key_type.
-#   D. Use "CN" as country_iso2 if "products of China" is mentioned.
+#   D. Set country_iso2 to the ISO-2 code for the country mentioned in the text. Leave it null when no country is provided.
 #   E. Only populate effective_start_date and effective_end_date when explicit "effective" dates or date ranges appear in the text.
 # * Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"
 # * Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"
@@ -205,6 +252,9 @@ class MeasureAnalysis:
     exclude: List[str]
     effective_start: Optional[date]
     effective_end: Optional[date]
+    country_iso2: Optional[str]
+    melt_pour_origin_iso2: Optional[str]
+    origin_exclude_iso2: Optional[List[str]]
 
 
 @dataclass
@@ -272,13 +322,13 @@ def classify_code_type(code: str) -> str:
     return "heading"
 
 
-class Section301Database:
+class Section232Database:
     """Minimal database helper around psycopg2."""
 
     def __init__(self, dsn: str):
         if psycopg2 is None:
             raise RuntimeError(
-                "psycopg2 is required to use Section301Database"
+                "psycopg2 is required to use Section232Database"
             ) from _PSYCOPG2_IMPORT_ERROR
         self._conn = psycopg2.connect(dsn)
         self._conn.autocommit = False
@@ -307,19 +357,24 @@ class Section301Database:
     def ensure_measure(
         self,
         heading: str,
-        country_iso2: str,
+        country_iso2: Optional[str],
         ad_valorem_rate: Decimal,
         value_basis: str,
+        melt_pour_origin_iso2: Optional[str],
+        origin_exclude_iso2: Optional[Sequence[str]],
         notes: Optional[Dict[str, Any]],
         start_date: date,
         end_date: Optional[date],
-    ) -> int:
+    ) -> Optional[int]:
         query_select = """
-            SELECT id FROM s301_measures
+            SELECT id FROM s232_measures
             WHERE heading = %s
-              AND country_iso2 = %s
+              AND COALESCE(country_iso2, '') = COALESCE(%s, '')
               AND ad_valorem_rate = %s
               AND value_basis = %s
+              AND COALESCE(melt_pour_origin_iso2, '') = COALESCE(%s, '')
+              AND COALESCE(origin_exclude_iso2, ARRAY[]::text[]) =
+                  COALESCE(%s::text[], ARRAY[]::text[])
               AND effective_start_date = %s
               AND COALESCE(effective_end_date, DATE '9999-12-31') =
                   COALESCE(%s, DATE '9999-12-31')
@@ -328,17 +383,27 @@ class Section301Database:
         with self._conn.cursor() as cur:
             cur.execute(
                 query_select,
-                (heading, country_iso2, ad_valorem_rate, value_basis, start_date, end_date),
+                (
+                    heading,
+                    country_iso2,
+                    ad_valorem_rate,
+                    value_basis,
+                    melt_pour_origin_iso2,
+                    origin_exclude_iso2,
+                    start_date,
+                    end_date,
+                ),
             )
             row = cur.fetchone()
             if row:
                 return row[0]
 
         query_insert = """
-            INSERT INTO s301_measures
-            (heading, country_iso2, ad_valorem_rate, value_basis, notes,
+            INSERT INTO s232_measures
+            (heading, country_iso2, ad_valorem_rate, value_basis,
+             melt_pour_origin_iso2, origin_exclude_iso2, notes,
              effective_start_date, effective_end_date)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
         """
         payload_notes = Json(notes) if notes is not None else None
@@ -352,6 +417,8 @@ class Section301Database:
                         country_iso2,
                         ad_valorem_rate,
                         value_basis,
+                        melt_pour_origin_iso2,
+                        origin_exclude_iso2,
                         payload_notes,
                         start_date,
                         end_date,
@@ -366,7 +433,16 @@ class Section301Database:
                     with self._conn.cursor() as cur_lookup:
                         cur_lookup.execute(
                             query_select,
-                            (heading, country_iso2, ad_valorem_rate, value_basis, start_date, end_date),
+                            (
+                                heading,
+                                country_iso2,
+                                ad_valorem_rate,
+                                value_basis,
+                                melt_pour_origin_iso2,
+                                origin_exclude_iso2,
+                                start_date,
+                                end_date,
+                            ),
                         )
                         row = cur_lookup.fetchone()
                         if row:
@@ -379,12 +455,12 @@ class Section301Database:
         LOGGER.info("Created measure %s for heading %s", measure_id, heading)
         return measure_id
 
-    def find_existing_measure_id(self, heading: str, country_iso2: str) -> Optional[int]:
+    def find_existing_measure_id(self, heading: str, country_iso2: Optional[str]) -> Optional[int]:
         query = """
             SELECT id
-            FROM s301_measures
+            FROM s232_measures
             WHERE heading = %s
-              AND country_iso2 = %s
+              AND COALESCE(country_iso2, '') = COALESCE(%s, '')
             ORDER BY effective_start_date DESC, id DESC
             LIMIT 1
         """
@@ -395,7 +471,7 @@ class Section301Database:
 
     def ensure_scope(self, record: ScopeRecord) -> int:
         query_select = """
-            SELECT id FROM s301_scope
+            SELECT id FROM s232_scope
             WHERE key = %s
               AND key_type = %s
               AND COALESCE(country_iso2, '') = COALESCE(%s, '')
@@ -420,7 +496,7 @@ class Section301Database:
                 return row[0]
 
         query_insert = """
-            INSERT INTO s301_scope
+            INSERT INTO s232_scope
             (key, key_type, country_iso2, source_label,
              effective_start_date, effective_end_date)
             VALUES (%s, %s, %s, %s, %s, %s)
@@ -481,7 +557,7 @@ class Section301Database:
         start_date = None
         end_date = None
         query_select = """
-            SELECT id FROM s301_scope_measure_map
+            SELECT id FROM s232_scope_measure_map
             WHERE scope_id = %s
               AND measure_id = %s
               AND relation = %s
@@ -510,7 +586,7 @@ class Section301Database:
                 return row[0]
 
         query_insert = """
-            INSERT INTO s301_scope_measure_map
+            INSERT INTO s232_scope_measure_map
             (scope_id, measure_id, relation, note_label, text_criteria,
              effective_start_date, effective_end_date)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -630,8 +706,8 @@ class Section301Database:
                 scope.source_label,
                 scope.effective_start_date,
                 scope.effective_end_date
-            FROM s301_scope_measure_map AS map
-            JOIN s301_scope AS scope ON scope.id = map.scope_id
+            FROM s232_scope_measure_map AS map
+            JOIN s232_scope AS scope ON scope.id = map.scope_id
             WHERE map.measure_id = %s
         """
         params: List[Any] = [measure_id]
@@ -643,7 +719,7 @@ class Section301Database:
             return cur.fetchall()
 
 
-class Section301LLM:
+class Section232LLM:
     """Thin wrapper around an LLM endpoint (default: OpenAI chat completions)."""
 
     def __init__(
@@ -700,7 +776,44 @@ class Section301LLM:
         eff_payload = payload.get("effective_period") or {}
         start = parse_date(eff_payload.get("start_date"))
         end = parse_date(eff_payload.get("end_date"))
-        return MeasureAnalysis(include=include, exclude=exclude, effective_start=start, effective_end=end)
+        
+        def _normalize_iso(value: Any) -> Optional[str]:
+            if value is None:
+                return None
+            text = str(value).strip().upper()
+            return text or None
+
+        def _normalize_iso_list(value: Any) -> Optional[List[str]]:
+            if value is None:
+                return None
+            candidates: List[str] = []
+            if isinstance(value, str):
+                candidates = [value]
+            else:
+                try:
+                    iterator = iter(value)
+                except TypeError:
+                    iterator = iter(())
+                for item in iterator:
+                    text = str(item).strip()
+                    if text:
+                        candidates.append(text)
+            normalized = [entry.strip().upper() for entry in candidates if entry.strip()]
+            return normalized or None
+
+        country_iso2 = _normalize_iso(payload.get("country_iso2"))
+        melt_origin = _normalize_iso(payload.get("melt_pour_origin_iso2"))
+        origin_exclude = _normalize_iso_list(payload.get("origin_exclude_iso2"))
+
+        return MeasureAnalysis(
+            include=include,
+            exclude=exclude,
+            effective_start=start,
+            effective_end=end,
+            country_iso2=country_iso2,
+            melt_pour_origin_iso2=melt_origin,
+            origin_exclude_iso2=origin_exclude,
+        )
 
     def extract_note(self, note_text: str, context: Dict[str, Any]) -> Dict[str, Any]:
         context_json = json.dumps(context, ensure_ascii=False, sort_keys=True)
@@ -718,15 +831,15 @@ class Section301LLM:
         return payload
 
 
-class Section301Agent:
-    """Coordinates DB + LLM workflow for Section 301 measures."""
+class Section232Agent:
+    """Coordinates DB + LLM workflow for Section 232 measures."""
 
     def __init__(
         self,
-        db: Section301Database,
-        llm: Section301LLM,
+        db: Section232Database,
+        llm: Section232LLM,
         *,
-        country_iso2: str = "CN",
+        country_iso2: Optional[str] = None,
     ):
         self.db = db
         self.llm = llm
@@ -749,16 +862,6 @@ class Section301Agent:
         if normalized in self._in_progress:
             LOGGER.warning("Heading %s is already being processed; skipping to avoid recursion", normalized)
             return None
-
-        existing_measure_id = self.db.find_existing_measure_id(normalized, self.country_iso2)
-        if existing_measure_id:
-            LOGGER.info(
-                "Heading %s already present in s301_measures (id=%s); reusing existing scope",
-                normalized,
-                existing_measure_id,
-            )
-            self._measure_cache[normalized] = existing_measure_id
-            return existing_measure_id
 
         LOGGER.info("Processing heading %s", normalized)
         self._in_progress.add(normalized)
@@ -787,11 +890,25 @@ class Section301Agent:
             end_date = analysis.effective_end
             rate = self._derive_rate(description)
 
+            measure_country_iso2 = analysis.country_iso2 or self.country_iso2
+
+            existing_measure_id = self.db.find_existing_measure_id(normalized, measure_country_iso2)
+            if existing_measure_id:
+                LOGGER.info(
+                    "Heading %s already present in s232_measures (id=%s); reusing existing scope",
+                    normalized,
+                    existing_measure_id,
+                )
+                self._measure_cache[normalized] = existing_measure_id
+                return existing_measure_id
+
             measure_id = self.db.ensure_measure(
                 heading=normalized,
-                country_iso2=self.country_iso2,
+                country_iso2=measure_country_iso2,
                 ad_valorem_rate=rate,
                 value_basis="customs_value",
+                melt_pour_origin_iso2=analysis.melt_pour_origin_iso2,
+                origin_exclude_iso2=analysis.origin_exclude_iso2,
                 notes=None,
                 start_date=start_date,
                 end_date=end_date,
@@ -806,6 +923,7 @@ class Section301Agent:
                 self._apply_scope_links(
                     heading=normalized,
                     measure_id=measure_id,
+                    country_iso2=measure_country_iso2,
                     start_date=start_date,
                     end_date=end_date,
                     includes=analysis.include,
@@ -832,6 +950,7 @@ class Section301Agent:
         *,
         heading: str,
         measure_id: int,
+        country_iso2: Optional[str],
         start_date: date,
         end_date: Optional[date],
         includes: Iterable[str],
@@ -846,6 +965,7 @@ class Section301Agent:
                 relation="include",
                 heading=heading,
                 measure_id=measure_id,
+                country_iso2=country_iso2,
                 fallback_start=start_date,
                 fallback_end=end_date,
             )
@@ -855,6 +975,7 @@ class Section301Agent:
                 relation="include",
                 heading=heading,
                 measure_id=measure_id,
+                country_iso2=country_iso2,
                 start_date=start_date,
                 end_date=end_date,
             )
@@ -865,6 +986,7 @@ class Section301Agent:
                 relation="exclude",
                 heading=heading,
                 measure_id=measure_id,
+                country_iso2=country_iso2,
                 fallback_start=start_date,
                 fallback_end=end_date,
             )
@@ -874,6 +996,7 @@ class Section301Agent:
                 relation="exclude",
                 heading=heading,
                 measure_id=measure_id,
+                country_iso2=country_iso2,
                 start_date=start_date,
                 end_date=end_date,
             )
@@ -912,6 +1035,7 @@ class Section301Agent:
         relation: str,
         heading: str,
         measure_id: int,
+        country_iso2: Optional[str],
         start_date: date,
         end_date: Optional[date],
     ) -> None:
@@ -938,7 +1062,7 @@ class Section301Agent:
         scope = ScopeRecord(
             key=ref,
             key_type=key_type,
-            country_iso2=self.country_iso2,
+            country_iso2=country_iso2,
             source_label=f"{heading}-description",
             effective_start_date=start_date,
             effective_end_date=end_date,
@@ -963,6 +1087,7 @@ class Section301Agent:
         relation: str,
         heading: str,
         measure_id: int,
+        country_iso2: Optional[str],
         fallback_start: date,
         fallback_end: Optional[date],
     ) -> None:
@@ -1008,11 +1133,16 @@ class Section301Agent:
         if not note_blocks:
             return
 
+        original_labels = [block[1] for block in note_blocks]
+        note_blocks, supporting_labels = self._expand_referenced_subdivisions(note_blocks)
+
         context = {
-            "country_iso2": self.country_iso2,
+            "country_iso2": country_iso2,
             "fallback_start_date": fallback_start.isoformat(),
             "source_label_prefix": ", ".join(block[1] for block in note_blocks),
             "note_labels": [block[0] for block in note_blocks],
+            "primary_note_labels": original_labels,
+            "supporting_note_labels": supporting_labels,
         }
 
         cache_key = tuple(block[1] for block in note_blocks)
@@ -1090,6 +1220,7 @@ class Section301Agent:
                 parent_heading=heading,
                 parent_measure_id=measure_id,
                 note_label=child["label"],
+                country_iso2=country_iso2,
                 fallback_start=child["start"],
                 fallback_end=child["end"],
             )
@@ -1235,6 +1366,7 @@ class Section301Agent:
         parent_heading: str,
         parent_measure_id: int,
         note_label: Optional[str],
+        country_iso2: Optional[str],
         fallback_start: date,
         fallback_end: Optional[date],
     ) -> None:
@@ -1250,7 +1382,7 @@ class Section301Agent:
         scope = ScopeRecord(
             key=child_heading,
             key_type="heading",
-            country_iso2=self.country_iso2,
+            country_iso2=country_iso2,
             source_label=note_label or child_heading,
             effective_start_date=fallback_start,
             effective_end_date=fallback_end,
@@ -1273,9 +1405,63 @@ class Section301Agent:
             relation,
         )
 
+    def _expand_referenced_subdivisions(
+        self, note_blocks: List[Tuple[str, str, str]]
+    ) -> Tuple[List[Tuple[str, str, str]], List[str]]:
+        expanded = list(note_blocks)
+        supporting: List[str] = []
+        existing: set[str] = {normalized for _, normalized, _ in expanded}
+        idx = 0
+        while idx < len(expanded):
+            original, normalized, text = expanded[idx]
+            idx += 1
+            related_labels = self._detect_subdivision_references(normalized, text)
+            for label in related_labels:
+                if label in existing:
+                    continue
+                note_rows = self.db.fetch_note_rows(label)
+                if not note_rows:
+                    continue
+                block_lines: List[str] = []
+                for row in note_rows:
+                    label_text = (row.get("label") or "").strip()
+                    content_text = (row.get("content") or "").strip()
+                    parts: List[str] = []
+                    if label_text:
+                        parts.append(label_text)
+                    if content_text:
+                        parts.append(content_text)
+                    line = " ".join(parts).strip()
+                    if line:
+                        block_lines.append(line)
+                combined_text = "\n".join(block_lines).strip()
+                if not combined_text:
+                    continue
+                expanded.append((label, label, combined_text))
+                supporting.append(label)
+                existing.add(label)
+        return expanded, supporting
+
+    @staticmethod
+    def _detect_subdivision_references(
+        normalized_label: str, text: str
+    ) -> List[str]:
+        LOGGER.info(text)
+        if "(" not in normalized_label:
+            return []
+        base = normalized_label.rsplit("(", 1)[0].strip()
+        if not base:
+            return []
+        matches = set()
+        for letter in re.findall(r"subdivision\s*\(\s*([a-z])\s*\)", text, re.IGNORECASE):
+            label = f"{base}({letter.lower()})"
+            if label != normalized_label:
+                matches.add(label)
+        return sorted(matches)
+
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="HTS Section 301 ingestion agent.")
+    parser = argparse.ArgumentParser(description="HTS Section 232 ingestion agent.")
     parser.add_argument(
         "--dsn",
         default=os.getenv("DATABASE_DSN"),
@@ -1302,9 +1488,9 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     if not args.dsn:
         raise SystemExit("Database DSN is required (set DATABASE_DSN or pass --dsn).")
 
-    db = Section301Database(args.dsn)
-    llm = Section301LLM()
-    agent = Section301Agent(db=db, llm=llm)
+    db = Section232Database(args.dsn)
+    llm = Section232LLM()
+    agent = Section232Agent(db=db, llm=llm)
 
     try:
         agent.run(args.headings)
