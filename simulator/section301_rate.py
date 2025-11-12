@@ -213,6 +213,7 @@ def compute_section301_duty(
     hts_number: str,
     country_of_origin: str,
     entry_date: date,
+    import_value: Optional[Decimal] = None,
 ) -> Section301Computation:
     """Compute Section 301 duty information for a given HTS number."""
 
@@ -255,12 +256,19 @@ def compute_section301_duty(
     rated_measures: List[Dict] = []
     zero_rate_matches: List[Dict] = []
 
+    def _coerce_decimal(raw_value: Optional[object]) -> Optional[Decimal]:
+        if raw_value is None:
+            return None
+        if isinstance(raw_value, Decimal):
+            return raw_value
+        return Decimal(str(raw_value))
+
     def _coerce_rate(raw_rate: Optional[object]) -> Optional[Decimal]:
         if raw_rate is None:
             return None
-        if isinstance(raw_rate, Decimal):
-            return raw_rate
-        return Decimal(str(raw_rate))
+        return _coerce_decimal(raw_rate)
+
+    import_value_decimal = _coerce_decimal(import_value)
 
     for measure in applicable_measures:
         rate = _coerce_rate(measure.get("ad_valorem_rate"))
@@ -369,11 +377,15 @@ def compute_section301_duty(
                 + zero_headings
             )
 
+    amount = Decimal("0")
+    if import_value_decimal is not None:
+        amount = (import_value_decimal * total_rate) / Decimal("100")
+
     return Section301Computation(
         module_id="301",
         module_name="Section 301 Tariffs",
         applicable=True,
-        amount=Decimal("0"),
+        amount=amount,
         currency="USD",
         rate=rate_display,
         ch99_list=ch99_list,

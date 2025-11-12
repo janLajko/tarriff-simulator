@@ -69,6 +69,7 @@ def _load_unit_config() -> Dict[str, Dict[str, object]]:
         raw_entries = json.load(handle)
 
     config: Dict[str, Dict[str, object]] = {}
+    base_keys = {"unit", "formula", "general_rate_of_duty", "hts_general", "notes"}
 
     def _ingest(hts: object, value: object) -> None:
         if not isinstance(value, dict):
@@ -78,13 +79,18 @@ def _load_unit_config() -> Dict[str, Dict[str, object]]:
             return
         units = value.get("unit") or []
         normalized_units = [str(item).strip().lower() for item in units if str(item).strip()]
-        config[code] = {
+        entry: Dict[str, object] = {
             "units": normalized_units,
             "formula": (value.get("formula") or "").strip(),
             "general_rate_of_duty": value.get("general_rate_of_duty"),
             "hts_general": value.get("hts_general"),
             "notes": value.get("notes"),
         }
+        for extra_key, extra_value in value.items():
+            if extra_key in base_keys:
+                continue
+            entry[extra_key] = extra_value
+        config[code] = entry
 
     if isinstance(raw_entries, dict):
         for hts, value in raw_entries.items():

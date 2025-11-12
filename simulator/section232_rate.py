@@ -5,8 +5,8 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from datetime import date
-from decimal import Decimal
-from typing import Dict, List, Optional, Sequence, Tuple
+from decimal import Decimal, InvalidOperation
+from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 try:  # pragma: no cover - optional dependency for environments without psycopg2
     import psycopg2
@@ -15,6 +15,8 @@ except ImportError:  # pragma: no cover - allow import without postgres libs
     psycopg2 = None  # type: ignore[assignment]
     RealDictCursor = None  # type: ignore[assignment]
 
+from .basic_hts_rate import get_unit_config
+
 
 @dataclass
 class Section232Ch99:
@@ -22,6 +24,8 @@ class Section232Ch99:
     alias: str
     general_rate: Decimal
     ch99_description: str
+    amount: Decimal = Decimal("0")
+    amount: Decimal
 
 
 @dataclass
@@ -34,6 +38,117 @@ class Section232Computation:
     rate: Optional[str]
     ch99_list: List[Section232Ch99] = field(default_factory=list)
     notes: List[str] = field(default_factory=list)
+
+
+HUNDRED = Decimal("100")
+STEEL_PREFIXES = ("9903.81", "9908.81")
+ALUMINUM_PREFIXES = ("9903.85", "9908.85")
+
+
+def _coerce_decimal(value: object) -> Optional[Decimal]:
+    if value is None:
+        return None
+    if isinstance(value, Decimal):
+        return value
+    try:
+        return Decimal(str(value))
+    except (InvalidOperation, TypeError, ValueError):  # pragma: no cover - defensive
+        return None
+
+
+def _normalize_measurement_map(
+    measurements: Optional[Mapping[str, object]],
+) -> Dict[str, Decimal]:
+    normalized: Dict[str, Decimal] = {}
+    if not measurements:
+        return normalized
+    for raw_key, raw_value in measurements.items():
+        key = str(raw_key or "").strip().lower()
+        if not key:
+            continue
+        value = _coerce_decimal(raw_value)
+        if value is None:
+            continue
+        normalized[key] = value
+    return normalized
+
+
+def _classify_component(heading: str) -> str:
+    normalized = (heading or "").strip()
+    for prefix in STEEL_PREFIXES:
+        if normalized.startswith(prefix):
+            return "steel"
+    for prefix in ALUMINUM_PREFIXES:
+        if normalized.startswith(prefix):
+            return "aluminum"
+    return "general"
+
+
+def _resolve_component_share(
+    component: str,
+    config: Mapping[str, object],
+    measurements: Mapping[str, Decimal],
+) -> Tuple[Optional[Decimal], Optional[str]]:
+    field_name = f"{component}_percentage"
+    measurement_value = measurements.get(field_name)
+    fallback_key = config.get(field_name)
+    if measurement_value is None and isinstance(fallback_key, str):
+        candidate_key = fallback_key.strip().lower()
+        if candidate_key and candidate_key not in {"kg", "kgs", "kilogram", "kilograms"}:
+            measurement_value = measurements.get(candidate_key)
+
+    if measurement_value is None:
+        if field_name in config:
+            return None, field_name
+        return Decimal("1"), None
+
+    share = measurement_value
+    if share > 1 and share <= 100:
+        share = share / HUNDRED
+    return share, None
+
+
+def _compute_section232_amount(
+    hts_number: str,
+    entries: Sequence[Section232Ch99],
+    import_value: Optional[Decimal],
+    measurements: Mapping[str, Decimal],
+) -> Tuple[Decimal, List[str]]:
+    if not entries:
+        return Decimal("0"), []
+    if import_value is None:
+        for entry in entries:
+            entry.amount = Decimal("0")
+        return Decimal("0"), []
+
+    config = get_unit_config(hts_number) or {}
+    shares: Dict[str, Optional[Decimal]] = {}
+    missing_fields: List[str] = []
+    for component in ("steel", "aluminum"):
+        share_value, missing_field = _resolve_component_share(component, config, measurements)
+        shares[component] = share_value
+        if missing_field:
+            missing_fields.append(missing_field)
+
+    amount = Decimal("0")
+    for entry in entries:
+        component = _classify_component(entry.ch99_id)
+        if component == "steel":
+            share = shares.get("steel", Decimal("1"))
+        elif component == "aluminum":
+            share = shares.get("aluminum", Decimal("1"))
+        else:
+            share = Decimal("1")
+
+        if share is None:
+            entry.amount = Decimal("0")
+            continue
+
+        entry_amount = (import_value * share * entry.general_rate) / HUNDRED
+        entry.amount = entry_amount
+        amount += entry_amount
+
+    return amount, missing_fields
 
 
 def _normalize_hts(code: str) -> str:
@@ -247,6 +362,10 @@ def compute_section232_duty(
     country_of_origin: str,
     entry_date: date,
     melt_pour_origin_iso2: Optional[str] = None,
+    import_value: Optional[Decimal] = None,
+    measurements: Optional[Mapping[str, Decimal]] = None,
+    steel_percentage: Optional[Decimal] = None,
+    aluminum_percentage: Optional[Decimal] = None,
 ) -> Section232Computation:
     """Compute Section 232 duty information for a given HTS number."""
 
@@ -261,6 +380,14 @@ def compute_section232_duty(
 
     origin = (country_of_origin or "").upper()
     melt_origin = (melt_pour_origin_iso2 or "").upper() or None
+    import_value_decimal = _coerce_decimal(import_value)
+    normalized_measurements = _normalize_measurement_map(measurements)
+    steel_share = _coerce_decimal(steel_percentage)
+    if steel_share is not None:
+        normalized_measurements["steel_percentage"] = steel_share
+    aluminum_share = _coerce_decimal(aluminum_percentage)
+    if aluminum_share is not None:
+        normalized_measurements["aluminum_percentage"] = aluminum_share
 
     dsn = os.getenv("DATABASE_DSN")
     if not dsn:
@@ -423,11 +550,24 @@ def compute_section232_duty(
                 + zero_headings
             )
 
+    amount, missing_measurement_fields = _compute_section232_amount(
+        hts_number,
+        ch99_list,
+        import_value_decimal,
+        normalized_measurements,
+    )
+    if missing_measurement_fields:
+        missing_list = ", ".join(sorted(set(missing_measurement_fields)))
+        notes.append(
+            "Section 232 amount requires additional measurements: "
+            f"{missing_list} (provide as fractional values, e.g., 0.25 for 25%)."
+        )
+
     return Section232Computation(
         module_id="232",
         module_name="Section 232 Tariffs",
         applicable=True,
-        amount=Decimal("0"),
+        amount=amount,
         currency="USD",
         rate=rate_display,
         ch99_list=ch99_list,

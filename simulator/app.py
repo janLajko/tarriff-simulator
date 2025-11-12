@@ -7,7 +7,7 @@ import os
 from contextlib import contextmanager
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 import psycopg2
 from fastapi import FastAPI, HTTPException
@@ -28,6 +28,7 @@ from .anti_scraping import (
     encrypt_payload,
 )
 from .section301_rate import Section301Computation, compute_section301_duty
+from .section232_rate import Section232Computation, compute_section232_duty
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +81,22 @@ class SimulationRequest(BaseModel):
         default_factory=dict,
         description="Measurement inputs keyed by unit name (e.g. usd, kg).",
     )
+    melt_pour_origin_iso2: Optional[str] = Field(
+        default=None,
+        description="ISO-2 code describing where steel was melted and poured, when applicable.",
+    )
+    steel_percentage: Optional[Decimal] = Field(
+        default=None,
+        description="Fractional (0-1) or percentage (0-100) share of steel content used for Section 232.",
+    )
+    aluminum_percentage: Optional[Decimal] = Field(
+        default=None,
+        description="Fractional (0-1) or percentage (0-100) share of aluminum content used for Section 232.",
+    )
+    pour_country: Optional[Union[str, List[str]]] = Field(
+        default=None,
+        description="Optional indicator describing which material categories require melt/pour origin checks.",
+    )
 
 
 class RequestEcho(BaseModel):
@@ -89,6 +106,7 @@ class RequestEcho(BaseModel):
     date_of_landing: Optional[date] = None
     import_value: Optional[Decimal] = None
     measurements: Dict[str, Decimal] = Field(default_factory=dict)
+    melt_pour_origin_iso2: Optional[str] = None
 
 
 class Ch99Entry(BaseModel):
@@ -96,6 +114,7 @@ class Ch99Entry(BaseModel):
     alias: Optional[str] = None
     general_rate: Decimal
     ch99_description: Optional[str] = None
+    amount: Decimal = Field(default=Decimal("0"))
 
 
 class TariffModule(BaseModel):
@@ -191,6 +210,10 @@ def _normalize_measurements(payload: SimulationRequest) -> Dict[str, Decimal]:
     }
     if payload.import_value is not None:
         measurements.setdefault("usd", payload.import_value)
+    if payload.steel_percentage is not None:
+        measurements["steel_percentage"] = payload.steel_percentage
+    if payload.aluminum_percentage is not None:
+        measurements["aluminum_percentage"] = payload.aluminum_percentage
     return measurements
 
 
@@ -235,27 +258,34 @@ def _build_meta_info(
     )
 
 
-def _build_modules(section301: Section301Computation) -> List[TariffModule]:
-    ch99_entries = [
-        Ch99Entry(
-            ch99_id=entry.ch99_id,
-            alias=entry.alias,
-            general_rate=entry.general_rate,
-            ch99_description=entry.ch99_description,
+def _build_modules(
+    *sections: Section301Computation | Section232Computation,
+) -> List[TariffModule]:
+    modules: List[TariffModule] = []
+    for computation in sections:
+        ch99_entries = [
+            Ch99Entry(
+                ch99_id=entry.ch99_id,
+                alias=entry.alias,
+                general_rate=entry.general_rate,
+                ch99_description=entry.ch99_description,
+                amount=entry.amount
+            )
+            for entry in computation.ch99_list
+        ]
+        modules.append(
+            TariffModule(
+                module_id=computation.module_id,
+                module_name=computation.module_name,
+                ch99_list=ch99_entries,
+                notes=list(computation.notes),
+                applicable=computation.applicable,
+                amount=computation.amount,
+                currency=computation.currency,
+                rate=computation.rate,
+            )
         )
-        for entry in section301.ch99_list
-    ]
-    module = TariffModule(
-        module_id=section301.module_id,
-        module_name=section301.module_name,
-        ch99_list=ch99_entries,
-        notes=list(section301.notes),
-        applicable=section301.applicable,
-        amount=section301.amount,
-        currency=section301.currency,
-        rate=section301.rate,
-    )
-    return [module]
+    return modules
 
 
 def _build_request_echo(
@@ -263,6 +293,7 @@ def _build_request_echo(
     normalized_measurements: Dict[str, Decimal],
     hts_code: str,
     entry_date: date,
+    melt_pour_origin_iso2: Optional[str],
 ) -> RequestEcho:
     import_value = (
         payload.import_value
@@ -276,6 +307,7 @@ def _build_request_echo(
         date_of_landing=payload.date_of_landing,
         import_value=import_value,
         measurements=normalized_measurements,
+        melt_pour_origin_iso2=melt_pour_origin_iso2,
     )
 
 
@@ -283,7 +315,13 @@ def _build_request_echo(
 def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
     entry = payload.entry_date or date.today()
     country = payload.country_of_origin.strip().upper()
+    melt_origin = (
+        payload.melt_pour_origin_iso2.strip().upper()
+        if payload.melt_pour_origin_iso2
+        else None
+    )
     measurements = _normalize_measurements(payload)
+    import_value_amount = measurements.get("usd")
 
     try:
         with db_connection() as conn:
@@ -329,9 +367,26 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         BasicRateComputationPayload.from_dataclass(computation)
         for computation in basic_computations
     ]
-    section_301_result = compute_section301_duty(canonical_hts, country, entry)
-    modules = _build_modules(section_301_result)
-    request_echo = _build_request_echo(payload, measurements, canonical_hts, entry)
+    section_301_result = compute_section301_duty(
+        canonical_hts,
+        country,
+        entry,
+        import_value=import_value_amount,
+    )
+    section_232_result = compute_section232_duty(
+        canonical_hts,
+        country,
+        entry,
+        melt_origin,
+        import_value=import_value_amount,
+        measurements=measurements,
+        steel_percentage=payload.steel_percentage,
+        aluminum_percentage=payload.aluminum_percentage,
+    )
+    modules = _build_modules(section_301_result, section_232_result)
+    request_echo = _build_request_echo(
+        payload, measurements, canonical_hts, entry, melt_origin
+    )
 
     envelope_payload = SimulationResponse(
         request=request_echo,
