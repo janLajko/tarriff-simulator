@@ -43,6 +43,34 @@ class Section232Computation:
 HUNDRED = Decimal("100")
 STEEL_PREFIXES = ("9903.81", "9908.81")
 ALUMINUM_PREFIXES = ("9903.85", "9908.85")
+STEEL_CH73_HEADINGS = {
+    "9903.81.87",
+    "9903.81.88",
+    "9903.81.89",
+    "9903.81.90",
+    "9903.81.93",
+    "9903.81.94",
+    "9903.81.95",
+    "9903.81.96",
+    "9903.81.97",
+    "9903.81.99",
+}
+STEEL_ALWAYS_HEADINGS = {
+    "9903.81.91",
+    "9903.81.98",
+}
+ALUMINUM_CH76_HEADINGS = {
+    "9903.85.02",
+    "9903.85.04",
+    "9903.85.07",
+    "9903.85.12",
+    "9903.85.13",
+    "9903.85.14",
+}
+ALUMINUM_ALWAYS_HEADINGS = {
+    "9903.85.08",
+    "9903.85.15",
+}
 
 
 def _coerce_decimal(value: object) -> Optional[Decimal]:
@@ -108,6 +136,41 @@ def _resolve_component_share(
     return share, None
 
 
+def _determine_entry_share(
+    hts_number: str,
+    ch99_id: str,
+    component: str,
+    shares: Mapping[str, Optional[Decimal]],
+) -> Tuple[Optional[Decimal], Optional[str]]:
+    chapter = _hts_chapter(hts_number)
+    normalized_ch99 = (ch99_id or "").strip()
+
+    def _component_share(name: str) -> Tuple[Optional[Decimal], Optional[str]]:
+        return shares.get(name), name
+
+    if normalized_ch99 in STEEL_CH73_HEADINGS:
+        if chapter == "73":
+            return _component_share("steel")
+        return Decimal("1"), None
+
+    if normalized_ch99 in STEEL_ALWAYS_HEADINGS:
+        return _component_share("steel")
+
+    if normalized_ch99 in ALUMINUM_CH76_HEADINGS:
+        if chapter == "76":
+            return _component_share("aluminum")
+        return Decimal("1"), None
+
+    if normalized_ch99 in ALUMINUM_ALWAYS_HEADINGS:
+        return _component_share("aluminum")
+
+    if component == "steel":
+        return _component_share("steel")
+    if component == "aluminum":
+        return _component_share("aluminum")
+    return Decimal("1"), None
+
+
 def _compute_section232_amount(
     hts_number: str,
     entries: Sequence[Section232Ch99],
@@ -123,24 +186,28 @@ def _compute_section232_amount(
 
     config = get_unit_config(hts_number) or {}
     shares: Dict[str, Optional[Decimal]] = {}
-    missing_fields: List[str] = []
+    component_missing_fields: Dict[str, str] = {}
     for component in ("steel", "aluminum"):
         share_value, missing_field = _resolve_component_share(component, config, measurements)
         shares[component] = share_value
         if missing_field:
-            missing_fields.append(missing_field)
+            component_missing_fields[component] = missing_field
 
     amount = Decimal("0")
+    missing_fields: set[str] = set()
     for entry in entries:
         component = _classify_component(entry.ch99_id)
-        if component == "steel":
-            share = shares.get("steel", Decimal("1"))
-        elif component == "aluminum":
-            share = shares.get("aluminum", Decimal("1"))
-        else:
-            share = Decimal("1")
+        share, required_component = _determine_entry_share(
+            hts_number,
+            entry.ch99_id,
+            component,
+            shares,
+        )
 
         if share is None:
+            if required_component:
+                missing_field = component_missing_fields.get(required_component) or f"{required_component}_percentage"
+                missing_fields.add(missing_field)
             entry.amount = Decimal("0")
             continue
 
@@ -148,11 +215,18 @@ def _compute_section232_amount(
         entry.amount = entry_amount
         amount += entry_amount
 
-    return amount, missing_fields
+    return amount, sorted(missing_fields)
 
 
 def _normalize_hts(code: str) -> str:
     return "".join(ch for ch in code if ch.isdigit())
+
+
+def _hts_chapter(hts_code: str) -> Optional[str]:
+    normalized = _normalize_hts(hts_code)
+    if len(normalized) < 2:
+        return None
+    return normalized[:2]
 
 
 def _code_matches(scope_code: str, hts_code: str) -> bool:

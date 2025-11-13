@@ -1,0 +1,23 @@
+
+测试目标hts 9903.81.87
+测试集：
+1、非刚含量计算（商品价值从价计算）：
+htscode:7208.10.6000,country_of_origin:CN,melt_origin:CN,import_value:10000
+预期
+10000 * 50% = 5000
+2、含钢量计算
+htscode:7301.10.0000,country_of_origin:CN,melt_origin:CN,import_value:10000,steel_percentage:85
+预期
+10000 * 85% * 50% = 4250
+
+测试目标hts 9903.81.92
+htscode:7208.10.6000,country_of_origin:CN,melt_origin:US,import_value:10000
+预期
+9903.81.92 计税0
+
+测试目标hts 9903.81.97
+htscode:7216.91.0010,country_of_origin:UK,melt_origin:CN,import_value:10000
+10000 * 25% = 2500
+
+htscode:7301.20.1000,country_of_origin:UK,melt_origin:CN,import_value:10000,steel_percentage:50
+10000 * 50% * 25% = 1250

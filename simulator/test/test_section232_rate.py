@@ -27,7 +27,7 @@ pytestmark = [
 ]
 
 CSV_DIR = Path(__file__).parent / "232"
-CSV_PATTERN = "99038192_*.csv"
+CSV_PATTERN = "test232_*.csv"
 DEFAULT_ENTRY_DATE = date(2024, 7, 1)
 
 _NORMALIZE = section232_rate._normalize_hts

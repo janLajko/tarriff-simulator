@@ -46,10 +46,9 @@ LOGGER = logging.getLogger("section232_agent")
 
 DEFAULT_HEADINGS = [
     # "9903.81.87",
-    # "9903.81.88",
     # "9903.81.89",
     # "9903.81.90",
-    # "9903.81.91",
+    "9903.81.91",
     # "9903.81.92",
     # "9903.81.93",
     # "9903.81.94",
@@ -58,19 +57,19 @@ DEFAULT_HEADINGS = [
     # "9903.81.97",
     # "9903.81.98",
     # "9903.81.99"
-    "9903.85.02",
-    "9903.85.04",
-    "9903.85.07",
-    "9903.85.08",
-    "9903.85.09",
-    "9903.85.12",
-    "9903.85.13",
-    "9903.85.14",
-    "9903.85.15",
-    "9903.85.67",
-    "9903.85.68",
-    "9903.85.69",
-    "9903.85.70"
+    # "9903.85.02",
+    # "9903.85.04",
+    # "9903.85.07",
+    # "9903.85.08",
+    # "9903.85.09",
+    # "9903.85.12",
+    # "9903.85.13",
+    # "9903.85.14",
+    # "9903.85.15",
+    # "9903.85.67",
+    # "9903.85.68",
+    # "9903.85.69",
+    # "9903.85.70"
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section 232 derivative steel measures.
@@ -130,14 +129,14 @@ Output JSON only. No inference. No paraphrasing. Include only codes that are exp
 Objective:
 From the input legal note text, produce three outputs:
 1. **input_htscode** – the heading(s) that the note applies to (from phrases like "For the purposes of heading …").
-2. **scope** – all headings, HTS8, or HTS10 codes that fall under the effective scope of those input headings.
-3. **except** – all headings, HTS8, or HTS10 codes explicitly excluded ("except … provided for in …").
+2. **scope** – all headings or subheadings that fall under the effective scope of those input headings (capture any HTS reference printed in the text, regardless of whether it is 4, 6, 8, or 10 digits).
+3. **except** – all headings or subheadings explicitly excluded ("except … provided for in …").
 
 Each object in scope or except must match the `s232_scope` table schema:
 
 - keys                 // comma-separated exact heading or HTS8 codes (e.g. "0203.29.20,0203.29.40,0206.10.00") when conditions are identical
 - key                  // single exact heading or HTS8 code (e.g. "9903.88.05" or "8501.10.40") when used alone
-- key_type             // one of: "heading" (e.g., 9903.88.05 or a 4-digit heading), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
+- key_type             // one of: "heading" (use for 4-digit headings and any 6-digit references), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
 - country_iso2         // ISO-2 country code mentioned in the text (e.g. "UK"), else null
 - source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
 - effective_start_date // ISO date; use context.fallback_start_date if not stated
@@ -146,9 +145,7 @@ Each object in scope or except must match the `s232_scope` table schema:
 Extraction rules:
 A. Identify **input_htscode** from the leading clause "For the purposes of heading …".
 B. Identify all **scope** items:
-   - For headings: include every 9903.xx.xx printed under "applies to…" or similar.
-   - For HTS8: include every 8-digit subheading printed in the list.
-   - For HTS10: include every 10-digit "statistical reporting number" printed in the scope text (only if explicitly listed as in-scope).
+   - Include every HTS reference that is explicitly printed (4-digit headings, 6-digit subheadings, 8-digit HTS codes, or 10-digit statistical reporting numbers) under "applies to…" or similar language.
    - Items explicitly listed after "except … provided for in …".
    - This includes any 10-digit "statistical reporting number(s)" printed in exceptions (e.g., "except … provided for in statistical reporting number 8517.62.0090").
    - Mark their source_label with "-exclusion".
