@@ -115,6 +115,7 @@ class Ch99Entry(BaseModel):
     general_rate: Decimal
     ch99_description: Optional[str] = None
     amount: Decimal = Field(default=Decimal("0"))
+    is_potential: bool = False
 
 
 class TariffModule(BaseModel):
@@ -269,7 +270,8 @@ def _build_modules(
                 alias=entry.alias,
                 general_rate=entry.general_rate,
                 ch99_description=entry.ch99_description,
-                amount=entry.amount
+                amount=entry.amount,
+                is_potential=entry.is_potential
             )
             for entry in computation.ch99_list
         ]

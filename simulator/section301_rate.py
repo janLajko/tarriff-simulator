@@ -22,6 +22,8 @@ class Section301Ch99:
     alias: str
     general_rate: Decimal
     ch99_description: str
+    amount: Decimal
+    is_potential: bool = False
 
 
 @dataclass
@@ -341,12 +343,18 @@ def compute_section301_duty(
         )
 
     total_rate = sum((m["ad_valorem_rate"] for m in rated_measures), Decimal("0"))
+    def _entry_amount(rate: Decimal) -> Decimal:
+        if import_value_decimal is None:
+            return Decimal("0")
+        return (import_value_decimal * rate) / Decimal("100")
+
     ch99_list = [
         Section301Ch99(
             ch99_id=m["heading"],
             alias=m["heading"],
             general_rate=m["ad_valorem_rate"],
             ch99_description=m.get("description") or "",
+            amount=_entry_amount(m["ad_valorem_rate"]),
         )
         for m in rated_measures
     ]

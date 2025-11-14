@@ -25,7 +25,8 @@ class Section232Ch99:
     general_rate: Decimal
     ch99_description: str
     amount: Decimal = Decimal("0")
-    amount: Decimal
+    is_potential: bool = False
+    # amount: Decimal
 
 
 @dataclass
@@ -288,6 +289,7 @@ class Section232Evaluator:
                 m.ad_valorem_rate,
                 m.effective_start_date,
                 m.effective_end_date,
+                m.is_potential,
                 COALESCE(h.description, '') AS description
             FROM s232_measures AS m
             LEFT JOIN LATERAL (
@@ -349,7 +351,8 @@ class Section232Evaluator:
                 origin_exclude_iso2,
                 ad_valorem_rate,
                 effective_start_date,
-                effective_end_date
+                effective_end_date,
+                is_potential
             FROM s232_measures
             WHERE heading = %s
               AND (melt_pour_origin_iso2 IS NULL OR melt_pour_origin_iso2 = %s)
@@ -512,6 +515,7 @@ def compute_section232_duty(
             alias=SPECIAL_ZERO_HEADING,
             general_rate=zero_decimal,
             ch99_description=ch99_description,
+            is_potential=bool(special_zero_measure.get("is_potential")),
         )
         notes = [
             f"Applied Section 232 measures: {SPECIAL_ZERO_HEADING} (0%)"
@@ -559,6 +563,7 @@ def compute_section232_duty(
                     "alias": heading,
                     "ad_valorem_rate": -rate,
                     "description": offset_measure.get("description") or "",
+                    "is_potential": offset_measure.get("is_potential"),
                 }
             )
 
@@ -594,6 +599,7 @@ def compute_section232_duty(
             alias=m["heading"],
             general_rate=m["ad_valorem_rate"],
             ch99_description=m.get("description") or "",
+            is_potential=bool(m.get("is_potential")),
         )
         for m in rated_measures
     ]

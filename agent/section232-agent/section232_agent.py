@@ -48,15 +48,15 @@ DEFAULT_HEADINGS = [
     # "9903.81.87",
     # "9903.81.89",
     # "9903.81.90",
-    "9903.81.91",
+    # "9903.81.91",
     # "9903.81.92",
-    # "9903.81.93",
+    "9903.81.93",
     # "9903.81.94",
     # "9903.81.95",
     # "9903.81.96",
     # "9903.81.97",
     # "9903.81.98",
-    # "9903.81.99"
+    "9903.81.99"
     # "9903.85.02",
     # "9903.85.04",
     # "9903.85.07",
@@ -80,6 +80,7 @@ From the following text, extract:
 4. **country_iso2** – ISO-2 code for the products covered by the measure. Use null when the measure applies to every country other than the excluded origins.
 5. **melt_pour_origin_iso2** – ISO-2 code for where the steel must be melted and poured (e.g., “US” when the text says “melted and poured in the United States”). Use null if not stated.
 6. **origin_exclude_iso2** – an array of ISO-2 codes for origin countries explicitly excluded (e.g., ["UK"]). When the text implies “all countries except the United Kingdom” for derivative products made from U.S.-melted steel, output ["UK"] even if the exclusion is implicit.
+7. **is_potential** – true only when the text describes a conditional or potential scenario (e.g., treatment of goods that might later enter commerce, or goods admitted to a foreign trade zone before a cut-off time). False when the measure is in force without such contingencies. When `is_potential` is true, leave `effective_period.end_date` null unless the text explicitly states when the measure itself expires. Dates that merely reference entry/admission timing do **not** impose an end date.
 
 Input text:
 \"\"\"{description}\"\"\"
@@ -94,7 +95,8 @@ Return JSON only. Use this schema:
   }},
   "country_iso2": "UK",
   "melt_pour_origin_iso2": "US",
-  "origin_exclude_iso2": ["UK"]
+  "origin_exclude_iso2": ["UK"],
+  "is_potential": false
 }}
 
 Examples:
@@ -107,7 +109,8 @@ Output:
   "effective_period": {{"start_date": null, "end_date": null}},
   "country_iso2": null,
   "melt_pour_origin_iso2": "US",
-  "origin_exclude_iso2": ["UK"]
+  "origin_exclude_iso2": ["UK"],
+  "is_potential": false
 }}
 
 2. Input:
@@ -119,7 +122,21 @@ Output:
   "effective_period": {{"start_date": null, "end_date": null}},
   "country_iso2": "UK",
   "melt_pour_origin_iso2": null,
-  "origin_exclude_iso2": []
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}}
+
+3. Input:
+\"\"\"Except as provided in headings 9903.81.91 or 9903.81.92, derivative products of iron or steel, as specified in subdivisions (l) and (m) of note 16 to this subchapter, admitted to a U.S. foreign trade zone under “privileged foreign status” as defined by 19 CFR 146.41, prior to 12:01 a.m. eastern daylight time on June 4, 2025.\"\"\"
+Output:
+{{
+  "except": ["9903.81.91", "9903.81.92"],
+  "include": ["note16(l)", "note16(m)"],
+  "effective_period": {{"start_date": null, "end_date": null}},
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": true
 }}
 """
 
@@ -160,6 +177,7 @@ D. Set country_iso2 to the ISO-2 code for the country named in the text (e.g. "U
 E. Only populate effective_start_date and effective_end_date when explicit "effective" or date ranges appear in the text.  
    - Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"  
    - Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"  
+   - Entry/admission timing clauses (e.g., goods admitted to a foreign trade zone before 12:01 a.m. EDT on March 12, 2025) do **not** impose an effective_end_date; they only describe which entries qualify.  
    - If no explicit "effective" or date reference appears, leave both fields null. Do not use fallback_start_date.
 F. Remove duplicates.
 G. When multiple note blocks are provided, use `context.note_labels` (same order as the input blocks) for their labels. `context.primary_note_labels` lists the notes that actually triggered this extraction. `context.supporting_note_labels` lists subdivisions that were included only because a primary note referenced them (e.g., "subdivision (l)"). For supporting notes:
@@ -191,68 +209,6 @@ Output JSON format (note the use of "keys" for combined codes and "key" for sing
 }}
 """
 
-# LLM_NOTE_PROMPT = """You are a structured extractor for HTSUS Section 232 notes.
-# Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
-
-# Objective:
-# From the input legal note text, produce three outputs:
-
-# 1. **input_htscode** – the heading(s) that the note applies to (from phrases like "For the purposes of heading …").
-# 2. **scope** – all headings, HTS8, or HTS10 codes that fall under the effective scope of those input headings.
-# 3. **except** – all headings, HTS8, or HTS10 codes explicitly excluded ("except … provided for in …").
-
-# Each object in scope or except must match the `s232_scope` table schema:
-
-# * keys                 // comma-separated exact codes when conditions are identical. Codes must be of the same key_type. Example: "0203.29.20,0203.29.40,0206.10.00"
-# * key                  // single exact code when used alone. Example: "9903.88.05" or "8501.10.40" or "8517.62.0090"
-# * key_type             // one of: "heading" (e.g., 9903.88.05 or a 4-digit heading), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
-# * country_iso2         // ISO-2 country code mentioned in the text (e.g. "UK"), else null
-# * source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
-# * effective_start_date // ISO date; only if the text states an explicit effective date; otherwise null
-# * effective_end_date   // ISO date; only if the text states an explicit end date; otherwise null
-
-# Extraction rules:
-# A. Identify **input_htscode** from the leading clause "For the purposes of heading …".
-# B. Identify all **scope** items:
-
-# * For headings: include every 9903.xx.xx printed under "applies to…" or similar.
-# * For HTS8: include every 8-digit subheading printed in the list.
-# * For HTS10: include every 10-digit "statistical reporting number" printed in the scope text (only if explicitly listed as in-scope).
-# * Do NOT include `input_htscode` again.
-# * When multiple codes share identical conditions (same key_type, country_iso2, source_label, effective_start_date, effective_end_date), combine them using "keys" with comma-separated values instead of creating separate objects.
-#   C. Identify all **except** items:
-# * Items explicitly listed after "except … provided for in …".
-# * This includes any 10-digit "statistical reporting number(s)" printed in exceptions (e.g., "except … provided for in statistical reporting number 8517.62.0090").
-# * Mark their source_label with "-exclusion".
-# * Apply the same combination rule as in scope, grouping only within the same key_type.
-#   D. Set country_iso2 to the ISO-2 code for the country mentioned in the text. Leave it null when no country is provided.
-#   E. Only populate effective_start_date and effective_end_date when explicit "effective" dates or date ranges appear in the text.
-# * Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"
-# * Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"
-# * If no explicit date appears, leave both fields null. Do not use any fallback date.
-#   F. Remove duplicates.
-#   G. When multiple note blocks are provided, treat each block independently and set `source_label` using that note label (e.g. "note20(a)" or "note20(b)-exclusion"). Use the provided `context.note_labels` array (same order as the blocks) if you need the human-readable label. If `context.source_label_prefix` is provided, use it as the base and append "-exclusion" for the except items.
-
-# Context (provided by caller):
-# {context_json}
-
-# Input (one or more note blocks, each beginning with its note label on the first line):
-# \"\"\"{note_text}\"\"\"
-
-# Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
-# {
-# "input_htscode": ["9903.88.04"],
-# "scope": [
-# { "keys": "2931.90.90,8517.62.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(g)", "effective_start_date": null, "effective_end_date": null }
-# ],
-# "except": [
-# { "keys": "9903.88.33,9903.88.34", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(g)-exclusion", "effective_start_date": null, "effective_end_date": null },
-# { "key": "8517.62.0090", "key_type": "hts10", "country_iso2": "CN", "source_label": "note20(g)-exclusion", "effective_start_date": null, "effective_end_date": null }
-# ]
-# }
-# """
-
-
 NOTE_TOKEN_RE = re.compile(r"\(\s*([^)]+?)\s*\)")
 
 
@@ -265,6 +221,7 @@ class MeasureAnalysis:
     country_iso2: Optional[str]
     melt_pour_origin_iso2: Optional[str]
     origin_exclude_iso2: Optional[List[str]]
+    is_potential: bool
 
 
 @dataclass
@@ -375,6 +332,7 @@ class Section232Database:
         notes: Optional[Dict[str, Any]],
         start_date: date,
         end_date: Optional[date],
+        is_potential: bool,
     ) -> Optional[int]:
         query_select = """
             SELECT id FROM s232_measures
@@ -388,6 +346,7 @@ class Section232Database:
               AND effective_start_date = %s
               AND COALESCE(effective_end_date, DATE '9999-12-31') =
                   COALESCE(%s, DATE '9999-12-31')
+              AND is_potential = %s
             LIMIT 1
         """
         with self._conn.cursor() as cur:
@@ -402,6 +361,7 @@ class Section232Database:
                     origin_exclude_iso2,
                     start_date,
                     end_date,
+                    is_potential,
                 ),
             )
             row = cur.fetchone()
@@ -412,8 +372,8 @@ class Section232Database:
             INSERT INTO s232_measures
             (heading, country_iso2, ad_valorem_rate, value_basis,
              melt_pour_origin_iso2, origin_exclude_iso2, notes,
-             effective_start_date, effective_end_date)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+             effective_start_date, effective_end_date, is_potential)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
         """
         payload_notes = Json(notes) if notes is not None else None
@@ -432,6 +392,7 @@ class Section232Database:
                         payload_notes,
                         start_date,
                         end_date,
+                        is_potential,
                     ),
                 )
                 measure_id = cur.fetchone()[0]
@@ -452,6 +413,7 @@ class Section232Database:
                                 origin_exclude_iso2,
                                 start_date,
                                 end_date,
+                                is_potential,
                             ),
                         )
                         row = cur_lookup.fetchone()
@@ -815,6 +777,16 @@ class Section232LLM:
         melt_origin = _normalize_iso(payload.get("melt_pour_origin_iso2"))
         origin_exclude = _normalize_iso_list(payload.get("origin_exclude_iso2"))
 
+        def _normalize_bool(value: Any) -> bool:
+            if isinstance(value, bool):
+                return value
+            if isinstance(value, (int, float)):
+                return bool(value)
+            if isinstance(value, str):
+                return value.strip().lower() in {"1", "true", "yes", "y"}
+            return False
+        is_potential = _normalize_bool(payload.get("is_potential"))
+
         return MeasureAnalysis(
             include=include,
             exclude=exclude,
@@ -823,6 +795,7 @@ class Section232LLM:
             country_iso2=country_iso2,
             melt_pour_origin_iso2=melt_origin,
             origin_exclude_iso2=origin_exclude,
+            is_potential=is_potential,
         )
 
     def extract_note(self, note_text: str, context: Dict[str, Any]) -> Dict[str, Any]:
@@ -898,6 +871,13 @@ class Section232Agent:
             LOGGER.info("analysis : %s", analysis)
             start_date = analysis.effective_start or date(1900, 1, 1)
             end_date = analysis.effective_end
+            if analysis.is_potential and end_date:
+                LOGGER.info(
+                    "Heading %s marked potential; clearing effective_end_date %s",
+                    normalized,
+                    end_date,
+                )
+                end_date = None
             rate = self._derive_rate(description)
 
             measure_country_iso2 = analysis.country_iso2 or self.country_iso2
@@ -922,6 +902,7 @@ class Section232Agent:
                 notes=None,
                 start_date=start_date,
                 end_date=end_date,
+                is_potential=analysis.is_potential,
             )
             if not measure_id:
                 LOGGER.warning("Failed to ensure measure for %s; skipping scope linkage", normalized)
