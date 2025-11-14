@@ -197,6 +197,8 @@ def _compute_section232_amount(
     amount = Decimal("0")
     missing_fields: set[str] = set()
     for entry in entries:
+        if entry.is_potential:
+            continue
         component = _classify_component(entry.ch99_id)
         share, required_component = _determine_entry_share(
             hts_number,

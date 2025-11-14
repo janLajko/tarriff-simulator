@@ -318,8 +318,8 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
     entry = payload.entry_date or date.today()
     country = payload.country_of_origin.strip().upper()
     melt_origin = (
-        payload.melt_pour_origin_iso2.strip().upper()
-        if payload.melt_pour_origin_iso2
+        payload.pour_country.strip().upper()
+        if payload.pour_country
         else None
     )
     measurements = _normalize_measurements(payload)
