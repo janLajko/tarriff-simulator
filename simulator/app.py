@@ -93,7 +93,11 @@ class SimulationRequest(BaseModel):
         default=None,
         description="Fractional (0-1) or percentage (0-100) share of aluminum content used for Section 232.",
     )
-    pour_country: Optional[Union[str, List[str]]] = Field(
+    steel_pour_country: Optional[Union[str, List[str]]] = Field(
+        default=None,
+        description="Optional indicator describing which material categories require melt/pour origin checks.",
+    )
+    aluminum_pour_country: Optional[Union[str, List[str]]] = Field(
         default=None,
         description="Optional indicator describing which material categories require melt/pour origin checks.",
     )
@@ -317,11 +321,17 @@ def _build_request_echo(
 def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
     entry = payload.entry_date or date.today()
     country = payload.country_of_origin.strip().upper()
-    melt_origin = (
-        payload.pour_country.strip().upper()
-        if payload.pour_country
+    steel_melt_origin = (
+        payload.steel_pour_country.strip().upper()
+        if payload.steel_pour_country
         else None
     )
+    aluminum_melt_origin = (
+        payload.aluminum_pour_country.strip().upper()
+        if payload.aluminum_pour_country
+        else None
+    )
+    melt_origin = steel_melt_origin or aluminum_melt_origin
     measurements = _normalize_measurements(payload)
     import_value_amount = measurements.get("usd")
 
@@ -379,7 +389,8 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         canonical_hts,
         country,
         entry,
-        melt_origin,
+        steel_melt_origin,
+        aluminum_melt_origin,
         import_value=import_value_amount,
         measurements=measurements,
         steel_percentage=payload.steel_percentage,

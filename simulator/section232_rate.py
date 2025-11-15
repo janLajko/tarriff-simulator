@@ -256,12 +256,14 @@ class Section232Evaluator:
         conn,
         entry_date: date,
         country: str,
-        melt_pour_origin: Optional[str],
+        steel_melt_origin: Optional[str],
+        aluminum_melt_origin: Optional[str],
     ) -> None:
         self.conn = conn
         self.entry_date = entry_date
         self.country = (country or "").upper()
-        self.melt_origin = (melt_pour_origin or "").upper() or None
+        self.steel_melt_origin = (steel_melt_origin or "").upper() or None
+        self.aluminum_melt_origin = (aluminum_melt_origin or "").upper() or None
         self.measures = self._load_measures()
         self.heading_to_measure: Dict[str, Dict] = {
             m["heading"]: m for m in self.measures
@@ -279,6 +281,23 @@ class Section232Evaluator:
             # If country is unknown, only allow global measures with no exclusions.
             return not excluded_upper
         return self.country not in excluded_upper
+
+    def _heading_melt_origin(self, heading: str) -> Optional[str]:
+        normalized = (heading or "").strip()
+        if normalized.startswith("9903.81"):
+            return self.steel_melt_origin
+        if normalized.startswith("9903.85"):
+            return self.aluminum_melt_origin
+        return self.steel_melt_origin or self.aluminum_melt_origin
+
+    def _melt_origin_allows_measure(self, measure: Dict) -> bool:
+        required_origin = (measure.get("melt_pour_origin_iso2") or "").upper()
+        if not required_origin:
+            return True
+        candidate = self._heading_melt_origin(measure.get("heading") or "")
+        if not candidate:
+            return False
+        return candidate == required_origin
 
     def _load_measures(self) -> List[Dict]:
         query = """
@@ -303,14 +322,17 @@ class Section232Evaluator:
             ) AS h ON TRUE
             WHERE m.effective_start_date <= %s
               AND (m.effective_end_date IS NULL OR %s <= m.effective_end_date)
-              AND (m.melt_pour_origin_iso2 IS NULL OR m.melt_pour_origin_iso2 = %s)
         """
-        params = (self.entry_date, self.entry_date, self.melt_origin)
+        params = (self.entry_date, self.entry_date)
         with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(query, params)
             rows = cur.fetchall()
 
-        filtered = [row for row in rows if self._country_allows_measure(row)]
+        filtered = [
+            row
+            for row in rows
+            if self._country_allows_measure(row) and self._melt_origin_allows_measure(row)
+        ]
         return filtered
 
     def _load_scopes(self, measure_id: int) -> Dict[str, List[Dict]]:
@@ -357,7 +379,6 @@ class Section232Evaluator:
                 is_potential
             FROM s232_measures
             WHERE heading = %s
-              AND (melt_pour_origin_iso2 IS NULL OR melt_pour_origin_iso2 = %s)
               AND effective_start_date <= %s
               AND (effective_end_date IS NULL OR %s <= effective_end_date)
             ORDER BY effective_start_date DESC, id DESC
@@ -366,10 +387,10 @@ class Section232Evaluator:
         with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(
                 query,
-                (heading, self.melt_origin, self.entry_date, self.entry_date),
+                (heading, self.entry_date, self.entry_date),
             )
             row = cur.fetchone()
-        if row and self._country_allows_measure(row):
+        if row and self._country_allows_measure(row) and self._melt_origin_allows_measure(row):
             self.heading_to_measure[row["heading"]] = row
             if row not in self.measures:
                 self.measures.append(row)
@@ -440,7 +461,8 @@ def compute_section232_duty(
     hts_number: str,
     country_of_origin: str,
     entry_date: date,
-    melt_pour_origin_iso2: Optional[str] = None,
+    steel_melt_origin: Optional[str] = None,
+    aluminum_melt_origin: Optional[str] = None,
     import_value: Optional[Decimal] = None,
     measurements: Optional[Mapping[str, Decimal]] = None,
     steel_percentage: Optional[Decimal] = None,
@@ -458,7 +480,8 @@ def compute_section232_duty(
         )
 
     origin = (country_of_origin or "").upper()
-    melt_origin = (melt_pour_origin_iso2 or "").upper() or None
+    normalized_steel_origin = (steel_melt_origin or "").upper() or None
+    normalized_aluminum_origin = (aluminum_melt_origin or "").upper() or None
     import_value_decimal = _coerce_decimal(import_value)
     normalized_measurements = _normalize_measurement_map(measurements)
     steel_share = _coerce_decimal(steel_percentage)
@@ -473,7 +496,13 @@ def compute_section232_duty(
         raise RuntimeError("DATABASE_DSN environment variable is required for Section 232 calculations.")
 
     with psycopg2.connect(dsn) as conn:
-        evaluator = Section232Evaluator(conn, entry_date, origin, melt_origin)
+        evaluator = Section232Evaluator(
+            conn,
+            entry_date,
+            origin,
+            normalized_steel_origin,
+            normalized_aluminum_origin,
+        )
         applicable_measures: List[Dict] = []
         excluded_measures: List[Tuple[Dict, List[str]]] = []
         for measure in evaluator.measures:
@@ -487,6 +516,7 @@ def compute_section232_duty(
     zero_rate_matches: List[Dict] = []
     special_zero_measure: Optional[Dict] = None
     SPECIAL_ZERO_HEADING = "9903.81.92"
+    ALUMINUM_SPECIAL_ZERO_HEADING = "9903.85.09"
 
     def _coerce_rate(raw_rate: Optional[object]) -> Optional[Decimal]:
         if raw_rate is None:
@@ -499,9 +529,10 @@ def compute_section232_duty(
         rate = _coerce_rate(measure.get("ad_valorem_rate"))
         if rate is None or rate == 0:
             zero_rate_matches.append(measure)
+            heading = (measure.get("heading") or "")
             if (
-                melt_origin == "US"
-                and (measure.get("heading") or "") == SPECIAL_ZERO_HEADING
+                (heading == SPECIAL_ZERO_HEADING and normalized_steel_origin == "US")
+                or (heading == ALUMINUM_SPECIAL_ZERO_HEADING and normalized_aluminum_origin == "US")
             ):
                 special_zero_measure = measure
             continue
@@ -509,29 +540,31 @@ def compute_section232_duty(
         measure_with_rate["ad_valorem_rate"] = rate
         rated_measures.append(measure_with_rate)
 
+    special_zero_entry: Optional[Section232Ch99] = None
+    special_zero_heading: Optional[str] = None
+    special_zero_prefix: Optional[str] = None
     if special_zero_measure:
         zero_decimal = Decimal("0")
         ch99_description = special_zero_measure.get("description") or ""
-        ch99_entry = Section232Ch99(
-            ch99_id=SPECIAL_ZERO_HEADING,
-            alias=SPECIAL_ZERO_HEADING,
+        special_zero_heading = special_zero_measure.get("heading")
+        special_zero_entry = Section232Ch99(
+            ch99_id=special_zero_heading or "",
+            alias=special_zero_heading or "",
             general_rate=zero_decimal,
             ch99_description=ch99_description,
             is_potential=bool(special_zero_measure.get("is_potential")),
         )
-        notes = [
-            f"Applied Section 232 measures: {SPECIAL_ZERO_HEADING} (0%)"
+        if special_zero_heading and special_zero_heading.startswith("9903.81"):
+            special_zero_prefix = "9903.81"
+        elif special_zero_heading and special_zero_heading.startswith("9903.85"):
+            special_zero_prefix = "9903.85"
+
+    if special_zero_prefix:
+        rated_measures = [
+            m
+            for m in rated_measures
+            if not (m.get("heading") or "").startswith(special_zero_prefix)
         ]
-        return Section232Computation(
-            module_id="232",
-            module_name="Section 232 Tariffs",
-            applicable=True,
-            amount=zero_decimal,
-            currency="USD",
-            rate="0%",
-            ch99_list=[ch99_entry],
-            notes=notes,
-        )
 
     offset_heading_hits: set[str] = set()
     for measure, exclusions in excluded_measures:
@@ -554,11 +587,16 @@ def compute_section232_duty(
 
         measure_with_rate = dict(measure)
         measure_with_rate["ad_valorem_rate"] = rate
+        heading_value = (measure_with_rate.get("heading") or "")
+        if special_zero_prefix and heading_value.startswith(special_zero_prefix):
+            continue
         rated_measures.append(measure_with_rate)
 
         for heading in ref_exclusions:
             offset_heading_hits.add(heading)
             offset_measure = evaluator.heading_to_measure.get(heading, {})
+            if special_zero_prefix and heading.startswith(special_zero_prefix):
+                continue
             rated_measures.append(
                 {
                     "heading": heading,
@@ -570,6 +608,20 @@ def compute_section232_duty(
             )
 
     if not rated_measures:
+        if special_zero_entry:
+            notes = [
+                f"Applied Section 232 measures: {special_zero_entry.ch99_id} (0%)"
+            ]
+            return Section232Computation(
+                module_id="232",
+                module_name="Section 232 Tariffs",
+                applicable=True,
+                amount=Decimal("0"),
+                currency="USD",
+                rate="0%",
+                ch99_list=[special_zero_entry],
+                notes=notes,
+            )
         notes = [
             "No active Section 232 measures matched the provided HTS number on the given entry date."
         ]
@@ -605,6 +657,15 @@ def compute_section232_duty(
         )
         for m in rated_measures
     ]
+    note_measures = list(rated_measures)
+    if special_zero_entry:
+        ch99_list.append(special_zero_entry)
+        note_measures.append(
+            {
+                "heading": special_zero_entry.ch99_id,
+                "ad_valorem_rate": Decimal("0"),
+            }
+        )
 
     normalized_total = total_rate.normalize()
     rate_display = f"{normalized_total}%"
@@ -615,7 +676,7 @@ def compute_section232_duty(
         return f"{prefix}{normalized}%"
 
     applied_details = ", ".join(
-        f"{m['heading']} ({_format_rate(m['ad_valorem_rate'])})" for m in rated_measures
+        f"{m['heading']} ({_format_rate(m['ad_valorem_rate'])})" for m in note_measures
     )
     notes = [
         "Applied Section 232 measures: " + applied_details
@@ -625,6 +686,7 @@ def compute_section232_duty(
             m["heading"]
             for m in zero_rate_matches
             if m.get("heading") not in offset_heading_hits
+            and m.get("heading") != special_zero_heading
         )
         if zero_headings:
             notes.append(

@@ -115,6 +115,7 @@ def test_compute_section232_duty_against_fixture(row_info: dict):
         row_info["country"],
         row_info["entry_date"],
         row_info["melt_origin"],
+        row_info["melt_origin"],
     )
 
     print(f"{row_info['id']}: {result}")
