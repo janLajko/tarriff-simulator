@@ -514,7 +514,7 @@ def compute_section232_duty(
 
     rated_measures: List[Dict] = []
     zero_rate_matches: List[Dict] = []
-    special_zero_measure: Optional[Dict] = None
+    special_zero_measures: Dict[str, Dict] = {}
     SPECIAL_ZERO_HEADING = "9903.81.92"
     ALUMINUM_SPECIAL_ZERO_HEADING = "9903.85.09"
 
@@ -530,40 +530,34 @@ def compute_section232_duty(
         if rate is None or rate == 0:
             zero_rate_matches.append(measure)
             heading = (measure.get("heading") or "")
-            if (
-                (heading == SPECIAL_ZERO_HEADING and normalized_steel_origin == "US")
-                or (heading == ALUMINUM_SPECIAL_ZERO_HEADING and normalized_aluminum_origin == "US")
-            ):
-                special_zero_measure = measure
+            if heading == SPECIAL_ZERO_HEADING and normalized_steel_origin == "US":
+                special_zero_measures["9903.81"] = measure
+            elif heading == ALUMINUM_SPECIAL_ZERO_HEADING and normalized_aluminum_origin == "US":
+                special_zero_measures["9903.85"] = measure
             continue
         measure_with_rate = dict(measure)
         measure_with_rate["ad_valorem_rate"] = rate
         rated_measures.append(measure_with_rate)
 
-    special_zero_entry: Optional[Section232Ch99] = None
-    special_zero_heading: Optional[str] = None
-    special_zero_prefix: Optional[str] = None
-    if special_zero_measure:
-        zero_decimal = Decimal("0")
-        ch99_description = special_zero_measure.get("description") or ""
-        special_zero_heading = special_zero_measure.get("heading")
-        special_zero_entry = Section232Ch99(
-            ch99_id=special_zero_heading or "",
-            alias=special_zero_heading or "",
-            general_rate=zero_decimal,
-            ch99_description=ch99_description,
-            is_potential=bool(special_zero_measure.get("is_potential")),
+    special_zero_entries: Dict[str, Section232Ch99] = {}
+    special_zero_headings: set[str] = set()
+    for prefix, measure in special_zero_measures.items():
+        heading = measure.get("heading") or ""
+        special_zero_headings.add(heading)
+        special_zero_entries[prefix] = Section232Ch99(
+            ch99_id=heading,
+            alias=heading,
+            general_rate=Decimal("0"),
+            ch99_description=measure.get("description") or "",
+            is_potential=bool(measure.get("is_potential")),
         )
-        if special_zero_heading and special_zero_heading.startswith("9903.81"):
-            special_zero_prefix = "9903.81"
-        elif special_zero_heading and special_zero_heading.startswith("9903.85"):
-            special_zero_prefix = "9903.85"
 
-    if special_zero_prefix:
+    if special_zero_entries:
+        prefixes = tuple(special_zero_entries.keys())
         rated_measures = [
             m
             for m in rated_measures
-            if not (m.get("heading") or "").startswith(special_zero_prefix)
+            if not any((m.get("heading") or "").startswith(prefix) for prefix in prefixes)
         ]
 
     offset_heading_hits: set[str] = set()
@@ -588,14 +582,14 @@ def compute_section232_duty(
         measure_with_rate = dict(measure)
         measure_with_rate["ad_valorem_rate"] = rate
         heading_value = (measure_with_rate.get("heading") or "")
-        if special_zero_prefix and heading_value.startswith(special_zero_prefix):
+        if special_zero_entries and any(heading_value.startswith(prefix) for prefix in special_zero_entries):
             continue
         rated_measures.append(measure_with_rate)
 
         for heading in ref_exclusions:
             offset_heading_hits.add(heading)
             offset_measure = evaluator.heading_to_measure.get(heading, {})
-            if special_zero_prefix and heading.startswith(special_zero_prefix):
+            if special_zero_entries and any(heading.startswith(prefix) for prefix in special_zero_entries):
                 continue
             rated_measures.append(
                 {
@@ -608,9 +602,11 @@ def compute_section232_duty(
             )
 
     if not rated_measures:
-        if special_zero_entry:
+        if special_zero_entries:
+            zero_entries = list(special_zero_entries.values())
             notes = [
-                f"Applied Section 232 measures: {special_zero_entry.ch99_id} (0%)"
+                "Applied Section 232 measures: "
+                + ", ".join(f"{entry.ch99_id} (0%)" for entry in zero_entries)
             ]
             return Section232Computation(
                 module_id="232",
@@ -619,7 +615,7 @@ def compute_section232_duty(
                 amount=Decimal("0"),
                 currency="USD",
                 rate="0%",
-                ch99_list=[special_zero_entry],
+                ch99_list=zero_entries,
                 notes=notes,
             )
         notes = [
@@ -658,14 +654,15 @@ def compute_section232_duty(
         for m in rated_measures
     ]
     note_measures = list(rated_measures)
-    if special_zero_entry:
-        ch99_list.append(special_zero_entry)
-        note_measures.append(
-            {
-                "heading": special_zero_entry.ch99_id,
-                "ad_valorem_rate": Decimal("0"),
-            }
-        )
+    if special_zero_entries:
+        for entry in special_zero_entries.values():
+            ch99_list.append(entry)
+            note_measures.append(
+                {
+                    "heading": entry.ch99_id,
+                    "ad_valorem_rate": Decimal("0"),
+                }
+            )
 
     normalized_total = total_rate.normalize()
     rate_display = f"{normalized_total}%"
@@ -686,7 +683,7 @@ def compute_section232_duty(
             m["heading"]
             for m in zero_rate_matches
             if m.get("heading") not in offset_heading_hits
-            and m.get("heading") != special_zero_heading
+            and m.get("heading") not in special_zero_headings
         )
         if zero_headings:
             notes.append(
