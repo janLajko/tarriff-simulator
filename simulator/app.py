@@ -29,6 +29,7 @@ from .anti_scraping import (
 )
 from .section301_rate import Section301Computation, compute_section301_duty
 from .section232_rate import Section232Computation, compute_section232_duty
+from .sectionieepa_rate import SectionIEEPAComputation, compute_sectionieepa_duty
 
 logger = logging.getLogger(__name__)
 
@@ -264,7 +265,7 @@ def _build_meta_info(
 
 
 def _build_modules(
-    *sections: Section301Computation | Section232Computation,
+    *sections: Section301Computation | Section232Computation | SectionIEEPAComputation,
 ) -> List[TariffModule]:
     modules: List[TariffModule] = []
     for computation in sections:
@@ -321,6 +322,11 @@ def _build_request_echo(
 def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
     entry = payload.entry_date or date.today()
     country = payload.country_of_origin.strip().upper()
+    general_melt_origin = (
+        payload.melt_pour_origin_iso2.strip().upper()
+        if payload.melt_pour_origin_iso2
+        else None
+    )
     steel_melt_origin = (
         payload.steel_pour_country.strip().upper()
         if payload.steel_pour_country
@@ -331,7 +337,7 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         if payload.aluminum_pour_country
         else None
     )
-    melt_origin = steel_melt_origin or aluminum_melt_origin
+    melt_origin = general_melt_origin or steel_melt_origin or aluminum_melt_origin
     measurements = _normalize_measurements(payload)
     import_value_amount = measurements.get("usd")
 
@@ -396,7 +402,15 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         steel_percentage=payload.steel_percentage,
         aluminum_percentage=payload.aluminum_percentage,
     )
-    modules = _build_modules(section_301_result, section_232_result)
+    section_ieepa_result = compute_sectionieepa_duty(
+        canonical_hts,
+        country,
+        entry,
+        import_value=import_value_amount,
+        melt_pour_origin_iso2=melt_origin,
+        measurements=measurements,
+    )
+    modules = _build_modules(section_301_result, section_232_result, section_ieepa_result)
     request_echo = _build_request_echo(
         payload, measurements, canonical_hts, entry, melt_origin
     )
