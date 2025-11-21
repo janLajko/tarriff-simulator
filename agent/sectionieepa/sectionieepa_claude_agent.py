@@ -48,7 +48,7 @@ BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 
 DEFAULT_HEADINGS = [
-    "9903.02.02"
+    "9903.01.25"
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section ieepa derivative steel measures.
@@ -1058,6 +1058,7 @@ class Section232LLM:
         message = LLM_MEASURE_PROMPT.format(description=description.strip())
         raw = strip_json_code_block(self._post(message))
         try:
+            LOGGER.info("measure %s", raw)
             payload = json.loads(raw)
         except json.JSONDecodeError as exc:
             raise RuntimeError(f"Failed to decode measure analysis JSON: {raw}") from exc
@@ -1197,7 +1198,9 @@ class Section232Agent:
                     end_date,
                 )
                 end_date = None
-            rate = self._derive_rate(description)
+
+            general_rate_of_duty = (row.get("general_rate_of_duty") or "").strip()
+            rate = self._derive_rate(general_rate_of_duty)
 
             measure_country_iso2 = analysis.country_iso2 or self.country_iso2
 
