@@ -191,7 +191,7 @@ class EncryptedEnvelope(BaseModel):
 
 app = FastAPI(title="Tariff Simulator API", version="0.3.0")
 
-allowed_origins = ["https://tariff-simulator-frontend.vercel.app","https://tariff.gingercontrol.com/"]
+allowed_origins = ["https://tariff-simulator-frontend.vercel.app","https://tariff.gingercontrol.com"]
 runtime_origin = os.getenv("SIMULATOR_FRONTEND_ORIGIN")
 if runtime_origin:
     allowed_origins.append(runtime_origin)
