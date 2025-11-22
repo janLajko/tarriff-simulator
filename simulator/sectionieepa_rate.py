@@ -6,6 +6,7 @@ import os
 from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
+import logging
 from typing import Dict, List, Optional, Tuple
 
 try:  # pragma: no cover - optional dependency for environments without psycopg2
@@ -36,6 +37,9 @@ class SectionIEEPAComputation:
     rate: Optional[str]
     ch99_list: List[SectionIEEPACh99] = field(default_factory=list)
     notes: List[str] = field(default_factory=list)
+
+
+logger = logging.getLogger(__name__)
 
 
 def _normalize_hts(code: str) -> str:
@@ -171,7 +175,25 @@ class SectionIEEPAEvaluator:
         with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(query, params)
             rows = cur.fetchall()
-        return [row for row in rows if self._country_allows_measure(row)]
+        filtered = [row for row in rows if self._country_allows_measure(row)]
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                "Section IEEPA _load_measures country=%s entry_date=%s raw=%s filtered=%s",
+                self.country,
+                self.entry_date,
+                len(rows),
+                len(filtered),
+            )
+            for row in filtered:
+                if row["heading"] in {"9903.02.29", "9903.02.30", "9903.02.31"}:
+                    logger.debug(
+                        "IEEPA measure kept heading=%s country_iso2=%s excludes=%s rate=%s",
+                        row.get("heading"),
+                        row.get("country_iso2"),
+                        row.get("origin_exclude_iso2"),
+                        row.get("ad_valorem_rate"),
+                    )
+        return filtered
 
     def _load_scopes(self, measure_id: int) -> Dict[str, List[Dict]]:
         if measure_id in self.scope_cache:
@@ -205,8 +227,26 @@ class SectionIEEPAEvaluator:
         if entry:
             return entry["id"]
         query = """
-            SELECT id, heading, ad_valorem_rate, effective_start_date, effective_end_date
-            FROM sieepa_measures
+            SELECT
+                m.id,
+                m.heading,
+                m.country_iso2,
+                m.ad_valorem_rate,
+                m.value_basis,
+                m.melt_pour_origin_iso2,
+                m.origin_exclude_iso2,
+                m.effective_start_date,
+                m.effective_end_date,
+                m.is_potential,
+                COALESCE(h.description, '') AS description
+            FROM sieepa_measures AS m
+            LEFT JOIN LATERAL (
+                SELECT description
+                FROM hts_codes hc
+                WHERE hc.hts_number = m.heading
+                ORDER BY hc.row_order
+                LIMIT 1
+            ) AS h ON TRUE
             WHERE heading = %s
               AND (%s <= COALESCE(effective_end_date, %s))
               AND effective_start_date <= %s
@@ -223,6 +263,13 @@ class SectionIEEPAEvaluator:
             if row["id"] not in self.id_to_measure:
                 self.id_to_measure[row["id"]] = row
             return row["id"]
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                "IEEPA _measure_id_for_heading filtered out heading=%s country=%s row_country=%s",
+                heading,
+                self.country,
+                row.get("country_iso2") if row else None,
+            )
         return None
 
     def constraints_met(self, measure: Dict) -> Tuple[bool, Optional[str]]:
@@ -333,6 +380,7 @@ def compute_sectionieepa_duty(
         )
 
     dsn = os.getenv("DATABASE_DSN")
+    logger.info(dsn)
     if not dsn:
         raise RuntimeError("DATABASE_DSN environment variable is required for Section IEEPA calculations.")
 
@@ -355,6 +403,19 @@ def compute_sectionieepa_duty(
                 applicable_measures.append(measure)
             elif exclusions:
                 excluded_measures.append((measure, exclusions))
+            elif logger.isEnabledFor(logging.DEBUG):
+                logger.debug(
+                    "IEEPA measure no match heading=%s country=%s exclusions=%s",
+                    measure.get("heading"),
+                    measure.get("country_iso2"),
+                    exclusions,
+                )
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(
+                "IEEPA applicable_measures count=%s items=%s",
+                len(applicable_measures),
+                [(m.get("heading"), m.get("country_iso2")) for m in applicable_measures],
+            )
 
     steel_share = _extract_share(measurements, "steel_percentage")
     aluminum_share = _extract_share(measurements, "aluminum_percentage")
@@ -386,40 +447,6 @@ def compute_sectionieepa_duty(
         rated_measures.append(measure_with_rate)
 
     offset_heading_hits: set[str] = set()
-    for measure, exclusions in excluded_measures:
-        rate = _coerce_decimal(measure.get("ad_valorem_rate"))
-        if rate is None or rate == 0:
-            zero_rate_matches.append(measure)
-            continue
-
-        direct_exclusions = [
-            heading for heading in exclusions if heading and not heading.startswith("99")
-        ]
-        if direct_exclusions:
-            continue
-
-        ref_exclusions = [
-            heading for heading in exclusions if heading and heading.startswith("99")
-        ]
-        if not ref_exclusions:
-            continue
-
-        measure_with_rate = dict(measure)
-        measure_with_rate["ad_valorem_rate"] = rate
-        rated_measures.append(measure_with_rate)
-
-        for heading in ref_exclusions:
-            offset_heading_hits.add(heading)
-            offset_measure = evaluator.heading_to_measure.get(heading, {})
-            rated_measures.append(
-                {
-                    "heading": heading,
-                    "alias": heading,
-                    "ad_valorem_rate": -rate,
-                    "description": offset_measure.get("description") or "",
-                    "is_potential": offset_measure.get("is_potential") or False,
-                }
-            )
 
     if not rated_measures:
         notes = [
