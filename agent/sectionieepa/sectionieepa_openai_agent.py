@@ -48,7 +48,7 @@ BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 
 DEFAULT_HEADINGS = [
-    "9903.02.02"
+    "9903.01.25"
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section ieepa derivative steel measures.
@@ -63,6 +63,10 @@ From the following text, extract:
 
 Input text:
 \"\"\"{description}\"\"\"
+
+import!
+1. When the text prints a range such as "9903.02.74-9903.02.77" or "9903.02.74–9903.02.77", expand it into each discrete heading (9903.02.74, 9903.02.75, 9903.02.76, 9903.02.77).
+
 
 Return JSON only. Use this schema:
 {{
@@ -977,7 +981,7 @@ class Section232Database:
 
 
 class Section232LLM:
-    """Thin wrapper around the Anthropic Claude Messages API."""
+    """Thin wrapper around an LLM endpoint (default: OpenAI chat completions)."""
 
     def __init__(
         self,
@@ -985,54 +989,27 @@ class Section232LLM:
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         timeout: int = 36000,
-        max_output_tokens: int = 64000,
-        api_version: Optional[str] = None,
     ):
-        self.model = model or os.getenv("CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
-        self.api_key = api_key or os.getenv("CLAUDE_API_KEY")
-        self.base_url = base_url or os.getenv("CLAUDE_API_BASE", "https://api.anthropic.com")
-        self.api_version = api_version or os.getenv("CLAUDE_API_VERSION", "2023-06-01")
-
-        max_tokens_env = os.getenv("CLAUDE_MAX_OUTPUT_TOKENS")
-        if max_tokens_env:
-            try:
-                self.max_output_tokens = int(max_tokens_env)
-            except ValueError:
-                LOGGER.warning(
-                    "Invalid CLAUDE_MAX_OUTPUT_TOKENS=%s; using default %s",
-                    max_tokens_env,
-                    max_output_tokens,
-                )
-                self.max_output_tokens = max_output_tokens
-        else:
-            self.max_output_tokens = max_output_tokens
-
+        self.model = model or os.getenv("OPENAI_MODEL", "gpt-5")
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+        self.base_url = base_url or os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
         self.timeout = timeout
 
     def _post(self, message: str) -> str:
         if not self.api_key:
-            raise RuntimeError("CLAUDE_API_KEY (or explicit api_key) is required for LLM calls")
+            raise RuntimeError("OPENAI_API_KEY (or explicit api_key) is required for LLM calls")
 
-        url = self.base_url.rstrip("/") + "/v1/messages"
+        url = self.base_url.rstrip("/") + "/chat/completions"
         headers = {
-            "x-api-key": self.api_key,
-            "anthropic-version": self.api_version,
+            "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
         }
         payload = {
             "model": self.model,
-            "max_tokens": self.max_output_tokens,
-            "system": "You are a precise legal text parser. Respond with JSON only.",
+            "response_format": {"type": "json_object"},
             "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": message,
-                        }
-                    ],
-                }
+                {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
+                {"role": "user", "content": message},
             ],
         }
         response = requests.post(url, headers=headers, json=payload, timeout=self.timeout)
@@ -1042,22 +1019,15 @@ class Section232LLM:
             raise RuntimeError(f"LLM HTTP error: {exc} → {response.text}") from exc
         data = response.json()
         try:
-            content_blocks = data["content"]
-            parts = [
-                block.get("text", "")
-                for block in content_blocks
-                if isinstance(block, dict) and block.get("type") == "text"
-            ]
-            if not parts:
-                raise KeyError("Claude response missing text content")
-            return "".join(parts)
-        except (KeyError, IndexError, TypeError) as exc:  # pragma: no cover - defensive
+            return data["choices"][0]["message"]["content"]
+        except (KeyError, IndexError) as exc:  # pragma: no cover - defensive
             raise RuntimeError(f"Unexpected LLM response structure: {data}") from exc
 
     def extract_measure(self, description: str) -> MeasureAnalysis:
         message = LLM_MEASURE_PROMPT.format(description=description.strip())
         raw = strip_json_code_block(self._post(message))
         try:
+            LOGGER.info("measure %s", raw)
             payload = json.loads(raw)
         except json.JSONDecodeError as exc:
             raise RuntimeError(f"Failed to decode measure analysis JSON: {raw}") from exc
@@ -1197,7 +1167,9 @@ class Section232Agent:
                     end_date,
                 )
                 end_date = None
-            rate = self._derive_rate(description)
+
+            general_rate_of_duty = (row.get("general_rate_of_duty") or "").strip()
+            rate = self._derive_rate(general_rate_of_duty)
 
             measure_country_iso2 = analysis.country_iso2 or self.country_iso2
 
