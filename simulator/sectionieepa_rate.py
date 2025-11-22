@@ -131,6 +131,17 @@ class SectionIEEPAEvaluator:
         self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
         self.match_cache: Dict[Tuple[int, str], Tuple[bool, List[str]]] = {}
 
+    def _country_allows_measure(self, measure: Dict) -> bool:
+        """Mirror Section 232 country filtering: explicit country must match, otherwise honor exclusions."""
+        target_country = (measure.get("country_iso2") or "").upper()
+        if target_country:
+            return self.country == target_country
+        excluded = measure.get("origin_exclude_iso2") or []
+        excluded_upper = {(code or "").upper() for code in excluded}
+        if not self.country:
+            return not excluded_upper
+        return self.country not in excluded_upper
+
     def _load_measures(self) -> List[Dict]:
         query = """
             SELECT
@@ -157,13 +168,10 @@ class SectionIEEPAEvaluator:
               AND (%s <= COALESCE(m.effective_end_date, %s))
         """
         params: List[object] = [self.entry_date, self.entry_date, self.entry_date]
-        if self.country:
-            query += " AND (m.country_iso2 IS NULL OR UPPER(m.country_iso2) = %s)"
-            params.append(self.country)
         with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(query, params)
             rows = cur.fetchall()
-        return rows
+        return [row for row in rows if self._country_allows_measure(row)]
 
     def _load_scopes(self, measure_id: int) -> Dict[str, List[Dict]]:
         if measure_id in self.scope_cache:
@@ -208,7 +216,7 @@ class SectionIEEPAEvaluator:
         with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(query, (heading, self.entry_date, self.entry_date, self.entry_date))
             row = cur.fetchone()
-        if row:
+        if row and self._country_allows_measure(row):
             self.heading_to_measure[row["heading"]] = row
             if row not in self.measures:
                 self.measures.append(row)
@@ -218,6 +226,8 @@ class SectionIEEPAEvaluator:
         return None
 
     def constraints_met(self, measure: Dict) -> Tuple[bool, Optional[str]]:
+        if not self._country_allows_measure(measure):
+            return False, f"Origin {self.country or 'UNKNOWN'} not eligible for {measure.get('heading', '')}"
         excluded = measure.get("origin_exclude_iso2") or []
         normalized_excludes = {str(entry or "").upper() for entry in excluded}
         if self.country and self.country in normalized_excludes:
