@@ -191,7 +191,7 @@ class EncryptedEnvelope(BaseModel):
 
 app = FastAPI(title="Tariff Simulator API", version="0.3.0")
 
-allowed_origins = ["https://tariff-simulator-frontend.vercel.app"]
+allowed_origins = ["https://tariff-simulator-frontend.vercel.app","https://tariff.gingercontrol.com/"]
 runtime_origin = os.getenv("SIMULATOR_FRONTEND_ORIGIN")
 if runtime_origin:
     allowed_origins.append(runtime_origin)
@@ -402,15 +402,15 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         steel_percentage=payload.steel_percentage,
         aluminum_percentage=payload.aluminum_percentage,
     )
-    section_ieepa_result = compute_sectionieepa_duty(
-        canonical_hts,
-        country,
-        entry,
-        import_value=import_value_amount,
-        melt_pour_origin_iso2=melt_origin,
-        measurements=measurements,
-    )
-    modules = _build_modules(section_301_result, section_232_result, section_ieepa_result)
+    # section_ieepa_result = compute_sectionieepa_duty(
+    #     canonical_hts,
+    #     country,
+    #     entry,
+    #     import_value=import_value_amount,
+    #     melt_pour_origin_iso2=melt_origin,
+    #     measurements=measurements,
+    # )
+    modules = _build_modules(section_301_result, section_232_result)
     request_echo = _build_request_echo(
         payload, measurements, canonical_hts, entry, melt_origin
     )
