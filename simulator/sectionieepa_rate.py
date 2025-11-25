@@ -70,6 +70,12 @@ PARTIAL_HEADING_SET = {
     "9903.01.39",
     "9903.01.63",
 }
+FORCED_EXCLUSION_HEADINGS = {
+    "9903.01.25",
+    "9903.01.35",
+    "9903.01.39",
+    "9903.01.63",
+}
 PARTIAL_RANGE_START = 99030201
 PARTIAL_RANGE_END = 99030273
 
@@ -133,7 +139,7 @@ class SectionIEEPAEvaluator:
         }
         self.id_to_measure: Dict[int, Dict] = {m["id"]: m for m in self.measures}
         self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
-        self.match_cache: Dict[Tuple[int, str], Tuple[bool, List[str]]] = {}
+        self.match_cache: Dict[Tuple[int, str, bool], Tuple[bool, List[str]]] = {}
 
     def _country_allows_measure(self, measure: Dict) -> bool:
         """Mirror Section 232 country filtering: explicit country must match, otherwise honor exclusions."""
@@ -289,9 +295,14 @@ class SectionIEEPAEvaluator:
         return True, None
 
     def measure_covers(
-        self, measure_id: int, hts_code: str, visited: Optional[set[int]] = None
+        self,
+        measure_id: int,
+        hts_code: str,
+        visited: Optional[set[int]] = None,
+        require_scope_match: bool = False,
     ) -> Tuple[bool, List[str]]:
-        key = (measure_id, _normalize_hts(hts_code))
+        normalized_hts = _normalize_hts(hts_code)
+        key = (measure_id, normalized_hts, require_scope_match)
         if key in self.match_cache:
             return self.match_cache[key]
 
@@ -306,7 +317,9 @@ class SectionIEEPAEvaluator:
         includes = scopes.get("include", [])
         excludes = scopes.get("exclude", [])
 
-        def matches_scope(scope_row: Dict, recurse: bool) -> bool:
+        def matches_scope(
+            scope_row: Dict, recurse: bool, force_scope: bool = False, force_ch99: bool = False
+        ) -> bool:
             country = (scope_row.get("country_iso2") or "").upper()
             if country and country != self.country:
                 return False
@@ -318,12 +331,19 @@ class SectionIEEPAEvaluator:
                 return False
             key_value = scope_row["key"]
             if key_value.startswith("99"):
+                if force_ch99:
+                    return True
                 if not recurse:
                     return False
                 child_id = self._measure_id_for_heading(key_value)
                 if not child_id:
                     return False
-                child_match, _ = self.measure_covers(child_id, hts_code, visited.copy())
+                child_match, _ = self.measure_covers(
+                    child_id,
+                    hts_code,
+                    visited.copy(),
+                    require_scope_match=require_scope_match or force_scope,
+                )
                 return child_match
             return _code_matches(key_value, hts_code)
 
@@ -337,7 +357,7 @@ class SectionIEEPAEvaluator:
             rate_decimal = None
         prefix_override = prefix_only and rate_decimal is not None and rate_decimal > 0
 
-        if prefix_override:
+        if prefix_override and not require_scope_match:
             include_hit = True
         elif includes:
             include_hit = any(matches_scope(scope, True) for scope in includes)
@@ -349,7 +369,10 @@ class SectionIEEPAEvaluator:
 
         matched_exclusions: List[str] = []
         for scope in excludes:
-            if matches_scope(scope, True):
+            key_value = scope.get("key", "") or ""
+            force_scope = key_value.startswith("99")
+            force_ch99 = force_scope and heading in FORCED_EXCLUSION_HEADINGS
+            if matches_scope(scope, True, force_scope=force_scope, force_ch99=force_ch99):
                 matched_exclusions.append(str(scope.get("key") or ""))
 
         if matched_exclusions:
@@ -449,28 +472,42 @@ def compute_sectionieepa_duty(
     offset_heading_hits: set[str] = set()
 
     if not rated_measures:
-        notes = [
-            "No active Section IEEPA measures matched the provided HTS number on the given entry date."
-        ]
-        if zero_rate_matches:
-            zero_headings = ", ".join(
-                m["heading"]
-                for m in zero_rate_matches
-                if m.get("heading") not in offset_heading_hits
-            )
-            if zero_headings:
-                notes.append(
-                    "Section IEEPA headings matched but have zero ad valorem rate: "
-                    f"{zero_headings}."
+        zero_rate_ch99: List[SectionIEEPACh99] = []
+        for measure in zero_rate_matches:
+            heading = measure.get("heading") or ""
+            if heading in offset_heading_hits:
+                continue
+            zero_rate_ch99.append(
+                SectionIEEPACh99(
+                    ch99_id=heading,
+                    alias=measure.get("alias") or heading,
+                    general_rate=_coerce_decimal(measure.get("ad_valorem_rate")) or Decimal("0"),
+                    ch99_description=measure.get("description") or "",
+                    amount=Decimal("0"),
+                    is_potential=bool(measure.get("is_potential")),
                 )
+            )
+
+        notes: List[str] = []
+        if zero_rate_ch99:
+            zero_headings = ", ".join(entry.ch99_id for entry in zero_rate_ch99)
+            notes.append(
+                "Section IEEPA headings matched but have zero ad valorem rate: "
+                + zero_headings
+            )
+        else:
+            notes.append(
+                "No active Section IEEPA measures matched the provided HTS number on the given entry date."
+            )
         notes.extend(constraint_notes)
         return SectionIEEPAComputation(
             module_id="ieepa",
             module_name="Section IEEPA Derivative Tariffs",
-            applicable=False,
+            applicable=bool(zero_rate_ch99),
             amount=Decimal("0"),
             currency="USD",
-            rate=None,
+            rate="0%" if zero_rate_ch99 else None,
+            ch99_list=zero_rate_ch99,
             notes=notes,
         )
 
@@ -496,6 +533,26 @@ def compute_sectionieepa_duty(
                 is_potential=bool(m.get("is_potential")),
             )
         )
+
+    if zero_rate_matches:
+        existing = {entry.ch99_id for entry in ch99_list}
+        for measure in zero_rate_matches:
+            heading = measure.get("heading") or ""
+            if heading in offset_heading_hits:
+                continue
+            if heading in existing:
+                continue
+            existing.add(heading)
+            ch99_list.append(
+                SectionIEEPACh99(
+                    ch99_id=heading,
+                    alias=measure.get("alias") or heading,
+                    general_rate=Decimal("0"),
+                    ch99_description=measure.get("description") or "",
+                    amount=Decimal("0"),
+                    is_potential=bool(measure.get("is_potential")),
+                )
+            )
 
     def _format_rate(rate: Decimal) -> str:
         normalized = rate.normalize()
