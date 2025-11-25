@@ -381,6 +381,12 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         (comp for comp in basic_computations if comp.case_id == GENERAL_RATE_CASE_ID),
         basic_computations[0],
     )
+    base_duty_rate_percent: Optional[Decimal] = None
+    if import_value_amount not in (None, Decimal("0")):
+        try:
+            base_duty_rate_percent = (general_basic_computation.amount / Decimal(import_value_amount)) * Decimal("100")
+        except Exception:
+            base_duty_rate_percent = None
     meta_info = _build_meta_info(general_basic_computation, unit_config_raw)
     basic_rate_payloads = [
         BasicRateComputationPayload.from_dataclass(computation)
@@ -410,6 +416,7 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         import_value=import_value_amount,
         melt_pour_origin_iso2=melt_origin,
         measurements=measurements,
+        base_duty_rate_percent=base_duty_rate_percent,
     )
     modules = _build_modules(section_301_result, section_232_result, section_ieepa_result)
     request_echo = _build_request_echo(

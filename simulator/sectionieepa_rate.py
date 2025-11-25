@@ -70,14 +70,79 @@ PARTIAL_HEADING_SET = {
     "9903.01.39",
     "9903.01.63",
 }
-FORCED_EXCLUSION_HEADINGS = {
+PARTIAL_RANGE_START = 99030201
+PARTIAL_RANGE_END = 99030273
+
+ALWAYS_INCLUDE_HEADINGS = {
     "9903.01.25",
+    "9903.01.26",
+    "9903.01.27",
     "9903.01.35",
     "9903.01.39",
     "9903.01.63",
 }
-PARTIAL_RANGE_START = 99030201
-PARTIAL_RANGE_END = 99030273
+ALWAYS_INCLUDE_RANGE_START = 99030201  # exclusive
+ALWAYS_INCLUDE_RANGE_END = 99030274  # exclusive
+
+EU_MEMBER_CODES = {
+    "AT",
+    "BE",
+    "BG",
+    "HR",
+    "CY",
+    "CZ",
+    "DK",
+    "EE",
+    "FI",
+    "FR",
+    "DE",
+    "GR",
+    "HU",
+    "IE",
+    "IT",
+    "LV",
+    "LT",
+    "LU",
+    "MT",
+    "NL",
+    "PL",
+    "PT",
+    "RO",
+    "SK",
+    "SI",
+    "ES",
+    "SE",
+}
+EU_MEMBER_NAMES = {
+    "AUSTRIA",
+    "BELGIUM",
+    "BULGARIA",
+    "CROATIA",
+    "CYPRUS",
+    "CZECHIA",
+    "CZECH REPUBLIC",
+    "DENMARK",
+    "ESTONIA",
+    "FINLAND",
+    "FRANCE",
+    "GERMANY",
+    "GREECE",
+    "HUNGARY",
+    "IRELAND",
+    "ITALY",
+    "LATVIA",
+    "LITHUANIA",
+    "LUXEMBOURG",
+    "MALTA",
+    "NETHERLANDS",
+    "POLAND",
+    "PORTUGAL",
+    "ROMANIA",
+    "SLOVAKIA",
+    "SLOVENIA",
+    "SPAIN",
+    "SWEDEN",
+}
 
 
 def _coerce_decimal(value: Optional[object]) -> Optional[Decimal]:
@@ -107,6 +172,15 @@ def _extract_share(measurements: Optional[Dict[str, Decimal]], key: str) -> Opti
     return share
 
 
+def _normalize_country_iso2_or_name(value: str) -> str:
+    normalized = (value or "").strip().upper()
+    if not normalized:
+        return ""
+    if normalized in EU_MEMBER_CODES or normalized in EU_MEMBER_NAMES:
+        return "EU"
+    return normalized
+
+
 def _is_partial_ieepa_heading(heading: str) -> bool:
     normalized = heading.strip()
     if normalized in PARTIAL_HEADING_SET:
@@ -118,7 +192,21 @@ def _is_partial_ieepa_heading(heading: str) -> bool:
         num = int(digits[:8])
     except ValueError:
         return False
-    return PARTIAL_RANGE_START <= num <= PARTIAL_RANGE_END
+    return PARTIAL_RANGE_START < num < PARTIAL_RANGE_END
+
+
+def _is_always_include_heading(heading: str) -> bool:
+    normalized = heading.strip()
+    if normalized in ALWAYS_INCLUDE_HEADINGS:
+        return True
+    digits = _normalize_hts(normalized)
+    if len(digits) < 8:
+        return False
+    try:
+        num = int(digits[:8])
+    except ValueError:
+        return False
+    return ALWAYS_INCLUDE_RANGE_START < num < ALWAYS_INCLUDE_RANGE_END
 
 
 class SectionIEEPAEvaluator:
@@ -131,8 +219,8 @@ class SectionIEEPAEvaluator:
     ):
         self.conn = conn
         self.entry_date = entry_date
-        self.country = (country or "").upper()
-        self.melt_origin = (melt_pour_origin or "").upper()
+        self.country = _normalize_country_iso2_or_name(country)
+        self.melt_origin = _normalize_country_iso2_or_name(melt_pour_origin)
         self.measures = self._load_measures()
         self.heading_to_measure: Dict[str, Dict] = {
             m["heading"]: m for m in self.measures
@@ -318,7 +406,11 @@ class SectionIEEPAEvaluator:
         excludes = scopes.get("exclude", [])
 
         def matches_scope(
-            scope_row: Dict, recurse: bool, force_scope: bool = False, force_ch99: bool = False
+            scope_row: Dict,
+            recurse: bool,
+            force_scope: bool = False,
+            force_ch99: bool = False,
+            is_exclusion: bool = False,
         ) -> bool:
             country = (scope_row.get("country_iso2") or "").upper()
             if country and country != self.country:
@@ -342,22 +434,16 @@ class SectionIEEPAEvaluator:
                     child_id,
                     hts_code,
                     visited.copy(),
-                    require_scope_match=require_scope_match or force_scope,
+                    require_scope_match=False if is_exclusion else require_scope_match,
                 )
                 return child_match
             return _code_matches(key_value, hts_code)
 
         measure = self.id_to_measure.get(measure_id)
         heading = (measure.get("heading") if measure else "") or ""
-        prefix_only = heading.startswith("9903.01") or heading.startswith("9903.02")
-        rate_raw = measure.get("ad_valorem_rate") if measure else None
-        try:
-            rate_decimal = Decimal(str(rate_raw)) if rate_raw is not None else None
-        except Exception:
-            rate_decimal = None
-        prefix_override = prefix_only and rate_decimal is not None and rate_decimal > 0
+        always_include = _is_always_include_heading(heading)
 
-        if prefix_override and not require_scope_match:
+        if always_include and not require_scope_match:
             include_hit = True
         elif includes:
             include_hit = any(matches_scope(scope, True) for scope in includes)
@@ -371,8 +457,13 @@ class SectionIEEPAEvaluator:
         for scope in excludes:
             key_value = scope.get("key", "") or ""
             force_scope = key_value.startswith("99")
-            force_ch99 = force_scope and heading in FORCED_EXCLUSION_HEADINGS
-            if matches_scope(scope, True, force_scope=force_scope, force_ch99=force_ch99):
+            if matches_scope(
+                scope,
+                True,
+                force_scope=force_scope,
+                force_ch99=False,
+                is_exclusion=True,
+            ):
                 matched_exclusions.append(str(scope.get("key") or ""))
 
         if matched_exclusions:
@@ -390,6 +481,7 @@ def compute_sectionieepa_duty(
     import_value: Optional[Decimal] = None,
     melt_pour_origin_iso2: Optional[str] = None,
     measurements: Optional[Dict[str, Decimal]] = None,
+    base_duty_rate_percent: Optional[Decimal] = None,
 ) -> SectionIEEPAComputation:
     """Compute Section IEEPA duty information for a given HTS number."""
 
@@ -446,6 +538,12 @@ def compute_sectionieepa_duty(
     zero_rate_matches: List[Dict] = []
 
     import_value_decimal = _coerce_decimal(import_value)
+    base_rate_decimal: Optional[Decimal] = None
+    if base_duty_rate_percent is not None:
+        try:
+            base_rate_decimal = Decimal(str(base_duty_rate_percent))
+        except Exception:
+            base_rate_decimal = None
 
     def _taxable_share(heading: str) -> Decimal:
         if not _is_partial_ieepa_heading(heading):
@@ -462,6 +560,17 @@ def compute_sectionieepa_duty(
 
     for measure in applicable_measures:
         rate = _coerce_decimal(measure.get("ad_valorem_rate"))
+        heading = (measure.get("heading") or "").strip()
+        if base_rate_decimal is not None and heading in {"9903.02.72", "9903.02.73"}:
+            if heading == "9903.02.72" and base_rate_decimal < Decimal("15"):
+                continue
+            if heading == "9903.02.73" and base_rate_decimal >= Decimal("15"):
+                continue
+        if base_rate_decimal is not None and heading in {"9903.02.19", "9903.02.72"}:
+            adjusted = Decimal("15") - base_rate_decimal
+            if adjusted < 0:
+                adjusted = Decimal("0")
+            rate = adjusted
         if rate is None or rate == 0:
             zero_rate_matches.append(measure)
             continue
