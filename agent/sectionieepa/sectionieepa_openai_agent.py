@@ -48,7 +48,7 @@ BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 
 DEFAULT_HEADINGS = [
-    "9903.01.32"
+    "9903.01.77"
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section ieepa derivative steel measures.
@@ -390,7 +390,7 @@ class Section232Database:
 
     def fetch_hts_code(self, heading: str) -> Optional[Dict[str, Any]]:
         query = """
-            SELECT hts_number, description, status, additional_duties
+            SELECT hts_number, description, status, additional_duties, general_rate_of_duty
             FROM hts_codes
             WHERE hts_number = %s
             ORDER BY row_order
