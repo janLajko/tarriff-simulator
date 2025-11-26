@@ -8,6 +8,7 @@ import os
 from contextlib import contextmanager
 from datetime import date, datetime
 from decimal import Decimal
+from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Optional, Union
 
 import psycopg2
@@ -392,32 +393,39 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         BasicRateComputationPayload.from_dataclass(computation)
         for computation in basic_computations
     ]
-    section_301_result = compute_section301_duty(
-        canonical_hts,
-        country,
-        entry,
-        import_value=import_value_amount,
-    )
-    section_232_result = compute_section232_duty(
-        canonical_hts,
-        country,
-        entry,
-        steel_melt_origin,
-        aluminum_melt_origin,
-        import_value=import_value_amount,
-        measurements=measurements,
-        steel_percentage=payload.steel_percentage,
-        aluminum_percentage=payload.aluminum_percentage,
-    )
-    section_ieepa_result = compute_sectionieepa_duty(
-        canonical_hts,
-        country,
-        entry,
-        import_value=import_value_amount,
-        melt_pour_origin_iso2=melt_origin,
-        measurements=measurements,
-        base_duty_rate_percent=base_duty_rate_percent,
-    )
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        fut_301 = executor.submit(
+            compute_section301_duty,
+            canonical_hts,
+            country,
+            entry,
+            import_value=import_value_amount,
+        )
+        fut_232 = executor.submit(
+            compute_section232_duty,
+            canonical_hts,
+            country,
+            entry,
+            steel_melt_origin,
+            aluminum_melt_origin,
+            import_value=import_value_amount,
+            measurements=measurements,
+            steel_percentage=payload.steel_percentage,
+            aluminum_percentage=payload.aluminum_percentage,
+        )
+        fut_ieepa = executor.submit(
+            compute_sectionieepa_duty,
+            canonical_hts,
+            country,
+            entry,
+            import_value=import_value_amount,
+            melt_pour_origin_iso2=melt_origin,
+            measurements=measurements,
+            base_duty_rate_percent=base_duty_rate_percent,
+        )
+        section_301_result = fut_301.result()
+        section_232_result = fut_232.result()
+        section_ieepa_result = fut_ieepa.result()
     modules = _build_modules(section_301_result, section_232_result, section_ieepa_result)
     request_echo = _build_request_echo(
         payload, measurements, canonical_hts, entry, melt_origin

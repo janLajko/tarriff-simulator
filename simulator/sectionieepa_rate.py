@@ -17,6 +17,11 @@ except ImportError:  # pragma: no cover - allow import without postgres libs
     psycopg2 = None  # type: ignore[assignment]
     RealDictCursor = None  # type: ignore[assignment]
 
+try:  # pragma: no cover - optional dependency for cross-module scope checks
+    from .section232_rate import Section232Evaluator
+except Exception:  # pragma: no cover
+    Section232Evaluator = None  # type: ignore[assignment]
+
 try:  # pragma: no cover - optional cache dependency
     from theine import Cache as TheineCache
 except Exception:  # pragma: no cover
@@ -261,6 +266,7 @@ class SectionIEEPAEvaluator:
         entry_date: date,
         country: str,
         melt_pour_origin: Optional[str],
+        section232_evaluator: Optional[object] = None,
     ):
         self.conn = conn
         self.entry_date = entry_date
@@ -273,6 +279,7 @@ class SectionIEEPAEvaluator:
         }
         self.id_to_measure: Dict[int, Dict] = {m["id"]: m for m in self.measures}
         self.match_cache: Dict[Tuple[int, str, bool], Tuple[bool, List[str]]] = {}
+        self.section232_evaluator = section232_evaluator
 
     def _country_allows_measure(self, measure: Dict) -> bool:
         """Mirror Section 232 country filtering: explicit country must match, otherwise honor exclusions."""
@@ -510,6 +517,12 @@ class SectionIEEPAEvaluator:
                 return False
             key_value = scope_row["key"]
             if key_value.startswith("99"):
+                if self.section232_evaluator and key_value.startswith(("9903.81", "9903.85")):
+                    child_id = self.section232_evaluator._measure_id_for_heading(key_value)  # type: ignore[attr-defined]
+                    if not child_id:
+                        return False
+                    child_match, _ = self.section232_evaluator.measure_covers(child_id, hts_code)  # type: ignore[attr-defined]
+                    return child_match
                 if force_ch99:
                     return True
                 if not recurse:
@@ -589,7 +602,19 @@ def compute_sectionieepa_duty(
     melt_origin = (melt_pour_origin_iso2 or "").upper()
 
     with psycopg2.connect(dsn) as conn:
-        evaluator = SectionIEEPAEvaluator(conn, entry_date, origin, melt_origin)
+        s232_eval = None
+        if Section232Evaluator is not None:
+            try:
+                s232_eval = Section232Evaluator(
+                    conn,
+                    entry_date,
+                    origin,
+                    melt_pour_origin_iso2,
+                    melt_pour_origin_iso2,
+                )
+            except Exception:
+                s232_eval = None
+        evaluator = SectionIEEPAEvaluator(conn, entry_date, origin, melt_origin, section232_evaluator=s232_eval)
         applicable_measures: List[Dict] = []
         excluded_measures: List[Tuple[Dict, List[str]]] = []
         constraint_notes: List[str] = []
