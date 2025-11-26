@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 import logging
+import time
 from typing import Dict, List, Optional, Tuple
 
 try:  # pragma: no cover - optional dependency for environments without psycopg2
@@ -15,6 +16,11 @@ try:  # pragma: no cover - optional dependency for environments without psycopg2
 except ImportError:  # pragma: no cover - allow import without postgres libs
     psycopg2 = None  # type: ignore[assignment]
     RealDictCursor = None  # type: ignore[assignment]
+
+try:  # pragma: no cover - optional cache dependency
+    from theine import Cache as TheineCache
+except Exception:  # pragma: no cover
+    TheineCache = None  # type: ignore[assignment]
 
 
 @dataclass
@@ -149,6 +155,14 @@ EU_MEMBER_NAMES = {
     "SWEDEN",
 }
 
+IEEPA_CACHE_TTL_SECONDS = 24 * 60 * 60
+
+if TheineCache is not None:
+    _ieepa_cache = TheineCache(maxsize=32, ttl=IEEPA_CACHE_TTL_SECONDS)
+else:  # simple fallback cache with TTL
+    _ieepa_cache = None
+    _ieepa_cache_store: Dict[str, Tuple[float, Dict]] = {}
+
 
 def _coerce_decimal(value: Optional[object]) -> Optional[Decimal]:
     if value is None:
@@ -184,6 +198,32 @@ def _normalize_country_iso2_or_name(value: str) -> str:
     if normalized in EU_MEMBER_CODES or normalized in EU_MEMBER_NAMES:
         return "EU"
     return normalized
+
+
+def _cache_get(key: str) -> Optional[Dict]:
+    if _ieepa_cache is not None:
+        try:
+            return _ieepa_cache.get(key)  # type: ignore[call-arg]
+        except Exception:
+            return None
+    entry = _ieepa_cache_store.get(key)
+    if not entry:
+        return None
+    expires_at, value = entry
+    if time.monotonic() > expires_at:
+        _ieepa_cache_store.pop(key, None)
+        return None
+    return value
+
+
+def _cache_set(key: str, value: Dict) -> None:
+    if _ieepa_cache is not None:
+        try:
+            _ieepa_cache.set(key, value)  # type: ignore[call-arg]
+        except Exception:
+            return
+        return
+    _ieepa_cache_store[key] = (time.monotonic() + IEEPA_CACHE_TTL_SECONDS, value)
 
 
 def _is_partial_ieepa_heading(heading: str) -> bool:
@@ -226,12 +266,12 @@ class SectionIEEPAEvaluator:
         self.entry_date = entry_date
         self.country = _normalize_country_iso2_or_name(country)
         self.melt_origin = _normalize_country_iso2_or_name(melt_pour_origin)
+        self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
         self.measures = self._load_measures()
         self.heading_to_measure: Dict[str, Dict] = {
             m["heading"]: m for m in self.measures
         }
         self.id_to_measure: Dict[int, Dict] = {m["id"]: m for m in self.measures}
-        self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
         self.match_cache: Dict[Tuple[int, str, bool], Tuple[bool, List[str]]] = {}
 
     def _country_allows_measure(self, measure: Dict) -> bool:
@@ -246,41 +286,83 @@ class SectionIEEPAEvaluator:
         return self.country not in excluded_upper
 
     def _load_measures(self) -> List[Dict]:
-        query = """
-            SELECT
-                m.id,
-                m.heading,
-                m.country_iso2,
-                m.ad_valorem_rate,
-                m.value_basis,
-                m.melt_pour_origin_iso2,
-                m.origin_exclude_iso2,
-                m.effective_start_date,
-                m.effective_end_date,
-                m.is_potential,
-                COALESCE(h.description, '') AS description
-            FROM sieepa_measures AS m
-            LEFT JOIN LATERAL (
-                SELECT description
-                FROM hts_codes hc
-                WHERE hc.hts_number = m.heading
-                ORDER BY hc.row_order
-                LIMIT 1
-            ) AS h ON TRUE
-            WHERE m.effective_start_date <= %s
-              AND (%s <= COALESCE(m.effective_end_date, %s))
-        """
-        params: List[object] = [self.entry_date, self.entry_date, self.entry_date]
-        with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(query, params)
-            rows = cur.fetchall()
-        filtered = [row for row in rows if self._country_allows_measure(row)]
+        cache_key = self.country or "__ALL__"
+        cached = _cache_get(cache_key)
+        if cached is None:
+            query = """
+                SELECT
+                    m.id,
+                    m.heading,
+                    m.country_iso2,
+                    m.ad_valorem_rate,
+                    m.value_basis,
+                    m.melt_pour_origin_iso2,
+                    m.origin_exclude_iso2,
+                    m.effective_start_date,
+                    m.effective_end_date,
+                    m.is_potential,
+                    COALESCE(h.description, '') AS description
+                FROM sieepa_measures AS m
+                LEFT JOIN LATERAL (
+                    SELECT description
+                    FROM hts_codes hc
+                    WHERE hc.hts_number = m.heading
+                    ORDER BY hc.row_order
+                    LIMIT 1
+                ) AS h ON TRUE
+                WHERE m.country_iso2 IS NULL OR m.country_iso2 = %s
+            """
+            params: List[object] = [self.country]
+            with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(query, params)
+                measure_rows = cur.fetchall()
+            measure_ids = [row["id"] for row in measure_rows]
+            scope_map: Dict[int, Dict[str, List[Dict]]] = {}
+            if measure_ids:
+                scope_query = """
+                    SELECT
+                        map.measure_id,
+                        map.relation,
+                        scope.key,
+                        scope.key_type,
+                        scope.country_iso2,
+                        scope.source_label,
+                        scope.effective_start_date,
+                        scope.effective_end_date
+                    FROM sieepa_scope_measure_map AS map
+                    JOIN sieepa_scope AS scope ON scope.id = map.scope_id
+                    WHERE map.measure_id = ANY(%s)
+                """
+                with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
+                    cur.execute(scope_query, (measure_ids,))
+                    scope_rows = cur.fetchall()
+                for row in scope_rows:
+                    rel = row.get("relation")
+                    if rel not in {"include", "exclude"}:
+                        continue
+                    mid = row["measure_id"]
+                    bucket = scope_map.setdefault(mid, {"include": [], "exclude": []})
+                    bucket[rel].append(row)
+            cached = {"measures": measure_rows, "scopes": scope_map}
+            _cache_set(cache_key, cached)
+        rows = cached.get("measures", [])
+        scope_map_cached = cached.get("scopes", {})
+
+        filtered = [
+            row
+            for row in rows
+            if self._country_allows_measure(row)
+            and row.get("effective_start_date") <= self.entry_date
+            and self.entry_date <= (row.get("effective_end_date") or self.entry_date)
+        ]
+        for mid, scopes in scope_map_cached.items():
+            self.scope_cache[mid] = scopes
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(
                 "Section IEEPA _load_measures country=%s entry_date=%s raw=%s filtered=%s",
                 self.country,
                 self.entry_date,
-                len(rows),
+                len(rows) if rows else 0,
                 len(filtered),
             )
             for row in filtered:
@@ -500,7 +582,6 @@ def compute_sectionieepa_duty(
         )
 
     dsn = os.getenv("DATABASE_DSN")
-    logger.info(dsn)
     if not dsn:
         raise RuntimeError("DATABASE_DSN environment variable is required for Section IEEPA calculations.")
 

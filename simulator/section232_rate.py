@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal, InvalidOperation
+import time
 from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 try:  # pragma: no cover - optional dependency for environments without psycopg2
@@ -14,6 +15,11 @@ try:  # pragma: no cover - optional dependency for environments without psycopg2
 except ImportError:  # pragma: no cover - allow import without postgres libs
     psycopg2 = None  # type: ignore[assignment]
     RealDictCursor = None  # type: ignore[assignment]
+
+try:  # pragma: no cover - optional cache dependency
+    from theine import Cache as TheineCache
+except Exception:  # pragma: no cover
+    TheineCache = None  # type: ignore[assignment]
 
 from .basic_hts_rate import get_unit_config
 
@@ -72,6 +78,14 @@ ALUMINUM_ALWAYS_HEADINGS = {
     "9903.85.08",
     "9903.85.15",
 }
+
+SECTION232_CACHE_TTL_SECONDS = 24 * 60 * 60
+
+if TheineCache is not None:
+    _s232_cache = TheineCache(maxsize=32, ttl=SECTION232_CACHE_TTL_SECONDS)
+else:  # simple fallback cache with TTL
+    _s232_cache = None
+    _s232_cache_store: Dict[str, Tuple[float, Dict]] = {}
 
 
 def _coerce_decimal(value: object) -> Optional[Decimal]:
@@ -250,6 +264,41 @@ def _date_active(entry: date, start: Optional[date], end: Optional[date]) -> boo
     return True
 
 
+SECTION232_CACHE_TTL_SECONDS = 24 * 60 * 60
+
+if TheineCache is not None:
+    _s232_cache = TheineCache(maxsize=32, ttl=SECTION232_CACHE_TTL_SECONDS)
+else:  # simple fallback cache with TTL
+    _s232_cache = None
+    _s232_cache_store: Dict[str, Tuple[float, Dict]] = {}
+
+
+def _cache_get_s232(key: str) -> Optional[Dict]:
+    if _s232_cache is not None:
+        try:
+            return _s232_cache.get(key)  # type: ignore[call-arg]
+        except Exception:
+            return None
+    entry = _s232_cache_store.get(key)
+    if not entry:
+        return None
+    expires_at, value = entry
+    if time.monotonic() > expires_at:
+        _s232_cache_store.pop(key, None)
+        return None
+    return value
+
+
+def _cache_set_s232(key: str, value: Dict) -> None:
+    if _s232_cache is not None:
+        try:
+            _s232_cache.set(key, value)  # type: ignore[call-arg]
+        except Exception:
+            return
+        return
+    _s232_cache_store[key] = (time.monotonic() + SECTION232_CACHE_TTL_SECONDS, value)
+
+
 class Section232Evaluator:
     def __init__(
         self,
@@ -264,11 +313,11 @@ class Section232Evaluator:
         self.country = (country or "").upper()
         self.steel_melt_origin = (steel_melt_origin or "").upper() or None
         self.aluminum_melt_origin = (aluminum_melt_origin or "").upper() or None
+        self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
         self.measures = self._load_measures()
         self.heading_to_measure: Dict[str, Dict] = {
             m["heading"]: m for m in self.measures
         }
-        self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
         self.match_cache: Dict[Tuple[int, str], Tuple[bool, List[str]]] = {}
 
     def _country_allows_measure(self, measure: Dict) -> bool:
@@ -300,38 +349,81 @@ class Section232Evaluator:
         return candidate == required_origin
 
     def _load_measures(self) -> List[Dict]:
-        query = """
-            SELECT
-                m.id,
-                m.heading,
-                m.country_iso2,
-                m.melt_pour_origin_iso2,
-                m.origin_exclude_iso2,
-                m.ad_valorem_rate,
-                m.effective_start_date,
-                m.effective_end_date,
-                m.is_potential,
-                COALESCE(h.description, '') AS description
-            FROM s232_measures AS m
-            LEFT JOIN LATERAL (
-                SELECT description
-                FROM hts_codes hc
-                WHERE hc.hts_number = m.heading
-                ORDER BY hc.row_order
-                LIMIT 1
-            ) AS h ON TRUE
-            WHERE m.effective_start_date <= %s
-              AND (m.effective_end_date IS NULL OR %s <= m.effective_end_date)
-        """
-        params = (self.entry_date, self.entry_date)
-        with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(query, params)
-            rows = cur.fetchall()
+        cache_key = self.country or "__ALL__"
+        cached = _cache_get_s232(cache_key)
+        if cached is None:
+            query = """
+                SELECT
+                    m.id,
+                    m.heading,
+                    m.country_iso2,
+                    m.melt_pour_origin_iso2,
+                    m.origin_exclude_iso2,
+                    m.ad_valorem_rate,
+                    m.effective_start_date,
+                    m.effective_end_date,
+                    m.is_potential,
+                    COALESCE(h.description, '') AS description
+                FROM s232_measures AS m
+                LEFT JOIN LATERAL (
+                    SELECT description
+                    FROM hts_codes hc
+                    WHERE hc.hts_number = m.heading
+                    ORDER BY hc.row_order
+                    LIMIT 1
+                ) AS h ON TRUE
+                WHERE m.country_iso2 IS NULL OR m.country_iso2 = %s
+            """
+            params = (self.country,)
+            with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(query, params)
+                measure_rows = cur.fetchall()
+
+            measure_ids = [row["id"] for row in measure_rows]
+            scope_map: Dict[int, Dict[str, List[Dict]]] = {}
+            if measure_ids:
+                scope_query = """
+                    SELECT
+                        map.measure_id,
+                        map.relation,
+                        scope.key,
+                        scope.key_type,
+                        scope.country_iso2,
+                        scope.source_label,
+                        scope.effective_start_date,
+                        scope.effective_end_date
+                    FROM s232_scope_measure_map AS map
+                    JOIN s232_scope AS scope ON scope.id = map.scope_id
+                    WHERE map.measure_id = ANY(%s)
+                """
+                with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
+                    cur.execute(scope_query, (measure_ids,))
+                    scope_rows = cur.fetchall()
+                for row in scope_rows:
+                    rel = row.get("relation")
+                    if rel not in {"include", "exclude"}:
+                        continue
+                    mid = row["measure_id"]
+                    bucket = scope_map.setdefault(mid, {"include": [], "exclude": []})
+                    bucket[rel].append(row)
+            cached = {"measures": measure_rows, "scopes": scope_map}
+            _cache_set_s232(cache_key, cached)
+
+        rows = cached.get("measures", [])
+        scope_map_cached = cached.get("scopes", {})
+        for mid, scopes in scope_map_cached.items():
+            self.scope_cache[mid] = scopes
 
         filtered = [
             row
             for row in rows
-            if self._country_allows_measure(row) and self._melt_origin_allows_measure(row)
+            if self._country_allows_measure(row)
+            and self._melt_origin_allows_measure(row)
+            and row.get("effective_start_date") <= self.entry_date
+            and (
+                row.get("effective_end_date") is None
+                or self.entry_date <= row.get("effective_end_date")
+            )
         ]
         return filtered
 

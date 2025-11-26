@@ -48,7 +48,8 @@ BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 
 DEFAULT_HEADINGS = [
-    "9903.01.77"
+    # "9903.01.77"
+    "9903.01.84"
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section ieepa derivative steel measures.
@@ -339,6 +340,13 @@ def classify_code_type(code: str) -> str:
     if len(digits_only) == 4:
         return "heading"
     return "heading"
+
+
+def _is_s232_heading(heading: str) -> bool:
+    """Return True for 9903.81.xx / 9903.85.xx headings that belong to Section 232."""
+    normalized = heading.strip()
+    digits = normalized.replace(".", "")
+    return digits.startswith("990381") or digits.startswith("990385")
 
 
 class Section232Database:
@@ -1129,6 +1137,10 @@ class Section232Agent:
         normalized = heading.strip()
         if not normalized:
             return None
+        if _is_s232_heading(normalized):
+            LOGGER.info("Heading %s belongs to Section 232; skipping measure/note processing", normalized)
+            self._measure_cache[normalized] = None
+            return None
         if normalized in self._measure_cache:
             LOGGER.debug("Heading %s already processed; reusing measure id %s", normalized, self._measure_cache[normalized])
             return self._measure_cache[normalized]
@@ -1375,7 +1387,7 @@ class Section232Agent:
             note_label=scope.source_label,
             text_criteria=None,
         )
-        if scope.key.startswith("99"):
+        if scope.key.startswith("99") and not _is_s232_heading(scope.key):
             self.process_heading(scope.key)
 
     def _process_note_references(
@@ -1644,14 +1656,22 @@ class Section232Agent:
         fallback_start: date,
         fallback_end: Optional[date],
     ) -> None:
-        child_measure_id = self.process_heading(child_heading)
-        if not child_measure_id:
+        skip_child_measure = _is_s232_heading(child_heading)
+        child_measure_id = None
+        if not skip_child_measure:
+            child_measure_id = self.process_heading(child_heading)
+            if not child_measure_id:
+                LOGGER.info(
+                    "Child heading %s could not be processed; skipping linkage to %s",
+                    child_heading,
+                    parent_heading,
+                )
+                return
+        else:
             LOGGER.info(
-                "Child heading %s could not be processed; skipping linkage to %s",
+                "Child heading %s belongs to Section 232; skipping measure/note processing",
                 child_heading,
-                parent_heading,
             )
-            return
 
         scope = ScopeRecord(
             key=child_heading,
@@ -1691,14 +1711,22 @@ class Section232Agent:
         fallback_start: date,
         fallback_end: Optional[date],
     ) -> None:
-        child_measure_id = self.process_heading(child_heading)
-        if not child_measure_id:
+        skip_child_measure = _is_s232_heading(child_heading)
+        child_measure_id = None
+        if not skip_child_measure:
+            child_measure_id = self.process_heading(child_heading)
+            if not child_measure_id:
+                LOGGER.info(
+                    "Child heading %s could not be processed; skipping reference linkage to %s",
+                    child_heading,
+                    parent_heading,
+                )
+                return
+        else:
             LOGGER.info(
-                "Child heading %s could not be processed; skipping reference linkage to %s",
+                "Child heading %s belongs to Section 232; skipping measure/note processing",
                 child_heading,
-                parent_heading,
             )
-            return
 
         scope = ScopeRecord(
             key=child_heading,
