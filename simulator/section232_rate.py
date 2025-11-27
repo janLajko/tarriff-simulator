@@ -82,7 +82,7 @@ ALUMINUM_ALWAYS_HEADINGS = {
 SECTION232_CACHE_TTL_SECONDS = 24 * 60 * 60
 
 if TheineCache is not None:
-    _s232_cache = TheineCache(maxsize=32, ttl=SECTION232_CACHE_TTL_SECONDS)
+    _s232_cache = TheineCache(32)
 else:  # simple fallback cache with TTL
     _s232_cache = None
     _s232_cache_store: Dict[str, Tuple[float, Dict]] = {}
@@ -267,7 +267,7 @@ def _date_active(entry: date, start: Optional[date], end: Optional[date]) -> boo
 SECTION232_CACHE_TTL_SECONDS = 24 * 60 * 60
 
 if TheineCache is not None:
-    _s232_cache = TheineCache(maxsize=32, ttl=SECTION232_CACHE_TTL_SECONDS)
+    _s232_cache = TheineCache(32)
 else:  # simple fallback cache with TTL
     _s232_cache = None
     _s232_cache_store: Dict[str, Tuple[float, Dict]] = {}
@@ -276,7 +276,8 @@ else:  # simple fallback cache with TTL
 def _cache_get_s232(key: str) -> Optional[Dict]:
     if _s232_cache is not None:
         try:
-            return _s232_cache.get(key)  # type: ignore[call-arg]
+            value, ok = _s232_cache.get(key)  # type: ignore[call-arg]
+            return value if ok else None
         except Exception:
             return None
     entry = _s232_cache_store.get(key)
@@ -292,7 +293,7 @@ def _cache_get_s232(key: str) -> Optional[Dict]:
 def _cache_set_s232(key: str, value: Dict) -> None:
     if _s232_cache is not None:
         try:
-            _s232_cache.set(key, value)  # type: ignore[call-arg]
+            _s232_cache.set(key, value, ttl=timedelta(seconds=SECTION232_CACHE_TTL_SECONDS))  # type: ignore[call-arg]
         except Exception:
             return
         return

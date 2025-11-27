@@ -22,10 +22,10 @@ try:  # pragma: no cover - optional dependency for cross-module scope checks
 except Exception:  # pragma: no cover
     Section232Evaluator = None  # type: ignore[assignment]
 
-try:  # pragma: no cover - optional cache dependency
-    from theine import Cache as TheineCache
-except Exception:  # pragma: no cover
-    TheineCache = None  # type: ignore[assignment]
+# try:  # pragma: no cover - optional cache dependency
+from theine import Cache as TheineCache
+# except Exception:  # pragma: no cover
+    # TheineCache = None  # type: ignore[assignment]
 
 
 @dataclass
@@ -163,7 +163,7 @@ EU_MEMBER_NAMES = {
 IEEPA_CACHE_TTL_SECONDS = 24 * 60 * 60
 
 if TheineCache is not None:
-    _ieepa_cache = TheineCache(maxsize=32, ttl=IEEPA_CACHE_TTL_SECONDS)
+    _ieepa_cache = TheineCache(32)
 else:  # simple fallback cache with TTL
     _ieepa_cache = None
     _ieepa_cache_store: Dict[str, Tuple[float, Dict]] = {}
@@ -208,7 +208,8 @@ def _normalize_country_iso2_or_name(value: str) -> str:
 def _cache_get(key: str) -> Optional[Dict]:
     if _ieepa_cache is not None:
         try:
-            return _ieepa_cache.get(key)  # type: ignore[call-arg]
+            value, ok = _ieepa_cache.get(key)  # type: ignore[call-arg]
+            return value if ok else None
         except Exception:
             return None
     entry = _ieepa_cache_store.get(key)
@@ -224,7 +225,7 @@ def _cache_get(key: str) -> Optional[Dict]:
 def _cache_set(key: str, value: Dict) -> None:
     if _ieepa_cache is not None:
         try:
-            _ieepa_cache.set(key, value)  # type: ignore[call-arg]
+            _ieepa_cache.set(key, value, ttl=timedelta(seconds=IEEPA_CACHE_TTL_SECONDS))  # type: ignore[call-arg]
         except Exception:
             return
         return
