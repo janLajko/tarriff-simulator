@@ -45,12 +45,13 @@ else:
 LOGGER = logging.getLogger("section301_agent")
 
 DEFAULT_HEADINGS = [
-    # "9903.88.69",
-    # "9903.88.01",
-    # "9903.88.02",
-    # "9903.88.03",
-    # "9903.88.04",
+    "9903.88.69",
+    "9903.88.01",
+    "9903.88.02",
+    "9903.88.03",
+    "9903.88.04",
     "9903.88.16",
+    "9903.88.70"
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer. From the following text, extract:
