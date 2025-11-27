@@ -24,7 +24,7 @@ import re
 from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, TypeVar
 
 import requests
 
@@ -43,6 +43,8 @@ else:
 
 
 LOGGER = logging.getLogger("section232_agent")
+BULK_QUERY_CHUNK = 50
+T = TypeVar("T")
 
 DEFAULT_HEADINGS = [
     "9903.81.87",
@@ -212,6 +214,13 @@ Output JSON format (note the use of "keys" for combined codes and "key" for sing
 NOTE_TOKEN_RE = re.compile(r"\(\s*([^)]+?)\s*\)")
 
 
+def chunked(items: Sequence[Any], size: int) -> Iterable[Sequence[Any]]:
+    if size <= 0:
+        raise ValueError("chunk size must be positive")
+    for idx in range(0, len(items), size):
+        yield items[idx : idx + size]
+
+
 @dataclass
 class MeasureAnalysis:
     include: List[str]
@@ -297,6 +306,7 @@ class Section232Database:
             raise RuntimeError(
                 "psycopg2 is required to use Section232Database"
             ) from _PSYCOPG2_IMPORT_ERROR
+        self._dsn = dsn
         self._conn = psycopg2.connect(dsn)
         self._conn.autocommit = False
 
@@ -308,6 +318,32 @@ class Section232Database:
 
     def rollback(self) -> None:
         self._conn.rollback()
+
+    def _reconnect(self) -> None:
+        try:
+            if self._conn and not self._conn.closed:
+                self._conn.close()
+        except Exception:
+            pass
+        self._conn = psycopg2.connect(self._dsn)
+        self._conn.autocommit = False
+
+    def _run_with_reconnect(self, operation: Callable[[], T]) -> T:
+        last_exc: Optional[Exception] = None
+        for attempt in range(2):
+            try:
+                return operation()
+            except psycopg2.OperationalError as exc:  # type: ignore[attr-defined]
+                last_exc = exc
+                message = str(exc).lower()
+                if "server closed the connection unexpectedly" in message:
+                    LOGGER.warning("Database connection lost; reconnecting (attempt %s)", attempt + 1)
+                    self._reconnect()
+                    continue
+                raise
+        if last_exc:
+            raise last_exc
+        raise RuntimeError("Operation failed without raising an exception")
 
     def fetch_hts_code(self, heading: str) -> Optional[Dict[str, Any]]:
         query = """
@@ -516,6 +552,104 @@ class Section232Database:
         LOGGER.info("Created scope %s for key %s", scope_id, record.key)
         return scope_id
 
+    def ensure_scopes_bulk(self, records: Sequence[ScopeRecord]) -> Dict[Tuple[str, str, str, date, Optional[date]], int]:
+        sentinel_end = date(9999, 12, 31)
+        unique: Dict[Tuple[str, str, str, date, Optional[date]], ScopeRecord] = {}
+        for record in records:
+            key = (
+                record.key,
+                record.key_type,
+                (record.country_iso2 or ""),
+                record.effective_start_date,
+                record.effective_end_date,
+            )
+            unique[key] = record
+        if not unique:
+            return {}
+
+        def _build_conditions(items: List[Tuple[str, str, str, date, Optional[date]]]) -> Tuple[str, List[Any]]:
+            clauses: List[str] = []
+            params: List[Any] = []
+            for entry in items:
+                clauses.append(
+                    "(key = %s AND key_type = %s AND COALESCE(country_iso2, '') = COALESCE(%s, '') "
+                    "AND effective_start_date = %s AND COALESCE(effective_end_date, DATE '9999-12-31') = "
+                    "COALESCE(%s, DATE '9999-12-31'))"
+                )
+                params.extend(entry)
+            return " OR ".join(clauses), params
+
+        existing: Dict[Tuple[str, str, str, date, Optional[date]], int] = {}
+        keys_list = list(unique.keys())
+        for chunk in chunked(keys_list, BULK_QUERY_CHUNK):
+            where_clause, params = _build_conditions(list(chunk))
+            query = (
+                "SELECT id, key, key_type, COALESCE(country_iso2, '') AS country_iso2, "
+                "effective_start_date, COALESCE(effective_end_date, DATE '9999-12-31') AS effective_end_date "
+                "FROM s232_scope WHERE " + where_clause
+            )
+
+            def _fetch_existing() -> List[Tuple[Any, ...]]:
+                with self._conn.cursor() as cur:
+                    cur.execute(query, params)
+                    return cur.fetchall()
+
+            rows = self._run_with_reconnect(_fetch_existing)
+            for row in rows:
+                signature = (
+                    row[1],
+                    row[2],
+                    row[3],
+                    row[4],
+                    None if row[5] == sentinel_end else row[5],
+                )
+                existing[signature] = row[0]
+
+        missing = [sig for sig in keys_list if sig not in existing]
+        if missing:
+            for chunk in chunked(missing, BULK_QUERY_CHUNK):
+                values = []
+                insert_params: List[Any] = []
+                for sig in chunk:
+                    record = unique[sig]
+                    values.append("(%s, %s, %s, %s, %s, %s)")
+                    insert_params.extend(
+                        [
+                            record.key,
+                            record.key_type,
+                            record.country_iso2,
+                            record.source_label,
+                            record.effective_start_date,
+                            record.effective_end_date,
+                        ]
+                    )
+                insert_query = (
+                    "INSERT INTO s232_scope "
+                    "(key, key_type, country_iso2, source_label, effective_start_date, effective_end_date) "
+                    "VALUES " + ", ".join(values) +
+                    " RETURNING id, key, key_type, COALESCE(country_iso2, '') AS country_iso2, "
+                    "effective_start_date, COALESCE(effective_end_date, DATE '9999-12-31') AS effective_end_date"
+                )
+
+                def _insert_missing() -> List[Tuple[Any, ...]]:
+                    with self._conn.cursor() as cur:
+                        cur.execute(insert_query, insert_params)
+                        return cur.fetchall()
+
+                rows = self._run_with_reconnect(_insert_missing)
+                for row in rows:
+                    signature = (
+                        row[1],
+                        row[2],
+                        row[3],
+                        row[4],
+                        None if row[5] == sentinel_end else row[5],
+                    )
+                    existing[signature] = row[0]
+                    LOGGER.info("Created scope %s for key %s", row[0], row[1])
+
+        return existing
+
     def ensure_scope_measure_map(
         self,
         scope_id: int,
@@ -623,6 +757,119 @@ class Section232Database:
             relation,
         )
         return map_id
+
+    def ensure_scope_measure_map_bulk(self, entries: Sequence[Dict[str, Any]]) -> Dict[Tuple[int, int, str, str, str, Optional[date], Optional[date]], int]:
+        sentinel_end = date(9999, 12, 31)
+        unique: Dict[Tuple[int, int, str, str, str, Optional[date], Optional[date]], Dict[str, Any]] = {}
+        for entry in entries:
+            key = (
+                entry["scope_id"],
+                entry["measure_id"],
+                entry["relation"],
+                (entry.get("note_label") or ""),
+                (entry.get("text_criteria") or ""),
+                entry.get("start_date"),
+                entry.get("end_date"),
+            )
+            unique[key] = entry
+        if not unique:
+            return {}
+
+        def _build_conditions(items: List[Tuple[int, int, str, str, str, Optional[date], Optional[date]]]) -> Tuple[str, List[Any]]:
+            clauses: List[str] = []
+            params: List[Any] = []
+            for entry in items:
+                clauses.append(
+                    "(scope_id = %s AND measure_id = %s AND relation = %s AND "
+                    "COALESCE(note_label, '') = COALESCE(%s, '') AND COALESCE(text_criteria, '') = COALESCE(%s, '') AND "
+                    "effective_start_date = %s AND COALESCE(effective_end_date, DATE '9999-12-31') = COALESCE(%s, DATE '9999-12-31'))"
+                )
+                params.extend(entry)
+            return " OR ".join(clauses), params
+
+        existing: Dict[Tuple[int, int, str, str, str, Optional[date], Optional[date]], int] = {}
+        keys_list = list(unique.keys())
+        for chunk in chunked(keys_list, BULK_QUERY_CHUNK):
+            where_clause, params = _build_conditions(list(chunk))
+            query = (
+                "SELECT id, scope_id, measure_id, relation, COALESCE(note_label, '') AS note_label, "
+                "COALESCE(text_criteria, '') AS text_criteria, effective_start_date, "
+                "COALESCE(effective_end_date, DATE '9999-12-31') AS effective_end_date "
+                "FROM s232_scope_measure_map WHERE " + where_clause
+            )
+
+            def _fetch_existing() -> List[Tuple[Any, ...]]:
+                with self._conn.cursor() as cur:
+                    cur.execute(query, params)
+                    return cur.fetchall()
+
+            rows = self._run_with_reconnect(_fetch_existing)
+            for row in rows:
+                signature = (
+                    row[1],
+                    row[2],
+                    row[3],
+                    row[4],
+                    row[5],
+                    row[6],
+                    None if row[7] == sentinel_end else row[7],
+                )
+                existing[signature] = row[0]
+
+        missing = [sig for sig in keys_list if sig not in existing]
+        if missing:
+            for chunk in chunked(missing, BULK_QUERY_CHUNK):
+                values = []
+                insert_params: List[Any] = []
+                for sig in chunk:
+                    entry = unique[sig]
+                    values.append("(%s, %s, %s, %s, %s, %s, %s)")
+                    insert_params.extend(
+                        [
+                            entry["scope_id"],
+                            entry["measure_id"],
+                            entry["relation"],
+                            entry.get("note_label"),
+                            entry.get("text_criteria"),
+                            entry.get("start_date"),
+                            entry.get("end_date"),
+                        ]
+                    )
+                insert_query = (
+                    "INSERT INTO s232_scope_measure_map "
+                    "(scope_id, measure_id, relation, note_label, text_criteria, effective_start_date, effective_end_date) "
+                    "VALUES " + ", ".join(values) +
+                    " RETURNING id, scope_id, measure_id, relation, COALESCE(note_label, '') AS note_label, "
+                    "COALESCE(text_criteria, '') AS text_criteria, effective_start_date, "
+                    "COALESCE(effective_end_date, DATE '9999-12-31') AS effective_end_date"
+                )
+
+                def _insert_missing() -> List[Tuple[Any, ...]]:
+                    with self._conn.cursor() as cur:
+                        cur.execute(insert_query, insert_params)
+                        return cur.fetchall()
+
+                rows = self._run_with_reconnect(_insert_missing)
+                for row in rows:
+                    signature = (
+                        row[1],
+                        row[2],
+                        row[3],
+                        row[4],
+                        row[5],
+                        row[6],
+                        None if row[7] == sentinel_end else row[7],
+                    )
+                    existing[signature] = row[0]
+                    LOGGER.info(
+                        "Created scope↔measure relation %s (scope=%s, measure=%s, %s)",
+                        row[0],
+                        row[1],
+                        row[2],
+                        row[3],
+                    )
+
+        return existing
 
     def fetch_note_rows(self, label: str) -> List[Dict[str, Any]]:
         """Fetch a note and all of its descendant rows, mirroring get_note()."""
@@ -1194,29 +1441,42 @@ class Section232Agent:
             fallback_end=fallback_end,
         )
 
+        scope_id_map = self._ensure_scopes_batch(scope_records + except_records)
+
+        map_entries: List[Dict[str, Any]] = []
         for scope in scope_records:
-            scope_id = self.db.ensure_scope(scope)
+            scope_id = scope_id_map.get(self._scope_signature(scope))
             if not scope_id:
                 continue
-            self.db.ensure_scope_measure_map(
-                scope_id=scope_id,
-                measure_id=measure_id,
-                relation="include",
-                note_label=scope.source_label,
-                text_criteria=None,
+            map_entries.append(
+                {
+                    "scope_id": scope_id,
+                    "measure_id": measure_id,
+                    "relation": "include",
+                    "note_label": scope.source_label,
+                    "text_criteria": None,
+                    "start_date": None,
+                    "end_date": None,
+                }
             )
 
         for scope in except_records:
-            scope_id = self.db.ensure_scope(scope)
+            scope_id = scope_id_map.get(self._scope_signature(scope))
             if not scope_id:
                 continue
-            self.db.ensure_scope_measure_map(
-                scope_id=scope_id,
-                measure_id=measure_id,
-                relation="exclude",
-                note_label=scope.source_label,
-                text_criteria=None,
+            map_entries.append(
+                {
+                    "scope_id": scope_id,
+                    "measure_id": measure_id,
+                    "relation": "exclude",
+                    "note_label": scope.source_label,
+                    "text_criteria": None,
+                    "start_date": None,
+                    "end_date": None,
+                }
             )
+
+        self.db.ensure_scope_measure_map_bulk(map_entries)
 
         for child in scope_children:
             self._link_child_heading(
@@ -1322,6 +1582,20 @@ class Section232Agent:
                 )
                 records.append(record)
         return records, child_refs
+
+    def _scope_signature(self, scope: ScopeRecord) -> Tuple[str, str, str, date, Optional[date]]:
+        return (
+            scope.key,
+            scope.key_type,
+            scope.country_iso2 or "",
+            scope.effective_start_date,
+            scope.effective_end_date,
+        )
+
+    def _ensure_scopes_batch(self, records: Sequence[ScopeRecord]) -> Dict[Tuple[str, str, str, date, Optional[date]], int]:
+        if not records:
+            return {}
+        return self.db.ensure_scopes_bulk(records)
 
     def _link_child_heading(
         self,
