@@ -311,7 +311,7 @@ class Section232Database:
 
     def fetch_hts_code(self, heading: str) -> Optional[Dict[str, Any]]:
         query = """
-            SELECT hts_number, description, status, additional_duties
+            SELECT hts_number, description, status, additional_duties,general_rate_of_duty
             FROM hts_codes
             WHERE hts_number = %s
             ORDER BY row_order
@@ -878,7 +878,9 @@ class Section232Agent:
                     end_date,
                 )
                 end_date = None
-            rate = self._derive_rate(description)
+
+            general_rate_of_duty = (row.get("general_rate_of_duty") or "").strip()
+            rate = self._derive_rate(general_rate_of_duty)
 
             measure_country_iso2 = analysis.country_iso2 or self.country_iso2
 
@@ -931,9 +933,32 @@ class Section232Agent:
             self._in_progress.discard(normalized)
 
     def _derive_rate(self, description: str) -> Decimal:
-        match = re.search(r"(\d+(?:\.\d+)?)\s*percent", description, re.IGNORECASE)
+        desc = description or ""
+        match_add = re.search(
+            r"the duty provided in the applicable subheading\s*(?:\+|plus)\s*(\d+(?:\.\d+)?)\s*(?:percent|%)",
+            desc,
+            re.IGNORECASE,
+        )
+        if match_add:
+            return Decimal(match_add.group(1)).quantize(Decimal("0.001"))
+
+        if re.search(r"the duty provided in the applicable subheading", desc, re.IGNORECASE):
+            return Decimal("0.000")
+
+        match = re.search(r"(\d+(?:\.\d+)?)\s*percent", desc, re.IGNORECASE)
         if match:
             return Decimal(match.group(1)).quantize(Decimal("0.001"))
+
+        fallback_num = re.search(r"(\d+(?:\.\d+)?)", desc)
+        if fallback_num:
+            value = Decimal(fallback_num.group(1)).quantize(Decimal("0.001"))
+            if value <= Decimal("999.000"):
+                return value
+            LOGGER.warning(
+                "Derived fallback rate %s exceeds numeric precision; using default 25%%",
+                value,
+            )
+
         return Decimal("25.000")
 
     def _apply_scope_links(
