@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import os
+import logging
 from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
+import time
 from typing import Dict, List, Optional, Tuple
 
 try:  # pragma: no cover - optional dependency for environments without psycopg2
@@ -14,6 +16,9 @@ try:  # pragma: no cover - optional dependency for environments without psycopg2
 except ImportError:  # pragma: no cover - allow import without postgres libs
     psycopg2 = None  # type: ignore[assignment]
     RealDictCursor = None  # type: ignore[assignment]
+
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -222,6 +227,8 @@ def compute_section301_duty(
     if not isinstance(entry_date, date):
         raise TypeError("entry_date must be a datetime.date instance")
 
+    start_time = time.perf_counter()
+
     if psycopg2 is None:  # pragma: no cover - runtime enforcement
         raise RuntimeError(
             "psycopg2 is required to compute Section 301 duties. "
@@ -229,7 +236,17 @@ def compute_section301_duty(
         )
 
     origin = (country_of_origin or "").upper()
+    logger.info(
+        "Section301 computation start hts=%s country=%s entry=%s",
+        hts_number,
+        origin,
+        entry_date,
+    )
     if origin != "CN":
+        logger.info(
+            "Section301 skipped for non-CN origin in %.3fs",
+            time.perf_counter() - start_time,
+        )
         return Section301Computation(
             module_id="301",
             module_name="Section 301 Tariffs",
@@ -244,6 +261,7 @@ def compute_section301_duty(
     if not dsn:
         raise RuntimeError("DATABASE_DSN environment variable is required for Section 301 calculations.")
 
+    eval_start = time.perf_counter()
     with psycopg2.connect(dsn) as conn:
         evaluator = Section301Evaluator(conn, entry_date, origin)
         applicable_measures: List[Dict] = []
@@ -254,6 +272,13 @@ def compute_section301_duty(
                 applicable_measures.append(measure)
             elif exclusions:
                 excluded_measures.append((measure, exclusions))
+    logger.info(
+        "Section301 evaluated measures in %.3fs (loaded=%s applicable=%s excluded=%s)",
+        time.perf_counter() - eval_start,
+        len(getattr(evaluator, "measures", []) or []),
+        len(applicable_measures),
+        len(excluded_measures),
+    )
 
     rated_measures: List[Dict] = []
     zero_rate_matches: List[Dict] = []
@@ -332,6 +357,10 @@ def compute_section301_duty(
                     "Section 301 headings matched but have zero ad valorem rate: "
                     f"{zero_headings}."
                 )
+        logger.info(
+            "Section301 returning no rated measures in %.3fs",
+            time.perf_counter() - start_time,
+        )
         return Section301Computation(
             module_id="301",
             module_name="Section 301 Tariffs",
@@ -389,6 +418,12 @@ def compute_section301_duty(
     if import_value_decimal is not None:
         amount = (import_value_decimal * total_rate) / Decimal("100")
 
+    logger.info(
+        "Section301 computed duty in %.3fs applicable_measures=%s rated=%s",
+        time.perf_counter() - start_time,
+        len(applicable_measures),
+        len(rated_measures),
+    )
     return Section301Computation(
         module_id="301",
         module_name="Section 301 Tariffs",

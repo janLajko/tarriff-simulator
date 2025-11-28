@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import logging
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from decimal import Decimal, InvalidOperation
@@ -22,6 +23,9 @@ except Exception:  # pragma: no cover
     TheineCache = None  # type: ignore[assignment]
 
 from .basic_hts_rate import get_unit_config
+
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -566,6 +570,8 @@ def compute_section232_duty(
     if not isinstance(entry_date, date):
         raise TypeError("entry_date must be a datetime.date instance")
 
+    start_time = time.perf_counter()
+
     if psycopg2 is None:  # pragma: no cover - runtime enforcement
         raise RuntimeError(
             "psycopg2 is required to compute Section 232 duties. "
@@ -588,6 +594,14 @@ def compute_section232_duty(
     if not dsn:
         raise RuntimeError("DATABASE_DSN environment variable is required for Section 232 calculations.")
 
+    logger.info(
+        "Section232 computation start hts=%s country=%s entry=%s",
+        hts_number,
+        origin,
+        entry_date,
+    )
+
+    eval_start = time.perf_counter()
     with psycopg2.connect(dsn) as conn:
         evaluator = Section232Evaluator(
             conn,
@@ -604,6 +618,13 @@ def compute_section232_duty(
                 applicable_measures.append(measure)
             elif exclusions:
                 excluded_measures.append((measure, exclusions))
+    logger.info(
+        "Section232 evaluated measures in %.3fs (loaded=%s applicable=%s excluded=%s)",
+        time.perf_counter() - eval_start,
+        len(getattr(evaluator, "measures", []) or []),
+        len(applicable_measures),
+        len(excluded_measures),
+    )
 
     rated_measures: List[Dict] = []
     zero_rate_matches: List[Dict] = []
@@ -701,6 +722,10 @@ def compute_section232_duty(
                 "Applied Section 232 measures: "
                 + ", ".join(f"{entry.ch99_id} (0%)" for entry in zero_entries)
             ]
+            logger.info(
+                "Section232 applied special zero measures in %.3fs",
+                time.perf_counter() - start_time,
+            )
             return Section232Computation(
                 module_id="232",
                 module_name="Section 232 Tariffs",
@@ -711,6 +736,10 @@ def compute_section232_duty(
                 ch99_list=zero_entries,
                 notes=notes,
             )
+        logger.info(
+            "Section232 returning without rated measures in %.3fs",
+            time.perf_counter() - start_time,
+        )
         notes = [
             "No active Section 232 measures matched the provided HTS number on the given entry date."
         ]
@@ -784,11 +813,17 @@ def compute_section232_duty(
                 + zero_headings
             )
 
+    amount_start = time.perf_counter()
     amount, missing_measurement_fields = _compute_section232_amount(
         hts_number,
         ch99_list,
         import_value_decimal,
         normalized_measurements,
+    )
+    logger.info(
+        "Section232 amount computed in %.3fs (missing_fields=%s)",
+        time.perf_counter() - amount_start,
+        len(missing_measurement_fields),
     )
     if missing_measurement_fields:
         missing_list = ", ".join(sorted(set(missing_measurement_fields)))
@@ -797,6 +832,12 @@ def compute_section232_duty(
             f"{missing_list} (provide as fractional values, e.g., 0.25 for 25%)."
         )
 
+    logger.info(
+        "Section232 completed in %.3fs applicable_measures=%s rated=%s",
+        time.perf_counter() - start_time,
+        len(applicable_measures),
+        len(rated_measures),
+    )
     return Section232Computation(
         module_id="232",
         module_name="Section 232 Tariffs",

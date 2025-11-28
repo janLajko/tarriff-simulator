@@ -162,11 +162,14 @@ EU_MEMBER_NAMES = {
 
 IEEPA_CACHE_TTL_SECONDS = 24 * 60 * 60
 
-if TheineCache is not None:
-    _ieepa_cache = TheineCache(32)
-else:  # simple fallback cache with TTL
-    _ieepa_cache = None
-    _ieepa_cache_store: Dict[str, Tuple[float, Dict]] = {}
+# if TheineCache is not None:
+_ieepa_cache = TheineCache(32)
+# else:  # simple fallback cache with TTL
+#     _ieepa_cache = None
+#     _ieepa_cache_store: Dict[str, Tuple[float, Dict]] = {}
+
+GLOBAL_MEASURE_CACHE_TTL_SECONDS = 24 * 60 * 60
+_global_measure_cache: Optional[Dict[str, object]] = None
 
 
 def _coerce_decimal(value: Optional[object]) -> Optional[Decimal]:
@@ -232,6 +235,86 @@ def _cache_set(key: str, value: Dict) -> None:
     _ieepa_cache_store[key] = (time.monotonic() + IEEPA_CACHE_TTL_SECONDS, value)
 
 
+def _refresh_global_measure_cache(conn) -> Dict[str, object]:
+    query = """
+        SELECT
+            m.id,
+            m.heading,
+            m.country_iso2,
+            m.ad_valorem_rate,
+            m.value_basis,
+            m.melt_pour_origin_iso2,
+            m.origin_exclude_iso2,
+            m.effective_start_date,
+            m.effective_end_date,
+            m.is_potential,
+            COALESCE(h.description, '') AS description
+        FROM sieepa_measures AS m
+        LEFT JOIN LATERAL (
+            SELECT description
+            FROM hts_codes hc
+            WHERE hc.hts_number = m.heading
+            ORDER BY hc.row_order
+            LIMIT 1
+        ) AS h ON TRUE
+        ORDER BY m.heading, m.effective_start_date DESC, m.id DESC
+    """
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(query)
+        rows = cur.fetchall()
+
+    by_heading: Dict[str, List[Dict]] = {}
+    for row in rows:
+        heading = row.get("heading")
+        if not heading:
+            continue
+        by_heading.setdefault(heading, []).append(row)
+
+    return {
+        "by_heading": by_heading,
+        "expires_at": time.monotonic() + GLOBAL_MEASURE_CACHE_TTL_SECONDS,
+    }
+
+
+def _get_global_measure_for_heading(
+    conn,
+    heading: str,
+    entry_date: date,
+) -> Tuple[Optional[Dict], bool]:
+    """Return matching measure from process-wide cache; bool indicates cache was used."""
+
+    global _global_measure_cache
+
+    now = time.monotonic()
+    cache = _global_measure_cache
+    if cache is None or now >= cache.get("expires_at", 0):
+        try:
+            cache = _refresh_global_measure_cache(conn)
+            _global_measure_cache = cache
+        except Exception:
+            logger.exception("IEEPA failed to refresh global measure cache")
+            cache = None
+
+    if cache is None:
+        return None, False
+
+    measures_by_heading = cache.get("by_heading") or {}
+    measures = measures_by_heading.get(heading)
+    if not measures:
+        return None, True
+
+    for row in measures:
+        start = row.get("effective_start_date")
+        end = row.get("effective_end_date")
+        if start and entry_date < start:
+            continue
+        if end and entry_date > end:
+            continue
+        return row, True
+
+    return None, True
+
+
 def _is_partial_ieepa_heading(heading: str) -> bool:
     normalized = heading.strip()
     if normalized in PARTIAL_HEADING_SET:
@@ -268,13 +351,21 @@ class SectionIEEPAEvaluator:
         country: str,
         melt_pour_origin: Optional[str],
         section232_evaluator: Optional[object] = None,
-    ):
+        ):
         self.conn = conn
         self.entry_date = entry_date
         self.country = _normalize_country_iso2_or_name(country)
         self.melt_origin = _normalize_country_iso2_or_name(melt_pour_origin)
         self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
+        measures_start = time.perf_counter()
         self.measures = self._load_measures()
+        logger.info(
+            "IEEPA _load_measures finished in %.3fs country=%s entry=%s count=%s",
+            time.perf_counter() - measures_start,
+            self.country,
+            self.entry_date,
+            len(self.measures),
+        )
         self.heading_to_measure: Dict[str, Dict] = {
             m["heading"]: m for m in self.measures
         }
@@ -295,6 +386,7 @@ class SectionIEEPAEvaluator:
 
     def _load_measures(self) -> List[Dict]:
         cache_key = self.country or "__ALL__"
+        cache_start = time.perf_counter()
         cached = _cache_get(cache_key)
         if cached is None:
             query = """
@@ -353,6 +445,12 @@ class SectionIEEPAEvaluator:
                     bucket[rel].append(row)
             cached = {"measures": measure_rows, "scopes": scope_map}
             _cache_set(cache_key, cached)
+        else:
+            logger.info(
+                "IEEPA _load_measures cache hit country=%s duration=%.3fs",
+                self.country,
+                time.perf_counter() - cache_start,
+            )
         rows = cached.get("measures", [])
         scope_map_cached = cached.get("scopes", {})
 
@@ -387,6 +485,7 @@ class SectionIEEPAEvaluator:
     def _load_scopes(self, measure_id: int) -> Dict[str, List[Dict]]:
         if measure_id in self.scope_cache:
             return self.scope_cache[measure_id]
+        scope_start = time.perf_counter()
         query = """
             SELECT
                 map.relation,
@@ -409,12 +508,57 @@ class SectionIEEPAEvaluator:
                 continue
             grouped[row["relation"]].append(row)
         self.scope_cache[measure_id] = grouped
+        logger.info(
+            "IEEPA _load_scopes measure_id=%s duration=%.3fs include=%s exclude=%s",
+            measure_id,
+            time.perf_counter() - scope_start,
+            len(grouped.get("include", [])),
+            len(grouped.get("exclude", [])),
+        )
         return grouped
 
     def _measure_id_for_heading(self, heading: str) -> Optional[int]:
+        lookup_start = time.perf_counter()
         entry = self.heading_to_measure.get(heading)
         if entry:
             return entry["id"]
+
+        cached_row, cache_used = _get_global_measure_for_heading(
+            self.conn, heading, self.entry_date
+        )
+        if cached_row is not None:
+            if self._country_allows_measure(cached_row):
+                self.heading_to_measure[cached_row["heading"]] = cached_row
+                if cached_row not in self.measures:
+                    self.measures.append(cached_row)
+                if cached_row["id"] not in self.id_to_measure:
+                    self.id_to_measure[cached_row["id"]] = cached_row
+                logger.info(
+                    "IEEPA _measure_id_for_heading cache hit heading=%s duration=%.3fs",
+                    heading,
+                    time.perf_counter() - lookup_start,
+                )
+                return cached_row["id"]
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(
+                    "IEEPA _measure_id_for_heading filtered by country heading=%s country=%s row_country=%s (cache)",
+                    heading,
+                    self.country,
+                    cached_row.get("country_iso2"),
+                )
+            logger.info(
+                "IEEPA _measure_id_for_heading cache filtered heading=%s duration=%.3fs",
+                heading,
+                time.perf_counter() - lookup_start,
+            )
+            return None
+        if cache_used:
+            logger.info(
+                "IEEPA _measure_id_for_heading cache miss heading=%s duration=%.3fs",
+                heading,
+                time.perf_counter() - lookup_start,
+            )
+            return None
         query = """
             SELECT
                 m.id,
@@ -451,6 +595,11 @@ class SectionIEEPAEvaluator:
                 self.measures.append(row)
             if row["id"] not in self.id_to_measure:
                 self.id_to_measure[row["id"]] = row
+            logger.info(
+                "IEEPA _measure_id_for_heading db hit heading=%s duration=%.3fs",
+                heading,
+                time.perf_counter() - lookup_start,
+            )
             return row["id"]
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(
@@ -459,6 +608,11 @@ class SectionIEEPAEvaluator:
                 self.country,
                 row.get("country_iso2") if row else None,
             )
+        logger.info(
+            "IEEPA _measure_id_for_heading db filtered heading=%s duration=%.3fs",
+            heading,
+            time.perf_counter() - lookup_start,
+        )
         return None
 
     def constraints_met(self, measure: Dict) -> Tuple[bool, Optional[str]]:
@@ -488,6 +642,8 @@ class SectionIEEPAEvaluator:
         key = (measure_id, normalized_hts, require_scope_match)
         if key in self.match_cache:
             return self.match_cache[key]
+
+        covers_start = time.perf_counter()
 
         if visited is None:
             visited = set()
@@ -547,6 +703,7 @@ class SectionIEEPAEvaluator:
         if always_include and not require_scope_match:
             include_hit = True
         elif includes:
+            # logger.info(includes)
             include_hit = any(matches_scope(scope, True) for scope in includes)
         else:
             include_hit = False
@@ -556,6 +713,7 @@ class SectionIEEPAEvaluator:
 
         matched_exclusions: List[str] = []
         for scope in excludes:
+            # logger.info("exclude scope %s, measure_id: %s",scope, measure_id)
             key_value = scope.get("key", "") or ""
             force_scope = key_value.startswith("99")
             if matches_scope(
@@ -569,9 +727,20 @@ class SectionIEEPAEvaluator:
 
         if matched_exclusions:
             self.match_cache[key] = (False, matched_exclusions)
+            logger.info(
+                "IEEPA measure_covers excluded measure_id=%s duration=%.3fs exclusions=%s",
+                measure_id,
+                time.perf_counter() - covers_start,
+                len(matched_exclusions),
+            )
             return False, matched_exclusions
 
         self.match_cache[key] = (True, [])
+        logger.info(
+            "IEEPA measure_covers matched measure_id=%s duration=%.3fs",
+            measure_id,
+            time.perf_counter() - covers_start,
+        )
         return True, []
 
 
@@ -589,6 +758,8 @@ def compute_sectionieepa_duty(
     if not isinstance(entry_date, date):
         raise TypeError("entry_date must be a datetime.date instance")
 
+    start_time = time.perf_counter()
+
     if psycopg2 is None:  # pragma: no cover - runtime enforcement
         raise RuntimeError(
             "psycopg2 is required to compute Section IEEPA duties. "
@@ -602,7 +773,18 @@ def compute_sectionieepa_duty(
     origin = (country_of_origin or "").upper()
     melt_origin = (melt_pour_origin_iso2 or "").upper()
 
+    logger.info(
+        "SectionIEEPA computation start hts=%s country=%s entry=%s",
+        hts_number,
+        origin,
+        entry_date,
+    )
+
+    eval_start = time.perf_counter()
     with psycopg2.connect(dsn) as conn:
+        cache_refresh_start = time.perf_counter()
+        _ = _get_global_measure_for_heading(conn, "__prewarm__", entry_date)
+        logger.info("SectionIEEPA global cache check in %.3fs", time.perf_counter() - cache_refresh_start)
         s232_eval = None
         if Section232Evaluator is not None:
             try:
@@ -643,6 +825,13 @@ def compute_sectionieepa_duty(
                 len(applicable_measures),
                 [(m.get("heading"), m.get("country_iso2")) for m in applicable_measures],
             )
+    logger.info(
+        "SectionIEEPA evaluated measures in %.3fs (loaded=%s applicable=%s excluded=%s)",
+        time.perf_counter() - eval_start,
+        len(getattr(evaluator, "measures", []) or []),
+        len(applicable_measures),
+        len(excluded_measures),
+    )
 
     steel_share = _extract_share(measurements, "steel_percentage")
     aluminum_share = _extract_share(measurements, "aluminum_percentage")
@@ -656,6 +845,8 @@ def compute_sectionieepa_duty(
             base_rate_decimal = Decimal(str(base_duty_rate_percent))
         except Exception:
             base_rate_decimal = None
+
+    scoring_start = time.perf_counter()
 
     def _taxable_share(heading: str) -> Decimal:
         if not _is_partial_ieepa_heading(heading):
@@ -689,6 +880,13 @@ def compute_sectionieepa_duty(
         measure_with_rate = dict(measure)
         measure_with_rate["ad_valorem_rate"] = rate
         rated_measures.append(measure_with_rate)
+    logger.info(
+        "SectionIEEPA scoring measures in %.3fs applicable=%s rated=%s zero=%s",
+        time.perf_counter() - scoring_start,
+        len(applicable_measures),
+        len(rated_measures),
+        len(zero_rate_matches),
+    )
 
     offset_heading_hits: set[str] = set()
 
@@ -721,6 +919,10 @@ def compute_sectionieepa_duty(
                 "No active Section IEEPA measures matched the provided HTS number on the given entry date."
             )
         notes.extend(constraint_notes)
+        logger.info(
+            "SectionIEEPA returning without rated measures in %.3fs",
+            time.perf_counter() - start_time,
+        )
         return SectionIEEPAComputation(
             module_id="ieepa",
             module_name="Section IEEPA Derivative Tariffs",
@@ -739,6 +941,8 @@ def compute_sectionieepa_duty(
             return Decimal("0")
         share = _taxable_share(heading)
         return (import_value_decimal * share * rate) / Decimal("100")
+
+    ch99_start = time.perf_counter()
 
     ch99_list: List[SectionIEEPACh99] = []
     for m in rated_measures:
@@ -774,6 +978,11 @@ def compute_sectionieepa_duty(
                     is_potential=bool(measure.get("is_potential")),
                 )
             )
+    logger.info(
+        "SectionIEEPA build ch99 list in %.3fs entries=%s",
+        time.perf_counter() - ch99_start,
+        len(ch99_list),
+    )
 
     def _format_rate(rate: Decimal) -> str:
         normalized = rate.normalize()
@@ -797,7 +1006,13 @@ def compute_sectionieepa_duty(
             )
     notes.extend(constraint_notes)
 
+    amount_start = time.perf_counter()
     amount = sum((entry.amount for entry in ch99_list), Decimal("0"))
+    logger.info(
+        "SectionIEEPA amount computed in %.3fs entries=%s",
+        time.perf_counter() - amount_start,
+        len(ch99_list),
+    )
 
     if import_value_decimal is not None and import_value_decimal != 0:
         effective_rate = (amount / import_value_decimal) * Decimal("100")
@@ -806,6 +1021,11 @@ def compute_sectionieepa_duty(
         normalized_total = total_rate.normalize()
         rate_display = f"{normalized_total}%"
 
+    logger.info(
+        "SectionIEEPA completed in %.3fs rated_measures=%s",
+        time.perf_counter() - start_time,
+        len(rated_measures),
+    )
     return SectionIEEPAComputation(
         module_id="ieepa",
         module_name="Section IEEPA Derivative Tariffs",

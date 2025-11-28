@@ -1,0 +1,813 @@
+DEBUG:asyncio:Using selector: KqueueSelector
+INFO:     Started server process [13111]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:simulator.app:simulate_tariff start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.app:HTS cache refreshed size=49873 duration=14.366s
+INFO:simulator.app:simulate_tariff fetched HTS record in 14.371s (cache)
+INFO:simulator.app:simulate_tariff basic duty computed in 0.031s
+INFO:simulator.section301_rate:Section301 computation start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.sectionieepa_rate:SectionIEEPA computation start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.section301_rate:Section301 skipped for non-CN origin in 0.000s
+INFO:simulator.section232_rate:Section232 computation start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.app:simulate_tariff section301 computed in 0.000s
+INFO:simulator.sectionieepa_rate:SectionIEEPA global cache check in 1.238s
+INFO:simulator.section232_rate:Section232 evaluated measures in 3.879s (loaded=9 applicable=2 excluded=0)
+INFO:simulator.section232_rate:Section232 returning without rated measures in 3.880s
+INFO:simulator.app:simulate_tariff section232 computed in 3.880s
+DEBUG:simulator.sectionieepa_rate:Section IEEPA _load_measures country=AF entry_date=2025-10-20 raw=35 filtered=35
+INFO:simulator.sectionieepa_rate:IEEPA _load_measures finished in 0.698s country=AF entry=2025-10-20 count=35
+INFO:simulator.sectionieepa_rate:IEEPA measure_covers matched measure_id=413 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.20 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.20 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.21 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.21 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.22 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.22 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.33 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.33 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.44 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.44 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.45 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.45 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.54 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.54 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.55 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.55 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.01 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.01 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.02 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.02 duration=0.000s
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=454 duration=0.246s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=455 duration=0.246s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=456 duration=0.247s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=460 duration=0.250s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=461 duration=0.246s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA measure_covers excluded measure_id=411 duration=1.243s exclusions=2
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.32 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.02 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.03 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.08 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.09 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=419 duration=0.246s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.07 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.02 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.03 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.04 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.78.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.02 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.03 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.04 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.05 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.06 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.07 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.30 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.31 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.33 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=458 duration=0.248s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.02.75 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.34 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.02.01 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=468 duration=0.279s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.13 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.14 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=473 duration=0.246s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.21 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=474 duration=0.246s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.22 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.23 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.20 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.20 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.21 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.21 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.22 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.22 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.33 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.33 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.44 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.44 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.45 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.45 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.54 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.54 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.55 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.55 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.01 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.01 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.02 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.02 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.01.26 country=AF row_country=CA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.01.26 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.01.27 country=AF row_country=MX (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.01.27 duration=0.000s
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=479 duration=0.246s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=480 duration=0.246s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.03 country=AF row_country=DZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.03 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.04 country=AF row_country=AO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.04 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.05 country=AF row_country=BD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.05 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.06 country=AF row_country=BO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.06 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.07 country=AF row_country=BA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.07 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.08 country=AF row_country=BW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.08 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.09 country=AF row_country=BR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.09 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.10 country=AF row_country=BN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.10 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.11 country=AF row_country=KH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.11 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.12 country=AF row_country=CM (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.12 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.13 country=AF row_country=TD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.13 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.14 country=AF row_country=CR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.14 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.15 country=AF row_country=CI (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.15 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.16 country=AF row_country=CD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.16 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.17 country=AF row_country=EC (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.17 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.18 country=AF row_country=GQ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.18 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.19 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.19 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.20 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.20 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.21 country=AF row_country=FK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.21 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.22 country=AF row_country=FJ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.22 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.23 country=AF row_country=GH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.23 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.24 country=AF row_country=GY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.24 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.25 country=AF row_country=IS (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.25 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.26 country=AF row_country=IN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.26 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.27 country=AF row_country=ID (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.27 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.28 country=AF row_country=IQ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.28 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.29 country=AF row_country=IL (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.29 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.30 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.30 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.31 country=AF row_country=JO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.31 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.32 country=AF row_country=KZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.32 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.33 country=AF row_country=LA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.33 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.34 country=AF row_country=LS (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.34 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.35 country=AF row_country=LY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.35 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.36 country=AF row_country=LI (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.36 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.37 country=AF row_country=MG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.37 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.38 country=AF row_country=MW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.38 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.39 country=AF row_country=MY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.39 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.40 country=AF row_country=MU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.40 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.41 country=AF row_country=MD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.41 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.42 country=AF row_country=MZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.42 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.43 country=AF row_country=MM (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.43 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.44 country=AF row_country=NA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.44 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.45 country=AF row_country=NR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.45 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.46 country=AF row_country=NZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.46 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.47 country=AF row_country=NI (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.47 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.48 country=AF row_country=NG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.48 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.49 country=AF row_country=MK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.49 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.50 country=AF row_country=NO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.50 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.51 country=AF row_country=PK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.51 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.52 country=AF row_country=PG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.52 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.53 country=AF row_country=PH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.53 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.54 country=AF row_country=RS (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.54 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.55 country=AF row_country=ZA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.55 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.56 country=AF row_country=KR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.56 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.57 country=AF row_country=LK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.57 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.58 country=AF row_country=CH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.58 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.59 country=AF row_country=SY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.59 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.60 country=AF row_country=TW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.60 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.61 country=AF row_country=TH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.61 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.62 country=AF row_country=TT (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.62 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.63 country=AF row_country=TN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.63 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.64 country=AF row_country=TR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.64 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.65 country=AF row_country=UG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.65 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.66 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.66 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.67 country=AF row_country=VU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.67 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.68 country=AF row_country=VE (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.68 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.69 country=AF row_country=VN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.69 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.70 country=AF row_country=ZM (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.70 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.71 country=AF row_country=ZW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.71 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.72 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.72 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.73 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.73 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.74 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.74 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.76 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.76 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.77 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.77 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.01 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.01 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.02 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.02 duration=0.000s
+INFO:simulator.sectionieepa_rate:IEEPA measure_covers excluded measure_id=476 duration=0.499s exclusions=2
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.28 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.29 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA applicable_measures count=1 items=[('9903.02.78', None)]
+INFO:simulator.sectionieepa_rate:SectionIEEPA evaluated measures in 8.052s (loaded=35 applicable=1 excluded=2)
+INFO:simulator.sectionieepa_rate:SectionIEEPA scoring measures in 0.000s applicable=1 rated=0 zero=1
+INFO:simulator.sectionieepa_rate:SectionIEEPA returning without rated measures in 8.052s
+INFO:simulator.app:simulate_tariff sectionieepa computed in 8.053s
+INFO:simulator.app:simulate_tariff payload encrypted in 0.014s
+INFO:simulator.app:simulate_tariff completed in 22.477s
+[BasicRateComputation(case_id='GENERAL_RATE', calculated=True, amount=Decimal('6400.000'), currency='USD', formula='0.064 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('100000')}, notes=[]), BasicRateComputation(case_id='SPECIAL_RATE_FREE', calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A (Generalized System of Preferences)."])]
+{'request': {'hts_code': '2106.90.99.98', 'country_of_origin': 'AF', 'entry_date': '2025-10-20', 'date_of_landing': '2025-10-18', 'import_value': '100000.0', 'measurements': {'usd': '100000', 'steel_percentage': '20', 'aluminum_percentage': '20'}, 'melt_pour_origin_iso2': None}, 'modules': [{'module_id': '301', 'module_name': 'Section 301 Tariffs', 'ch99_list': [], 'notes': ['Section 301 tariffs currently target products of China only.'], 'applicable': False, 'amount': '0', 'currency': 'USD', 'rate': None}, {'module_id': '232', 'module_name': 'Section 232 Tariffs', 'ch99_list': [], 'notes': ['No active Section 232 measures matched the provided HTS number on the given entry date.', 'Section 232 headings matched but have zero ad valorem rate: 9903.81.91, 9903.85.08.'], 'applicable': False, 'amount': '0', 'currency': 'USD', 'rate': None}, {'module_id': 'ieepa', 'module_name': 'Section IEEPA Derivative Tariffs', 'ch99_list': [{'ch99_id': '9903.02.78', 'alias': '9903.02.78', 'general_rate': '0', 'ch99_description': 'Articles the product of any country, as provided for in subdivision (v)(iii)(b) of U.S. note 2 to this subchapter', 'amount': '0', 'is_potential': False}], 'notes': ['Section IEEPA headings matched but have zero ad valorem rate: 9903.02.78'], 'applicable': True, 'amount': '0', 'currency': 'USD', 'rate': '0%'}], 'meta': {'currency': 'USD', 'rate_type': 'ad_valorem_fraction', 'evaluated_at': '2025-11-29T01:36:42.466731+08:00', 'disclaimer': 'Rates and applicability depend on full legal context and notes; confirm before filing.', 'calculated': True, 'basic_duty_amount': '6400.000', 'formula': '0.064 * usd', 'required_units': ['usd'], 'provided_inputs': {'usd': '100000'}, 'notes': []}, 'basic_rate_computations': [{'case_id': 'GENERAL_RATE', 'calculated': True, 'amount': '6400.000', 'currency': 'USD', 'formula': '0.064 * usd', 'required_units': ['usd'], 'provided_inputs': {'usd': '100000'}, 'notes': []}, {'case_id': 'SPECIAL_RATE_FREE', 'calculated': False, 'amount': '0', 'currency': 'USD', 'formula': None, 'required_units': [], 'provided_inputs': {}, 'notes': ["Special rate 'Free' applies for country AF; qualifying program codes: A (Generalized System of Preferences)."]}]}
+INFO:     127.0.0.1:60495 - "POST /simulate HTTP/1.1" 200 OK
+INFO:simulator.app:simulate_tariff start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.app:simulate_tariff fetched HTS record in 0.000s (cache)
+INFO:simulator.app:simulate_tariff basic duty computed in 0.001s
+INFO:simulator.section301_rate:Section301 computation start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.section301_rate:Section301 skipped for non-CN origin in 0.000s
+INFO:simulator.sectionieepa_rate:SectionIEEPA computation start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.app:simulate_tariff section301 computed in 0.000s
+INFO:simulator.section232_rate:Section232 computation start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.section232_rate:Section232 evaluated measures in 1.758s (loaded=9 applicable=2 excluded=0)
+INFO:simulator.section232_rate:Section232 returning without rated measures in 1.759s
+INFO:simulator.app:simulate_tariff section232 computed in 1.759s
+INFO:simulator.sectionieepa_rate:SectionIEEPA global cache check in 0.000s
+INFO:simulator.sectionieepa_rate:IEEPA _load_measures cache hit country=AF duration=0.000s
+DEBUG:simulator.sectionieepa_rate:Section IEEPA _load_measures country=AF entry_date=2025-10-20 raw=35 filtered=35
+INFO:simulator.sectionieepa_rate:IEEPA _load_measures finished in 0.001s country=AF entry=2025-10-20 count=35
+INFO:simulator.sectionieepa_rate:IEEPA measure_covers matched measure_id=413 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.20 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.20 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.21 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.21 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.22 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.22 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.33 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.33 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.44 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.44 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.45 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.45 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.54 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.54 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.55 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.55 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.01 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.01 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.02 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.02 duration=0.000s
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=454 duration=0.750s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=455 duration=0.339s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=456 duration=0.350s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=460 duration=0.302s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=461 duration=0.292s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA measure_covers excluded measure_id=411 duration=2.046s exclusions=2
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.32 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.02 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.03 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.08 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.09 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=419 duration=0.313s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.07 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.02 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.03 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.04 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.78.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.02 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.03 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.04 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.05 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.06 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.07 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.30 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.31 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.33 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=458 duration=0.325s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.02.75 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.34 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.02.01 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=468 duration=0.322s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.13 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.14 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=473 duration=0.335s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.21 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=474 duration=0.471s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.22 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.23 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.20 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.20 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.21 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.21 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.22 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.22 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.33 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.33 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.44 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.44 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.45 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.45 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.54 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.54 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.55 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.55 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.01 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.01 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.02 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.02 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.01.26 country=AF row_country=CA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.01.26 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.01.27 country=AF row_country=MX (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.01.27 duration=0.000s
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=479 duration=0.331s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=480 duration=0.330s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.03 country=AF row_country=DZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.03 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.04 country=AF row_country=AO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.04 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.05 country=AF row_country=BD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.05 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.06 country=AF row_country=BO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.06 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.07 country=AF row_country=BA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.07 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.08 country=AF row_country=BW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.08 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.09 country=AF row_country=BR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.09 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.10 country=AF row_country=BN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.10 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.11 country=AF row_country=KH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.11 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.12 country=AF row_country=CM (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.12 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.13 country=AF row_country=TD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.13 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.14 country=AF row_country=CR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.14 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.15 country=AF row_country=CI (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.15 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.16 country=AF row_country=CD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.16 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.17 country=AF row_country=EC (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.17 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.18 country=AF row_country=GQ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.18 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.19 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.19 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.20 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.20 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.21 country=AF row_country=FK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.21 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.22 country=AF row_country=FJ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.22 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.23 country=AF row_country=GH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.23 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.24 country=AF row_country=GY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.24 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.25 country=AF row_country=IS (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.25 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.26 country=AF row_country=IN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.26 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.27 country=AF row_country=ID (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.27 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.28 country=AF row_country=IQ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.28 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.29 country=AF row_country=IL (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.29 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.30 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.30 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.31 country=AF row_country=JO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.31 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.32 country=AF row_country=KZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.32 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.33 country=AF row_country=LA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.33 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.34 country=AF row_country=LS (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.34 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.35 country=AF row_country=LY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.35 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.36 country=AF row_country=LI (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.36 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.37 country=AF row_country=MG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.37 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.38 country=AF row_country=MW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.38 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.39 country=AF row_country=MY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.39 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.40 country=AF row_country=MU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.40 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.41 country=AF row_country=MD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.41 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.42 country=AF row_country=MZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.42 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.43 country=AF row_country=MM (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.43 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.44 country=AF row_country=NA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.44 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.45 country=AF row_country=NR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.45 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.46 country=AF row_country=NZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.46 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.47 country=AF row_country=NI (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.47 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.48 country=AF row_country=NG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.48 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.49 country=AF row_country=MK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.49 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.50 country=AF row_country=NO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.50 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.51 country=AF row_country=PK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.51 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.52 country=AF row_country=PG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.52 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.53 country=AF row_country=PH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.53 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.54 country=AF row_country=RS (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.54 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.55 country=AF row_country=ZA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.55 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.56 country=AF row_country=KR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.56 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.57 country=AF row_country=LK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.57 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.58 country=AF row_country=CH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.58 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.59 country=AF row_country=SY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.59 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.60 country=AF row_country=TW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.60 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.61 country=AF row_country=TH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.61 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.62 country=AF row_country=TT (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.62 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.63 country=AF row_country=TN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.63 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.64 country=AF row_country=TR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.64 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.65 country=AF row_country=UG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.65 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.66 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.66 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.67 country=AF row_country=VU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.67 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.68 country=AF row_country=VE (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.68 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.69 country=AF row_country=VN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.69 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.70 country=AF row_country=ZM (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.70 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.71 country=AF row_country=ZW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.71 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.72 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.72 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.73 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.73 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.74 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.74 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.76 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.76 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.77 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.77 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.01 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.01 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.02 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.02 duration=0.000s
+INFO:simulator.sectionieepa_rate:IEEPA measure_covers excluded measure_id=476 duration=0.670s exclusions=2
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.28 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.29 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA applicable_measures count=1 items=[('9903.02.78', None)]
+INFO:simulator.sectionieepa_rate:SectionIEEPA evaluated measures in 7.204s (loaded=35 applicable=1 excluded=2)
+INFO:simulator.sectionieepa_rate:SectionIEEPA scoring measures in 0.000s applicable=1 rated=0 zero=1
+INFO:simulator.sectionieepa_rate:SectionIEEPA returning without rated measures in 7.205s
+INFO:simulator.app:simulate_tariff sectionieepa computed in 7.206s
+INFO:simulator.app:simulate_tariff payload encrypted in 0.001s
+INFO:simulator.app:simulate_tariff completed in 7.212s
+[BasicRateComputation(case_id='GENERAL_RATE', calculated=True, amount=Decimal('6400.000'), currency='USD', formula='0.064 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('100000')}, notes=[]), BasicRateComputation(case_id='SPECIAL_RATE_FREE', calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A (Generalized System of Preferences)."])]
+{'request': {'hts_code': '2106.90.99.98', 'country_of_origin': 'AF', 'entry_date': '2025-10-20', 'date_of_landing': '2025-10-18', 'import_value': '100000.0', 'measurements': {'usd': '100000', 'steel_percentage': '20', 'aluminum_percentage': '20'}, 'melt_pour_origin_iso2': None}, 'modules': [{'module_id': '301', 'module_name': 'Section 301 Tariffs', 'ch99_list': [], 'notes': ['Section 301 tariffs currently target products of China only.'], 'applicable': False, 'amount': '0', 'currency': 'USD', 'rate': None}, {'module_id': '232', 'module_name': 'Section 232 Tariffs', 'ch99_list': [], 'notes': ['No active Section 232 measures matched the provided HTS number on the given entry date.', 'Section 232 headings matched but have zero ad valorem rate: 9903.81.91, 9903.85.08.'], 'applicable': False, 'amount': '0', 'currency': 'USD', 'rate': None}, {'module_id': 'ieepa', 'module_name': 'Section IEEPA Derivative Tariffs', 'ch99_list': [{'ch99_id': '9903.02.78', 'alias': '9903.02.78', 'general_rate': '0', 'ch99_description': 'Articles the product of any country, as provided for in subdivision (v)(iii)(b) of U.S. note 2 to this subchapter', 'amount': '0', 'is_potential': False}], 'notes': ['Section IEEPA headings matched but have zero ad valorem rate: 9903.02.78'], 'applicable': True, 'amount': '0', 'currency': 'USD', 'rate': '0%'}], 'meta': {'currency': 'USD', 'rate_type': 'ad_valorem_fraction', 'evaluated_at': '2025-11-29T01:37:06.802787+08:00', 'disclaimer': 'Rates and applicability depend on full legal context and notes; confirm before filing.', 'calculated': True, 'basic_duty_amount': '6400.000', 'formula': '0.064 * usd', 'required_units': ['usd'], 'provided_inputs': {'usd': '100000'}, 'notes': []}, 'basic_rate_computations': [{'case_id': 'GENERAL_RATE', 'calculated': True, 'amount': '6400.000', 'currency': 'USD', 'formula': '0.064 * usd', 'required_units': ['usd'], 'provided_inputs': {'usd': '100000'}, 'notes': []}, {'case_id': 'SPECIAL_RATE_FREE', 'calculated': False, 'amount': '0', 'currency': 'USD', 'formula': None, 'required_units': [], 'provided_inputs': {}, 'notes': ["Special rate 'Free' applies for country AF; qualifying program codes: A (Generalized System of Preferences)."]}]}
+INFO:     127.0.0.1:60679 - "POST /simulate HTTP/1.1" 200 OK
+INFO:simulator.app:simulate_tariff start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.app:simulate_tariff fetched HTS record in 0.000s (cache)
+INFO:simulator.app:simulate_tariff basic duty computed in 0.001s
+INFO:simulator.section301_rate:Section301 computation start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.sectionieepa_rate:SectionIEEPA computation start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.section301_rate:Section301 skipped for non-CN origin in 0.000s
+INFO:simulator.section232_rate:Section232 computation start hts=2106.90.99.98 country=AF entry=2025-10-20
+INFO:simulator.app:simulate_tariff section301 computed in 0.001s
+INFO:simulator.section232_rate:Section232 evaluated measures in 1.835s (loaded=9 applicable=2 excluded=0)
+INFO:simulator.sectionieepa_rate:SectionIEEPA global cache check in 0.000s
+INFO:simulator.section232_rate:Section232 returning without rated measures in 1.836s
+INFO:simulator.sectionieepa_rate:IEEPA _load_measures cache hit country=AF duration=0.000s
+DEBUG:simulator.sectionieepa_rate:Section IEEPA _load_measures country=AF entry_date=2025-10-20 raw=35 filtered=35
+INFO:simulator.app:simulate_tariff section232 computed in 1.837s
+INFO:simulator.sectionieepa_rate:IEEPA _load_measures finished in 0.001s country=AF entry=2025-10-20 count=35
+INFO:simulator.sectionieepa_rate:IEEPA measure_covers matched measure_id=413 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.20 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.20 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.21 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.21 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.22 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.22 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.33 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.33 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.44 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.44 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.45 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.45 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.54 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.54 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.55 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.55 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.01 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.01 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.02 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.02 duration=0.000s
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=454 duration=0.558s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=455 duration=0.248s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=456 duration=0.265s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=460 duration=0.249s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=461 duration=0.248s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA measure_covers excluded measure_id=411 duration=1.581s exclusions=2
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.32 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.02 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.03 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.08 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.09 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=419 duration=0.248s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.74.07 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.02 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.03 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.76.04 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.78.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.01 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.02 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.03 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.04 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.05 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.06 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.94.07 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.30 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.31 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.33 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=458 duration=0.248s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.02.75 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.34 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.02.01 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=468 duration=0.247s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.13 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.14 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=473 duration=0.248s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.21 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=474 duration=0.249s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.22 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.23 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.20 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.20 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.21 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.21 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.76.22 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.76.22 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.33 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.33 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.44 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.44 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.45 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.45 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.54 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.54 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.94.55 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.94.55 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.01 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.01 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.02 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.02 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.01.26 country=AF row_country=CA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.01.26 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.01.27 country=AF row_country=MX (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.01.27 duration=0.000s
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=479 duration=0.300s include=0 exclude=0
+INFO:simulator.sectionieepa_rate:IEEPA _load_scopes measure_id=480 duration=0.309s include=0 exclude=0
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.03 country=AF row_country=DZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.03 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.04 country=AF row_country=AO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.04 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.05 country=AF row_country=BD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.05 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.06 country=AF row_country=BO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.06 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.07 country=AF row_country=BA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.07 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.08 country=AF row_country=BW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.08 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.09 country=AF row_country=BR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.09 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.10 country=AF row_country=BN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.10 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.11 country=AF row_country=KH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.11 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.12 country=AF row_country=CM (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.12 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.13 country=AF row_country=TD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.13 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.14 country=AF row_country=CR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.14 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.15 country=AF row_country=CI (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.15 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.16 country=AF row_country=CD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.16 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.17 country=AF row_country=EC (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.17 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.18 country=AF row_country=GQ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.18 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.19 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.19 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.20 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.20 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.21 country=AF row_country=FK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.21 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.22 country=AF row_country=FJ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.22 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.23 country=AF row_country=GH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.23 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.24 country=AF row_country=GY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.24 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.25 country=AF row_country=IS (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.25 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.26 country=AF row_country=IN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.26 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.27 country=AF row_country=ID (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.27 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.28 country=AF row_country=IQ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.28 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.29 country=AF row_country=IL (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.29 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.30 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.30 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.31 country=AF row_country=JO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.31 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.32 country=AF row_country=KZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.32 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.33 country=AF row_country=LA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.33 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.34 country=AF row_country=LS (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.34 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.35 country=AF row_country=LY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.35 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.36 country=AF row_country=LI (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.36 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.37 country=AF row_country=MG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.37 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.38 country=AF row_country=MW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.38 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.39 country=AF row_country=MY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.39 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.40 country=AF row_country=MU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.40 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.41 country=AF row_country=MD (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.41 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.42 country=AF row_country=MZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.42 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.43 country=AF row_country=MM (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.43 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.44 country=AF row_country=NA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.44 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.45 country=AF row_country=NR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.45 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.46 country=AF row_country=NZ (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.46 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.47 country=AF row_country=NI (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.47 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.48 country=AF row_country=NG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.48 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.49 country=AF row_country=MK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.49 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.50 country=AF row_country=NO (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.50 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.51 country=AF row_country=PK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.51 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.52 country=AF row_country=PG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.52 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.53 country=AF row_country=PH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.53 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.54 country=AF row_country=RS (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.54 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.55 country=AF row_country=ZA (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.55 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.56 country=AF row_country=KR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.56 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.57 country=AF row_country=LK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.57 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.58 country=AF row_country=CH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.58 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.59 country=AF row_country=SY (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.59 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.60 country=AF row_country=TW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.60 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.61 country=AF row_country=TH (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.61 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.62 country=AF row_country=TT (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.62 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.63 country=AF row_country=TN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.63 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.64 country=AF row_country=TR (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.64 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.65 country=AF row_country=UG (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.65 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.66 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.66 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.67 country=AF row_country=VU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.67 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.68 country=AF row_country=VE (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.68 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.69 country=AF row_country=VN (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.69 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.70 country=AF row_country=ZM (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.70 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.71 country=AF row_country=ZW (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.71 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.72 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.72 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.73 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.73 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.74 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.74 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.76 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.76 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.02.77 country=AF row_country=EU (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.02.77 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.01 country=AF row_country=UK (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.01 duration=0.000s
+DEBUG:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading filtered by country heading=9903.96.02 country=AF row_country=JP (cache)
+INFO:simulator.sectionieepa_rate:IEEPA _measure_id_for_heading cache filtered heading=9903.96.02 duration=0.000s
+INFO:simulator.sectionieepa_rate:IEEPA measure_covers excluded measure_id=476 duration=0.621s exclusions=2
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.28 country=None exclusions=[]
+DEBUG:simulator.sectionieepa_rate:IEEPA measure no match heading=9903.01.29 country=None exclusions=[]
+INFO:simulator.sectionieepa_rate:IEEPA applicable_measures count=1 items=[('9903.02.78', None)]
+INFO:simulator.sectionieepa_rate:SectionIEEPA evaluated measures in 5.531s (loaded=35 applicable=1 excluded=2)
+INFO:simulator.sectionieepa_rate:SectionIEEPA scoring measures in 0.000s applicable=1 rated=0 zero=1
+INFO:simulator.sectionieepa_rate:SectionIEEPA returning without rated measures in 5.533s
+INFO:simulator.app:simulate_tariff sectionieepa computed in 5.533s
+INFO:simulator.app:simulate_tariff payload encrypted in 0.000s
+INFO:simulator.app:simulate_tariff completed in 5.537s
+[BasicRateComputation(case_id='GENERAL_RATE', calculated=True, amount=Decimal('6400.000'), currency='USD', formula='0.064 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('100000')}, notes=[]), BasicRateComputation(case_id='SPECIAL_RATE_FREE', calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country AF; qualifying program codes: A (Generalized System of Preferences)."])]
+{'request': {'hts_code': '2106.90.99.98', 'country_of_origin': 'AF', 'entry_date': '2025-10-20', 'date_of_landing': '2025-10-18', 'import_value': '100000.0', 'measurements': {'usd': '100000', 'steel_percentage': '20', 'aluminum_percentage': '20'}, 'melt_pour_origin_iso2': None}, 'modules': [{'module_id': '301', 'module_name': 'Section 301 Tariffs', 'ch99_list': [], 'notes': ['Section 301 tariffs currently target products of China only.'], 'applicable': False, 'amount': '0', 'currency': 'USD', 'rate': None}, {'module_id': '232', 'module_name': 'Section 232 Tariffs', 'ch99_list': [], 'notes': ['No active Section 232 measures matched the provided HTS number on the given entry date.', 'Section 232 headings matched but have zero ad valorem rate: 9903.81.91, 9903.85.08.'], 'applicable': False, 'amount': '0', 'currency': 'USD', 'rate': None}, {'module_id': 'ieepa', 'module_name': 'Section IEEPA Derivative Tariffs', 'ch99_list': [{'ch99_id': '9903.02.78', 'alias': '9903.02.78', 'general_rate': '0', 'ch99_description': 'Articles the product of any country, as provided for in subdivision (v)(iii)(b) of U.S. note 2 to this subchapter', 'amount': '0', 'is_potential': False}], 'notes': ['Section IEEPA headings matched but have zero ad valorem rate: 9903.02.78'], 'applicable': True, 'amount': '0', 'currency': 'USD', 'rate': '0%'}], 'meta': {'currency': 'USD', 'rate_type': 'ad_valorem_fraction', 'evaluated_at': '2025-11-29T01:37:31.930865+08:00', 'disclaimer': 'Rates and applicability depend on full legal context and notes; confirm before filing.', 'calculated': True, 'basic_duty_amount': '6400.000', 'formula': '0.064 * usd', 'required_units': ['usd'], 'provided_inputs': {'usd': '100000'}, 'notes': []}, 'basic_rate_computations': [{'case_id': 'GENERAL_RATE', 'calculated': True, 'amount': '6400.000', 'currency': 'USD', 'formula': '0.064 * usd', 'required_units': ['usd'], 'provided_inputs': {'usd': '100000'}, 'notes': []}, {'case_id': 'SPECIAL_RATE_FREE', 'calculated': False, 'amount': '0', 'currency': 'USD', 'formula': None, 'required_units': [], 'provided_inputs': {}, 'notes': ["Special rate 'Free' applies for country AF; qualifying program codes: A (Generalized System of Preferences)."]}]}
+INFO:     127.0.0.1:60767 - "POST /simulate HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [13111]
