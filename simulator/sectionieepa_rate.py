@@ -170,6 +170,12 @@ _ieepa_cache = TheineCache(32)
 
 GLOBAL_MEASURE_CACHE_TTL_SECONDS = 24 * 60 * 60
 _global_measure_cache: Optional[Dict[str, object]] = None
+GLOBAL_SCOPE_CACHE_TTL_SECONDS = 24 * 60 * 60
+if TheineCache is not None:
+    _global_scope_cache = TheineCache(256)
+else:
+    _global_scope_cache = None
+    _global_scope_cache_store: Dict[int, Tuple[float, Dict[str, List[Dict]]]] = {}
 
 
 def _coerce_decimal(value: Optional[object]) -> Optional[Decimal]:
@@ -233,6 +239,36 @@ def _cache_set(key: str, value: Dict) -> None:
             return
         return
     _ieepa_cache_store[key] = (time.monotonic() + IEEPA_CACHE_TTL_SECONDS, value)
+
+
+def _scope_cache_get(measure_id: int) -> Optional[Dict[str, List[Dict]]]:
+    if _global_scope_cache is not None:
+        try:
+            value, ok = _global_scope_cache.get(measure_id)  # type: ignore[call-arg]
+            return value if ok else None
+        except Exception:
+            return None
+    entry = _global_scope_cache_store.get(measure_id)
+    if not entry:
+        return None
+    expires_at, value = entry
+    if time.monotonic() > expires_at:
+        _global_scope_cache_store.pop(measure_id, None)
+        return None
+    return value
+
+
+def _scope_cache_set(measure_id: int, value: Dict[str, List[Dict]]) -> None:
+    if _global_scope_cache is not None:
+        try:
+            _global_scope_cache.set(measure_id, value, ttl=timedelta(seconds=GLOBAL_SCOPE_CACHE_TTL_SECONDS))  # type: ignore[call-arg]
+        except Exception:
+            return
+        return
+    _global_scope_cache_store[measure_id] = (
+        time.monotonic() + GLOBAL_SCOPE_CACHE_TTL_SECONDS,
+        value,
+    )
 
 
 def _refresh_global_measure_cache(conn) -> Dict[str, object]:
@@ -486,6 +522,17 @@ class SectionIEEPAEvaluator:
         if measure_id in self.scope_cache:
             return self.scope_cache[measure_id]
         scope_start = time.perf_counter()
+        global_cached = _scope_cache_get(measure_id)
+        if global_cached is not None:
+            self.scope_cache[measure_id] = global_cached
+            logger.info(
+                "IEEPA _load_scopes measure_id=%s duration=%.3fs include=%s exclude=%s (cache)",
+                measure_id,
+                time.perf_counter() - scope_start,
+                len(global_cached.get("include", [])),
+                len(global_cached.get("exclude", [])),
+            )
+            return global_cached
         query = """
             SELECT
                 map.relation,
@@ -508,6 +555,7 @@ class SectionIEEPAEvaluator:
                 continue
             grouped[row["relation"]].append(row)
         self.scope_cache[measure_id] = grouped
+        _scope_cache_set(measure_id, grouped)
         logger.info(
             "IEEPA _load_scopes measure_id=%s duration=%.3fs include=%s exclude=%s",
             measure_id,
@@ -539,18 +587,18 @@ class SectionIEEPAEvaluator:
                     time.perf_counter() - lookup_start,
                 )
                 return cached_row["id"]
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(
-                    "IEEPA _measure_id_for_heading filtered by country heading=%s country=%s row_country=%s (cache)",
-                    heading,
-                    self.country,
-                    cached_row.get("country_iso2"),
-                )
-            logger.info(
-                "IEEPA _measure_id_for_heading cache filtered heading=%s duration=%.3fs",
-                heading,
-                time.perf_counter() - lookup_start,
-            )
+            # if logger.isEnabledFor(logging.DEBUG):
+            #     logger.debug(
+            #         "IEEPA _measure_id_for_heading filtered by country heading=%s country=%s row_country=%s (cache)",
+            #         heading,
+            #         self.country,
+            #         cached_row.get("country_iso2"),
+            #     )
+            # logger.info(
+            #     "IEEPA _measure_id_for_heading cache filtered heading=%s duration=%.3fs",
+            #     heading,
+            #     time.perf_counter() - lookup_start,
+            # )
             return None
         if cache_used:
             logger.info(
@@ -812,26 +860,26 @@ def compute_sectionieepa_duty(
                 applicable_measures.append(measure)
             elif exclusions:
                 excluded_measures.append((measure, exclusions))
-            elif logger.isEnabledFor(logging.DEBUG):
-                logger.debug(
-                    "IEEPA measure no match heading=%s country=%s exclusions=%s",
-                    measure.get("heading"),
-                    measure.get("country_iso2"),
-                    exclusions,
-                )
-        if logger.isEnabledFor(logging.INFO):
-            logger.info(
-                "IEEPA applicable_measures count=%s items=%s",
-                len(applicable_measures),
-                [(m.get("heading"), m.get("country_iso2")) for m in applicable_measures],
-            )
-    logger.info(
-        "SectionIEEPA evaluated measures in %.3fs (loaded=%s applicable=%s excluded=%s)",
-        time.perf_counter() - eval_start,
-        len(getattr(evaluator, "measures", []) or []),
-        len(applicable_measures),
-        len(excluded_measures),
-    )
+            # elif logger.isEnabledFor(logging.DEBUG):
+                # logger.debug(
+                #     "IEEPA measure no match heading=%s country=%s exclusions=%s",
+                #     measure.get("heading"),
+                #     measure.get("country_iso2"),
+                #     exclusions,
+                # )
+        # if logger.isEnabledFor(logging.INFO):
+        #     logger.info(
+        #         "IEEPA applicable_measures count=%s items=%s",
+        #         len(applicable_measures),
+        #         [(m.get("heading"), m.get("country_iso2")) for m in applicable_measures],
+        #     )
+    # logger.info(
+    #     "SectionIEEPA evaluated measures in %.3fs (loaded=%s applicable=%s excluded=%s)",
+    #     time.perf_counter() - eval_start,
+    #     len(getattr(evaluator, "measures", []) or []),
+    #     len(applicable_measures),
+    #     len(excluded_measures),
+    # )
 
     steel_share = _extract_share(measurements, "steel_percentage")
     aluminum_share = _extract_share(measurements, "aluminum_percentage")
