@@ -282,6 +282,7 @@ def compute_section301_duty(
 
     rated_measures: List[Dict] = []
     zero_rate_matches: List[Dict] = []
+    seen_headings: set[str] = set()
 
     def _coerce_decimal(raw_value: Optional[object]) -> Optional[Decimal]:
         if raw_value is None:
@@ -295,6 +296,17 @@ def compute_section301_duty(
             return None
         return _coerce_decimal(raw_rate)
 
+    def _add_rated_measure(measure: Dict, rate: Decimal) -> None:
+        heading = measure.get("heading")
+        if not heading:
+            return
+        if heading in seen_headings:
+            return
+        measure_with_rate = dict(measure)
+        measure_with_rate["ad_valorem_rate"] = rate
+        rated_measures.append(measure_with_rate)
+        seen_headings.add(heading)
+
     import_value_decimal = _coerce_decimal(import_value)
 
     for measure in applicable_measures:
@@ -302,9 +314,7 @@ def compute_section301_duty(
         if rate is None or rate == 0:
             zero_rate_matches.append(measure)
             continue
-        measure_with_rate = dict(measure)
-        measure_with_rate["ad_valorem_rate"] = rate
-        rated_measures.append(measure_with_rate)
+        _add_rated_measure(measure, rate)
 
     offset_heading_hits: set[str] = set()
     for measure, exclusions in excluded_measures:
@@ -328,18 +338,19 @@ def compute_section301_duty(
 
         measure_with_rate = dict(measure)
         measure_with_rate["ad_valorem_rate"] = rate
-        rated_measures.append(measure_with_rate)
+        _add_rated_measure(measure_with_rate, rate)
 
         for heading in ref_exclusions:
             offset_heading_hits.add(heading)
             offset_measure = evaluator.heading_to_measure.get(heading, {})
-            rated_measures.append(
+            _add_rated_measure(
                 {
                     "heading": heading,
                     "alias": heading,
                     "ad_valorem_rate": -rate,
                     "description": offset_measure.get("description") or "",
-                }
+                },
+                -rate,
             )
 
     if not rated_measures:

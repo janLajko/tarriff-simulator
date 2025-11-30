@@ -26,7 +26,8 @@ pytestmark = [
     ),
 ]
 
-CSV_DIR = Path(__file__).parent
+# CSV_DIR = Path(__file__).parent
+CSV_DIR = Path(__file__).parent / "301"
 CSV_PATTERN = "99038815_*.csv"
 DEFAULT_ENTRY_DATE = date(2024, 7, 1)
 
