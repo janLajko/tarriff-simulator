@@ -1,20 +1,20 @@
-INFO:sectionieepa_agent:Processing heading 9903.01.01
+INFO:sectionieepa_agent:Processing heading 9903.01.24
 INFO:sectionieepa_agent:measure {
-  "except": ["9903.01.02", "9903.01.03", "9903.01.04", "9903.01.05"],
-  "include": ["note2(a)"],
+  "except": ["9903.01.21", "9903.01.22", "9903.01.23", "note2(w)"],
+  "include": ["note2(u)"],
   "effective_period": {
     "start_date": null,
     "end_date": null
   },
-  "country_iso2": "MX",
+  "country_iso2": null,
   "melt_pour_origin_iso2": null,
   "origin_exclude_iso2": [],
   "is_potential": false
 }
-INFO:sectionieepa_agent:Created measure 323 for heading 9903.01.01
-INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(a) (first path=['note', '2', 'a'])
-INFO:sectionieepa_agent:note(2)(a) For the purposes of heading 9903.01.01, products of Mexico, other than products described in headings 9903.01.02, 9903.01.03, 9903.01.04, 9903.01.05, 9903.76.01, 9903.76.02 or 9903.76.03 and other than products for personal use included in accompanied baggage of persons arriving in the United States, shall be subject to an additional 25% ad valorem rate of duty. Notwithstanding U.S. note 1 to this subchapter, all products of Mexico that are subject to the additional ad valorem rate of duty imposed by heading 9903.01.01 shall also be subject to the general rates of duty imposed on products of Mexico entered under subheadings in chapters 1 to 97 of the tariff schedule. The additional duties imposed by heading 9903.01.01 apply to products of Mexico including both goods of Mexico under the rules set forth in part 102, title 19 of the Code of Federal Regulations, as applicable, as well as goods for which Mexico was the last country of substantial transformation prior to importation into the United States. Products of Mexico that are eligible for special tariff treatment under general note 3(c)(i) to the tariff schedule, or that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional ad valorem rate of duty imposed by heading 9903.01.01. The additional duties imposed by heading 9903.01.01 shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection ("CBP"), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under heading 9802.00.80; and subheadings 9802.00.40, 9802.00.50, and 9802.00.60. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed (in Mexico), as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article assembled abroad (in Mexico), less the cost or value of such products of the United States, as described. Products of Mexico that are provided for in heading 9903.01.01 shall continue to be subject to antidumping, countervailing, or other duties, taxes, fees, exactions and charges that apply to such products, as well as to the additional ad valorem rate of duty imposed by heading 9903.01.01. Products of Mexico that are provided for in heading 9903.01.01 and that are otherwise eligible for the administrative exemption from duty and certain taxes at 19 U.S.C. 1321(a)(2)(C) - known as " de minimis " exemption - may continue to qualify for the exemption, but the de minimis exemption shall cease to be available for such articles upon notification by the Secretary of Commerce, in consultation with the Secretary of the Treasury, to the President that adequate systems are in place to fully and expediently process and collect tariff revenue applicable for covered articles otherwise eligible for the de minimis exemption.
-INFO:sectionieepa_agent:Querying LLM for notes note(2)(a)
+INFO:sectionieepa_agent:Created measure 335 for heading 9903.01.24
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(u) (first path=['note', '2', 'u'])
+INFO:sectionieepa_agent:note(2)(u) For the purposes of heading 9903.01.24, products of China and Hong Kong entered for consumption, or withdrawn from warehouse for consumption on or after 12:01 a.m., eastern standard time on March 4, 2025, other than products described in heading 9903.01.21, heading 9903.01.22, heading 9903.01.23, and other than products for personal use included in accompanied baggage of persons arriving in the United States, shall be subject to an additional 20% ad valorem rate of duty. Notwithstanding U.S. note 1 to this subchapter, all products of China and Hong Kong that are subject to the additional ad valorem (Compiler's Note: entered as written in notice) rate of duty imposed by heading 9903.01.24 shall also be subject to the general rates of duty imposed on products of China and Hong Kong entered under subheadings in chapters 1 to 97 of the tariff schedule. Products of China and Hong Kong that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99 shall be subject to the additional ad valorem rate of duty imposed by heading 9903.01.24. The additional duties imposed by heading 9903.01.24 shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection ("CBP"), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under heading 9802.00.80; and subheadings 9802.00.40, 9802.00.50, and 9802.00.60. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed (in China and Hong Kong), as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article assembled abroad (in China and Hong Kong), less the cost or value of such products of the United States, as described. Products of China and Hong Kong that are provided for in heading 9903.01.24 shall continue to be subject to antidumping, countervailing, or other duties, taxes, fees, exactions and charges that apply to such products, as well as to the additional ad valorem rate of duty imposed by heading 9903.01.24. Products of China and Hong Kong are not eligible for the administrative exemption from duty and certain taxes at 19 U.S.C. 1321(a)(2)(C)-known as ?? de minimis ?? exemption.
+INFO:sectionieepa_agent:Querying LLM for notes note(2)(u)
 INFO:sectionieepa_agent:message:You are a structured extractor for HTSUS Section ieepa notes.
 Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
 
@@ -102,11 +102,11 @@ Context (provided by caller):
 // context.note_labels → labels for each input block (in order)
 // context.primary_note_labels → subset that actually triggered extraction
 // context.supporting_note_labels → subdivisions referenced only to describe exclusions for the primaries
-{"country_iso2": "MX", "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.01"], "note_labels": ["note2(a)"], "primary_note_labels": ["note(2)(a)"], "source_label_prefix": "note(2)(a)", "supporting_note_labels": []}
+{"country_iso2": null, "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.24"], "note_labels": ["note2(u)"], "primary_note_labels": ["note(2)(u)"], "source_label_prefix": "note(2)(u)", "supporting_note_labels": []}
 
 Input (one or more note blocks, each beginning with its note label on the first line):
-"""note2(a)
-note(2)(a) For the purposes of heading 9903.01.01, products of Mexico, other than products described in headings 9903.01.02, 9903.01.03, 9903.01.04, 9903.01.05, 9903.76.01, 9903.76.02 or 9903.76.03 and other than products for personal use included in accompanied baggage of persons arriving in the United States, shall be subject to an additional 25% ad valorem rate of duty. Notwithstanding U.S. note 1 to this subchapter, all products of Mexico that are subject to the additional ad valorem rate of duty imposed by heading 9903.01.01 shall also be subject to the general rates of duty imposed on products of Mexico entered under subheadings in chapters 1 to 97 of the tariff schedule. The additional duties imposed by heading 9903.01.01 apply to products of Mexico including both goods of Mexico under the rules set forth in part 102, title 19 of the Code of Federal Regulations, as applicable, as well as goods for which Mexico was the last country of substantial transformation prior to importation into the United States. Products of Mexico that are eligible for special tariff treatment under general note 3(c)(i) to the tariff schedule, or that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional ad valorem rate of duty imposed by heading 9903.01.01. The additional duties imposed by heading 9903.01.01 shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection ("CBP"), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under heading 9802.00.80; and subheadings 9802.00.40, 9802.00.50, and 9802.00.60. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed (in Mexico), as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article assembled abroad (in Mexico), less the cost or value of such products of the United States, as described. Products of Mexico that are provided for in heading 9903.01.01 shall continue to be subject to antidumping, countervailing, or other duties, taxes, fees, exactions and charges that apply to such products, as well as to the additional ad valorem rate of duty imposed by heading 9903.01.01. Products of Mexico that are provided for in heading 9903.01.01 and that are otherwise eligible for the administrative exemption from duty and certain taxes at 19 U.S.C. 1321(a)(2)(C) - known as " de minimis " exemption - may continue to qualify for the exemption, but the de minimis exemption shall cease to be available for such articles upon notification by the Secretary of Commerce, in consultation with the Secretary of the Treasury, to the President that adequate systems are in place to fully and expediently process and collect tariff revenue applicable for covered articles otherwise eligible for the de minimis exemption."""
+"""note2(u)
+note(2)(u) For the purposes of heading 9903.01.24, products of China and Hong Kong entered for consumption, or withdrawn from warehouse for consumption on or after 12:01 a.m., eastern standard time on March 4, 2025, other than products described in heading 9903.01.21, heading 9903.01.22, heading 9903.01.23, and other than products for personal use included in accompanied baggage of persons arriving in the United States, shall be subject to an additional 20% ad valorem rate of duty. Notwithstanding U.S. note 1 to this subchapter, all products of China and Hong Kong that are subject to the additional ad valorem (Compiler's Note: entered as written in notice) rate of duty imposed by heading 9903.01.24 shall also be subject to the general rates of duty imposed on products of China and Hong Kong entered under subheadings in chapters 1 to 97 of the tariff schedule. Products of China and Hong Kong that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99 shall be subject to the additional ad valorem rate of duty imposed by heading 9903.01.24. The additional duties imposed by heading 9903.01.24 shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection ("CBP"), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under heading 9802.00.80; and subheadings 9802.00.40, 9802.00.50, and 9802.00.60. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed (in China and Hong Kong), as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article assembled abroad (in China and Hong Kong), less the cost or value of such products of the United States, as described. Products of China and Hong Kong that are provided for in heading 9903.01.24 shall continue to be subject to antidumping, countervailing, or other duties, taxes, fees, exactions and charges that apply to such products, as well as to the additional ad valorem rate of duty imposed by heading 9903.01.24. Products of China and Hong Kong are not eligible for the administrative exemption from duty and certain taxes at 19 U.S.C. 1321(a)(2)(C)-known as ?? de minimis ?? exemption."""
 
 Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
 {
@@ -121,63 +121,77 @@ Output JSON format (note the use of "keys" for combined codes and "key" for sing
 }
 
 INFO:sectionieepa_agent:raw:{
-  "input_htscode": [
-    "9903.01.01"
-  ],
+  "input_htscode": ["9903.01.24"],
   "scope": [
     {
-      "keys": "9802.00.40,9802.00.50,9802.00.60",
+      "keys": "9802.00.80,9802.00.40,9802.00.50,9802.00.60",
       "key_type": "hts8",
-      "country_iso2": "MX",
-      "source_label": "note(2)(a)",
-      "effective_start_date": null,
+      "country_iso2": "CN",
+      "source_label": "note2(u)",
+      "effective_start_date": "2025-03-04",
       "effective_end_date": null
     },
     {
-      "key": "9802.00.80",
+      "keys": "9802.00.80,9802.00.40,9802.00.50,9802.00.60",
       "key_type": "hts8",
-      "country_iso2": "MX",
-      "source_label": "note(2)(a)",
-      "effective_start_date": null,
+      "country_iso2": "HK",
+      "source_label": "note2(u)",
+      "effective_start_date": "2025-03-04",
       "effective_end_date": null
     }
   ],
   "except": [
     {
-      "keys": "9903.01.02,9903.01.03,9903.01.04,9903.01.05,9903.76.01,9903.76.02,9903.76.03",
-      "key_type": "hts8",
-      "country_iso2": "MX",
-      "source_label": "note(2)(a)-exclusion",
-      "effective_start_date": null,
+      "keys": "9903.01.21,9903.01.22,9903.01.23",
+      "key_type": "heading",
+      "country_iso2": "CN",
+      "source_label": "note2(u)-exclusion",
+      "effective_start_date": "2025-03-04",
+      "effective_end_date": null
+    },
+    {
+      "keys": "9903.01.21,9903.01.22,9903.01.23",
+      "key_type": "heading",
+      "country_iso2": "HK",
+      "source_label": "note2(u)-exclusion",
+      "effective_start_date": "2025-03-04",
       "effective_end_date": null
     }
   ]
 }
-INFO:sectionieepa_agent:Created scope 21881 for key 9802.00.40
-INFO:sectionieepa_agent:Created scope 21882 for key 9802.00.50
-INFO:sectionieepa_agent:Created scope 21883 for key 9802.00.60
-INFO:sectionieepa_agent:Created scope 21884 for key 9802.00.80
-INFO:sectionieepa_agent:Created scope↔measure relation 155932 (scope=21881, measure=323, include)
-INFO:sectionieepa_agent:Created scope↔measure relation 155933 (scope=21882, measure=323, include)
-INFO:sectionieepa_agent:Created scope↔measure relation 155934 (scope=21883, measure=323, include)
-INFO:sectionieepa_agent:Created scope↔measure relation 155935 (scope=21884, measure=323, include)
-INFO:sectionieepa_agent:Processing heading 9903.01.02
+INFO:sectionieepa_agent:Created scope 21911 for key 9802.00.80
+INFO:sectionieepa_agent:Created scope 21912 for key 9802.00.40
+INFO:sectionieepa_agent:Created scope 21913 for key 9802.00.50
+INFO:sectionieepa_agent:Created scope 21914 for key 9802.00.60
+INFO:sectionieepa_agent:Created scope 21915 for key 9802.00.80
+INFO:sectionieepa_agent:Created scope 21916 for key 9802.00.40
+INFO:sectionieepa_agent:Created scope 21917 for key 9802.00.50
+INFO:sectionieepa_agent:Created scope 21918 for key 9802.00.60
+INFO:sectionieepa_agent:Created scope↔measure relation 155983 (scope=21911, measure=335, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 155984 (scope=21912, measure=335, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 155985 (scope=21913, measure=335, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 155986 (scope=21914, measure=335, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 155987 (scope=21915, measure=335, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 155988 (scope=21916, measure=335, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 155989 (scope=21917, measure=335, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 155990 (scope=21918, measure=335, include)
+INFO:sectionieepa_agent:Processing heading 9903.01.21
 INFO:sectionieepa_agent:measure {
   "except": [],
-  "include": ["note2(b)"],
+  "include": ["note2(t)"],
   "effective_period": {
     "start_date": null,
     "end_date": null
   },
-  "country_iso2": "MX",
+  "country_iso2": null,
   "melt_pour_origin_iso2": null,
   "origin_exclude_iso2": [],
   "is_potential": false
 }
-INFO:sectionieepa_agent:Created measure 324 for heading 9903.01.02
-INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(b) (first path=['note', '2', 'b'])
-INFO:sectionieepa_agent:note(2)(b) Heading 9903.01.02 covers only products of Mexico, that are donations, by persons subject to the jurisdiction of the United States, of articles, such as food, clothing, and medicine, intended to be used to relieve human suffering, except to the extent that the President determines that such donations (A) would seriously impair his ability to deal with any national emergency declared under section 1701 of title 19 of the U.S. Code, (B) are in response to coercion against the proposed recipient or donor, or (C) would endanger Armed Forces of the United States which are engaged in hostilities or are in a situation where imminent involvement in hostilities is clearly indicated by the circumstances.
-INFO:sectionieepa_agent:Querying LLM for notes note(2)(b)
+INFO:sectionieepa_agent:Created measure 336 for heading 9903.01.21
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(t) (first path=['note', '2', 't'])
+INFO:sectionieepa_agent:note(2)(t) Heading 9903.01.21 covers only products of China and Hong Kong, that are donations, by persons subject to the jurisdiction of the United States, of articles, such as food, clothing, and medicine, intended to be used to relieve human suffering, except to the extent that the President determines that such donations (A) would seriously impair his ability to deal with any national emergency declared under section 1701 of title 19 of the U.S. Code, (B) are in response to coercion against the proposed recipient or donor, or (C) would endanger Armed Forces of the United States which are engaged in hostilities or are in a situation where imminent involvement in hostilities is clearly indicated by the circumstances.
+INFO:sectionieepa_agent:Querying LLM for notes note(2)(t)
 INFO:sectionieepa_agent:message:You are a structured extractor for HTSUS Section ieepa notes.
 Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
 
@@ -265,11 +279,11 @@ Context (provided by caller):
 // context.note_labels → labels for each input block (in order)
 // context.primary_note_labels → subset that actually triggered extraction
 // context.supporting_note_labels → subdivisions referenced only to describe exclusions for the primaries
-{"country_iso2": "MX", "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.02"], "note_labels": ["note2(b)"], "primary_note_labels": ["note(2)(b)"], "source_label_prefix": "note(2)(b)", "supporting_note_labels": []}
+{"country_iso2": null, "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.21"], "note_labels": ["note2(t)"], "primary_note_labels": ["note(2)(t)"], "source_label_prefix": "note(2)(t)", "supporting_note_labels": []}
 
 Input (one or more note blocks, each beginning with its note label on the first line):
-"""note2(b)
-note(2)(b) Heading 9903.01.02 covers only products of Mexico, that are donations, by persons subject to the jurisdiction of the United States, of articles, such as food, clothing, and medicine, intended to be used to relieve human suffering, except to the extent that the President determines that such donations (A) would seriously impair his ability to deal with any national emergency declared under section 1701 of title 19 of the U.S. Code, (B) are in response to coercion against the proposed recipient or donor, or (C) would endanger Armed Forces of the United States which are engaged in hostilities or are in a situation where imminent involvement in hostilities is clearly indicated by the circumstances."""
+"""note2(t)
+note(2)(t) Heading 9903.01.21 covers only products of China and Hong Kong, that are donations, by persons subject to the jurisdiction of the United States, of articles, such as food, clothing, and medicine, intended to be used to relieve human suffering, except to the extent that the President determines that such donations (A) would seriously impair his ability to deal with any national emergency declared under section 1701 of title 19 of the U.S. Code, (B) are in response to coercion against the proposed recipient or donor, or (C) would endanger Armed Forces of the United States which are engaged in hostilities or are in a situation where imminent involvement in hostilities is clearly indicated by the circumstances."""
 
 Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
 {
@@ -284,14 +298,14 @@ Output JSON format (note the use of "keys" for combined codes and "key" for sing
 }
 
 INFO:sectionieepa_agent:raw:{
-  "input_htscode": ["9903.01.02"],
+  "input_htscode": ["9903.01.21"],
   "scope": [],
   "except": []
 }
-INFO:sectionieepa_agent:Created scope 21885 for key 9903.01.02
-INFO:sectionieepa_agent:Created scope↔measure relation 155936 (scope=21885, measure=323, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.01 → 9903.01.02 as exclude
-INFO:sectionieepa_agent:Processing heading 9903.01.03
+INFO:sectionieepa_agent:Created scope 21919 for key 9903.01.21
+INFO:sectionieepa_agent:Created scope↔measure relation 155991 (scope=21919, measure=335, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.24 → 9903.01.21 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.01.22
 INFO:sectionieepa_agent:measure {
   "except": [],
   "include": [],
@@ -299,55 +313,42 @@ INFO:sectionieepa_agent:measure {
     "start_date": null,
     "end_date": null
   },
-  "country_iso2": "MX",
-  "melt_pour_origin_iso2": null,
-  "origin_exclude_iso2": [],
-  "is_potential": false
-}
-INFO:sectionieepa_agent:Created measure 325 for heading 9903.01.03
-INFO:sectionieepa_agent:Created scope 21886 for key 9903.01.03
-INFO:sectionieepa_agent:Created scope↔measure relation 155937 (scope=21886, measure=323, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.01 → 9903.01.03 as exclude
-INFO:sectionieepa_agent:Processing heading 9903.01.04
-INFO:sectionieepa_agent:measure {
-  "except": [],
-  "include": ["general note 11", "chapter 98 subchapter XXIII", "chapter 99 subchapter XXII"],
-  "effective_period": {
-    "start_date": null,
-    "end_date": null
-  },
   "country_iso2": null,
   "melt_pour_origin_iso2": null,
   "origin_exclude_iso2": [],
   "is_potential": false
 }
-INFO:sectionieepa_agent:Created measure 326 for heading 9903.01.04
-INFO:sectionieepa_agent:Created scope 21887 for key general note 11
-INFO:sectionieepa_agent:Created scope↔measure relation 155938 (scope=21887, measure=326, include)
-INFO:sectionieepa_agent:Created scope 21888 for key chapter 98 subchapter XXIII
-INFO:sectionieepa_agent:Created scope↔measure relation 155939 (scope=21888, measure=326, include)
-INFO:sectionieepa_agent:Created scope 21889 for key chapter 99 subchapter XXII
-INFO:sectionieepa_agent:Created scope↔measure relation 155940 (scope=21889, measure=326, include)
-INFO:sectionieepa_agent:Created scope 21890 for key 9903.01.04
-INFO:sectionieepa_agent:Created scope↔measure relation 155941 (scope=21890, measure=323, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.01 → 9903.01.04 as exclude
-INFO:sectionieepa_agent:Processing heading 9903.01.05
+INFO:sectionieepa_agent:Created measure 337 for heading 9903.01.22
+INFO:sectionieepa_agent:Created scope 21920 for key 9903.01.22
+INFO:sectionieepa_agent:Created scope↔measure relation 155992 (scope=21920, measure=335, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.24 → 9903.01.22 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.01.23
 INFO:sectionieepa_agent:measure {
-  "except": [],
-  "include": ["note2(c)"],
-  "effective_period": {
-    "start_date": null,
-    "end_date": null
-  },
-  "country_iso2": "MX",
+  "except": ["9903.01.21", "9903.01.22"],
+  "include": [],
+  "effective_period": {"start_date": null, "end_date": null},
+  "country_iso2": null,
   "melt_pour_origin_iso2": null,
   "origin_exclude_iso2": [],
-  "is_potential": false
+  "is_potential": true
 }
-INFO:sectionieepa_agent:Created measure 327 for heading 9903.01.05
-INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(c) (first path=['note', '2', 'c'])
-INFO:sectionieepa_agent:note(2)(c) For the purposes of heading 9903.01.05, products of Mexico other than products described in headings 9903.01.01, 9903.01.02, 9903.01.03, and 9903.01.04, and other than products for personal use included in accompanied baggage of persons arriving in the United States, shall be subject to an additional 10% ad valorem rate of duty. Notwithstanding U.S. note 1 to this subchapter, all products of Mexico that are subject to the additional ad valorem rate of duty imposed by heading 9903.01.05 shall also be subject to the general rates of duty imposed on products of Mexico entered under subheadings in chapters 1 to 97 of the tariff schedule. The additional duties imposed by heading 9903.01.05 apply to products of Mexico including both goods of Mexico under the rules set forth in part 102, title 19 of the Code of Federal Regulations, as applicable, as well as goods for which Mexico was the last country of substantial transformation prior to importation into the United States. Products of Mexico that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional ad valorem rate of duty imposed by heading 9903.01.05. The additional duties imposed by heading 9903.01.05 shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection (?CBP?), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under heading 9802.00.80; and subheadings 9802.00.40, 9802.00.50, and 9802.00.60. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed (in Mexico), as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article assembled abroad (in Mexico), less the cost or value of such products of the United States, as described. Products of Mexico that are provided for in headings 9903.01.04 and 9903.01.05 shall continue to be subject to antidumping, countervailing, or other duties, taxes, fees, exactions and charges that apply to such products. Products of Mexico that are provided for in headings 9903.01.04 and 9903.01.05 that are otherwise eligible for the administrative exemption from duty and certain taxes at 19 U.S.C. 1321(a)(2)(C) ? known as the ? de minimis ? exemption ? may continue to qualify for the exemption, but the de minimis exemption shall cease to be available for such articles upon notification by the Secretary of Commerce, in consultation with the Secretary of the Treasury, to the President that adequate systems are in place to fully and expediently process and collect tariff revenue applicable for covered articles otherwise eligible for the de minimi s exemption.
-INFO:sectionieepa_agent:Querying LLM for notes note(2)(c)
+INFO:sectionieepa_agent:Created measure 338 for heading 9903.01.23
+INFO:sectionieepa_agent:Created scope 21921 for key 9903.01.21
+INFO:sectionieepa_agent:Created scope↔measure relation 155993 (scope=21921, measure=338, exclude)
+INFO:sectionieepa_agent:Created scope 21922 for key 9903.01.22
+INFO:sectionieepa_agent:Created scope↔measure relation 155994 (scope=21922, measure=338, exclude)
+INFO:sectionieepa_agent:Created scope 21923 for key 9903.01.23
+INFO:sectionieepa_agent:Created scope↔measure relation 155995 (scope=21923, measure=335, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.24 → 9903.01.23 as exclude
+INFO:sectionieepa_agent:Created scope↔measure relation 155996 (scope=21919, measure=335, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.24 → 9903.01.21 as exclude
+INFO:sectionieepa_agent:Created scope↔measure relation 155997 (scope=21920, measure=335, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.24 → 9903.01.22 as exclude
+INFO:sectionieepa_agent:Created scope↔measure relation 155998 (scope=21923, measure=335, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.24 → 9903.01.23 as exclude
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(w) (first path=['note', '2', 'w'])
+INFO:sectionieepa_agent:note(2)(w) Products of China and Hong Kong are not eligible for the administrative exemption from duty and certain taxes at 19 U.S.C.1321(a)(2)(C)-known as the ?? de minimis ?? exemption.
+INFO:sectionieepa_agent:Querying LLM for notes note(2)(w)
 INFO:sectionieepa_agent:message:You are a structured extractor for HTSUS Section ieepa notes.
 Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
 
@@ -435,11 +436,11 @@ Context (provided by caller):
 // context.note_labels → labels for each input block (in order)
 // context.primary_note_labels → subset that actually triggered extraction
 // context.supporting_note_labels → subdivisions referenced only to describe exclusions for the primaries
-{"country_iso2": "MX", "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.05"], "note_labels": ["note2(c)"], "primary_note_labels": ["note(2)(c)"], "source_label_prefix": "note(2)(c)", "supporting_note_labels": []}
+{"country_iso2": null, "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.24"], "note_labels": ["note2(w)"], "primary_note_labels": ["note(2)(w)"], "source_label_prefix": "note(2)(w)", "supporting_note_labels": []}
 
 Input (one or more note blocks, each beginning with its note label on the first line):
-"""note2(c)
-note(2)(c) For the purposes of heading 9903.01.05, products of Mexico other than products described in headings 9903.01.01, 9903.01.02, 9903.01.03, and 9903.01.04, and other than products for personal use included in accompanied baggage of persons arriving in the United States, shall be subject to an additional 10% ad valorem rate of duty. Notwithstanding U.S. note 1 to this subchapter, all products of Mexico that are subject to the additional ad valorem rate of duty imposed by heading 9903.01.05 shall also be subject to the general rates of duty imposed on products of Mexico entered under subheadings in chapters 1 to 97 of the tariff schedule. The additional duties imposed by heading 9903.01.05 apply to products of Mexico including both goods of Mexico under the rules set forth in part 102, title 19 of the Code of Federal Regulations, as applicable, as well as goods for which Mexico was the last country of substantial transformation prior to importation into the United States. Products of Mexico that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional ad valorem rate of duty imposed by heading 9903.01.05. The additional duties imposed by heading 9903.01.05 shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection (?CBP?), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under heading 9802.00.80; and subheadings 9802.00.40, 9802.00.50, and 9802.00.60. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed (in Mexico), as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article assembled abroad (in Mexico), less the cost or value of such products of the United States, as described. Products of Mexico that are provided for in headings 9903.01.04 and 9903.01.05 shall continue to be subject to antidumping, countervailing, or other duties, taxes, fees, exactions and charges that apply to such products. Products of Mexico that are provided for in headings 9903.01.04 and 9903.01.05 that are otherwise eligible for the administrative exemption from duty and certain taxes at 19 U.S.C. 1321(a)(2)(C) ? known as the ? de minimis ? exemption ? may continue to qualify for the exemption, but the de minimis exemption shall cease to be available for such articles upon notification by the Secretary of Commerce, in consultation with the Secretary of the Treasury, to the President that adequate systems are in place to fully and expediently process and collect tariff revenue applicable for covered articles otherwise eligible for the de minimi s exemption."""
+"""note2(w)
+note(2)(w) Products of China and Hong Kong are not eligible for the administrative exemption from duty and certain taxes at 19 U.S.C.1321(a)(2)(C)-known as the ?? de minimis ?? exemption."""
 
 Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
 {
@@ -454,79 +455,11 @@ Output JSON format (note the use of "keys" for combined codes and "key" for sing
 }
 
 INFO:sectionieepa_agent:raw:{
-  "input_htscode": ["9903.01.05"],
+  "input_htscode": ["9903.01.24"],
   "scope": [],
-  "except": [
-    {
-      "keys": "9903.01.01,9903.01.02,9903.01.03,9903.01.04",
-      "key_type": "hts8",
-      "country_iso2": "MX",
-      "source_label": "note2(c)-exclusion",
-      "effective_start_date": null,
-      "effective_end_date": null
-    }
-  ]
+  "except": []
 }
-WARNING:sectionieepa_agent:Heading 9903.01.01 is already being processed; skipping to avoid recursion
-INFO:sectionieepa_agent:Child heading 9903.01.01 could not be processed; skipping reference linkage to 9903.01.05
-INFO:sectionieepa_agent:Created scope↔measure relation 155942 (scope=21885, measure=327, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.05 → 9903.01.02 as exclude
-INFO:sectionieepa_agent:Created scope↔measure relation 155943 (scope=21886, measure=327, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.05 → 9903.01.03 as exclude
-INFO:sectionieepa_agent:Created scope↔measure relation 155944 (scope=21890, measure=327, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.05 → 9903.01.04 as exclude
-INFO:sectionieepa_agent:Created scope 21891 for key 9903.01.05
-INFO:sectionieepa_agent:Created scope↔measure relation 155945 (scope=21891, measure=323, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.01 → 9903.01.05 as exclude
-INFO:sectionieepa_agent:Processing heading 9903.76.01
-INFO:sectionieepa_agent:measure {
-  "except": [],
-  "include": ["note37(b)"],
-  "effective_period": {
-    "start_date": null,
-    "end_date": null
-  },
-  "country_iso2": null,
-  "melt_pour_origin_iso2": null,
-  "origin_exclude_iso2": [],
-  "is_potential": false
-}
-INFO:sectionieepa_agent:Heading 9903.76.01 already present in sieepa_measures (id=196); reusing existing scope
-INFO:sectionieepa_agent:Created scope 21892 for key 9903.76.01
-INFO:sectionieepa_agent:Created scope↔measure relation 155946 (scope=21892, measure=323, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.01 → 9903.76.01 as exclude
-INFO:sectionieepa_agent:Processing heading 9903.76.02
-INFO:sectionieepa_agent:measure {
-  "except": [],
-  "include": ["note37(d)"],
-  "effective_period": {
-    "start_date": null,
-    "end_date": null
-  },
-  "country_iso2": null,
-  "melt_pour_origin_iso2": null,
-  "origin_exclude_iso2": [],
-  "is_potential": false
-}
-INFO:sectionieepa_agent:Heading 9903.76.02 already present in sieepa_measures (id=197); reusing existing scope
-INFO:sectionieepa_agent:Created scope 21893 for key 9903.76.02
-INFO:sectionieepa_agent:Created scope↔measure relation 155947 (scope=21893, measure=323, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.01 → 9903.76.02 as exclude
-INFO:sectionieepa_agent:Processing heading 9903.76.03
-INFO:sectionieepa_agent:measure {
-  "except": [],
-  "include": ["note37(f)"],
-  "effective_period": {"start_date": null, "end_date": null},
-  "country_iso2": null,
-  "melt_pour_origin_iso2": null,
-  "origin_exclude_iso2": [],
-  "is_potential": false
-}
-INFO:sectionieepa_agent:Heading 9903.76.03 already present in sieepa_measures (id=198); reusing existing scope
-INFO:sectionieepa_agent:Created scope 21894 for key 9903.76.03
-INFO:sectionieepa_agent:Created scope↔measure relation 155948 (scope=21894, measure=323, exclude)
-INFO:sectionieepa_agent:Recorded child heading reference 9903.01.01 → 9903.76.03 as exclude
-INFO:sectionieepa_agent:Created scope↔measure relation 155949 (scope=21885, measure=323, exclude)
-INFO:sectionieepa_agent:Created scope↔measure relation 155950 (scope=21886, measure=323, exclude)
-INFO:sectionieepa_agent:Created scope↔measure relation 155951 (scope=21890, measure=323, exclude)
-INFO:sectionieepa_agent:Created scope↔measure relation 155952 (scope=21891, measure=323, exclude)
+INFO:sectionieepa_agent:Created scope↔measure relation 155999 (scope=21921, measure=335, exclude)
+INFO:sectionieepa_agent:Created scope↔measure relation 156000 (scope=21922, measure=335, exclude)
+INFO:sectionieepa_agent:Created scope 21924 for key 9903.01.23
+INFO:sectionieepa_agent:Created scope↔measure relation 156001 (scope=21924, measure=335, exclude)

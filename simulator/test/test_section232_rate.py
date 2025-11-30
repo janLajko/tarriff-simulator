@@ -139,3 +139,24 @@ def test_compute_section232_duty_against_fixture(row_info: dict):
     assert result.rate is not None, f"{row_info['id']}: expected rate display"
     actual_rate = Decimal(result.rate.rstrip("%"))
     assert actual_rate == expected_duty, f"{row_info['id']}: unexpected duty rate"
+
+
+def test_us_melt_uk_origin_prefers_us_zero_headings_for_steel_and_aluminum():
+    result = section232_rate.compute_section232_duty(
+        "0402.99.68.00",
+        "UK",
+        date(2025, 10, 20),
+        steel_melt_origin="US",
+        aluminum_melt_origin="US",
+        import_value=Decimal("100000"),
+        measurements={
+            "usd": Decimal("100000"),
+            "steel_percentage": Decimal("0.2"),
+            "aluminum_percentage": Decimal("0.87"),
+        },
+    )
+
+    ch_ids = {ch.ch99_id for ch in result.ch99_list}
+    assert "9903.81.92" in ch_ids, "US-melt steel should hit zero-rate 9903.81.92"
+    assert "9903.85.09" in ch_ids, "US-melt aluminum should hit zero-rate 9903.85.09"
+    assert "9903.81.98" not in ch_ids, "UK-specific 9903.81.98 should be excluded when melt is US"

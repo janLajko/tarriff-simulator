@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 import logging
+logging.basicConfig(level=logging.DEBUG)
 import os
+import time
 from contextlib import contextmanager
 from datetime import date, datetime
 from decimal import Decimal
+from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Optional, Union
 
 import psycopg2
+from psycopg2.extras import RealDictCursor
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field
@@ -32,6 +36,10 @@ from .section232_rate import Section232Computation, compute_section232_duty
 from .sectionieepa_rate import SectionIEEPAComputation, compute_sectionieepa_duty
 
 logger = logging.getLogger(__name__)
+HTS_CACHE_TTL_SECONDS = 24 * 60 * 60
+_hts_record_cache: dict[str, dict] = {}
+_hts_cache_expires_at: float = 0.0
+
 
 DATABASE_DSN = (
     os.getenv("DATABASE_DSN")
@@ -223,6 +231,74 @@ def _normalize_measurements(payload: SimulationRequest) -> Dict[str, Decimal]:
     return measurements
 
 
+def _normalize_hts10(value: str) -> Optional[str]:
+    digits = "".join(ch for ch in str(value) if ch.isdigit())
+    if len(digits) >= 10:
+        return digits[:10]
+    return None
+
+
+def _ensure_hts_cache() -> None:
+    """Load all HTS records into process cache with a TTL."""
+
+    global _hts_record_cache, _hts_cache_expires_at
+
+    now = time.monotonic()
+    if _hts_record_cache and now < _hts_cache_expires_at:
+        return
+
+    cache_start = time.perf_counter()
+    new_cache: dict[str, dict] = {}
+    with db_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT hts_number,
+                       indent,
+                       description,
+                       unit_of_quantity,
+                       general_rate_of_duty,
+                       special_rate_of_duty,
+                       column_2_rate_of_duty,
+                       quota_quantity,
+                       additional_duties,
+                       status,
+                       parent_hts_number,
+                       row_order,
+                       parent_row_order
+                FROM hts_codes
+                """
+            )
+            rows = cur.fetchall()
+
+    for raw in rows:
+        record = dict(raw)
+        hts_number = str(record.get("hts_number") or "").strip()
+        if hts_number:
+            new_cache[hts_number] = record
+        norm = _normalize_hts10(hts_number)
+        if norm and norm not in new_cache:
+            new_cache[norm] = record
+
+    _hts_record_cache = new_cache
+    _hts_cache_expires_at = now + HTS_CACHE_TTL_SECONDS
+    logger.info(
+        "HTS cache refreshed size=%s duration=%.3fs", len(_hts_record_cache), time.perf_counter() - cache_start
+    )
+
+
+def _get_cached_hts_record(hts_code: str) -> Optional[dict]:
+    if not hts_code:
+        return None
+    normalized = _normalize_hts10(hts_code)
+    record = _hts_record_cache.get(hts_code.strip())
+    if record:
+        return record
+    if normalized:
+        return _hts_record_cache.get(normalized)
+    return None
+
+
 def _determine_rate_type(required_units: List[str]) -> str:
     if not required_units:
         return "no_duty"
@@ -320,6 +396,7 @@ def _build_request_echo(
 
 @app.post("/simulate", response_model=EncryptedEnvelope)
 def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
+    request_start = time.perf_counter()
     entry = payload.entry_date or date.today()
     country = payload.country_of_origin.strip().upper()
     general_melt_origin = (
@@ -341,9 +418,32 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
     measurements = _normalize_measurements(payload)
     import_value_amount = measurements.get("usd")
 
+    logger.info(
+        "simulate_tariff start hts=%s country=%s entry=%s",
+        payload.hts_code,
+        country,
+        entry,
+    )
+
     try:
-        with db_connection() as conn:
-            record = fetch_basic_hts_record(conn, payload.hts_code.strip())
+        db_start = time.perf_counter()
+        _ensure_hts_cache()
+        record = _get_cached_hts_record(payload.hts_code)
+        source = "cache"
+        if record is None:
+            with db_connection() as conn:
+                record = fetch_basic_hts_record(conn, payload.hts_code.strip())
+            source = "db"
+            if record:
+                # Keep cache fresh for lookups we might have missed during bulk load.
+                normalized = _normalize_hts10(payload.hts_code)
+                if normalized:
+                    _hts_record_cache[normalized] = record
+        logger.info(
+            "simulate_tariff fetched HTS record in %.3fs (%s)",
+            time.perf_counter() - db_start,
+            source,
+        )
     except Exception as exc:  # pragma: no cover - database connectivity
         logger.exception("Failed to fetch HTS record from database.")
         raise HTTPException(
@@ -359,12 +459,14 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
 
     canonical_hts = str(record["hts_number"])
     try:
+        basic_start = time.perf_counter()
         basic_computations = compute_basic_duty(
             canonical_hts,
             measurements,
             country_of_origin=country,
             special_rate_of_duty=record.get("special_rate_of_duty"),
         )
+        logger.info("simulate_tariff basic duty computed in %.3fs", time.perf_counter() - basic_start)
         print(basic_computations)
     except MissingMeasurementError as exc:
         raise HTTPException(
@@ -380,37 +482,65 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         (comp for comp in basic_computations if comp.case_id == GENERAL_RATE_CASE_ID),
         basic_computations[0],
     )
+    base_duty_rate_percent: Optional[Decimal] = None
+    if import_value_amount not in (None, Decimal("0")):
+        try:
+            base_duty_rate_percent = (general_basic_computation.amount / Decimal(import_value_amount)) * Decimal("100")
+        except Exception:
+            base_duty_rate_percent = None
     meta_info = _build_meta_info(general_basic_computation, unit_config_raw)
     basic_rate_payloads = [
         BasicRateComputationPayload.from_dataclass(computation)
         for computation in basic_computations
     ]
-    section_301_result = compute_section301_duty(
-        canonical_hts,
-        country,
-        entry,
-        import_value=import_value_amount,
-    )
-    section_232_result = compute_section232_duty(
-        canonical_hts,
-        country,
-        entry,
-        steel_melt_origin,
-        aluminum_melt_origin,
-        import_value=import_value_amount,
-        measurements=measurements,
-        steel_percentage=payload.steel_percentage,
-        aluminum_percentage=payload.aluminum_percentage,
-    )
-    # section_ieepa_result = compute_sectionieepa_duty(
-    #     canonical_hts,
-    #     country,
-    #     entry,
-    #     import_value=import_value_amount,
-    #     melt_pour_origin_iso2=melt_origin,
-    #     measurements=measurements,
-    # )
-    modules = _build_modules(section_301_result, section_232_result)
+
+    def _timed_call(name: str, func, *args, **kwargs):
+        started = time.perf_counter()
+        try:
+            return func(*args, **kwargs)
+        finally:
+            logger.info("simulate_tariff %s computed in %.3fs", name, time.perf_counter() - started)
+
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        fut_301 = executor.submit(
+            _timed_call,
+            "section301",
+            compute_section301_duty,
+            canonical_hts,
+            country,
+            entry,
+            import_value=import_value_amount,
+        )
+        fut_ieepa = executor.submit(
+            _timed_call,
+            "sectionieepa",
+            compute_sectionieepa_duty,
+            canonical_hts,
+            country,
+            entry,
+            import_value=import_value_amount,
+            melt_pour_origin_iso2=melt_origin,
+            measurements=measurements,
+            base_duty_rate_percent=base_duty_rate_percent,
+        )
+        fut_232 = executor.submit(
+            _timed_call,
+            "section232",
+            compute_section232_duty,
+            canonical_hts,
+            country,
+            entry,
+            steel_melt_origin,
+            aluminum_melt_origin,
+            import_value=import_value_amount,
+            measurements=measurements,
+            steel_percentage=payload.steel_percentage,
+            aluminum_percentage=payload.aluminum_percentage,
+        )
+        section_301_result = fut_301.result()
+        section_232_result = fut_232.result()
+        section_ieepa_result = fut_ieepa.result()
+    modules = _build_modules(section_301_result, section_232_result, section_ieepa_result)
     request_echo = _build_request_echo(
         payload, measurements, canonical_hts, entry, melt_origin
     )
@@ -425,9 +555,13 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
     print(envelope_payload)
 
     try:
+        encrypt_start = time.perf_counter()
         encrypted = encrypt_payload(envelope_payload)
+        logger.info("simulate_tariff payload encrypted in %.3fs", time.perf_counter() - encrypt_start)
     except (EncryptionConfigError, EncryptionExecutionError) as exc:
         logger.exception("Failed to encrypt response payload.")
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
+    total_elapsed = time.perf_counter() - request_start
+    logger.info("simulate_tariff completed in %.3fs", total_elapsed)
     return EncryptedEnvelope.model_validate(encrypted)

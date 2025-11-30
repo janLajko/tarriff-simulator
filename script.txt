@@ -6,5 +6,8 @@ python agent/chapter99note-agent/notes_agent.py --dsn postgresql://postgres:Xylx
 测试notes_agent
 python agent/chapter99note-agent/test_notes_agent.py --dsn postgresql://postgres:Xylx1.t123@34.129.224.77:5432/tariff-simulate
 
+
+301数据同步
+
 本地启动simulator服务
  uvicorn simulator.app:app
