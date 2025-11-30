@@ -325,16 +325,27 @@ class Section232Evaluator:
         }
         self.match_cache: Dict[Tuple[int, str], Tuple[bool, List[str]]] = {}
 
+    def _applicable_origin(self, heading: str) -> Optional[str]:
+        """Determine the origin to use for country-based gating."""
+        origin = self._heading_melt_origin(heading)
+        if origin:
+            return origin
+        if self.country:
+            return self.country
+        return None
+
     def _country_allows_measure(self, measure: Dict) -> bool:
+        heading = measure.get("heading") or ""
+        candidate_origin = (self._applicable_origin(heading) or "").upper()
         target_country = (measure.get("country_iso2") or "").upper()
         if target_country:
-            return self.country == target_country
+            return candidate_origin == target_country
         excluded: Sequence[str] = measure.get("origin_exclude_iso2") or []
-        excluded_upper = { (code or "").upper() for code in excluded }
-        if not self.country:
-            # If country is unknown, only allow global measures with no exclusions.
+        excluded_upper = {(code or "").upper() for code in excluded}
+        if not candidate_origin:
+            # If origin is unknown, only allow global measures with no exclusions.
             return not excluded_upper
-        return self.country not in excluded_upper
+        return candidate_origin not in excluded_upper
 
     def _heading_melt_origin(self, heading: str) -> Optional[str]:
         normalized = (heading or "").strip()

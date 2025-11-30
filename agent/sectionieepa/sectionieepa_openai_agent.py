@@ -48,13 +48,15 @@ BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 
 DEFAULT_HEADINGS = [
-    "9903.02.02",
-    "9903.01.10",
-    "9903.01.24",
-    "9903.01.25",
-    "9903.01.24",
-    "9903.01.77",
-    "9903.01.84",
+    # "9903.02.02",
+    # "9903.01.10",
+    # "9903.01.24",
+    # "9903.01.25",
+    # "9903.01.24",
+    # "9903.01.77",
+    # "9903.01.84",
+    "9903.01.01",
+    "9903.01.04",
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section ieepa derivative steel measures.
