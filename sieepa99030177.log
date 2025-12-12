@@ -1,0 +1,1764 @@
+INFO:sectionieepa_agent:Processing heading 9903.01.77
+INFO:sectionieepa_agent:measure {
+  "except": ["9903.01.78", "9903.01.79", "9903.01.80", "9903.01.81", "9903.01.82", "9903.01.83"],
+  "include": ["note2(x)"],
+  "effective_period": {
+    "start_date": "August 6, 2025",
+    "end_date": null
+  },
+  "country_iso2": "BR",
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Created measure 395 for heading 9903.01.77
+INFO:sectionieepa_agent:Loaded 15 note rows for note(2)(x) (first path=['note', '2', 'x'])
+INFO:sectionieepa_agent:note(2)(x) null
+note(2)(x)(i) Except as provided in headings 9903.01.78-9903.01.83, and in subdivisions (x)(ii) through (x)(xiv) of this note, and other than products for personal use included in accompanied baggage of persons arriving in the United States, heading 9903.01.77 imposes an additional ad valorem rate of duty on imports of all products of Brazil. Notwithstanding U.S. note 1 to this subchapter, all products that are subject to the additional ad valorem rate of duty imposed by this heading shall also be subject to the general rates of duty imposed under subheadings in chapters 1 to 97 of the tariff schedule. Except as provided in subdivisions (x)(ii) through (x)(xiv) of this note, all products that are subject to the additional ad valorem rate of duty imposed by this heading shall also be subject to any additional duty provided for in this subchapter or subchapter IV of chapter 99. Products that are eligible for special tariff treatment under general note 3(c)(i) to the tariff schedule, with the exception of products covered by the World Trade Organization Agreement on Trade in Civil Aircraft, or that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional ad valorem rate of duty imposed by this heading. The additional duty imposed by this heading shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection ("CBP"), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under heading 9802.00.80; and subheadings 9802.00.40, 9802.00.50, and 9802.00.60. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed, as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article assembled abroad, less the cost or value of such products of the United States, as described. Products that are provided for in heading 9903.01.77 shall continue to be subject to antidumping, countervailing, or other duties, taxes, fees, exactions and charges that apply to such products, as well as to the additional ad valorem rate of duty imposed by this heading.
+note(2)(x)(ii) Heading 9903.01.79 covers only products that are donations, by persons subject to the jurisdiction of the United States, of articles, such as food, clothing, and medicine, intended to be used to relieve human suffering, except to the extent that the President determines that such donations (A) would seriously impair his ability to deal with any national emergency declared under section 1701 of title 19 of the U.S. Code, (B) are in response to coercion against the proposed recipient or donor, or (C) would endanger Armed Forces of the United States which are engaged in hostilities or are in a situation where imminent involvement in hostilities is clearly indicated by the circumstances.
+note(2)(x)(iii) As provided in heading 9903.01.81, the additional duties imposed by heading 9903.01.77 shall not apply to products classified in the following provisions of the HTSUS: [Compiler's note: List may appear or continue on a subsequent page; read numbers from left to right.] 0801.21.00 2008.30.35 2009.11.00 2009.12.25 2009.12.45 2525.10.00 2601.11.00 2601.12.00 2609.00.00 2701.11.00 2701.12.00 2701.19.00 2701.20.00 2702.10.00 2702.20.00 2703.00.00 2704.00.00 2705.00.00 2706.00.00 2707.10.00 2707.20.00 2707.30.00 2707.40.00 2707.50.00 2707.91.00 2707.99.10 2707.99.20 2707.99.40 2707.99.51 2707.99.55 2707.99.59 2707.99.90 2708.10.00 2708.20.00 2709.00.10 2709.00.20 2710.12.15 2710.12.18 2710.12.25 2710.12.45 2710.12.90 2710.19.06 2710.19.11 2710.19.16 2710.19.24 2710.19.25 2710.19.26 2710.19.30 2710.19.35 2710.19.40 2710.19.45 2710.19.90 2710.20.05 2710.20.10 2710.20.15 2710.20.25 2710.91.00 2710.99.05 2710.99.10 2710.99.16 2710.99.21 2710.99.31 2710.99.32 2710.99.39 2710.99.45 2710.99.90 2711.11.00 2711.12.00 2711.13.00 2711.14.00 2711.19.00 2711.21.00 2711.29.00 2712.10.00 2712.20.00 2712.90.10 2712.90.20 2713.11.00 2713.12.00 2713.20.00 2713.90.00 2714.10.00 2714.90.00 2715.00.00 2716.00.00 2804.69.10 2804.69.50 2815.20.00 2818.20.00 2825.90.20 2827.39.25 2903.19.05 2903.19.10 2903.19.30 2903.19.60 3105.10.00 3105.20.00 3105.60.00 4407.29.02 4702.00.00 4703.11.00 4703.19.00 4703.21.00 4703.29.00 4704.11.00 4704.19.00 4704.21.00 4704.29.00 4705.00.00 4706.10.00 4706.20.00 4706.30.00 4706.91.00 4706.92.01 4706.93.01 5607.21.00 6802.99.00 7106.91.10 7108.12.10 7201.10.00 7201.20.00 7201.50.30 7201.50.60 7202.60.00 7202.93.40 7202.93.80 7203.10.00 7203.90.00 8002.00.00 null
+note(2)(x)(iv) As provided in heading 9903.01.82, the additional duties imposed by heading 9903.01.77 shall not apply to articles of civil aircraft (all aircraft other than military aircraft); their engines, parts, and components; their other parts, components, and subassemblies; and ground flight simulators and their parts and components of Brazil, that otherwise meet the criteria of general note 6 to the tariff schedule, and classifiable in the following provisions of the HTSUS, but regardless of whether a product is entered under a provision for which the rate of duty "Free (C)" appears in the "Special" subcolumn: 3917.21.00 3917.22.00 3917.23.00 3917.29.00 3917.31.00 3917.33.00 3917.39.00 3917.40.00 3926.90.45 3926.90.94 3926.90.96 3926.90.99 4008.29.20 4009.12.00 4009.22.00 4009.32.00 4009.42.00 4011.30.00 4012.13.00 4012.20.10 4016.10.00 4016.93.50 4016.99.35 4016.99.60 4017.00.00 4504.90.00 4823.90.10 4823.90.20 4823.90.31 4823.90.40 4823.90.50 4823.90.60 4823.90.67 4823.90.70 4823.90.80 4823.90.86 6812.80.90 6812.99.10 6812.99.20 6812.99.90 6813.20.00 6813.81.00 6813.89.00 7007.21.11 7304.31.30 7304.31.60 7304.39.00 7304.41.30 7304.41.60 7304.49.00 7304.51.10 7304.51.50 7304.59.10 7304.59.20 7304.59.60 7304.59.80 7304.90.10 7304.90.30 7304.90.50 7304.90.70 7306.30.10 7306.30.30 7306.30.50 7306.40.10 7306.40.50 7306.50.10 7306.50.30 7306.50.50 7306.61.10 7306.61.30 7306.61.50 7306.61.70 7306.69.10 7306.69.30 7306.69.50 7306.69.70 7312.10.05 7312.10.10 7312.10.20 7312.10.30 7312.10.50 7312.10.60 7312.10.70 7312.10.80 7312.10.90 7312.90.00 7322.90.00 7324.10.00 7324.90.00 7326.20.00 7413.00.90 7608.10.00 7608.20.00 8108.90.60 8302.10.60 8302.10.90 8302.20.00 8302.42.30 8302.42.60 8302.49.40 8302.49.60 8302.49.80 8302.60.30 8307.10.30 8307.90.30 8407.10.00 8408.90.90 8409.10.00 8411.11.40 8411.11.80 8411.12.40 8411.12.80 8411.21.40 8411.21.80 8411.22.40 8411.22.80 8411.81.40 8411.82.40 8411.91.10 8411.91.90 8411.99.10 8411.99.90 8412.10.00 8412.21.00 8412.29.40 8412.29.80 8412.31.00 8412.39.00 8412.80.10 8412.80.90 8412.90.90 8413.19.00 8413.20.00 8413.30.10 8413.30.90 8413.50.00 8413.60.00 8413.70.10 8413.70.20 8413.81.00 8413.91.10 8413.91.20 8413.91.90 8414.10.00 8414.20.00 8414.30.40 8414.30.80 8414.51.30 8414.51.90 8414.59.30 8414.59.65 8414.80.05 8414.80.16 8414.80.20 8414.80.90 8414.90.10 8414.90.30 8414.90.41 8414.90.91 8415.10.60 8415.10.90 8415.81.01 8415.82.01 8415.83.00 8415.90.40 8415.90.80 8418.10.00 8418.30.00 8418.40.00 8418.61.01 8418.69.01 8419.50.10 8419.50.50 8419.81.50 8419.81.90 8419.90.10 8419.90.20 8419.90.30 8419.90.50 8419.90.85 8421.19.00 8421.21.00 8421.23.00 8421.29.00 8421.31.00 8421.32.00 8421.39.01 8424.10.00 8425.11.00 8425.19.00 8425.31.01 8425.39.01 8425.42.00 8425.49.00 8426.99.00 8428.10.00 8428.20.00 8428.33.00 8428.39.00 8428.90.03 8443.31.00 8443.32.10 8443.32.50 8471.41.01 8471.49.00 8471.50.01 8471.60.10 8471.60.20 8471.60.70 8471.60.80 8471.60.90 8471.70.10 8471.70.20 8471.70.30 8471.70.40 8471.70.50 8471.70.60 8471.70.90 8479.89.10 8479.89.20 8479.89.65 8479.89.70 8479.89.95 8479.90.41 8479.90.45 8479.90.55 8479.90.65 8479.90.75 8479.90.85 8479.90.95 8483.10.10 8483.10.30 8483.10.50 8483.30.40 8483.30.80 8483.40.10 8483.40.30 8483.40.50 8483.40.70 8483.40.80 8483.40.90 8483.50.40 8483.50.60 8483.50.90 8483.60.40 8483.60.80 8483.90.10 8483.90.20 8483.90.30 8483.90.50 8483.90.80 8484.10.00 8484.90.00 8501.20.50 8501.20.60 8501.31.50 8501.31.60 8501.31.81 8501.32.20 8501.32.55 8501.32.61 8501.33.20 8501.33.30 8501.33.61 8501.34.61 8501.40.50 8501.40.60 8501.51.50 8501.51.60 8501.52.40 8501.52.80 8501.53.40 8501.53.60 8501.61.01 8501.62.01 8501.63.01 8501.71.00 8501.72.10 8501.72.20 8501.72.30 8501.72.90 8501.80.10 8501.80.20 8501.80.30 8502.11.00 8502.12.00 8502.13.00 8502.20.00 8502.31.00 8502.39.00 8502.40.00 8504.10.00 8504.31.20 8504.31.40 8504.31.60 8504.32.00 8504.33.00 8504.40.40 8504.40.60 8504.40.70 8504.40.85 8504.40.95 8504.50.40 8504.50.80 8507.10.00 8507.20.80 8507.30.80 8507.50.00 8507.60.00 8507.80.82 8507.90.40 8507.90.80 8511.10.00 8511.20.00 8511.30.00 8511.40.00 8511.50.00 8511.80.20 8511.80.40 8511.80.60 8514.20.40 8516.80.40 8516.80.80 8517.13.00 8517.14.00 8517.61.00 8517.62.00 8517.69.00 8517.71.00 8518.10.40 8518.10.80 8518.21.00 8518.22.00 8518.29.40 8518.29.80 8518.30.10 8518.30.20 8518.40.10 8518.40.20 8518.50.00 8519.81.10 8519.81.20 8519.81.25 8519.81.30 8519.81.41 8519.89.10 8519.89.20 8519.89.30 8521.10.30 8521.10.60 8521.10.90 8522.90.25 8522.90.36 8522.90.45 8522.90.58 8522.90.65 8522.90.80 8526.10.00 8526.91.00 8526.92.10 8526.92.50 8528.42.00 8528.52.00 8528.62.00 8529.10.21 8529.10.40 8529.10.91 8529.90.04 8529.90.05 8529.90.06 8529.90.09 8529.90.13 8529.90.16 8529.90.19 8529.90.21 8529.90.24 8529.90.29 8529.90.33 8529.90.36 8529.90.39 8529.90.43 8529.90.46 8529.90.49 8529.90.55 8529.90.63 8529.90.68 8529.90.73 8529.90.77 8529.90.78 8529.90.81 8529.90.83 8529.90.87 8529.90.88 8529.90.89 8529.90.93 8529.90.95 8529.90.97 8529.90.98 8531.10.00 8531.20.00 8531.80.15 8531.80.90 8536.70.00 8539.10.00 8539.51.00 8543.70.42 8543.70.45 8543.70.60 8543.70.80 8543.70.91 8543.70.95 8543.90.12 8543.90.15 8543.90.35 8543.90.65 8543.90.68 8543.90.85 8543.90.88 8544.30.00 8801.00.00 8802.11.01 8802.12.01 8802.20.01 8802.30.01 8802.40.01 8805.29.00 8806.10.00 8806.21.00 8806.22.00 8806.23.00 8806.24.00 8806.29.00 8806.91.00 8806.92.00 8806.93.00 8806.94.00 8806.99.00 8807.10.00 8807.20.00 8807.30.00 8807.90.90 9001.90.40 9001.90.50 9001.90.60 9001.90.80 9001.90.90 9002.90.20 9002.90.40 9002.90.70 9002.90.85 9002.90.95 9014.10.10 9014.10.60 9014.10.70 9014.10.90 9014.20.20 9014.20.40 9014.20.60 9014.20.80 9014.90.10 9014.90.20 9014.90.40 9014.90.60 9020.00.40 9020.00.60 9025.11.20 9025.11.40 9025.19.40 9025.19.80 9025.80.10 9025.80.15 9025.80.20 9025.80.35 9025.80.40 9025.80.50 9025.90.06 9026.10.20 9026.10.40 9026.10.60 9026.20.40 9026.20.80 9026.80.20 9026.80.40 9026.80.60 9026.90.20 9026.90.40 9026.90.60 9029.10.80 9029.20.40 9029.90.80 9030.10.00 9030.20.05 9030.20.10 9030.31.00 9030.32.00 9030.33.34 9030.33.38 9030.39.01 9030.40.00 9030.84.00 9030.89.01 9030.90.25 9030.90.46 9030.90.66 9030.90.68 9030.90.84 9030.90.89 9031.80.40 9031.80.80 9031.90.21 9031.90.45 9031.90.54 9031.90.59 9031.90.70 9031.90.91 9032.10.00 9032.20.00 9032.81.00 9032.89.20 9032.89.40 9032.89.60 9032.90.21 9032.90.41 9032.90.61 9033.00.90 9104.00.05 9104.00.10 9104.00.20 9104.00.25 9104.00.30 9104.00.40 9104.00.45 9104.00.50 9104.00.60 9109.10.50 9109.10.60 9109.90.20 9401.10.40 9401.10.80 9403.20.00 9403.70.40 9403.70.80 9405.11.40 9405.11.60 9405.11.80 9405.19.40 9405.19.60 9405.19.80 9405.61.20 9405.61.40 9405.61.60 9405.69.20 9405.69.40 9405.69.60 9405.92.00 9405.99.20 9405.99.40 9620.00.50 9620.00.60 9802.00.40 9802.00.50 9802.00.60 9802.00.80 9818.00.05 9818.00.07
+note(2)(x)(v) The additional duties imposed by heading 9903.01.77 shall not apply to products of iron or steel provided for in headings 9903.81.87 and 9903.81.88.
+note(2)(x)(vi) The additional duties imposed by heading 9903.01.77 shall not apply to derivative iron or steel products provided for in headings 9903.81.89, 9903.81.90, 9903.81.91, 9903.81.92 and 9903.81.93.
+note(2)(x)(vii) The additional duties imposed by heading 9903.01.77 shall not apply to products of aluminum provided for in heading 9903.85.02.
+note(2)(x)(viii) The additional duties imposed by heading 9903.01.77 shall not apply to derivative aluminum products provided for in headings 9903.85.04, 9903.85.07, 9903.85.08 and 9903.85.09.
+note(2)(x)(ix) The additional duties imposed by heading 9903.01.77 shall not apply to passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans, and cargo vans) and light trucks provided for in headings 9903.94.01 and 9903.94.03.
+note(2)(x)(x) The additional duties imposed by heading 9903.01.77 shall not apply to parts of passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans, and cargo vans) and parts of light trucks provided for in headings 9903.94.05 and 9903.94.07.
+note(2)(x)(xi) The additional duties imposed by heading 9903.01.77 shall not apply to semi-finished copper and intensive copper derivative products provided for in heading 9903.78.01.
+note(2)(x)(xii) The additional duties imposed by heading 9903.01.77 shall apply to wood products provided for in heading 9903.76.04, but shall not apply to wood products provided for in headings 9903.76.01, 9903.76.02 and 9903.76.03.
+note(2)(x)(xiii) The additional duties imposed by heading 9903.01.77 shall not apply to medium- and heavy-duty vehicles provided for in headings 9903.74.01, 9903.74.02 and 9903.74.03.
+note(2)(x)(xiv) The additional duties imposed by heading 9903.01.77 shall not apply to medium- and heavy-duty vehicle parts provided for in headings 9903.74.08 and 9903.74.09.
+INFO:sectionieepa_agent:Querying LLM for notes note(2)(x)
+INFO:sectionieepa_agent:message:You are a structured extractor for HTSUS Section ieepa notes.
+Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
+
+Objective:
+From the input legal note text, produce three outputs:
+1. **input_htscode** – copy exactly from `context.input_htscode` (a list provided by the caller). Do NOT infer, paraphrase, or add/remove codes. If this field is missing, return an empty list.
+2. **scope** – headings or subheadings that are explicitly stated to be covered (inside the range) by the measure. Do **not** include anything that appears only inside "except"/"exclusion" phrasing.
+3. **except** – headings or subheadings explicitly excluded (phrases such as "except … provided for in …").
+
+Each object in scope or except must match the `sieepa_scope` table schema:
+
+- keys                 // comma-separated exact heading or HTS8 codes (e.g. "0203.29.20,0203.29.40,0206.10.00") when conditions are identical
+- key                  // single exact heading or HTS8 code (e.g. "9903.88.05" or "8501.10.40") when used alone
+- key_type             // one of: "heading" (use for 4-digit headings and any 6-digit references), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
+- country_iso2         // ISO-2 country code mentioned in the text (e.g. "UK"), else null
+- source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
+- effective_start_date // ISO date; use context.fallback_start_date if not stated
+- effective_end_date   // ISO date or null
+
+Extraction rules:
+A. Set **input_htscode** equal to `context.input_htscode`. Never invent or summarize values.
+
+B. Identify all **scope** items:
+   - Include every HTS reference that is explicitly printed (4-digit headings, 6-digit subheadings, 8-digit HTS codes, or 10-digit statistical reporting numbers) under "applies to…" or similar language.
+   - When the text prints a range such as "9903.02.74-9903.02.77" or "9903.02.74–9903.02.77", expand it into each discrete heading (9903.02.74, 9903.02.75, 9903.02.76, 9903.02.77).
+   - Do NOT include `input_htscode` again.
+   - **When multiple HTS codes share identical conditions (same key_type, country_iso2, source_label, effective_start_date, effective_end_date), combine them using "keys" field with comma-separated values instead of creating separate objects.**
+
+C. Identify all **except** items:
+   - Look for any statement that exempts certain products/headings from the additional duties that would otherwise apply to `input_htscode`.
+   - Common patterns include:
+     * "Except as provided in heading(s) X..."
+     * "The additional duties imposed by heading(s) [including input_htscode] shall not apply to [products] provided for in heading(s) X"
+     * "As provided in heading X, the additional duties... shall not apply to products classified in..."
+   
+   - **Understanding Full vs Partial Exemptions:**
+     * **FULL EXEMPTION** (add to `except`): The products classified in the referenced heading are COMPLETELY exempt from the additional duties.
+       - The entire product/article in that heading is not subject to the additional duties.
+       - Example: "The additional duties shall not apply to medium- and heavy-duty vehicle parts provided for in headings 9903.74.08 and 9903.74.09"
+         → Products in 9903.74.08 and 9903.74.09 are FULLY exempt
+     
+     * **PARTIAL EXEMPTION** (do NOT add to `except`): Only a specific portion/component of the products in the referenced heading is exempt, while the remaining portion is still subject to duties.
+       - The text clarifies that duties still apply to some part/content of the product.
+       - Example: "The additional duties shall not apply to products of iron or steel provided for in headings 9903.81.87 and 9903.81.88, but such additional duties shall apply to the non-steel content of such products"
+         → Products in 9903.81.87 and 9903.81.88 are only PARTIALLY exempt (steel content exempt, non-steel content still taxed)
+       - Example: "The additional duties shall not apply to the declared value of the steel content of the derivative iron or steel products provided for in headings 9903.81.89-9903.81.93, but shall apply to the non-steel content"
+         → Products in 9903.81.89-9903.81.93 are only PARTIALLY exempt
+   
+   - **Decision Rule**: 
+     * Use your understanding of the legal language to determine: Are the products in the referenced heading COMPLETELY exempt from the additional duties, or are they only PARTIALLY exempt?
+     * Only add headings to `except` if they represent FULL exemptions.
+     * Do NOT add headings that represent partial exemptions (where some portion is still taxable).
+
+   - Special handling for clauses like "As provided for in heading 9903.01.32, the additional duties imposed by headings 9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, and 9903.02.01-9903.02.73 shall not apply to products classified in the following subheadings …": the listed subheadings (e.g., 0201.10.05, 0201.10.10) are the contents of heading 9903.01.32. Add **9903.01.32** itself to the `except` set for each imposing heading (9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, 9903.02.01-9903.02.73). Do not add the enumerated subheadings directly to `except` in this scenario.
+   
+   - **Checking Applicability**: 
+     * For an exemption to apply to `input_htscode`, the text must indicate that the exemption applies to the additional duties imposed by a list of headings that includes `input_htscode`.
+     * Ranges like "9903.02.01-9903.02.73" include ALL codes numerically between start and end (inclusive).
+     * Example: If input_htscode is "9903.02.02" and text says "duties imposed by headings 9903.02.01-9903.02.73 shall not apply to X", then X is an exemption for 9903.02.02.
+   
+   - Mark their source_label with "-exclusion".
+   - Apply the same combination rule as scope items when conditions are identical.
+
+D. Ignore carve-outs that clearly belong to other headings/programs (e.g., "As provided in 9903.01.26 ... products of Canada"). Unless the sentence explicitly ties the relief to `input_htscode`, do not add those references to `scope` or `except`.
+
+E. Set country_iso2 to the ISO-2 code for the country named in the text (e.g. "UK" for "products of the United Kingdom"). If no country is mentioned, leave it null.
+
+F. Only populate effective_start_date and effective_end_date when explicit "effective" or date ranges appear in the text.  
+   - Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"  
+   - Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"  
+   - Entry/admission timing clauses (e.g., goods admitted to a foreign trade zone before 12:01 a.m. EDT on March 12, 2025) do **not** impose an effective_end_date; they only describe which entries qualify.  
+   - If no explicit "effective" or date reference appears, leave both fields null. Do not use fallback_start_date.
+
+G. Remove duplicates.
+
+H. When multiple note blocks are provided, use `context.note_labels` (same order as the input blocks) for their labels. `context.primary_note_labels` lists the notes that actually triggered this extraction. `context.supporting_note_labels` lists subdivisions that were included only because a primary note referenced them (e.g., "subdivision (l)"). For supporting notes:
+   - Treat any HTS codes printed inside those blocks as exclusions for the referencing primary note unless the supporting block clearly introduces a different heading of its own.
+   - Use the primary note label with "-exclusion" for the `source_label` (e.g., `note16(m)-exclusion`).
+   - Do NOT add supporting-block codes to the scope of the current heading unless the text explicitly says they apply to that heading.
+
+I. If a supporting block explicitly states a different heading (e.g., "The rates … in heading 9903.81.89"), you may output its own scope entries but keep the source_label equal to that supporting note label.
+
+Context (provided by caller):
+// context.input_htscode → base headings provided by the caller; copy directly into "input_htscode"
+// context.note_labels → labels for each input block (in order)
+// context.primary_note_labels → subset that actually triggered extraction
+// context.supporting_note_labels → subdivisions referenced only to describe exclusions for the primaries
+{"country_iso2": "BR", "fallback_start_date": "2025-08-06", "input_htscode": ["9903.01.77"], "note_labels": ["note2(x)"], "primary_note_labels": ["note(2)(x)"], "source_label_prefix": "note(2)(x)", "supporting_note_labels": []}
+
+Input (one or more note blocks, each beginning with its note label on the first line):
+"""note2(x)
+note(2)(x) null
+note(2)(x)(i) Except as provided in headings 9903.01.78-9903.01.83, and in subdivisions (x)(ii) through (x)(xiv) of this note, and other than products for personal use included in accompanied baggage of persons arriving in the United States, heading 9903.01.77 imposes an additional ad valorem rate of duty on imports of all products of Brazil. Notwithstanding U.S. note 1 to this subchapter, all products that are subject to the additional ad valorem rate of duty imposed by this heading shall also be subject to the general rates of duty imposed under subheadings in chapters 1 to 97 of the tariff schedule. Except as provided in subdivisions (x)(ii) through (x)(xiv) of this note, all products that are subject to the additional ad valorem rate of duty imposed by this heading shall also be subject to any additional duty provided for in this subchapter or subchapter IV of chapter 99. Products that are eligible for special tariff treatment under general note 3(c)(i) to the tariff schedule, with the exception of products covered by the World Trade Organization Agreement on Trade in Civil Aircraft, or that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional ad valorem rate of duty imposed by this heading. The additional duty imposed by this heading shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection ("CBP"), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under heading 9802.00.80; and subheadings 9802.00.40, 9802.00.50, and 9802.00.60. For subheadings 9802.00.40, 9802.00.50, and 9802.00.60, the additional duties apply to the value of repairs, alterations, or processing performed, as described in the applicable subheading. For heading 9802.00.80, the additional duties apply to the value of the article assembled abroad, less the cost or value of such products of the United States, as described. Products that are provided for in heading 9903.01.77 shall continue to be subject to antidumping, countervailing, or other duties, taxes, fees, exactions and charges that apply to such products, as well as to the additional ad valorem rate of duty imposed by this heading.
+note(2)(x)(ii) Heading 9903.01.79 covers only products that are donations, by persons subject to the jurisdiction of the United States, of articles, such as food, clothing, and medicine, intended to be used to relieve human suffering, except to the extent that the President determines that such donations (A) would seriously impair his ability to deal with any national emergency declared under section 1701 of title 19 of the U.S. Code, (B) are in response to coercion against the proposed recipient or donor, or (C) would endanger Armed Forces of the United States which are engaged in hostilities or are in a situation where imminent involvement in hostilities is clearly indicated by the circumstances.
+note(2)(x)(iii) As provided in heading 9903.01.81, the additional duties imposed by heading 9903.01.77 shall not apply to products classified in the following provisions of the HTSUS: [Compiler's note: List may appear or continue on a subsequent page; read numbers from left to right.] 0801.21.00 2008.30.35 2009.11.00 2009.12.25 2009.12.45 2525.10.00 2601.11.00 2601.12.00 2609.00.00 2701.11.00 2701.12.00 2701.19.00 2701.20.00 2702.10.00 2702.20.00 2703.00.00 2704.00.00 2705.00.00 2706.00.00 2707.10.00 2707.20.00 2707.30.00 2707.40.00 2707.50.00 2707.91.00 2707.99.10 2707.99.20 2707.99.40 2707.99.51 2707.99.55 2707.99.59 2707.99.90 2708.10.00 2708.20.00 2709.00.10 2709.00.20 2710.12.15 2710.12.18 2710.12.25 2710.12.45 2710.12.90 2710.19.06 2710.19.11 2710.19.16 2710.19.24 2710.19.25 2710.19.26 2710.19.30 2710.19.35 2710.19.40 2710.19.45 2710.19.90 2710.20.05 2710.20.10 2710.20.15 2710.20.25 2710.91.00 2710.99.05 2710.99.10 2710.99.16 2710.99.21 2710.99.31 2710.99.32 2710.99.39 2710.99.45 2710.99.90 2711.11.00 2711.12.00 2711.13.00 2711.14.00 2711.19.00 2711.21.00 2711.29.00 2712.10.00 2712.20.00 2712.90.10 2712.90.20 2713.11.00 2713.12.00 2713.20.00 2713.90.00 2714.10.00 2714.90.00 2715.00.00 2716.00.00 2804.69.10 2804.69.50 2815.20.00 2818.20.00 2825.90.20 2827.39.25 2903.19.05 2903.19.10 2903.19.30 2903.19.60 3105.10.00 3105.20.00 3105.60.00 4407.29.02 4702.00.00 4703.11.00 4703.19.00 4703.21.00 4703.29.00 4704.11.00 4704.19.00 4704.21.00 4704.29.00 4705.00.00 4706.10.00 4706.20.00 4706.30.00 4706.91.00 4706.92.01 4706.93.01 5607.21.00 6802.99.00 7106.91.10 7108.12.10 7201.10.00 7201.20.00 7201.50.30 7201.50.60 7202.60.00 7202.93.40 7202.93.80 7203.10.00 7203.90.00 8002.00.00 null
+note(2)(x)(iv) As provided in heading 9903.01.82, the additional duties imposed by heading 9903.01.77 shall not apply to articles of civil aircraft (all aircraft other than military aircraft); their engines, parts, and components; their other parts, components, and subassemblies; and ground flight simulators and their parts and components of Brazil, that otherwise meet the criteria of general note 6 to the tariff schedule, and classifiable in the following provisions of the HTSUS, but regardless of whether a product is entered under a provision for which the rate of duty "Free (C)" appears in the "Special" subcolumn: 3917.21.00 3917.22.00 3917.23.00 3917.29.00 3917.31.00 3917.33.00 3917.39.00 3917.40.00 3926.90.45 3926.90.94 3926.90.96 3926.90.99 4008.29.20 4009.12.00 4009.22.00 4009.32.00 4009.42.00 4011.30.00 4012.13.00 4012.20.10 4016.10.00 4016.93.50 4016.99.35 4016.99.60 4017.00.00 4504.90.00 4823.90.10 4823.90.20 4823.90.31 4823.90.40 4823.90.50 4823.90.60 4823.90.67 4823.90.70 4823.90.80 4823.90.86 6812.80.90 6812.99.10 6812.99.20 6812.99.90 6813.20.00 6813.81.00 6813.89.00 7007.21.11 7304.31.30 7304.31.60 7304.39.00 7304.41.30 7304.41.60 7304.49.00 7304.51.10 7304.51.50 7304.59.10 7304.59.20 7304.59.60 7304.59.80 7304.90.10 7304.90.30 7304.90.50 7304.90.70 7306.30.10 7306.30.30 7306.30.50 7306.40.10 7306.40.50 7306.50.10 7306.50.30 7306.50.50 7306.61.10 7306.61.30 7306.61.50 7306.61.70 7306.69.10 7306.69.30 7306.69.50 7306.69.70 7312.10.05 7312.10.10 7312.10.20 7312.10.30 7312.10.50 7312.10.60 7312.10.70 7312.10.80 7312.10.90 7312.90.00 7322.90.00 7324.10.00 7324.90.00 7326.20.00 7413.00.90 7608.10.00 7608.20.00 8108.90.60 8302.10.60 8302.10.90 8302.20.00 8302.42.30 8302.42.60 8302.49.40 8302.49.60 8302.49.80 8302.60.30 8307.10.30 8307.90.30 8407.10.00 8408.90.90 8409.10.00 8411.11.40 8411.11.80 8411.12.40 8411.12.80 8411.21.40 8411.21.80 8411.22.40 8411.22.80 8411.81.40 8411.82.40 8411.91.10 8411.91.90 8411.99.10 8411.99.90 8412.10.00 8412.21.00 8412.29.40 8412.29.80 8412.31.00 8412.39.00 8412.80.10 8412.80.90 8412.90.90 8413.19.00 8413.20.00 8413.30.10 8413.30.90 8413.50.00 8413.60.00 8413.70.10 8413.70.20 8413.81.00 8413.91.10 8413.91.20 8413.91.90 8414.10.00 8414.20.00 8414.30.40 8414.30.80 8414.51.30 8414.51.90 8414.59.30 8414.59.65 8414.80.05 8414.80.16 8414.80.20 8414.80.90 8414.90.10 8414.90.30 8414.90.41 8414.90.91 8415.10.60 8415.10.90 8415.81.01 8415.82.01 8415.83.00 8415.90.40 8415.90.80 8418.10.00 8418.30.00 8418.40.00 8418.61.01 8418.69.01 8419.50.10 8419.50.50 8419.81.50 8419.81.90 8419.90.10 8419.90.20 8419.90.30 8419.90.50 8419.90.85 8421.19.00 8421.21.00 8421.23.00 8421.29.00 8421.31.00 8421.32.00 8421.39.01 8424.10.00 8425.11.00 8425.19.00 8425.31.01 8425.39.01 8425.42.00 8425.49.00 8426.99.00 8428.10.00 8428.20.00 8428.33.00 8428.39.00 8428.90.03 8443.31.00 8443.32.10 8443.32.50 8471.41.01 8471.49.00 8471.50.01 8471.60.10 8471.60.20 8471.60.70 8471.60.80 8471.60.90 8471.70.10 8471.70.20 8471.70.30 8471.70.40 8471.70.50 8471.70.60 8471.70.90 8479.89.10 8479.89.20 8479.89.65 8479.89.70 8479.89.95 8479.90.41 8479.90.45 8479.90.55 8479.90.65 8479.90.75 8479.90.85 8479.90.95 8483.10.10 8483.10.30 8483.10.50 8483.30.40 8483.30.80 8483.40.10 8483.40.30 8483.40.50 8483.40.70 8483.40.80 8483.40.90 8483.50.40 8483.50.60 8483.50.90 8483.60.40 8483.60.80 8483.90.10 8483.90.20 8483.90.30 8483.90.50 8483.90.80 8484.10.00 8484.90.00 8501.20.50 8501.20.60 8501.31.50 8501.31.60 8501.31.81 8501.32.20 8501.32.55 8501.32.61 8501.33.20 8501.33.30 8501.33.61 8501.34.61 8501.40.50 8501.40.60 8501.51.50 8501.51.60 8501.52.40 8501.52.80 8501.53.40 8501.53.60 8501.61.01 8501.62.01 8501.63.01 8501.71.00 8501.72.10 8501.72.20 8501.72.30 8501.72.90 8501.80.10 8501.80.20 8501.80.30 8502.11.00 8502.12.00 8502.13.00 8502.20.00 8502.31.00 8502.39.00 8502.40.00 8504.10.00 8504.31.20 8504.31.40 8504.31.60 8504.32.00 8504.33.00 8504.40.40 8504.40.60 8504.40.70 8504.40.85 8504.40.95 8504.50.40 8504.50.80 8507.10.00 8507.20.80 8507.30.80 8507.50.00 8507.60.00 8507.80.82 8507.90.40 8507.90.80 8511.10.00 8511.20.00 8511.30.00 8511.40.00 8511.50.00 8511.80.20 8511.80.40 8511.80.60 8514.20.40 8516.80.40 8516.80.80 8517.13.00 8517.14.00 8517.61.00 8517.62.00 8517.69.00 8517.71.00 8518.10.40 8518.10.80 8518.21.00 8518.22.00 8518.29.40 8518.29.80 8518.30.10 8518.30.20 8518.40.10 8518.40.20 8518.50.00 8519.81.10 8519.81.20 8519.81.25 8519.81.30 8519.81.41 8519.89.10 8519.89.20 8519.89.30 8521.10.30 8521.10.60 8521.10.90 8522.90.25 8522.90.36 8522.90.45 8522.90.58 8522.90.65 8522.90.80 8526.10.00 8526.91.00 8526.92.10 8526.92.50 8528.42.00 8528.52.00 8528.62.00 8529.10.21 8529.10.40 8529.10.91 8529.90.04 8529.90.05 8529.90.06 8529.90.09 8529.90.13 8529.90.16 8529.90.19 8529.90.21 8529.90.24 8529.90.29 8529.90.33 8529.90.36 8529.90.39 8529.90.43 8529.90.46 8529.90.49 8529.90.55 8529.90.63 8529.90.68 8529.90.73 8529.90.77 8529.90.78 8529.90.81 8529.90.83 8529.90.87 8529.90.88 8529.90.89 8529.90.93 8529.90.95 8529.90.97 8529.90.98 8531.10.00 8531.20.00 8531.80.15 8531.80.90 8536.70.00 8539.10.00 8539.51.00 8543.70.42 8543.70.45 8543.70.60 8543.70.80 8543.70.91 8543.70.95 8543.90.12 8543.90.15 8543.90.35 8543.90.65 8543.90.68 8543.90.85 8543.90.88 8544.30.00 8801.00.00 8802.11.01 8802.12.01 8802.20.01 8802.30.01 8802.40.01 8805.29.00 8806.10.00 8806.21.00 8806.22.00 8806.23.00 8806.24.00 8806.29.00 8806.91.00 8806.92.00 8806.93.00 8806.94.00 8806.99.00 8807.10.00 8807.20.00 8807.30.00 8807.90.90 9001.90.40 9001.90.50 9001.90.60 9001.90.80 9001.90.90 9002.90.20 9002.90.40 9002.90.70 9002.90.85 9002.90.95 9014.10.10 9014.10.60 9014.10.70 9014.10.90 9014.20.20 9014.20.40 9014.20.60 9014.20.80 9014.90.10 9014.90.20 9014.90.40 9014.90.60 9020.00.40 9020.00.60 9025.11.20 9025.11.40 9025.19.40 9025.19.80 9025.80.10 9025.80.15 9025.80.20 9025.80.35 9025.80.40 9025.80.50 9025.90.06 9026.10.20 9026.10.40 9026.10.60 9026.20.40 9026.20.80 9026.80.20 9026.80.40 9026.80.60 9026.90.20 9026.90.40 9026.90.60 9029.10.80 9029.20.40 9029.90.80 9030.10.00 9030.20.05 9030.20.10 9030.31.00 9030.32.00 9030.33.34 9030.33.38 9030.39.01 9030.40.00 9030.84.00 9030.89.01 9030.90.25 9030.90.46 9030.90.66 9030.90.68 9030.90.84 9030.90.89 9031.80.40 9031.80.80 9031.90.21 9031.90.45 9031.90.54 9031.90.59 9031.90.70 9031.90.91 9032.10.00 9032.20.00 9032.81.00 9032.89.20 9032.89.40 9032.89.60 9032.90.21 9032.90.41 9032.90.61 9033.00.90 9104.00.05 9104.00.10 9104.00.20 9104.00.25 9104.00.30 9104.00.40 9104.00.45 9104.00.50 9104.00.60 9109.10.50 9109.10.60 9109.90.20 9401.10.40 9401.10.80 9403.20.00 9403.70.40 9403.70.80 9405.11.40 9405.11.60 9405.11.80 9405.19.40 9405.19.60 9405.19.80 9405.61.20 9405.61.40 9405.61.60 9405.69.20 9405.69.40 9405.69.60 9405.92.00 9405.99.20 9405.99.40 9620.00.50 9620.00.60 9802.00.40 9802.00.50 9802.00.60 9802.00.80 9818.00.05 9818.00.07
+note(2)(x)(v) The additional duties imposed by heading 9903.01.77 shall not apply to products of iron or steel provided for in headings 9903.81.87 and 9903.81.88.
+note(2)(x)(vi) The additional duties imposed by heading 9903.01.77 shall not apply to derivative iron or steel products provided for in headings 9903.81.89, 9903.81.90, 9903.81.91, 9903.81.92 and 9903.81.93.
+note(2)(x)(vii) The additional duties imposed by heading 9903.01.77 shall not apply to products of aluminum provided for in heading 9903.85.02.
+note(2)(x)(viii) The additional duties imposed by heading 9903.01.77 shall not apply to derivative aluminum products provided for in headings 9903.85.04, 9903.85.07, 9903.85.08 and 9903.85.09.
+note(2)(x)(ix) The additional duties imposed by heading 9903.01.77 shall not apply to passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans, and cargo vans) and light trucks provided for in headings 9903.94.01 and 9903.94.03.
+note(2)(x)(x) The additional duties imposed by heading 9903.01.77 shall not apply to parts of passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans, and cargo vans) and parts of light trucks provided for in headings 9903.94.05 and 9903.94.07.
+note(2)(x)(xi) The additional duties imposed by heading 9903.01.77 shall not apply to semi-finished copper and intensive copper derivative products provided for in heading 9903.78.01.
+note(2)(x)(xii) The additional duties imposed by heading 9903.01.77 shall apply to wood products provided for in heading 9903.76.04, but shall not apply to wood products provided for in headings 9903.76.01, 9903.76.02 and 9903.76.03.
+note(2)(x)(xiii) The additional duties imposed by heading 9903.01.77 shall not apply to medium- and heavy-duty vehicles provided for in headings 9903.74.01, 9903.74.02 and 9903.74.03.
+note(2)(x)(xiv) The additional duties imposed by heading 9903.01.77 shall not apply to medium- and heavy-duty vehicle parts provided for in headings 9903.74.08 and 9903.74.09."""
+
+Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
+{
+  "input_htscode": ["9903.88.01"],
+  "scope": [
+    { "keys": "0203.29.20,0203.29.40,0206.10.00,0208.10.00,0208.90.20,0208.90.25,0210.19.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null },
+    { "key": "2845.30.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ],
+  "except": [
+    { "key": "9903.88.05", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(a)-exclusion", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ]
+}
+
+INFO:sectionieepa_agent:raw:{
+  "input_htscode": ["9903.01.77"],
+  "scope": [],
+  "except": [
+    {
+      "keys": "9903.01.78,9903.01.79,9903.01.80,9903.01.81,9903.01.82,9903.01.83,9903.81.87,9903.81.88,9903.81.89,9903.81.90,9903.81.91,9903.81.92,9903.81.93,9903.85.02,9903.85.04,9903.85.07,9903.85.08,9903.85.09,9903.94.01,9903.94.03,9903.94.05,9903.94.07,9903.78.01,9903.76.01,9903.76.02,9903.76.03,9903.74.01,9903.74.02,9903.74.03,9903.74.08,9903.74.09",
+      "key_type": "heading",
+      "country_iso2": "BR",
+      "source_label": "note(2)(x)-exclusion",
+      "effective_start_date": null,
+      "effective_end_date": null
+    }
+  ]
+}
+INFO:sectionieepa_agent:Processing heading 9903.01.78
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": [],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": "BR",
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": true
+}
+INFO:sectionieepa_agent:Created measure 396 for heading 9903.01.78
+INFO:sectionieepa_agent:Created scope↔measure relation 160515 (scope=21931, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.01.78 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.01.79
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note2(x)(ii)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": "BR",
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Created measure 397 for heading 9903.01.79
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(ii) (first path=['note', '2', 'x', 'ii'])
+INFO:sectionieepa_agent:note(2)(x)(ii) Heading 9903.01.79 covers only products that are donations, by persons subject to the jurisdiction of the United States, of articles, such as food, clothing, and medicine, intended to be used to relieve human suffering, except to the extent that the President determines that such donations (A) would seriously impair his ability to deal with any national emergency declared under section 1701 of title 19 of the U.S. Code, (B) are in response to coercion against the proposed recipient or donor, or (C) would endanger Armed Forces of the United States which are engaged in hostilities or are in a situation where imminent involvement in hostilities is clearly indicated by the circumstances.
+INFO:sectionieepa_agent:Querying LLM for notes note(2)(x)(ii)
+INFO:sectionieepa_agent:message:You are a structured extractor for HTSUS Section ieepa notes.
+Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
+
+Objective:
+From the input legal note text, produce three outputs:
+1. **input_htscode** – copy exactly from `context.input_htscode` (a list provided by the caller). Do NOT infer, paraphrase, or add/remove codes. If this field is missing, return an empty list.
+2. **scope** – headings or subheadings that are explicitly stated to be covered (inside the range) by the measure. Do **not** include anything that appears only inside "except"/"exclusion" phrasing.
+3. **except** – headings or subheadings explicitly excluded (phrases such as "except … provided for in …").
+
+Each object in scope or except must match the `sieepa_scope` table schema:
+
+- keys                 // comma-separated exact heading or HTS8 codes (e.g. "0203.29.20,0203.29.40,0206.10.00") when conditions are identical
+- key                  // single exact heading or HTS8 code (e.g. "9903.88.05" or "8501.10.40") when used alone
+- key_type             // one of: "heading" (use for 4-digit headings and any 6-digit references), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
+- country_iso2         // ISO-2 country code mentioned in the text (e.g. "UK"), else null
+- source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
+- effective_start_date // ISO date; use context.fallback_start_date if not stated
+- effective_end_date   // ISO date or null
+
+Extraction rules:
+A. Set **input_htscode** equal to `context.input_htscode`. Never invent or summarize values.
+
+B. Identify all **scope** items:
+   - Include every HTS reference that is explicitly printed (4-digit headings, 6-digit subheadings, 8-digit HTS codes, or 10-digit statistical reporting numbers) under "applies to…" or similar language.
+   - When the text prints a range such as "9903.02.74-9903.02.77" or "9903.02.74–9903.02.77", expand it into each discrete heading (9903.02.74, 9903.02.75, 9903.02.76, 9903.02.77).
+   - Do NOT include `input_htscode` again.
+   - **When multiple HTS codes share identical conditions (same key_type, country_iso2, source_label, effective_start_date, effective_end_date), combine them using "keys" field with comma-separated values instead of creating separate objects.**
+
+C. Identify all **except** items:
+   - Look for any statement that exempts certain products/headings from the additional duties that would otherwise apply to `input_htscode`.
+   - Common patterns include:
+     * "Except as provided in heading(s) X..."
+     * "The additional duties imposed by heading(s) [including input_htscode] shall not apply to [products] provided for in heading(s) X"
+     * "As provided in heading X, the additional duties... shall not apply to products classified in..."
+   
+   - **Understanding Full vs Partial Exemptions:**
+     * **FULL EXEMPTION** (add to `except`): The products classified in the referenced heading are COMPLETELY exempt from the additional duties.
+       - The entire product/article in that heading is not subject to the additional duties.
+       - Example: "The additional duties shall not apply to medium- and heavy-duty vehicle parts provided for in headings 9903.74.08 and 9903.74.09"
+         → Products in 9903.74.08 and 9903.74.09 are FULLY exempt
+     
+     * **PARTIAL EXEMPTION** (do NOT add to `except`): Only a specific portion/component of the products in the referenced heading is exempt, while the remaining portion is still subject to duties.
+       - The text clarifies that duties still apply to some part/content of the product.
+       - Example: "The additional duties shall not apply to products of iron or steel provided for in headings 9903.81.87 and 9903.81.88, but such additional duties shall apply to the non-steel content of such products"
+         → Products in 9903.81.87 and 9903.81.88 are only PARTIALLY exempt (steel content exempt, non-steel content still taxed)
+       - Example: "The additional duties shall not apply to the declared value of the steel content of the derivative iron or steel products provided for in headings 9903.81.89-9903.81.93, but shall apply to the non-steel content"
+         → Products in 9903.81.89-9903.81.93 are only PARTIALLY exempt
+   
+   - **Decision Rule**: 
+     * Use your understanding of the legal language to determine: Are the products in the referenced heading COMPLETELY exempt from the additional duties, or are they only PARTIALLY exempt?
+     * Only add headings to `except` if they represent FULL exemptions.
+     * Do NOT add headings that represent partial exemptions (where some portion is still taxable).
+
+   - Special handling for clauses like "As provided for in heading 9903.01.32, the additional duties imposed by headings 9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, and 9903.02.01-9903.02.73 shall not apply to products classified in the following subheadings …": the listed subheadings (e.g., 0201.10.05, 0201.10.10) are the contents of heading 9903.01.32. Add **9903.01.32** itself to the `except` set for each imposing heading (9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, 9903.02.01-9903.02.73). Do not add the enumerated subheadings directly to `except` in this scenario.
+   
+   - **Checking Applicability**: 
+     * For an exemption to apply to `input_htscode`, the text must indicate that the exemption applies to the additional duties imposed by a list of headings that includes `input_htscode`.
+     * Ranges like "9903.02.01-9903.02.73" include ALL codes numerically between start and end (inclusive).
+     * Example: If input_htscode is "9903.02.02" and text says "duties imposed by headings 9903.02.01-9903.02.73 shall not apply to X", then X is an exemption for 9903.02.02.
+   
+   - Mark their source_label with "-exclusion".
+   - Apply the same combination rule as scope items when conditions are identical.
+
+D. Ignore carve-outs that clearly belong to other headings/programs (e.g., "As provided in 9903.01.26 ... products of Canada"). Unless the sentence explicitly ties the relief to `input_htscode`, do not add those references to `scope` or `except`.
+
+E. Set country_iso2 to the ISO-2 code for the country named in the text (e.g. "UK" for "products of the United Kingdom"). If no country is mentioned, leave it null.
+
+F. Only populate effective_start_date and effective_end_date when explicit "effective" or date ranges appear in the text.  
+   - Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"  
+   - Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"  
+   - Entry/admission timing clauses (e.g., goods admitted to a foreign trade zone before 12:01 a.m. EDT on March 12, 2025) do **not** impose an effective_end_date; they only describe which entries qualify.  
+   - If no explicit "effective" or date reference appears, leave both fields null. Do not use fallback_start_date.
+
+G. Remove duplicates.
+
+H. When multiple note blocks are provided, use `context.note_labels` (same order as the input blocks) for their labels. `context.primary_note_labels` lists the notes that actually triggered this extraction. `context.supporting_note_labels` lists subdivisions that were included only because a primary note referenced them (e.g., "subdivision (l)"). For supporting notes:
+   - Treat any HTS codes printed inside those blocks as exclusions for the referencing primary note unless the supporting block clearly introduces a different heading of its own.
+   - Use the primary note label with "-exclusion" for the `source_label` (e.g., `note16(m)-exclusion`).
+   - Do NOT add supporting-block codes to the scope of the current heading unless the text explicitly says they apply to that heading.
+
+I. If a supporting block explicitly states a different heading (e.g., "The rates … in heading 9903.81.89"), you may output its own scope entries but keep the source_label equal to that supporting note label.
+
+Context (provided by caller):
+// context.input_htscode → base headings provided by the caller; copy directly into "input_htscode"
+// context.note_labels → labels for each input block (in order)
+// context.primary_note_labels → subset that actually triggered extraction
+// context.supporting_note_labels → subdivisions referenced only to describe exclusions for the primaries
+{"country_iso2": "BR", "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.79"], "note_labels": ["note2(x)(ii)"], "primary_note_labels": ["note(2)(x)(ii)"], "source_label_prefix": "note(2)(x)(ii)", "supporting_note_labels": []}
+
+Input (one or more note blocks, each beginning with its note label on the first line):
+"""note2(x)(ii)
+note(2)(x)(ii) Heading 9903.01.79 covers only products that are donations, by persons subject to the jurisdiction of the United States, of articles, such as food, clothing, and medicine, intended to be used to relieve human suffering, except to the extent that the President determines that such donations (A) would seriously impair his ability to deal with any national emergency declared under section 1701 of title 19 of the U.S. Code, (B) are in response to coercion against the proposed recipient or donor, or (C) would endanger Armed Forces of the United States which are engaged in hostilities or are in a situation where imminent involvement in hostilities is clearly indicated by the circumstances."""
+
+Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
+{
+  "input_htscode": ["9903.88.01"],
+  "scope": [
+    { "keys": "0203.29.20,0203.29.40,0206.10.00,0208.10.00,0208.90.20,0208.90.25,0210.19.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null },
+    { "key": "2845.30.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ],
+  "except": [
+    { "key": "9903.88.05", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(a)-exclusion", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ]
+}
+
+INFO:sectionieepa_agent:raw:{
+  "input_htscode": ["9903.01.79"],
+  "scope": [],
+  "except": []
+}
+INFO:sectionieepa_agent:Created scope↔measure relation 160516 (scope=21932, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.01.79 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.01.80
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": [],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": "BR",
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Created measure 398 for heading 9903.01.80
+INFO:sectionieepa_agent:Created scope↔measure relation 160517 (scope=21933, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.01.80 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.01.81
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note2(x)(iii)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": "BR",
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Created measure 399 for heading 9903.01.81
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(iii) (first path=['note', '2', 'x', 'iii'])
+INFO:sectionieepa_agent:note(2)(x)(iii) As provided in heading 9903.01.81, the additional duties imposed by heading 9903.01.77 shall not apply to products classified in the following provisions of the HTSUS: [Compiler's note: List may appear or continue on a subsequent page; read numbers from left to right.] 0801.21.00 2008.30.35 2009.11.00 2009.12.25 2009.12.45 2525.10.00 2601.11.00 2601.12.00 2609.00.00 2701.11.00 2701.12.00 2701.19.00 2701.20.00 2702.10.00 2702.20.00 2703.00.00 2704.00.00 2705.00.00 2706.00.00 2707.10.00 2707.20.00 2707.30.00 2707.40.00 2707.50.00 2707.91.00 2707.99.10 2707.99.20 2707.99.40 2707.99.51 2707.99.55 2707.99.59 2707.99.90 2708.10.00 2708.20.00 2709.00.10 2709.00.20 2710.12.15 2710.12.18 2710.12.25 2710.12.45 2710.12.90 2710.19.06 2710.19.11 2710.19.16 2710.19.24 2710.19.25 2710.19.26 2710.19.30 2710.19.35 2710.19.40 2710.19.45 2710.19.90 2710.20.05 2710.20.10 2710.20.15 2710.20.25 2710.91.00 2710.99.05 2710.99.10 2710.99.16 2710.99.21 2710.99.31 2710.99.32 2710.99.39 2710.99.45 2710.99.90 2711.11.00 2711.12.00 2711.13.00 2711.14.00 2711.19.00 2711.21.00 2711.29.00 2712.10.00 2712.20.00 2712.90.10 2712.90.20 2713.11.00 2713.12.00 2713.20.00 2713.90.00 2714.10.00 2714.90.00 2715.00.00 2716.00.00 2804.69.10 2804.69.50 2815.20.00 2818.20.00 2825.90.20 2827.39.25 2903.19.05 2903.19.10 2903.19.30 2903.19.60 3105.10.00 3105.20.00 3105.60.00 4407.29.02 4702.00.00 4703.11.00 4703.19.00 4703.21.00 4703.29.00 4704.11.00 4704.19.00 4704.21.00 4704.29.00 4705.00.00 4706.10.00 4706.20.00 4706.30.00 4706.91.00 4706.92.01 4706.93.01 5607.21.00 6802.99.00 7106.91.10 7108.12.10 7201.10.00 7201.20.00 7201.50.30 7201.50.60 7202.60.00 7202.93.40 7202.93.80 7203.10.00 7203.90.00 8002.00.00 null
+INFO:sectionieepa_agent:Querying LLM for notes note(2)(x)(iii)
+INFO:sectionieepa_agent:message:You are a structured extractor for HTSUS Section ieepa notes.
+Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
+
+Objective:
+From the input legal note text, produce three outputs:
+1. **input_htscode** – copy exactly from `context.input_htscode` (a list provided by the caller). Do NOT infer, paraphrase, or add/remove codes. If this field is missing, return an empty list.
+2. **scope** – headings or subheadings that are explicitly stated to be covered (inside the range) by the measure. Do **not** include anything that appears only inside "except"/"exclusion" phrasing.
+3. **except** – headings or subheadings explicitly excluded (phrases such as "except … provided for in …").
+
+Each object in scope or except must match the `sieepa_scope` table schema:
+
+- keys                 // comma-separated exact heading or HTS8 codes (e.g. "0203.29.20,0203.29.40,0206.10.00") when conditions are identical
+- key                  // single exact heading or HTS8 code (e.g. "9903.88.05" or "8501.10.40") when used alone
+- key_type             // one of: "heading" (use for 4-digit headings and any 6-digit references), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
+- country_iso2         // ISO-2 country code mentioned in the text (e.g. "UK"), else null
+- source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
+- effective_start_date // ISO date; use context.fallback_start_date if not stated
+- effective_end_date   // ISO date or null
+
+Extraction rules:
+A. Set **input_htscode** equal to `context.input_htscode`. Never invent or summarize values.
+
+B. Identify all **scope** items:
+   - Include every HTS reference that is explicitly printed (4-digit headings, 6-digit subheadings, 8-digit HTS codes, or 10-digit statistical reporting numbers) under "applies to…" or similar language.
+   - When the text prints a range such as "9903.02.74-9903.02.77" or "9903.02.74–9903.02.77", expand it into each discrete heading (9903.02.74, 9903.02.75, 9903.02.76, 9903.02.77).
+   - Do NOT include `input_htscode` again.
+   - **When multiple HTS codes share identical conditions (same key_type, country_iso2, source_label, effective_start_date, effective_end_date), combine them using "keys" field with comma-separated values instead of creating separate objects.**
+
+C. Identify all **except** items:
+   - Look for any statement that exempts certain products/headings from the additional duties that would otherwise apply to `input_htscode`.
+   - Common patterns include:
+     * "Except as provided in heading(s) X..."
+     * "The additional duties imposed by heading(s) [including input_htscode] shall not apply to [products] provided for in heading(s) X"
+     * "As provided in heading X, the additional duties... shall not apply to products classified in..."
+   
+   - **Understanding Full vs Partial Exemptions:**
+     * **FULL EXEMPTION** (add to `except`): The products classified in the referenced heading are COMPLETELY exempt from the additional duties.
+       - The entire product/article in that heading is not subject to the additional duties.
+       - Example: "The additional duties shall not apply to medium- and heavy-duty vehicle parts provided for in headings 9903.74.08 and 9903.74.09"
+         → Products in 9903.74.08 and 9903.74.09 are FULLY exempt
+     
+     * **PARTIAL EXEMPTION** (do NOT add to `except`): Only a specific portion/component of the products in the referenced heading is exempt, while the remaining portion is still subject to duties.
+       - The text clarifies that duties still apply to some part/content of the product.
+       - Example: "The additional duties shall not apply to products of iron or steel provided for in headings 9903.81.87 and 9903.81.88, but such additional duties shall apply to the non-steel content of such products"
+         → Products in 9903.81.87 and 9903.81.88 are only PARTIALLY exempt (steel content exempt, non-steel content still taxed)
+       - Example: "The additional duties shall not apply to the declared value of the steel content of the derivative iron or steel products provided for in headings 9903.81.89-9903.81.93, but shall apply to the non-steel content"
+         → Products in 9903.81.89-9903.81.93 are only PARTIALLY exempt
+   
+   - **Decision Rule**: 
+     * Use your understanding of the legal language to determine: Are the products in the referenced heading COMPLETELY exempt from the additional duties, or are they only PARTIALLY exempt?
+     * Only add headings to `except` if they represent FULL exemptions.
+     * Do NOT add headings that represent partial exemptions (where some portion is still taxable).
+
+   - Special handling for clauses like "As provided for in heading 9903.01.32, the additional duties imposed by headings 9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, and 9903.02.01-9903.02.73 shall not apply to products classified in the following subheadings …": the listed subheadings (e.g., 0201.10.05, 0201.10.10) are the contents of heading 9903.01.32. Add **9903.01.32** itself to the `except` set for each imposing heading (9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, 9903.02.01-9903.02.73). Do not add the enumerated subheadings directly to `except` in this scenario.
+   
+   - **Checking Applicability**: 
+     * For an exemption to apply to `input_htscode`, the text must indicate that the exemption applies to the additional duties imposed by a list of headings that includes `input_htscode`.
+     * Ranges like "9903.02.01-9903.02.73" include ALL codes numerically between start and end (inclusive).
+     * Example: If input_htscode is "9903.02.02" and text says "duties imposed by headings 9903.02.01-9903.02.73 shall not apply to X", then X is an exemption for 9903.02.02.
+   
+   - Mark their source_label with "-exclusion".
+   - Apply the same combination rule as scope items when conditions are identical.
+
+D. Ignore carve-outs that clearly belong to other headings/programs (e.g., "As provided in 9903.01.26 ... products of Canada"). Unless the sentence explicitly ties the relief to `input_htscode`, do not add those references to `scope` or `except`.
+
+E. Set country_iso2 to the ISO-2 code for the country named in the text (e.g. "UK" for "products of the United Kingdom"). If no country is mentioned, leave it null.
+
+F. Only populate effective_start_date and effective_end_date when explicit "effective" or date ranges appear in the text.  
+   - Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"  
+   - Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"  
+   - Entry/admission timing clauses (e.g., goods admitted to a foreign trade zone before 12:01 a.m. EDT on March 12, 2025) do **not** impose an effective_end_date; they only describe which entries qualify.  
+   - If no explicit "effective" or date reference appears, leave both fields null. Do not use fallback_start_date.
+
+G. Remove duplicates.
+
+H. When multiple note blocks are provided, use `context.note_labels` (same order as the input blocks) for their labels. `context.primary_note_labels` lists the notes that actually triggered this extraction. `context.supporting_note_labels` lists subdivisions that were included only because a primary note referenced them (e.g., "subdivision (l)"). For supporting notes:
+   - Treat any HTS codes printed inside those blocks as exclusions for the referencing primary note unless the supporting block clearly introduces a different heading of its own.
+   - Use the primary note label with "-exclusion" for the `source_label` (e.g., `note16(m)-exclusion`).
+   - Do NOT add supporting-block codes to the scope of the current heading unless the text explicitly says they apply to that heading.
+
+I. If a supporting block explicitly states a different heading (e.g., "The rates … in heading 9903.81.89"), you may output its own scope entries but keep the source_label equal to that supporting note label.
+
+Context (provided by caller):
+// context.input_htscode → base headings provided by the caller; copy directly into "input_htscode"
+// context.note_labels → labels for each input block (in order)
+// context.primary_note_labels → subset that actually triggered extraction
+// context.supporting_note_labels → subdivisions referenced only to describe exclusions for the primaries
+{"country_iso2": "BR", "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.81"], "note_labels": ["note2(x)(iii)"], "primary_note_labels": ["note(2)(x)(iii)"], "source_label_prefix": "note(2)(x)(iii)", "supporting_note_labels": []}
+
+Input (one or more note blocks, each beginning with its note label on the first line):
+"""note2(x)(iii)
+note(2)(x)(iii) As provided in heading 9903.01.81, the additional duties imposed by heading 9903.01.77 shall not apply to products classified in the following provisions of the HTSUS: [Compiler's note: List may appear or continue on a subsequent page; read numbers from left to right.] 0801.21.00 2008.30.35 2009.11.00 2009.12.25 2009.12.45 2525.10.00 2601.11.00 2601.12.00 2609.00.00 2701.11.00 2701.12.00 2701.19.00 2701.20.00 2702.10.00 2702.20.00 2703.00.00 2704.00.00 2705.00.00 2706.00.00 2707.10.00 2707.20.00 2707.30.00 2707.40.00 2707.50.00 2707.91.00 2707.99.10 2707.99.20 2707.99.40 2707.99.51 2707.99.55 2707.99.59 2707.99.90 2708.10.00 2708.20.00 2709.00.10 2709.00.20 2710.12.15 2710.12.18 2710.12.25 2710.12.45 2710.12.90 2710.19.06 2710.19.11 2710.19.16 2710.19.24 2710.19.25 2710.19.26 2710.19.30 2710.19.35 2710.19.40 2710.19.45 2710.19.90 2710.20.05 2710.20.10 2710.20.15 2710.20.25 2710.91.00 2710.99.05 2710.99.10 2710.99.16 2710.99.21 2710.99.31 2710.99.32 2710.99.39 2710.99.45 2710.99.90 2711.11.00 2711.12.00 2711.13.00 2711.14.00 2711.19.00 2711.21.00 2711.29.00 2712.10.00 2712.20.00 2712.90.10 2712.90.20 2713.11.00 2713.12.00 2713.20.00 2713.90.00 2714.10.00 2714.90.00 2715.00.00 2716.00.00 2804.69.10 2804.69.50 2815.20.00 2818.20.00 2825.90.20 2827.39.25 2903.19.05 2903.19.10 2903.19.30 2903.19.60 3105.10.00 3105.20.00 3105.60.00 4407.29.02 4702.00.00 4703.11.00 4703.19.00 4703.21.00 4703.29.00 4704.11.00 4704.19.00 4704.21.00 4704.29.00 4705.00.00 4706.10.00 4706.20.00 4706.30.00 4706.91.00 4706.92.01 4706.93.01 5607.21.00 6802.99.00 7106.91.10 7108.12.10 7201.10.00 7201.20.00 7201.50.30 7201.50.60 7202.60.00 7202.93.40 7202.93.80 7203.10.00 7203.90.00 8002.00.00 null"""
+
+Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
+{
+  "input_htscode": ["9903.88.01"],
+  "scope": [
+    { "keys": "0203.29.20,0203.29.40,0206.10.00,0208.10.00,0208.90.20,0208.90.25,0210.19.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null },
+    { "key": "2845.30.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ],
+  "except": [
+    { "key": "9903.88.05", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(a)-exclusion", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ]
+}
+
+INFO:sectionieepa_agent:raw:{
+  "input_htscode": ["9903.01.81"],
+  "scope": [
+    {
+      "keys": "0801.21.00,2008.30.35,2009.11.00,2009.12.25,2009.12.45,2525.10.00,2601.11.00,2601.12.00,2609.00.00,2701.11.00,2701.12.00,2701.19.00,2701.20.00,2702.10.00,2702.20.00,2703.00.00,2704.00.00,2705.00.00,2706.00.00,2707.10.00,2707.20.00,2707.30.00,2707.40.00,2707.50.00,2707.91.00,2707.99.10,2707.99.20,2707.99.40,2707.99.51,2707.99.55,2707.99.59,2707.99.90,2708.10.00,2708.20.00,2709.00.10,2709.00.20,2710.12.15,2710.12.18,2710.12.25,2710.12.45,2710.12.90,2710.19.06,2710.19.11,2710.19.16,2710.19.24,2710.19.25,2710.19.26,2710.19.30,2710.19.35,2710.19.40,2710.19.45,2710.19.90,2710.20.05,2710.20.10,2710.20.15,2710.20.25,2710.91.00,2710.99.05,2710.99.10,2710.99.16,2710.99.21,2710.99.31,2710.99.32,2710.99.39,2710.99.45,2710.99.90,2711.11.00,2711.12.00,2711.13.00,2711.14.00,2711.19.00,2711.21.00,2711.29.00,2712.10.00,2712.20.00,2712.90.10,2712.90.20,2713.11.00,2713.12.00,2713.20.00,2713.90.00,2714.10.00,2714.90.00,2715.00.00,2716.00.00,2804.69.10,2804.69.50,2815.20.00,2818.20.00,2825.90.20,2827.39.25,2903.19.05,2903.19.10,2903.19.30,2903.19.60,3105.10.00,3105.20.00,3105.60.00,4407.29.02,4702.00.00,4703.11.00,4703.19.00,4703.21.00,4703.29.00,4704.11.00,4704.19.00,4704.21.00,4704.29.00,4705.00.00,4706.10.00,4706.20.00,4706.30.00,4706.91.00,4706.92.01,4706.93.01,5607.21.00,6802.99.00,7106.91.10,7108.12.10,7201.10.00,7201.20.00,7201.50.30,7201.50.60,7202.60.00,7202.93.40,7202.93.80,7203.10.00,7203.90.00,8002.00.00",
+      "key_type": "hts8",
+      "country_iso2": null,
+      "source_label": "note(2)(x)(iii)",
+      "effective_start_date": null,
+      "effective_end_date": null
+    }
+  ],
+  "except": []
+}
+INFO:sectionieepa_agent:Created scope↔measure relation 160518 (scope=22706, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160519 (scope=22707, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160520 (scope=22708, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160521 (scope=22709, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160522 (scope=22710, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160523 (scope=22711, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160524 (scope=22712, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160525 (scope=22713, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160526 (scope=16401, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160527 (scope=16416, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160528 (scope=16417, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160529 (scope=16418, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160530 (scope=16419, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160531 (scope=16420, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160532 (scope=16421, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160533 (scope=16422, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160534 (scope=16423, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160535 (scope=16424, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160536 (scope=16425, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160537 (scope=16426, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160538 (scope=16427, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160539 (scope=16428, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160540 (scope=16429, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160541 (scope=16430, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160542 (scope=16431, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160543 (scope=16432, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160544 (scope=16433, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160545 (scope=16434, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160546 (scope=16435, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160547 (scope=16436, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160548 (scope=16437, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160549 (scope=16438, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160550 (scope=16439, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160551 (scope=16440, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160552 (scope=16441, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160553 (scope=16442, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160554 (scope=16443, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160555 (scope=16444, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160556 (scope=16445, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160557 (scope=16446, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160558 (scope=16447, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160559 (scope=16448, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160560 (scope=16449, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160561 (scope=16450, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160562 (scope=16451, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160563 (scope=16452, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160564 (scope=16453, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160565 (scope=16454, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160566 (scope=16455, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160567 (scope=16456, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160568 (scope=16457, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160569 (scope=16458, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160570 (scope=16459, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160571 (scope=16460, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160572 (scope=16461, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160573 (scope=16462, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160574 (scope=16463, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160575 (scope=16464, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160576 (scope=16465, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160577 (scope=16466, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160578 (scope=16467, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160579 (scope=16468, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160580 (scope=16469, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160581 (scope=16470, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160582 (scope=16471, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160583 (scope=16472, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160584 (scope=16473, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160585 (scope=16474, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160586 (scope=16475, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160587 (scope=16476, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160588 (scope=16477, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160589 (scope=16478, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160590 (scope=16479, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160591 (scope=16480, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160592 (scope=16481, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160593 (scope=16482, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160594 (scope=16483, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160595 (scope=16484, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160596 (scope=16485, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160597 (scope=16486, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160598 (scope=16487, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160599 (scope=16488, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160600 (scope=16489, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160601 (scope=16490, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160602 (scope=16491, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160603 (scope=22714, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160604 (scope=22715, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160605 (scope=16508, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160606 (scope=16515, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160607 (scope=22716, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160608 (scope=22717, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160609 (scope=22718, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160610 (scope=22719, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160611 (scope=22720, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160612 (scope=22721, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160613 (scope=17014, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160614 (scope=17015, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160615 (scope=17016, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160616 (scope=17066, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160617 (scope=22722, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160618 (scope=17069, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160619 (scope=22723, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160620 (scope=17070, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160621 (scope=17071, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160622 (scope=22724, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160623 (scope=22725, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160624 (scope=22726, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160625 (scope=22727, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160626 (scope=22728, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160627 (scope=22729, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160628 (scope=22730, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160629 (scope=22731, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160630 (scope=22732, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160631 (scope=22733, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160632 (scope=22734, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160633 (scope=22735, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160634 (scope=22736, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160635 (scope=17088, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160636 (scope=17090, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160637 (scope=22737, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160638 (scope=22738, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160639 (scope=22739, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160640 (scope=22740, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160641 (scope=17117, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160642 (scope=17120, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160643 (scope=17121, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160644 (scope=22741, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160645 (scope=22742, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160646 (scope=17151, measure=399, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160647 (scope=21934, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.01.81 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.01.82
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note2(x)(iv)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": "BR",
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Created measure 400 for heading 9903.01.82
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(iv) (first path=['note', '2', 'x', 'iv'])
+INFO:sectionieepa_agent:note(2)(x)(iv) As provided in heading 9903.01.82, the additional duties imposed by heading 9903.01.77 shall not apply to articles of civil aircraft (all aircraft other than military aircraft); their engines, parts, and components; their other parts, components, and subassemblies; and ground flight simulators and their parts and components of Brazil, that otherwise meet the criteria of general note 6 to the tariff schedule, and classifiable in the following provisions of the HTSUS, but regardless of whether a product is entered under a provision for which the rate of duty "Free (C)" appears in the "Special" subcolumn: 3917.21.00 3917.22.00 3917.23.00 3917.29.00 3917.31.00 3917.33.00 3917.39.00 3917.40.00 3926.90.45 3926.90.94 3926.90.96 3926.90.99 4008.29.20 4009.12.00 4009.22.00 4009.32.00 4009.42.00 4011.30.00 4012.13.00 4012.20.10 4016.10.00 4016.93.50 4016.99.35 4016.99.60 4017.00.00 4504.90.00 4823.90.10 4823.90.20 4823.90.31 4823.90.40 4823.90.50 4823.90.60 4823.90.67 4823.90.70 4823.90.80 4823.90.86 6812.80.90 6812.99.10 6812.99.20 6812.99.90 6813.20.00 6813.81.00 6813.89.00 7007.21.11 7304.31.30 7304.31.60 7304.39.00 7304.41.30 7304.41.60 7304.49.00 7304.51.10 7304.51.50 7304.59.10 7304.59.20 7304.59.60 7304.59.80 7304.90.10 7304.90.30 7304.90.50 7304.90.70 7306.30.10 7306.30.30 7306.30.50 7306.40.10 7306.40.50 7306.50.10 7306.50.30 7306.50.50 7306.61.10 7306.61.30 7306.61.50 7306.61.70 7306.69.10 7306.69.30 7306.69.50 7306.69.70 7312.10.05 7312.10.10 7312.10.20 7312.10.30 7312.10.50 7312.10.60 7312.10.70 7312.10.80 7312.10.90 7312.90.00 7322.90.00 7324.10.00 7324.90.00 7326.20.00 7413.00.90 7608.10.00 7608.20.00 8108.90.60 8302.10.60 8302.10.90 8302.20.00 8302.42.30 8302.42.60 8302.49.40 8302.49.60 8302.49.80 8302.60.30 8307.10.30 8307.90.30 8407.10.00 8408.90.90 8409.10.00 8411.11.40 8411.11.80 8411.12.40 8411.12.80 8411.21.40 8411.21.80 8411.22.40 8411.22.80 8411.81.40 8411.82.40 8411.91.10 8411.91.90 8411.99.10 8411.99.90 8412.10.00 8412.21.00 8412.29.40 8412.29.80 8412.31.00 8412.39.00 8412.80.10 8412.80.90 8412.90.90 8413.19.00 8413.20.00 8413.30.10 8413.30.90 8413.50.00 8413.60.00 8413.70.10 8413.70.20 8413.81.00 8413.91.10 8413.91.20 8413.91.90 8414.10.00 8414.20.00 8414.30.40 8414.30.80 8414.51.30 8414.51.90 8414.59.30 8414.59.65 8414.80.05 8414.80.16 8414.80.20 8414.80.90 8414.90.10 8414.90.30 8414.90.41 8414.90.91 8415.10.60 8415.10.90 8415.81.01 8415.82.01 8415.83.00 8415.90.40 8415.90.80 8418.10.00 8418.30.00 8418.40.00 8418.61.01 8418.69.01 8419.50.10 8419.50.50 8419.81.50 8419.81.90 8419.90.10 8419.90.20 8419.90.30 8419.90.50 8419.90.85 8421.19.00 8421.21.00 8421.23.00 8421.29.00 8421.31.00 8421.32.00 8421.39.01 8424.10.00 8425.11.00 8425.19.00 8425.31.01 8425.39.01 8425.42.00 8425.49.00 8426.99.00 8428.10.00 8428.20.00 8428.33.00 8428.39.00 8428.90.03 8443.31.00 8443.32.10 8443.32.50 8471.41.01 8471.49.00 8471.50.01 8471.60.10 8471.60.20 8471.60.70 8471.60.80 8471.60.90 8471.70.10 8471.70.20 8471.70.30 8471.70.40 8471.70.50 8471.70.60 8471.70.90 8479.89.10 8479.89.20 8479.89.65 8479.89.70 8479.89.95 8479.90.41 8479.90.45 8479.90.55 8479.90.65 8479.90.75 8479.90.85 8479.90.95 8483.10.10 8483.10.30 8483.10.50 8483.30.40 8483.30.80 8483.40.10 8483.40.30 8483.40.50 8483.40.70 8483.40.80 8483.40.90 8483.50.40 8483.50.60 8483.50.90 8483.60.40 8483.60.80 8483.90.10 8483.90.20 8483.90.30 8483.90.50 8483.90.80 8484.10.00 8484.90.00 8501.20.50 8501.20.60 8501.31.50 8501.31.60 8501.31.81 8501.32.20 8501.32.55 8501.32.61 8501.33.20 8501.33.30 8501.33.61 8501.34.61 8501.40.50 8501.40.60 8501.51.50 8501.51.60 8501.52.40 8501.52.80 8501.53.40 8501.53.60 8501.61.01 8501.62.01 8501.63.01 8501.71.00 8501.72.10 8501.72.20 8501.72.30 8501.72.90 8501.80.10 8501.80.20 8501.80.30 8502.11.00 8502.12.00 8502.13.00 8502.20.00 8502.31.00 8502.39.00 8502.40.00 8504.10.00 8504.31.20 8504.31.40 8504.31.60 8504.32.00 8504.33.00 8504.40.40 8504.40.60 8504.40.70 8504.40.85 8504.40.95 8504.50.40 8504.50.80 8507.10.00 8507.20.80 8507.30.80 8507.50.00 8507.60.00 8507.80.82 8507.90.40 8507.90.80 8511.10.00 8511.20.00 8511.30.00 8511.40.00 8511.50.00 8511.80.20 8511.80.40 8511.80.60 8514.20.40 8516.80.40 8516.80.80 8517.13.00 8517.14.00 8517.61.00 8517.62.00 8517.69.00 8517.71.00 8518.10.40 8518.10.80 8518.21.00 8518.22.00 8518.29.40 8518.29.80 8518.30.10 8518.30.20 8518.40.10 8518.40.20 8518.50.00 8519.81.10 8519.81.20 8519.81.25 8519.81.30 8519.81.41 8519.89.10 8519.89.20 8519.89.30 8521.10.30 8521.10.60 8521.10.90 8522.90.25 8522.90.36 8522.90.45 8522.90.58 8522.90.65 8522.90.80 8526.10.00 8526.91.00 8526.92.10 8526.92.50 8528.42.00 8528.52.00 8528.62.00 8529.10.21 8529.10.40 8529.10.91 8529.90.04 8529.90.05 8529.90.06 8529.90.09 8529.90.13 8529.90.16 8529.90.19 8529.90.21 8529.90.24 8529.90.29 8529.90.33 8529.90.36 8529.90.39 8529.90.43 8529.90.46 8529.90.49 8529.90.55 8529.90.63 8529.90.68 8529.90.73 8529.90.77 8529.90.78 8529.90.81 8529.90.83 8529.90.87 8529.90.88 8529.90.89 8529.90.93 8529.90.95 8529.90.97 8529.90.98 8531.10.00 8531.20.00 8531.80.15 8531.80.90 8536.70.00 8539.10.00 8539.51.00 8543.70.42 8543.70.45 8543.70.60 8543.70.80 8543.70.91 8543.70.95 8543.90.12 8543.90.15 8543.90.35 8543.90.65 8543.90.68 8543.90.85 8543.90.88 8544.30.00 8801.00.00 8802.11.01 8802.12.01 8802.20.01 8802.30.01 8802.40.01 8805.29.00 8806.10.00 8806.21.00 8806.22.00 8806.23.00 8806.24.00 8806.29.00 8806.91.00 8806.92.00 8806.93.00 8806.94.00 8806.99.00 8807.10.00 8807.20.00 8807.30.00 8807.90.90 9001.90.40 9001.90.50 9001.90.60 9001.90.80 9001.90.90 9002.90.20 9002.90.40 9002.90.70 9002.90.85 9002.90.95 9014.10.10 9014.10.60 9014.10.70 9014.10.90 9014.20.20 9014.20.40 9014.20.60 9014.20.80 9014.90.10 9014.90.20 9014.90.40 9014.90.60 9020.00.40 9020.00.60 9025.11.20 9025.11.40 9025.19.40 9025.19.80 9025.80.10 9025.80.15 9025.80.20 9025.80.35 9025.80.40 9025.80.50 9025.90.06 9026.10.20 9026.10.40 9026.10.60 9026.20.40 9026.20.80 9026.80.20 9026.80.40 9026.80.60 9026.90.20 9026.90.40 9026.90.60 9029.10.80 9029.20.40 9029.90.80 9030.10.00 9030.20.05 9030.20.10 9030.31.00 9030.32.00 9030.33.34 9030.33.38 9030.39.01 9030.40.00 9030.84.00 9030.89.01 9030.90.25 9030.90.46 9030.90.66 9030.90.68 9030.90.84 9030.90.89 9031.80.40 9031.80.80 9031.90.21 9031.90.45 9031.90.54 9031.90.59 9031.90.70 9031.90.91 9032.10.00 9032.20.00 9032.81.00 9032.89.20 9032.89.40 9032.89.60 9032.90.21 9032.90.41 9032.90.61 9033.00.90 9104.00.05 9104.00.10 9104.00.20 9104.00.25 9104.00.30 9104.00.40 9104.00.45 9104.00.50 9104.00.60 9109.10.50 9109.10.60 9109.90.20 9401.10.40 9401.10.80 9403.20.00 9403.70.40 9403.70.80 9405.11.40 9405.11.60 9405.11.80 9405.19.40 9405.19.60 9405.19.80 9405.61.20 9405.61.40 9405.61.60 9405.69.20 9405.69.40 9405.69.60 9405.92.00 9405.99.20 9405.99.40 9620.00.50 9620.00.60 9802.00.40 9802.00.50 9802.00.60 9802.00.80 9818.00.05 9818.00.07
+INFO:sectionieepa_agent:Querying LLM for notes note(2)(x)(iv)
+INFO:sectionieepa_agent:message:You are a structured extractor for HTSUS Section ieepa notes.
+Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
+
+Objective:
+From the input legal note text, produce three outputs:
+1. **input_htscode** – copy exactly from `context.input_htscode` (a list provided by the caller). Do NOT infer, paraphrase, or add/remove codes. If this field is missing, return an empty list.
+2. **scope** – headings or subheadings that are explicitly stated to be covered (inside the range) by the measure. Do **not** include anything that appears only inside "except"/"exclusion" phrasing.
+3. **except** – headings or subheadings explicitly excluded (phrases such as "except … provided for in …").
+
+Each object in scope or except must match the `sieepa_scope` table schema:
+
+- keys                 // comma-separated exact heading or HTS8 codes (e.g. "0203.29.20,0203.29.40,0206.10.00") when conditions are identical
+- key                  // single exact heading or HTS8 code (e.g. "9903.88.05" or "8501.10.40") when used alone
+- key_type             // one of: "heading" (use for 4-digit headings and any 6-digit references), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
+- country_iso2         // ISO-2 country code mentioned in the text (e.g. "UK"), else null
+- source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
+- effective_start_date // ISO date; use context.fallback_start_date if not stated
+- effective_end_date   // ISO date or null
+
+Extraction rules:
+A. Set **input_htscode** equal to `context.input_htscode`. Never invent or summarize values.
+
+B. Identify all **scope** items:
+   - Include every HTS reference that is explicitly printed (4-digit headings, 6-digit subheadings, 8-digit HTS codes, or 10-digit statistical reporting numbers) under "applies to…" or similar language.
+   - When the text prints a range such as "9903.02.74-9903.02.77" or "9903.02.74–9903.02.77", expand it into each discrete heading (9903.02.74, 9903.02.75, 9903.02.76, 9903.02.77).
+   - Do NOT include `input_htscode` again.
+   - **When multiple HTS codes share identical conditions (same key_type, country_iso2, source_label, effective_start_date, effective_end_date), combine them using "keys" field with comma-separated values instead of creating separate objects.**
+
+C. Identify all **except** items:
+   - Look for any statement that exempts certain products/headings from the additional duties that would otherwise apply to `input_htscode`.
+   - Common patterns include:
+     * "Except as provided in heading(s) X..."
+     * "The additional duties imposed by heading(s) [including input_htscode] shall not apply to [products] provided for in heading(s) X"
+     * "As provided in heading X, the additional duties... shall not apply to products classified in..."
+   
+   - **Understanding Full vs Partial Exemptions:**
+     * **FULL EXEMPTION** (add to `except`): The products classified in the referenced heading are COMPLETELY exempt from the additional duties.
+       - The entire product/article in that heading is not subject to the additional duties.
+       - Example: "The additional duties shall not apply to medium- and heavy-duty vehicle parts provided for in headings 9903.74.08 and 9903.74.09"
+         → Products in 9903.74.08 and 9903.74.09 are FULLY exempt
+     
+     * **PARTIAL EXEMPTION** (do NOT add to `except`): Only a specific portion/component of the products in the referenced heading is exempt, while the remaining portion is still subject to duties.
+       - The text clarifies that duties still apply to some part/content of the product.
+       - Example: "The additional duties shall not apply to products of iron or steel provided for in headings 9903.81.87 and 9903.81.88, but such additional duties shall apply to the non-steel content of such products"
+         → Products in 9903.81.87 and 9903.81.88 are only PARTIALLY exempt (steel content exempt, non-steel content still taxed)
+       - Example: "The additional duties shall not apply to the declared value of the steel content of the derivative iron or steel products provided for in headings 9903.81.89-9903.81.93, but shall apply to the non-steel content"
+         → Products in 9903.81.89-9903.81.93 are only PARTIALLY exempt
+   
+   - **Decision Rule**: 
+     * Use your understanding of the legal language to determine: Are the products in the referenced heading COMPLETELY exempt from the additional duties, or are they only PARTIALLY exempt?
+     * Only add headings to `except` if they represent FULL exemptions.
+     * Do NOT add headings that represent partial exemptions (where some portion is still taxable).
+
+   - Special handling for clauses like "As provided for in heading 9903.01.32, the additional duties imposed by headings 9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, and 9903.02.01-9903.02.73 shall not apply to products classified in the following subheadings …": the listed subheadings (e.g., 0201.10.05, 0201.10.10) are the contents of heading 9903.01.32. Add **9903.01.32** itself to the `except` set for each imposing heading (9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, 9903.02.01-9903.02.73). Do not add the enumerated subheadings directly to `except` in this scenario.
+   
+   - **Checking Applicability**: 
+     * For an exemption to apply to `input_htscode`, the text must indicate that the exemption applies to the additional duties imposed by a list of headings that includes `input_htscode`.
+     * Ranges like "9903.02.01-9903.02.73" include ALL codes numerically between start and end (inclusive).
+     * Example: If input_htscode is "9903.02.02" and text says "duties imposed by headings 9903.02.01-9903.02.73 shall not apply to X", then X is an exemption for 9903.02.02.
+   
+   - Mark their source_label with "-exclusion".
+   - Apply the same combination rule as scope items when conditions are identical.
+
+D. Ignore carve-outs that clearly belong to other headings/programs (e.g., "As provided in 9903.01.26 ... products of Canada"). Unless the sentence explicitly ties the relief to `input_htscode`, do not add those references to `scope` or `except`.
+
+E. Set country_iso2 to the ISO-2 code for the country named in the text (e.g. "UK" for "products of the United Kingdom"). If no country is mentioned, leave it null.
+
+F. Only populate effective_start_date and effective_end_date when explicit "effective" or date ranges appear in the text.  
+   - Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"  
+   - Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"  
+   - Entry/admission timing clauses (e.g., goods admitted to a foreign trade zone before 12:01 a.m. EDT on March 12, 2025) do **not** impose an effective_end_date; they only describe which entries qualify.  
+   - If no explicit "effective" or date reference appears, leave both fields null. Do not use fallback_start_date.
+
+G. Remove duplicates.
+
+H. When multiple note blocks are provided, use `context.note_labels` (same order as the input blocks) for their labels. `context.primary_note_labels` lists the notes that actually triggered this extraction. `context.supporting_note_labels` lists subdivisions that were included only because a primary note referenced them (e.g., "subdivision (l)"). For supporting notes:
+   - Treat any HTS codes printed inside those blocks as exclusions for the referencing primary note unless the supporting block clearly introduces a different heading of its own.
+   - Use the primary note label with "-exclusion" for the `source_label` (e.g., `note16(m)-exclusion`).
+   - Do NOT add supporting-block codes to the scope of the current heading unless the text explicitly says they apply to that heading.
+
+I. If a supporting block explicitly states a different heading (e.g., "The rates … in heading 9903.81.89"), you may output its own scope entries but keep the source_label equal to that supporting note label.
+
+Context (provided by caller):
+// context.input_htscode → base headings provided by the caller; copy directly into "input_htscode"
+// context.note_labels → labels for each input block (in order)
+// context.primary_note_labels → subset that actually triggered extraction
+// context.supporting_note_labels → subdivisions referenced only to describe exclusions for the primaries
+{"country_iso2": "BR", "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.82"], "note_labels": ["note2(x)(iv)"], "primary_note_labels": ["note(2)(x)(iv)"], "source_label_prefix": "note(2)(x)(iv)", "supporting_note_labels": []}
+
+Input (one or more note blocks, each beginning with its note label on the first line):
+"""note2(x)(iv)
+note(2)(x)(iv) As provided in heading 9903.01.82, the additional duties imposed by heading 9903.01.77 shall not apply to articles of civil aircraft (all aircraft other than military aircraft); their engines, parts, and components; their other parts, components, and subassemblies; and ground flight simulators and their parts and components of Brazil, that otherwise meet the criteria of general note 6 to the tariff schedule, and classifiable in the following provisions of the HTSUS, but regardless of whether a product is entered under a provision for which the rate of duty "Free (C)" appears in the "Special" subcolumn: 3917.21.00 3917.22.00 3917.23.00 3917.29.00 3917.31.00 3917.33.00 3917.39.00 3917.40.00 3926.90.45 3926.90.94 3926.90.96 3926.90.99 4008.29.20 4009.12.00 4009.22.00 4009.32.00 4009.42.00 4011.30.00 4012.13.00 4012.20.10 4016.10.00 4016.93.50 4016.99.35 4016.99.60 4017.00.00 4504.90.00 4823.90.10 4823.90.20 4823.90.31 4823.90.40 4823.90.50 4823.90.60 4823.90.67 4823.90.70 4823.90.80 4823.90.86 6812.80.90 6812.99.10 6812.99.20 6812.99.90 6813.20.00 6813.81.00 6813.89.00 7007.21.11 7304.31.30 7304.31.60 7304.39.00 7304.41.30 7304.41.60 7304.49.00 7304.51.10 7304.51.50 7304.59.10 7304.59.20 7304.59.60 7304.59.80 7304.90.10 7304.90.30 7304.90.50 7304.90.70 7306.30.10 7306.30.30 7306.30.50 7306.40.10 7306.40.50 7306.50.10 7306.50.30 7306.50.50 7306.61.10 7306.61.30 7306.61.50 7306.61.70 7306.69.10 7306.69.30 7306.69.50 7306.69.70 7312.10.05 7312.10.10 7312.10.20 7312.10.30 7312.10.50 7312.10.60 7312.10.70 7312.10.80 7312.10.90 7312.90.00 7322.90.00 7324.10.00 7324.90.00 7326.20.00 7413.00.90 7608.10.00 7608.20.00 8108.90.60 8302.10.60 8302.10.90 8302.20.00 8302.42.30 8302.42.60 8302.49.40 8302.49.60 8302.49.80 8302.60.30 8307.10.30 8307.90.30 8407.10.00 8408.90.90 8409.10.00 8411.11.40 8411.11.80 8411.12.40 8411.12.80 8411.21.40 8411.21.80 8411.22.40 8411.22.80 8411.81.40 8411.82.40 8411.91.10 8411.91.90 8411.99.10 8411.99.90 8412.10.00 8412.21.00 8412.29.40 8412.29.80 8412.31.00 8412.39.00 8412.80.10 8412.80.90 8412.90.90 8413.19.00 8413.20.00 8413.30.10 8413.30.90 8413.50.00 8413.60.00 8413.70.10 8413.70.20 8413.81.00 8413.91.10 8413.91.20 8413.91.90 8414.10.00 8414.20.00 8414.30.40 8414.30.80 8414.51.30 8414.51.90 8414.59.30 8414.59.65 8414.80.05 8414.80.16 8414.80.20 8414.80.90 8414.90.10 8414.90.30 8414.90.41 8414.90.91 8415.10.60 8415.10.90 8415.81.01 8415.82.01 8415.83.00 8415.90.40 8415.90.80 8418.10.00 8418.30.00 8418.40.00 8418.61.01 8418.69.01 8419.50.10 8419.50.50 8419.81.50 8419.81.90 8419.90.10 8419.90.20 8419.90.30 8419.90.50 8419.90.85 8421.19.00 8421.21.00 8421.23.00 8421.29.00 8421.31.00 8421.32.00 8421.39.01 8424.10.00 8425.11.00 8425.19.00 8425.31.01 8425.39.01 8425.42.00 8425.49.00 8426.99.00 8428.10.00 8428.20.00 8428.33.00 8428.39.00 8428.90.03 8443.31.00 8443.32.10 8443.32.50 8471.41.01 8471.49.00 8471.50.01 8471.60.10 8471.60.20 8471.60.70 8471.60.80 8471.60.90 8471.70.10 8471.70.20 8471.70.30 8471.70.40 8471.70.50 8471.70.60 8471.70.90 8479.89.10 8479.89.20 8479.89.65 8479.89.70 8479.89.95 8479.90.41 8479.90.45 8479.90.55 8479.90.65 8479.90.75 8479.90.85 8479.90.95 8483.10.10 8483.10.30 8483.10.50 8483.30.40 8483.30.80 8483.40.10 8483.40.30 8483.40.50 8483.40.70 8483.40.80 8483.40.90 8483.50.40 8483.50.60 8483.50.90 8483.60.40 8483.60.80 8483.90.10 8483.90.20 8483.90.30 8483.90.50 8483.90.80 8484.10.00 8484.90.00 8501.20.50 8501.20.60 8501.31.50 8501.31.60 8501.31.81 8501.32.20 8501.32.55 8501.32.61 8501.33.20 8501.33.30 8501.33.61 8501.34.61 8501.40.50 8501.40.60 8501.51.50 8501.51.60 8501.52.40 8501.52.80 8501.53.40 8501.53.60 8501.61.01 8501.62.01 8501.63.01 8501.71.00 8501.72.10 8501.72.20 8501.72.30 8501.72.90 8501.80.10 8501.80.20 8501.80.30 8502.11.00 8502.12.00 8502.13.00 8502.20.00 8502.31.00 8502.39.00 8502.40.00 8504.10.00 8504.31.20 8504.31.40 8504.31.60 8504.32.00 8504.33.00 8504.40.40 8504.40.60 8504.40.70 8504.40.85 8504.40.95 8504.50.40 8504.50.80 8507.10.00 8507.20.80 8507.30.80 8507.50.00 8507.60.00 8507.80.82 8507.90.40 8507.90.80 8511.10.00 8511.20.00 8511.30.00 8511.40.00 8511.50.00 8511.80.20 8511.80.40 8511.80.60 8514.20.40 8516.80.40 8516.80.80 8517.13.00 8517.14.00 8517.61.00 8517.62.00 8517.69.00 8517.71.00 8518.10.40 8518.10.80 8518.21.00 8518.22.00 8518.29.40 8518.29.80 8518.30.10 8518.30.20 8518.40.10 8518.40.20 8518.50.00 8519.81.10 8519.81.20 8519.81.25 8519.81.30 8519.81.41 8519.89.10 8519.89.20 8519.89.30 8521.10.30 8521.10.60 8521.10.90 8522.90.25 8522.90.36 8522.90.45 8522.90.58 8522.90.65 8522.90.80 8526.10.00 8526.91.00 8526.92.10 8526.92.50 8528.42.00 8528.52.00 8528.62.00 8529.10.21 8529.10.40 8529.10.91 8529.90.04 8529.90.05 8529.90.06 8529.90.09 8529.90.13 8529.90.16 8529.90.19 8529.90.21 8529.90.24 8529.90.29 8529.90.33 8529.90.36 8529.90.39 8529.90.43 8529.90.46 8529.90.49 8529.90.55 8529.90.63 8529.90.68 8529.90.73 8529.90.77 8529.90.78 8529.90.81 8529.90.83 8529.90.87 8529.90.88 8529.90.89 8529.90.93 8529.90.95 8529.90.97 8529.90.98 8531.10.00 8531.20.00 8531.80.15 8531.80.90 8536.70.00 8539.10.00 8539.51.00 8543.70.42 8543.70.45 8543.70.60 8543.70.80 8543.70.91 8543.70.95 8543.90.12 8543.90.15 8543.90.35 8543.90.65 8543.90.68 8543.90.85 8543.90.88 8544.30.00 8801.00.00 8802.11.01 8802.12.01 8802.20.01 8802.30.01 8802.40.01 8805.29.00 8806.10.00 8806.21.00 8806.22.00 8806.23.00 8806.24.00 8806.29.00 8806.91.00 8806.92.00 8806.93.00 8806.94.00 8806.99.00 8807.10.00 8807.20.00 8807.30.00 8807.90.90 9001.90.40 9001.90.50 9001.90.60 9001.90.80 9001.90.90 9002.90.20 9002.90.40 9002.90.70 9002.90.85 9002.90.95 9014.10.10 9014.10.60 9014.10.70 9014.10.90 9014.20.20 9014.20.40 9014.20.60 9014.20.80 9014.90.10 9014.90.20 9014.90.40 9014.90.60 9020.00.40 9020.00.60 9025.11.20 9025.11.40 9025.19.40 9025.19.80 9025.80.10 9025.80.15 9025.80.20 9025.80.35 9025.80.40 9025.80.50 9025.90.06 9026.10.20 9026.10.40 9026.10.60 9026.20.40 9026.20.80 9026.80.20 9026.80.40 9026.80.60 9026.90.20 9026.90.40 9026.90.60 9029.10.80 9029.20.40 9029.90.80 9030.10.00 9030.20.05 9030.20.10 9030.31.00 9030.32.00 9030.33.34 9030.33.38 9030.39.01 9030.40.00 9030.84.00 9030.89.01 9030.90.25 9030.90.46 9030.90.66 9030.90.68 9030.90.84 9030.90.89 9031.80.40 9031.80.80 9031.90.21 9031.90.45 9031.90.54 9031.90.59 9031.90.70 9031.90.91 9032.10.00 9032.20.00 9032.81.00 9032.89.20 9032.89.40 9032.89.60 9032.90.21 9032.90.41 9032.90.61 9033.00.90 9104.00.05 9104.00.10 9104.00.20 9104.00.25 9104.00.30 9104.00.40 9104.00.45 9104.00.50 9104.00.60 9109.10.50 9109.10.60 9109.90.20 9401.10.40 9401.10.80 9403.20.00 9403.70.40 9403.70.80 9405.11.40 9405.11.60 9405.11.80 9405.19.40 9405.19.60 9405.19.80 9405.61.20 9405.61.40 9405.61.60 9405.69.20 9405.69.40 9405.69.60 9405.92.00 9405.99.20 9405.99.40 9620.00.50 9620.00.60 9802.00.40 9802.00.50 9802.00.60 9802.00.80 9818.00.05 9818.00.07"""
+
+Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
+{
+  "input_htscode": ["9903.88.01"],
+  "scope": [
+    { "keys": "0203.29.20,0203.29.40,0206.10.00,0208.10.00,0208.90.20,0208.90.25,0210.19.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null },
+    { "key": "2845.30.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ],
+  "except": [
+    { "key": "9903.88.05", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(a)-exclusion", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ]
+}
+
+INFO:sectionieepa_agent:raw:{
+  "input_htscode": ["9903.01.82"],
+  "scope": [
+    {
+      "keys": "3917.21.00,3917.22.00,3917.23.00,3917.29.00,3917.31.00,3917.33.00,3917.39.00,3917.40.00,3926.90.45,3926.90.94,3926.90.96,3926.90.99,4008.29.20,4009.12.00,4009.22.00,4009.32.00,4009.42.00,4011.30.00,4012.13.00,4012.20.10,4016.10.00,4016.93.50,4016.99.35,4016.99.60,4017.00.00,4504.90.00,4823.90.10,4823.90.20,4823.90.31,4823.90.40,4823.90.50,4823.90.60,4823.90.67,4823.90.70,4823.90.80,4823.90.86,6812.80.90,6812.99.10,6812.99.20,6812.99.90,6813.20.00,6813.81.00,6813.89.00,7007.21.11,7304.31.30,7304.31.60,7304.39.00,7304.41.30,7304.41.60,7304.49.00,7304.51.10,7304.51.50,7304.59.10,7304.59.20,7304.59.60,7304.59.80,7304.90.10,7304.90.30,7304.90.50,7304.90.70,7306.30.10,7306.30.30,7306.30.50,7306.40.10,7306.40.50,7306.50.10,7306.50.30,7306.50.50,7306.61.10,7306.61.30,7306.61.50,7306.61.70,7306.69.10,7306.69.30,7306.69.50,7306.69.70,7312.10.05,7312.10.10,7312.10.20,7312.10.30,7312.10.50,7312.10.60,7312.10.70,7312.10.80,7312.10.90,7312.90.00,7322.90.00,7324.10.00,7324.90.00,7326.20.00,7413.00.90,7608.10.00,7608.20.00,8108.90.60,8302.10.60,8302.10.90,8302.20.00,8302.42.30,8302.42.60,8302.49.40,8302.49.60,8302.49.80,8302.60.30,8307.10.30,8307.90.30,8407.10.00,8408.90.90,8409.10.00,8411.11.40,8411.11.80,8411.12.40,8411.12.80,8411.21.40,8411.21.80,8411.22.40,8411.22.80,8411.81.40,8411.82.40,8411.91.10,8411.91.90,8411.99.10,8411.99.90,8412.10.00,8412.21.00,8412.29.40,8412.29.80,8412.31.00,8412.39.00,8412.80.10,8412.80.90,8412.90.90,8413.19.00,8413.20.00,8413.30.10,8413.30.90,8413.50.00,8413.60.00,8413.70.10,8413.70.20,8413.81.00,8413.91.10,8413.91.20,8413.91.90,8414.10.00,8414.20.00,8414.30.40,8414.30.80,8414.51.30,8414.51.90,8414.59.30,8414.59.65,8414.80.05,8414.80.16,8414.80.20,8414.80.90,8414.90.10,8414.90.30,8414.90.41,8414.90.91,8415.10.60,8415.10.90,8415.81.01,8415.82.01,8415.83.00,8415.90.40,8415.90.80,8418.10.00,8418.30.00,8418.40.00,8418.61.01,8418.69.01,8419.50.10,8419.50.50,8419.81.50,8419.81.90,8419.90.10,8419.90.20,8419.90.30,8419.90.50,8419.90.85,8421.19.00,8421.21.00,8421.23.00,8421.29.00,8421.31.00,8421.32.00,8421.39.01,8424.10.00,8425.11.00,8425.19.00,8425.31.01,8425.39.01,8425.42.00,8425.49.00,8426.99.00,8428.10.00,8428.20.00,8428.33.00,8428.39.00,8428.90.03,8443.31.00,8443.32.10,8443.32.50,8471.41.01,8471.49.00,8471.50.01,8471.60.10,8471.60.20,8471.60.70,8471.60.80,8471.60.90,8471.70.10,8471.70.20,8471.70.30,8471.70.40,8471.70.50,8471.70.60,8471.70.90,8479.89.10,8479.89.20,8479.89.65,8479.89.70,8479.89.95,8479.90.41,8479.90.45,8479.90.55,8479.90.65,8479.90.75,8479.90.85,8479.90.95,8483.10.10,8483.10.30,8483.10.50,8483.30.40,8483.30.80,8483.40.10,8483.40.30,8483.40.50,8483.40.70,8483.40.80,8483.40.90,8483.50.40,8483.50.60,8483.50.90,8483.60.40,8483.60.80,8483.90.10,8483.90.20,8483.90.30,8483.90.50,8483.90.80,8484.10.00,8484.90.00,8501.20.50,8501.20.60,8501.31.50,8501.31.60,8501.31.81,8501.32.20,8501.32.55,8501.32.61,8501.33.20,8501.33.30,8501.33.61,8501.34.61,8501.40.50,8501.40.60,8501.51.50,8501.51.60,8501.52.40,8501.52.80,8501.53.40,8501.53.60,8501.61.01,8501.62.01,8501.63.01,8501.71.00,8501.72.10,8501.72.20,8501.72.30,8501.72.90,8501.80.10,8501.80.20,8501.80.30,8502.11.00,8502.12.00,8502.13.00,8502.20.00,8502.31.00,8502.39.00,8502.40.00,8504.10.00,8504.31.20,8504.31.40,8504.31.60,8504.32.00,8504.33.00,8504.40.40,8504.40.60,8504.40.70,8504.40.85,8504.40.95,8504.50.40,8504.50.80,8507.10.00,8507.20.80,8507.30.80,8507.50.00,8507.60.00,8507.80.82,8507.90.40,8507.90.80,8511.10.00,8511.20.00,8511.30.00,8511.40.00,8511.50.00,8511.80.20,8511.80.40,8511.80.60,8514.20.40,8516.80.40,8516.80.80,8517.13.00,8517.14.00,8517.61.00,8517.62.00,8517.69.00,8517.71.00,8518.10.40,8518.10.80,8518.21.00,8518.22.00,8518.29.40,8518.29.80,8518.30.10,8518.30.20,8518.40.10,8518.40.20,8518.50.00,8519.81.10,8519.81.20,8519.81.25,8519.81.30,8519.81.41,8519.89.10,8519.89.20,8519.89.30,8521.10.30,8521.10.60,8521.10.90,8522.90.25,8522.90.36,8522.90.45,8522.90.58,8522.90.65,8522.90.80,8526.10.00,8526.91.00,8526.92.10,8526.92.50,8528.42.00,8528.52.00,8528.62.00,8529.10.21,8529.10.40,8529.10.91,8529.90.04,8529.90.05,8529.90.06,8529.90.09,8529.90.13,8529.90.16,8529.90.19,8529.90.21,8529.90.24,8529.90.29,8529.90.33,8529.90.36,8529.90.39,8529.90.43,8529.90.46,8529.90.49,8529.90.55,8529.90.63,8529.90.68,8529.90.73,8529.90.77,8529.90.78,8529.90.81,8529.90.83,8529.90.87,8529.90.88,8529.90.89,8529.90.93,8529.90.95,8529.90.97,8529.90.98,8531.10.00,8531.20.00,8531.80.15,8531.80.90,8536.70.00,8539.10.00,8539.51.00,8543.70.42,8543.70.45,8543.70.60,8543.70.80,8543.70.91,8543.70.95,8543.90.12,8543.90.15,8543.90.35,8543.90.65,8543.90.68,8543.90.85,8543.90.88,8544.30.00,8801.00.00,8802.11.01,8802.12.01,8802.20.01,8802.30.01,8802.40.01,8805.29.00,8806.10.00,8806.21.00,8806.22.00,8806.23.00,8806.24.00,8806.29.00,8806.91.00,8806.92.00,8806.93.00,8806.94.00,8806.99.00,8807.10.00,8807.20.00,8807.30.00,8807.90.90,9001.90.40,9001.90.50,9001.90.60,9001.90.80,9001.90.90,9002.90.20,9002.90.40,9002.90.70,9002.90.85,9002.90.95,9014.10.10,9014.10.60,9014.10.70,9014.10.90,9014.20.20,9014.20.40,9014.20.60,9014.20.80,9014.90.10,9014.90.20,9014.90.40,9014.90.60,9020.00.40,9020.00.60,9025.11.20,9025.11.40,9025.19.40,9025.19.80,9025.80.10,9025.80.15,9025.80.20,9025.80.35,9025.80.40,9025.80.50,9025.90.06,9026.10.20,9026.10.40,9026.10.60,9026.20.40,9026.20.80,9026.80.20,9026.80.40,9026.80.60,9026.90.20,9026.90.40,9026.90.60,9029.10.80,9029.20.40,9029.90.80,9030.10.00,9030.20.05,9030.20.10,9030.31.00,9030.32.00,9030.33.34,9030.33.38,9030.39.01,9030.40.00,9030.84.00,9030.89.01,9030.90.25,9030.90.46,9030.90.66,9030.90.68,9030.90.84,9030.90.89,9031.80.40,9031.80.80,9031.90.21,9031.90.45,9031.90.54,9031.90.59,9031.90.70,9031.90.91,9032.10.00,9032.20.00,9032.81.00,9032.89.20,9032.89.40,9032.89.60,9032.90.21,9032.90.41,9032.90.61,9033.00.90,9104.00.05,9104.00.10,9104.00.20,9104.00.25,9104.00.30,9104.00.40,9104.00.45,9104.00.50,9104.00.60,9109.10.50,9109.10.60,9109.90.20,9401.10.40,9401.10.80,9403.20.00,9403.70.40,9403.70.80,9405.11.40,9405.11.60,9405.11.80,9405.19.40,9405.19.60,9405.19.80,9405.61.20,9405.61.40,9405.61.60,9405.69.20,9405.69.40,9405.69.60,9405.92.00,9405.99.20,9405.99.40,9620.00.50,9620.00.60,9802.00.40,9802.00.50,9802.00.60,9802.00.80,9818.00.05,9818.00.07",
+      "key_type": "hts8",
+      "country_iso2": "BR",
+      "source_label": "note(2)(x)(iv)",
+      "effective_start_date": "1900-01-01",
+      "effective_end_date": null
+    }
+  ],
+  "except": []
+}
+INFO:sectionieepa_agent:Created scope↔measure relation 160648 (scope=21935, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160649 (scope=21936, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160650 (scope=21937, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160651 (scope=21938, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160652 (scope=21939, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160653 (scope=21940, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160654 (scope=21941, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160655 (scope=21942, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160656 (scope=21943, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160657 (scope=21944, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160658 (scope=21945, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160659 (scope=21946, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160660 (scope=21947, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160661 (scope=21948, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160662 (scope=21949, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160663 (scope=21950, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160664 (scope=21951, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160665 (scope=21952, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160666 (scope=21953, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160667 (scope=21954, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160668 (scope=21955, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160669 (scope=21956, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160670 (scope=21957, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160671 (scope=21958, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160672 (scope=21959, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160673 (scope=21960, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160674 (scope=21961, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160675 (scope=21962, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160676 (scope=21963, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160677 (scope=21964, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160678 (scope=21965, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160679 (scope=21966, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160680 (scope=21967, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160681 (scope=21968, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160682 (scope=21969, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160683 (scope=21970, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160684 (scope=21971, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160685 (scope=21972, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160686 (scope=21973, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160687 (scope=21974, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160688 (scope=21975, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160689 (scope=21976, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160690 (scope=21977, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160691 (scope=21978, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160692 (scope=21979, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160693 (scope=21980, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160694 (scope=21981, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160695 (scope=21982, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160696 (scope=21983, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160697 (scope=21984, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160698 (scope=21985, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160699 (scope=21986, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160700 (scope=21987, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160701 (scope=21988, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160702 (scope=21989, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160703 (scope=21990, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160704 (scope=21991, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160705 (scope=21992, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160706 (scope=21993, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160707 (scope=21994, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160708 (scope=21995, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160709 (scope=21996, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160710 (scope=21997, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160711 (scope=21998, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160712 (scope=21999, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160713 (scope=22000, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160714 (scope=22001, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160715 (scope=22002, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160716 (scope=22003, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160717 (scope=22004, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160718 (scope=22005, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160719 (scope=22006, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160720 (scope=22007, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160721 (scope=22008, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160722 (scope=22009, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160723 (scope=22010, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160724 (scope=22011, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160725 (scope=22012, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160726 (scope=22013, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160727 (scope=22014, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160728 (scope=22015, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160729 (scope=22016, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160730 (scope=22017, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160731 (scope=22018, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160732 (scope=22019, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160733 (scope=22020, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160734 (scope=22021, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160735 (scope=22022, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160736 (scope=22023, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160737 (scope=22024, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160738 (scope=22025, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160739 (scope=22026, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160740 (scope=22027, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160741 (scope=22028, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160742 (scope=22029, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160743 (scope=22030, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160744 (scope=22031, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160745 (scope=22032, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160746 (scope=22033, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160747 (scope=22034, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160748 (scope=22035, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160749 (scope=22036, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160750 (scope=22037, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160751 (scope=22038, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160752 (scope=22039, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160753 (scope=22040, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160754 (scope=22041, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160755 (scope=22042, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160756 (scope=22043, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160757 (scope=22044, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160758 (scope=22045, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160759 (scope=22046, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160760 (scope=22047, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160761 (scope=22048, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160762 (scope=22049, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160763 (scope=22050, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160764 (scope=22051, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160765 (scope=22052, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160766 (scope=22053, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160767 (scope=22054, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160768 (scope=22055, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160769 (scope=22056, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160770 (scope=22057, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160771 (scope=22058, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160772 (scope=22059, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160773 (scope=22060, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160774 (scope=22061, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160775 (scope=22062, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160776 (scope=22063, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160777 (scope=22064, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160778 (scope=22065, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160779 (scope=22066, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160780 (scope=22067, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160781 (scope=22068, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160782 (scope=22069, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160783 (scope=22070, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160784 (scope=22071, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160785 (scope=22072, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160786 (scope=22073, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160787 (scope=22074, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160788 (scope=22075, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160789 (scope=22076, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160790 (scope=22077, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160791 (scope=22078, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160792 (scope=22079, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160793 (scope=22080, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160794 (scope=22081, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160795 (scope=22082, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160796 (scope=22083, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160797 (scope=22084, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160798 (scope=22085, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160799 (scope=22086, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160800 (scope=22087, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160801 (scope=22088, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160802 (scope=22089, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160803 (scope=22090, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160804 (scope=22091, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160805 (scope=22092, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160806 (scope=22093, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160807 (scope=22094, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160808 (scope=22095, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160809 (scope=22096, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160810 (scope=22097, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160811 (scope=22098, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160812 (scope=22099, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160813 (scope=22100, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160814 (scope=22101, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160815 (scope=22102, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160816 (scope=22103, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160817 (scope=22104, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160818 (scope=22105, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160819 (scope=22106, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160820 (scope=22107, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160821 (scope=22108, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160822 (scope=22109, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160823 (scope=22110, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160824 (scope=22111, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160825 (scope=22112, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160826 (scope=22113, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160827 (scope=22114, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160828 (scope=22115, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160829 (scope=22116, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160830 (scope=22117, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160831 (scope=22118, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160832 (scope=22119, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160833 (scope=22120, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160834 (scope=22121, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160835 (scope=22122, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160836 (scope=22123, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160837 (scope=22124, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160838 (scope=22125, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160839 (scope=22126, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160840 (scope=22127, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160841 (scope=22128, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160842 (scope=22129, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160843 (scope=22130, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160844 (scope=22131, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160845 (scope=22132, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160846 (scope=22133, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160847 (scope=22134, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160848 (scope=22135, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160849 (scope=22136, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160850 (scope=22137, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160851 (scope=22138, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160852 (scope=22139, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160853 (scope=22140, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160854 (scope=22141, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160855 (scope=22142, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160856 (scope=22143, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160857 (scope=22144, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160858 (scope=22145, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160859 (scope=22146, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160860 (scope=22147, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160861 (scope=22148, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160862 (scope=22149, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160863 (scope=22150, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160864 (scope=22151, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160865 (scope=22152, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160866 (scope=22153, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160867 (scope=22154, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160868 (scope=22155, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160869 (scope=22156, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160870 (scope=22157, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160871 (scope=22158, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160872 (scope=22159, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160873 (scope=22160, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160874 (scope=22161, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160875 (scope=22162, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160876 (scope=22163, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160877 (scope=22164, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160878 (scope=22165, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160879 (scope=22166, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160880 (scope=22167, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160881 (scope=22168, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160882 (scope=22169, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160883 (scope=22170, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160884 (scope=22171, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160885 (scope=22172, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160886 (scope=22173, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160887 (scope=22174, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160888 (scope=22175, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160889 (scope=22176, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160890 (scope=22177, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160891 (scope=22178, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160892 (scope=22179, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160893 (scope=22180, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160894 (scope=22181, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160895 (scope=22182, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160896 (scope=22183, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160897 (scope=22184, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160898 (scope=22185, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160899 (scope=22186, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160900 (scope=22187, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160901 (scope=22188, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160902 (scope=22189, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160903 (scope=22190, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160904 (scope=22191, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160905 (scope=22192, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160906 (scope=22193, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160907 (scope=22194, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160908 (scope=22195, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160909 (scope=22196, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160910 (scope=22197, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160911 (scope=22198, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160912 (scope=22199, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160913 (scope=22200, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160914 (scope=22201, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160915 (scope=22202, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160916 (scope=22203, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160917 (scope=22204, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160918 (scope=22205, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160919 (scope=22206, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160920 (scope=22207, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160921 (scope=22208, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160922 (scope=22209, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160923 (scope=22210, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160924 (scope=22211, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160925 (scope=22212, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160926 (scope=22213, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160927 (scope=22214, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160928 (scope=22215, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160929 (scope=22216, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160930 (scope=22217, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160931 (scope=22218, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160932 (scope=22219, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160933 (scope=22220, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160934 (scope=22221, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160935 (scope=22222, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160936 (scope=22223, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160937 (scope=22224, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160938 (scope=22225, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160939 (scope=22226, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160940 (scope=22227, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160941 (scope=22228, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160942 (scope=22229, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160943 (scope=22230, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160944 (scope=22231, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160945 (scope=22232, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160946 (scope=22233, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160947 (scope=22234, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160948 (scope=22235, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160949 (scope=22236, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160950 (scope=22237, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160951 (scope=22238, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160952 (scope=22239, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160953 (scope=22240, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160954 (scope=22241, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160955 (scope=22242, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160956 (scope=22243, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160957 (scope=22244, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160958 (scope=22245, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160959 (scope=22246, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160960 (scope=22247, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160961 (scope=22248, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160962 (scope=22249, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160963 (scope=22250, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160964 (scope=22251, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160965 (scope=22252, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160966 (scope=22253, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160967 (scope=22254, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160968 (scope=22255, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160969 (scope=22256, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160970 (scope=22257, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160971 (scope=22258, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160972 (scope=22259, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160973 (scope=22260, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160974 (scope=22261, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160975 (scope=22262, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160976 (scope=22263, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160977 (scope=22264, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160978 (scope=22265, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160979 (scope=22266, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160980 (scope=22267, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160981 (scope=22268, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160982 (scope=22269, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160983 (scope=22270, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160984 (scope=22271, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160985 (scope=22272, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160986 (scope=22273, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160987 (scope=22274, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160988 (scope=22275, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160989 (scope=22276, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160990 (scope=22277, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160991 (scope=22278, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160992 (scope=22279, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160993 (scope=22280, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160994 (scope=22281, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160995 (scope=22282, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160996 (scope=22283, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160997 (scope=22284, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160998 (scope=22285, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 160999 (scope=22286, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161000 (scope=22287, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161001 (scope=22288, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161002 (scope=22289, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161003 (scope=22290, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161004 (scope=22291, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161005 (scope=22292, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161006 (scope=22293, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161007 (scope=22294, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161008 (scope=22295, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161009 (scope=22296, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161010 (scope=22297, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161011 (scope=22298, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161012 (scope=22299, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161013 (scope=22300, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161014 (scope=22301, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161015 (scope=22302, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161016 (scope=22303, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161017 (scope=22304, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161018 (scope=22305, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161019 (scope=22306, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161020 (scope=22307, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161021 (scope=22308, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161022 (scope=22309, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161023 (scope=22310, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161024 (scope=22311, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161025 (scope=22312, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161026 (scope=22313, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161027 (scope=22314, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161028 (scope=22315, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161029 (scope=22316, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161030 (scope=22317, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161031 (scope=22318, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161032 (scope=22319, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161033 (scope=22320, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161034 (scope=22321, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161035 (scope=22322, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161036 (scope=22323, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161037 (scope=22324, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161038 (scope=22325, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161039 (scope=22326, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161040 (scope=22327, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161041 (scope=22328, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161042 (scope=22329, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161043 (scope=22330, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161044 (scope=22331, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161045 (scope=22332, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161046 (scope=22333, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161047 (scope=22334, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161048 (scope=22335, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161049 (scope=22336, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161050 (scope=22337, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161051 (scope=22338, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161052 (scope=22339, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161053 (scope=22340, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161054 (scope=22341, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161055 (scope=22342, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161056 (scope=22343, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161057 (scope=22344, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161058 (scope=22345, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161059 (scope=22346, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161060 (scope=22347, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161061 (scope=22348, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161062 (scope=22349, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161063 (scope=22350, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161064 (scope=22351, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161065 (scope=22352, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161066 (scope=22353, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161067 (scope=22354, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161068 (scope=22355, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161069 (scope=22356, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161070 (scope=22357, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161071 (scope=22358, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161072 (scope=22359, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161073 (scope=22360, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161074 (scope=22361, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161075 (scope=22362, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161076 (scope=22363, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161077 (scope=22364, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161078 (scope=22365, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161079 (scope=22366, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161080 (scope=22367, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161081 (scope=22368, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161082 (scope=22369, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161083 (scope=22370, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161084 (scope=22371, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161085 (scope=22372, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161086 (scope=22373, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161087 (scope=22374, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161088 (scope=22375, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161089 (scope=22376, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161090 (scope=22377, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161091 (scope=22378, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161092 (scope=22379, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161093 (scope=22380, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161094 (scope=22381, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161095 (scope=22382, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161096 (scope=22383, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161097 (scope=22384, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161098 (scope=22385, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161099 (scope=22386, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161100 (scope=22387, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161101 (scope=22388, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161102 (scope=22389, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161103 (scope=22390, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161104 (scope=22391, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161105 (scope=22392, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161106 (scope=22393, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161107 (scope=22394, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161108 (scope=22395, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161109 (scope=22396, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161110 (scope=22397, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161111 (scope=22398, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161112 (scope=22399, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161113 (scope=22400, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161114 (scope=22401, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161115 (scope=22402, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161116 (scope=22403, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161117 (scope=22404, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161118 (scope=22405, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161119 (scope=22406, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161120 (scope=22407, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161121 (scope=22408, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161122 (scope=22409, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161123 (scope=22410, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161124 (scope=22411, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161125 (scope=22412, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161126 (scope=22413, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161127 (scope=22414, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161128 (scope=22415, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161129 (scope=22416, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161130 (scope=22417, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161131 (scope=22418, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161132 (scope=22419, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161133 (scope=22420, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161134 (scope=22421, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161135 (scope=22422, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161136 (scope=22423, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161137 (scope=22424, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161138 (scope=22425, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161139 (scope=22426, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161140 (scope=22427, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161141 (scope=22428, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161142 (scope=22429, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161143 (scope=22430, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161144 (scope=22431, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161145 (scope=22432, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161146 (scope=22433, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161147 (scope=22434, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161148 (scope=22435, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161149 (scope=22436, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161150 (scope=22437, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161151 (scope=22438, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161152 (scope=22439, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161153 (scope=22440, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161154 (scope=22441, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161155 (scope=22442, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161156 (scope=22443, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161157 (scope=22444, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161158 (scope=22445, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161159 (scope=22446, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161160 (scope=22447, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161161 (scope=22448, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161162 (scope=22449, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161163 (scope=22450, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161164 (scope=22451, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161165 (scope=22452, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161166 (scope=22453, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161167 (scope=22454, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161168 (scope=22455, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161169 (scope=22456, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161170 (scope=22457, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161171 (scope=22458, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161172 (scope=22459, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161173 (scope=22460, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161174 (scope=22461, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161175 (scope=22462, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161176 (scope=22463, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161177 (scope=22464, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161178 (scope=22465, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161179 (scope=22466, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161180 (scope=22467, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161181 (scope=22468, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161182 (scope=22469, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161183 (scope=22470, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161184 (scope=22471, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161185 (scope=22472, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161186 (scope=22473, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161187 (scope=22474, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161188 (scope=22475, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161189 (scope=22476, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161190 (scope=22477, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161191 (scope=22478, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161192 (scope=22479, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161193 (scope=22480, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161194 (scope=22481, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161195 (scope=22482, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161196 (scope=22483, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161197 (scope=22484, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161198 (scope=22485, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161199 (scope=22486, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161200 (scope=22487, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161201 (scope=22488, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161202 (scope=22489, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161203 (scope=22490, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161204 (scope=22491, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161205 (scope=22492, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161206 (scope=22493, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161207 (scope=22494, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161208 (scope=22495, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161209 (scope=22496, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161210 (scope=22497, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161211 (scope=22498, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161212 (scope=22499, measure=400, include)
+INFO:sectionieepa_agent:Created scope↔measure relation 161213 (scope=22500, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.01.82 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.01.83
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": [
+    "note2(x)(v)",
+    "note2(x)(vi)",
+    "note2(x)(vii)",
+    "note2(x)(viii)",
+    "note2(x)(ix)",
+    "note2(x)(x)",
+    "note2(x)(xi)",
+    "note2(x)(xii)",
+    "note2(x)(xiii)",
+    "note2(x)(xiv)"
+  ],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": "BR",
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Created measure 401 for heading 9903.01.83
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(v) (first path=['note', '2', 'x', 'v'])
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(vi) (first path=['note', '2', 'x', 'vi'])
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(vii) (first path=['note', '2', 'x', 'vii'])
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(viii) (first path=['note', '2', 'x', 'viii'])
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(ix) (first path=['note', '2', 'x', 'ix'])
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(x) (first path=['note', '2', 'x', 'x'])
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(xi) (first path=['note', '2', 'x', 'xi'])
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(xii) (first path=['note', '2', 'x', 'xii'])
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(xiii) (first path=['note', '2', 'x', 'xiii'])
+INFO:sectionieepa_agent:Loaded 1 note rows for note(2)(x)(xiv) (first path=['note', '2', 'x', 'xiv'])
+INFO:sectionieepa_agent:note(2)(x)(v) The additional duties imposed by heading 9903.01.77 shall not apply to products of iron or steel provided for in headings 9903.81.87 and 9903.81.88.
+INFO:sectionieepa_agent:note(2)(x)(vi) The additional duties imposed by heading 9903.01.77 shall not apply to derivative iron or steel products provided for in headings 9903.81.89, 9903.81.90, 9903.81.91, 9903.81.92 and 9903.81.93.
+INFO:sectionieepa_agent:note(2)(x)(vii) The additional duties imposed by heading 9903.01.77 shall not apply to products of aluminum provided for in heading 9903.85.02.
+INFO:sectionieepa_agent:note(2)(x)(viii) The additional duties imposed by heading 9903.01.77 shall not apply to derivative aluminum products provided for in headings 9903.85.04, 9903.85.07, 9903.85.08 and 9903.85.09.
+INFO:sectionieepa_agent:note(2)(x)(ix) The additional duties imposed by heading 9903.01.77 shall not apply to passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans, and cargo vans) and light trucks provided for in headings 9903.94.01 and 9903.94.03.
+INFO:sectionieepa_agent:note(2)(x)(x) The additional duties imposed by heading 9903.01.77 shall not apply to parts of passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans, and cargo vans) and parts of light trucks provided for in headings 9903.94.05 and 9903.94.07.
+INFO:sectionieepa_agent:note(2)(x)(xi) The additional duties imposed by heading 9903.01.77 shall not apply to semi-finished copper and intensive copper derivative products provided for in heading 9903.78.01.
+INFO:sectionieepa_agent:note(2)(x)(xii) The additional duties imposed by heading 9903.01.77 shall apply to wood products provided for in heading 9903.76.04, but shall not apply to wood products provided for in headings 9903.76.01, 9903.76.02 and 9903.76.03.
+INFO:sectionieepa_agent:note(2)(x)(xiii) The additional duties imposed by heading 9903.01.77 shall not apply to medium- and heavy-duty vehicles provided for in headings 9903.74.01, 9903.74.02 and 9903.74.03.
+INFO:sectionieepa_agent:note(2)(x)(xiv) The additional duties imposed by heading 9903.01.77 shall not apply to medium- and heavy-duty vehicle parts provided for in headings 9903.74.08 and 9903.74.09.
+INFO:sectionieepa_agent:Querying LLM for notes note(2)(x)(v), note(2)(x)(vi), note(2)(x)(vii), note(2)(x)(viii), note(2)(x)(ix), note(2)(x)(x), note(2)(x)(xi), note(2)(x)(xii), note(2)(x)(xiii), note(2)(x)(xiv)
+INFO:sectionieepa_agent:message:You are a structured extractor for HTSUS Section ieepa notes.
+Output JSON only. No inference. No paraphrasing. Include only codes that are explicitly printed in the input text.
+
+Objective:
+From the input legal note text, produce three outputs:
+1. **input_htscode** – copy exactly from `context.input_htscode` (a list provided by the caller). Do NOT infer, paraphrase, or add/remove codes. If this field is missing, return an empty list.
+2. **scope** – headings or subheadings that are explicitly stated to be covered (inside the range) by the measure. Do **not** include anything that appears only inside "except"/"exclusion" phrasing.
+3. **except** – headings or subheadings explicitly excluded (phrases such as "except … provided for in …").
+
+Each object in scope or except must match the `sieepa_scope` table schema:
+
+- keys                 // comma-separated exact heading or HTS8 codes (e.g. "0203.29.20,0203.29.40,0206.10.00") when conditions are identical
+- key                  // single exact heading or HTS8 code (e.g. "9903.88.05" or "8501.10.40") when used alone
+- key_type             // one of: "heading" (use for 4-digit headings and any 6-digit references), "hts8" (8-digit subheading), "hts10" (10-digit statistical reporting number)
+- country_iso2         // ISO-2 country code mentioned in the text (e.g. "UK"), else null
+- source_label         // e.g. "note20(a)" or "note20(b)-exclusion"
+- effective_start_date // ISO date; use context.fallback_start_date if not stated
+- effective_end_date   // ISO date or null
+
+Extraction rules:
+A. Set **input_htscode** equal to `context.input_htscode`. Never invent or summarize values.
+
+B. Identify all **scope** items:
+   - Include every HTS reference that is explicitly printed (4-digit headings, 6-digit subheadings, 8-digit HTS codes, or 10-digit statistical reporting numbers) under "applies to…" or similar language.
+   - When the text prints a range such as "9903.02.74-9903.02.77" or "9903.02.74–9903.02.77", expand it into each discrete heading (9903.02.74, 9903.02.75, 9903.02.76, 9903.02.77).
+   - Do NOT include `input_htscode` again.
+   - **When multiple HTS codes share identical conditions (same key_type, country_iso2, source_label, effective_start_date, effective_end_date), combine them using "keys" field with comma-separated values instead of creating separate objects.**
+
+C. Identify all **except** items:
+   - Look for any statement that exempts certain products/headings from the additional duties that would otherwise apply to `input_htscode`.
+   - Common patterns include:
+     * "Except as provided in heading(s) X..."
+     * "The additional duties imposed by heading(s) [including input_htscode] shall not apply to [products] provided for in heading(s) X"
+     * "As provided in heading X, the additional duties... shall not apply to products classified in..."
+   
+   - **Understanding Full vs Partial Exemptions:**
+     * **FULL EXEMPTION** (add to `except`): The products classified in the referenced heading are COMPLETELY exempt from the additional duties.
+       - The entire product/article in that heading is not subject to the additional duties.
+       - Example: "The additional duties shall not apply to medium- and heavy-duty vehicle parts provided for in headings 9903.74.08 and 9903.74.09"
+         → Products in 9903.74.08 and 9903.74.09 are FULLY exempt
+     
+     * **PARTIAL EXEMPTION** (do NOT add to `except`): Only a specific portion/component of the products in the referenced heading is exempt, while the remaining portion is still subject to duties.
+       - The text clarifies that duties still apply to some part/content of the product.
+       - Example: "The additional duties shall not apply to products of iron or steel provided for in headings 9903.81.87 and 9903.81.88, but such additional duties shall apply to the non-steel content of such products"
+         → Products in 9903.81.87 and 9903.81.88 are only PARTIALLY exempt (steel content exempt, non-steel content still taxed)
+       - Example: "The additional duties shall not apply to the declared value of the steel content of the derivative iron or steel products provided for in headings 9903.81.89-9903.81.93, but shall apply to the non-steel content"
+         → Products in 9903.81.89-9903.81.93 are only PARTIALLY exempt
+   
+   - **Decision Rule**: 
+     * Use your understanding of the legal language to determine: Are the products in the referenced heading COMPLETELY exempt from the additional duties, or are they only PARTIALLY exempt?
+     * Only add headings to `except` if they represent FULL exemptions.
+     * Do NOT add headings that represent partial exemptions (where some portion is still taxable).
+
+   - Special handling for clauses like "As provided for in heading 9903.01.32, the additional duties imposed by headings 9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, and 9903.02.01-9903.02.73 shall not apply to products classified in the following subheadings …": the listed subheadings (e.g., 0201.10.05, 0201.10.10) are the contents of heading 9903.01.32. Add **9903.01.32** itself to the `except` set for each imposing heading (9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, 9903.02.01-9903.02.73). Do not add the enumerated subheadings directly to `except` in this scenario.
+   
+   - **Checking Applicability**: 
+     * For an exemption to apply to `input_htscode`, the text must indicate that the exemption applies to the additional duties imposed by a list of headings that includes `input_htscode`.
+     * Ranges like "9903.02.01-9903.02.73" include ALL codes numerically between start and end (inclusive).
+     * Example: If input_htscode is "9903.02.02" and text says "duties imposed by headings 9903.02.01-9903.02.73 shall not apply to X", then X is an exemption for 9903.02.02.
+   
+   - Mark their source_label with "-exclusion".
+   - Apply the same combination rule as scope items when conditions are identical.
+
+D. Ignore carve-outs that clearly belong to other headings/programs (e.g., "As provided in 9903.01.26 ... products of Canada"). Unless the sentence explicitly ties the relief to `input_htscode`, do not add those references to `scope` or `except`.
+
+E. Set country_iso2 to the ISO-2 code for the country named in the text (e.g. "UK" for "products of the United Kingdom"). If no country is mentioned, leave it null.
+
+F. Only populate effective_start_date and effective_end_date when explicit "effective" or date ranges appear in the text.  
+   - Example: "effective January 1, 2023" → effective_start_date = "2023-01-01"  
+   - Example: "effective January 1, 2019 through December 31, 2019" → effective_start_date = "2019-01-01", effective_end_date = "2019-12-31"  
+   - Entry/admission timing clauses (e.g., goods admitted to a foreign trade zone before 12:01 a.m. EDT on March 12, 2025) do **not** impose an effective_end_date; they only describe which entries qualify.  
+   - If no explicit "effective" or date reference appears, leave both fields null. Do not use fallback_start_date.
+
+G. Remove duplicates.
+
+H. When multiple note blocks are provided, use `context.note_labels` (same order as the input blocks) for their labels. `context.primary_note_labels` lists the notes that actually triggered this extraction. `context.supporting_note_labels` lists subdivisions that were included only because a primary note referenced them (e.g., "subdivision (l)"). For supporting notes:
+   - Treat any HTS codes printed inside those blocks as exclusions for the referencing primary note unless the supporting block clearly introduces a different heading of its own.
+   - Use the primary note label with "-exclusion" for the `source_label` (e.g., `note16(m)-exclusion`).
+   - Do NOT add supporting-block codes to the scope of the current heading unless the text explicitly says they apply to that heading.
+
+I. If a supporting block explicitly states a different heading (e.g., "The rates … in heading 9903.81.89"), you may output its own scope entries but keep the source_label equal to that supporting note label.
+
+Context (provided by caller):
+// context.input_htscode → base headings provided by the caller; copy directly into "input_htscode"
+// context.note_labels → labels for each input block (in order)
+// context.primary_note_labels → subset that actually triggered extraction
+// context.supporting_note_labels → subdivisions referenced only to describe exclusions for the primaries
+{"country_iso2": "BR", "fallback_start_date": "1900-01-01", "input_htscode": ["9903.01.83"], "note_labels": ["note2(x)(v)", "note2(x)(vi)", "note2(x)(vii)", "note2(x)(viii)", "note2(x)(ix)", "note2(x)(x)", "note2(x)(xi)", "note2(x)(xii)", "note2(x)(xiii)", "note2(x)(xiv)"], "primary_note_labels": ["note(2)(x)(v)", "note(2)(x)(vi)", "note(2)(x)(vii)", "note(2)(x)(viii)", "note(2)(x)(ix)", "note(2)(x)(x)", "note(2)(x)(xi)", "note(2)(x)(xii)", "note(2)(x)(xiii)", "note(2)(x)(xiv)"], "source_label_prefix": "note(2)(x)(v), note(2)(x)(vi), note(2)(x)(vii), note(2)(x)(viii), note(2)(x)(ix), note(2)(x)(x), note(2)(x)(xi), note(2)(x)(xii), note(2)(x)(xiii), note(2)(x)(xiv)", "supporting_note_labels": []}
+
+Input (one or more note blocks, each beginning with its note label on the first line):
+"""note2(x)(v)
+note(2)(x)(v) The additional duties imposed by heading 9903.01.77 shall not apply to products of iron or steel provided for in headings 9903.81.87 and 9903.81.88.
+
+note2(x)(vi)
+note(2)(x)(vi) The additional duties imposed by heading 9903.01.77 shall not apply to derivative iron or steel products provided for in headings 9903.81.89, 9903.81.90, 9903.81.91, 9903.81.92 and 9903.81.93.
+
+note2(x)(vii)
+note(2)(x)(vii) The additional duties imposed by heading 9903.01.77 shall not apply to products of aluminum provided for in heading 9903.85.02.
+
+note2(x)(viii)
+note(2)(x)(viii) The additional duties imposed by heading 9903.01.77 shall not apply to derivative aluminum products provided for in headings 9903.85.04, 9903.85.07, 9903.85.08 and 9903.85.09.
+
+note2(x)(ix)
+note(2)(x)(ix) The additional duties imposed by heading 9903.01.77 shall not apply to passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans, and cargo vans) and light trucks provided for in headings 9903.94.01 and 9903.94.03.
+
+note2(x)(x)
+note(2)(x)(x) The additional duties imposed by heading 9903.01.77 shall not apply to parts of passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans, and cargo vans) and parts of light trucks provided for in headings 9903.94.05 and 9903.94.07.
+
+note2(x)(xi)
+note(2)(x)(xi) The additional duties imposed by heading 9903.01.77 shall not apply to semi-finished copper and intensive copper derivative products provided for in heading 9903.78.01.
+
+note2(x)(xii)
+note(2)(x)(xii) The additional duties imposed by heading 9903.01.77 shall apply to wood products provided for in heading 9903.76.04, but shall not apply to wood products provided for in headings 9903.76.01, 9903.76.02 and 9903.76.03.
+
+note2(x)(xiii)
+note(2)(x)(xiii) The additional duties imposed by heading 9903.01.77 shall not apply to medium- and heavy-duty vehicles provided for in headings 9903.74.01, 9903.74.02 and 9903.74.03.
+
+note2(x)(xiv)
+note(2)(x)(xiv) The additional duties imposed by heading 9903.01.77 shall not apply to medium- and heavy-duty vehicle parts provided for in headings 9903.74.08 and 9903.74.09."""
+
+Output JSON format (note the use of "keys" for combined codes and "key" for single codes):
+{
+  "input_htscode": ["9903.88.01"],
+  "scope": [
+    { "keys": "0203.29.20,0203.29.40,0206.10.00,0208.10.00,0208.90.20,0208.90.25,0210.19.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null },
+    { "key": "2845.30.00", "key_type": "hts8", "country_iso2": "CN", "source_label": "note20(b)", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ],
+  "except": [
+    { "key": "9903.88.05", "key_type": "heading", "country_iso2": "CN", "source_label": "note20(a)-exclusion", "effective_start_date": "1900-01-01", "effective_end_date": null }
+  ]
+}
+
+INFO:sectionieepa_agent:raw:{
+  "input_htscode": ["9903.01.83"],
+  "scope": [],
+  "except": []
+}
+INFO:sectionieepa_agent:Created scope↔measure relation 161214 (scope=22501, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.01.83 as exclude
+INFO:sectionieepa_agent:Child heading 9903.81.87 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope↔measure relation 161215 (scope=23468, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.81.87 as exclude
+INFO:sectionieepa_agent:Child heading 9903.81.88 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope↔measure relation 161216 (scope=23469, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.81.88 as exclude
+INFO:sectionieepa_agent:Child heading 9903.81.89 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope↔measure relation 161217 (scope=23470, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.81.89 as exclude
+INFO:sectionieepa_agent:Child heading 9903.81.90 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope↔measure relation 161218 (scope=23471, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.81.90 as exclude
+INFO:sectionieepa_agent:Child heading 9903.81.91 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope↔measure relation 161219 (scope=23472, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.81.91 as exclude
+INFO:sectionieepa_agent:Child heading 9903.81.92 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope↔measure relation 161220 (scope=23473, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.81.92 as exclude
+INFO:sectionieepa_agent:Child heading 9903.81.93 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope 23484 for key 9903.81.93
+INFO:sectionieepa_agent:Created scope↔measure relation 161221 (scope=23484, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.81.93 as exclude
+INFO:sectionieepa_agent:Child heading 9903.85.02 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope 23485 for key 9903.85.02
+INFO:sectionieepa_agent:Created scope↔measure relation 161222 (scope=23485, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.85.02 as exclude
+INFO:sectionieepa_agent:Child heading 9903.85.04 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope 23486 for key 9903.85.04
+INFO:sectionieepa_agent:Created scope↔measure relation 161223 (scope=23486, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.85.04 as exclude
+INFO:sectionieepa_agent:Child heading 9903.85.07 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope 23487 for key 9903.85.07
+INFO:sectionieepa_agent:Created scope↔measure relation 161224 (scope=23487, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.85.07 as exclude
+INFO:sectionieepa_agent:Child heading 9903.85.08 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope 23488 for key 9903.85.08
+INFO:sectionieepa_agent:Created scope↔measure relation 161225 (scope=23488, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.85.08 as exclude
+INFO:sectionieepa_agent:Child heading 9903.85.09 belongs to Section 232; skipping measure/note processing
+INFO:sectionieepa_agent:Created scope 23489 for key 9903.85.09
+INFO:sectionieepa_agent:Created scope↔measure relation 161226 (scope=23489, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.85.09 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.94.01
+INFO:sectionieepa_agent:measure {
+  "except": [
+    "9903.94.02",
+    "9903.94.03",
+    "9903.94.04",
+    "9903.94.31",
+    "9903.94.40",
+    "9903.94.41",
+    "9903.94.50",
+    "9903.94.51"
+  ],
+  "include": [
+    "note33",
+    "note33(b)"
+  ],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.94.01 already present in sieepa_measures (id=171); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23490 for key 9903.94.01
+INFO:sectionieepa_agent:Created scope↔measure relation 161227 (scope=23490, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.94.01 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.94.03
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note33(d)"],
+  "effective_period": {
+    "start_date": "April 3, 2025",
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.94.03 already present in sieepa_measures (id=173); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23491 for key 9903.94.03
+INFO:sectionieepa_agent:Created scope↔measure relation 161228 (scope=23491, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.94.03 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.94.05
+INFO:sectionieepa_agent:measure {
+  "except": [
+    "9903.94.06",
+    "9903.94.32",
+    "9903.94.33",
+    "9903.94.42",
+    "9903.94.43",
+    "9903.94.44",
+    "9903.94.45",
+    "9903.94.52",
+    "9903.94.53",
+    "9903.94.54",
+    "9903.94.55"
+  ],
+  "include": ["note33(g)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.94.05 already present in sieepa_measures (id=180); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23492 for key 9903.94.05
+INFO:sectionieepa_agent:Created scope↔measure relation 161229 (scope=23492, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.94.05 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.94.07
+INFO:sectionieepa_agent:measure {
+  "except": ["9903.94.33", "9903.94.44", "9903.94.45", "9903.94.54", "9903.94.55"],
+  "include": ["note33(p)"],
+  "effective_period": {"start_date": null, "end_date": null},
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.94.07 already present in sieepa_measures (id=192); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23493 for key 9903.94.07
+INFO:sectionieepa_agent:Created scope↔measure relation 161230 (scope=23493, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.94.07 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.78.01
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note36(b)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.78.01 already present in sieepa_measures (id=193); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23494 for key 9903.78.01
+INFO:sectionieepa_agent:Created scope↔measure relation 161231 (scope=23494, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.78.01 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.76.01
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note37(b)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.76.01 already present in sieepa_measures (id=196); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23495 for key 9903.76.01
+INFO:sectionieepa_agent:Created scope↔measure relation 161232 (scope=23495, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.76.01 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.76.02
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note37(d)"],
+  "effective_period": {"start_date": null, "end_date": null},
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.76.02 already present in sieepa_measures (id=197); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23496 for key 9903.76.02
+INFO:sectionieepa_agent:Created scope↔measure relation 161233 (scope=23496, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.76.02 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.76.03
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note37(f)"],
+  "effective_period": {"start_date": null, "end_date": null},
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.76.03 already present in sieepa_measures (id=198); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23497 for key 9903.76.03
+INFO:sectionieepa_agent:Created scope↔measure relation 161234 (scope=23497, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.76.03 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.74.01
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note38(b)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.74.01 already present in sieepa_measures (id=203); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23498 for key 9903.74.01
+INFO:sectionieepa_agent:Created scope↔measure relation 161235 (scope=23498, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.74.01 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.74.02
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note38(c)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.74.02 already present in sieepa_measures (id=204); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23499 for key 9903.74.02
+INFO:sectionieepa_agent:Created scope↔measure relation 161236 (scope=23499, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.74.02 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.74.03
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["USnote38(d)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.74.03 already present in sieepa_measures (id=205); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23500 for key 9903.74.03
+INFO:sectionieepa_agent:Created scope↔measure relation 161237 (scope=23500, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.74.03 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.74.08
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note38(i)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.74.08 already present in sieepa_measures (id=206); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23501 for key 9903.74.08
+INFO:sectionieepa_agent:Created scope↔measure relation 161238 (scope=23501, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.74.08 as exclude
+INFO:sectionieepa_agent:Processing heading 9903.74.09
+INFO:sectionieepa_agent:measure {
+  "except": [],
+  "include": ["note38(j)"],
+  "effective_period": {
+    "start_date": null,
+    "end_date": null
+  },
+  "country_iso2": null,
+  "melt_pour_origin_iso2": null,
+  "origin_exclude_iso2": [],
+  "is_potential": false
+}
+INFO:sectionieepa_agent:Heading 9903.74.09 already present in sieepa_measures (id=207); reusing existing scope
+INFO:sectionieepa_agent:Created scope 23502 for key 9903.74.09
+INFO:sectionieepa_agent:Created scope↔measure relation 161239 (scope=23502, measure=395, exclude)
+INFO:sectionieepa_agent:Recorded child heading reference 9903.01.77 → 9903.74.09 as exclude
+INFO:sectionieepa_agent:Created scope↔measure relation 161240 (scope=21931, measure=395, exclude)
+INFO:sectionieepa_agent:Created scope↔measure relation 161241 (scope=21932, measure=395, exclude)
+INFO:sectionieepa_agent:Created scope↔measure relation 161242 (scope=21933, measure=395, exclude)
+INFO:sectionieepa_agent:Created scope↔measure relation 161243 (scope=21934, measure=395, exclude)
+INFO:sectionieepa_agent:Created scope↔measure relation 161244 (scope=22500, measure=395, exclude)
+INFO:sectionieepa_agent:Created scope↔measure relation 161245 (scope=22501, measure=395, exclude)

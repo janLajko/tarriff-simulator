@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import os
+import logging
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal, InvalidOperation
+import time
 from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 try:  # pragma: no cover - optional dependency for environments without psycopg2
@@ -15,7 +17,15 @@ except ImportError:  # pragma: no cover - allow import without postgres libs
     psycopg2 = None  # type: ignore[assignment]
     RealDictCursor = None  # type: ignore[assignment]
 
+try:  # pragma: no cover - optional cache dependency
+    from theine import Cache as TheineCache
+except Exception:  # pragma: no cover
+    TheineCache = None  # type: ignore[assignment]
+
 from .basic_hts_rate import get_unit_config
+
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -72,6 +82,14 @@ ALUMINUM_ALWAYS_HEADINGS = {
     "9903.85.08",
     "9903.85.15",
 }
+
+SECTION232_CACHE_TTL_SECONDS = 24 * 60 * 60
+
+if TheineCache is not None:
+    _s232_cache = TheineCache(32)
+else:  # simple fallback cache with TTL
+    _s232_cache = None
+    _s232_cache_store: Dict[str, Tuple[float, Dict]] = {}
 
 
 def _coerce_decimal(value: object) -> Optional[Decimal]:
@@ -250,6 +268,42 @@ def _date_active(entry: date, start: Optional[date], end: Optional[date]) -> boo
     return True
 
 
+SECTION232_CACHE_TTL_SECONDS = 24 * 60 * 60
+
+if TheineCache is not None:
+    _s232_cache = TheineCache(32)
+else:  # simple fallback cache with TTL
+    _s232_cache = None
+    _s232_cache_store: Dict[str, Tuple[float, Dict]] = {}
+
+
+def _cache_get_s232(key: str) -> Optional[Dict]:
+    if _s232_cache is not None:
+        try:
+            value, ok = _s232_cache.get(key)  # type: ignore[call-arg]
+            return value if ok else None
+        except Exception:
+            return None
+    entry = _s232_cache_store.get(key)
+    if not entry:
+        return None
+    expires_at, value = entry
+    if time.monotonic() > expires_at:
+        _s232_cache_store.pop(key, None)
+        return None
+    return value
+
+
+def _cache_set_s232(key: str, value: Dict) -> None:
+    if _s232_cache is not None:
+        try:
+            _s232_cache.set(key, value, ttl=timedelta(seconds=SECTION232_CACHE_TTL_SECONDS))  # type: ignore[call-arg]
+        except Exception:
+            return
+        return
+    _s232_cache_store[key] = (time.monotonic() + SECTION232_CACHE_TTL_SECONDS, value)
+
+
 class Section232Evaluator:
     def __init__(
         self,
@@ -264,23 +318,34 @@ class Section232Evaluator:
         self.country = (country or "").upper()
         self.steel_melt_origin = (steel_melt_origin or "").upper() or None
         self.aluminum_melt_origin = (aluminum_melt_origin or "").upper() or None
+        self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
         self.measures = self._load_measures()
         self.heading_to_measure: Dict[str, Dict] = {
             m["heading"]: m for m in self.measures
         }
-        self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
         self.match_cache: Dict[Tuple[int, str], Tuple[bool, List[str]]] = {}
 
+    def _applicable_origin(self, heading: str) -> Optional[str]:
+        """Determine the origin to use for country-based gating."""
+        origin = self._heading_melt_origin(heading)
+        if origin:
+            return origin
+        if self.country:
+            return self.country
+        return None
+
     def _country_allows_measure(self, measure: Dict) -> bool:
+        heading = measure.get("heading") or ""
+        candidate_origin = (self._applicable_origin(heading) or "").upper()
         target_country = (measure.get("country_iso2") or "").upper()
         if target_country:
-            return self.country == target_country
+            return candidate_origin == target_country
         excluded: Sequence[str] = measure.get("origin_exclude_iso2") or []
-        excluded_upper = { (code or "").upper() for code in excluded }
-        if not self.country:
-            # If country is unknown, only allow global measures with no exclusions.
+        excluded_upper = {(code or "").upper() for code in excluded}
+        if not candidate_origin:
+            # If origin is unknown, only allow global measures with no exclusions.
             return not excluded_upper
-        return self.country not in excluded_upper
+        return candidate_origin not in excluded_upper
 
     def _heading_melt_origin(self, heading: str) -> Optional[str]:
         normalized = (heading or "").strip()
@@ -300,38 +365,81 @@ class Section232Evaluator:
         return candidate == required_origin
 
     def _load_measures(self) -> List[Dict]:
-        query = """
-            SELECT
-                m.id,
-                m.heading,
-                m.country_iso2,
-                m.melt_pour_origin_iso2,
-                m.origin_exclude_iso2,
-                m.ad_valorem_rate,
-                m.effective_start_date,
-                m.effective_end_date,
-                m.is_potential,
-                COALESCE(h.description, '') AS description
-            FROM s232_measures AS m
-            LEFT JOIN LATERAL (
-                SELECT description
-                FROM hts_codes hc
-                WHERE hc.hts_number = m.heading
-                ORDER BY hc.row_order
-                LIMIT 1
-            ) AS h ON TRUE
-            WHERE m.effective_start_date <= %s
-              AND (m.effective_end_date IS NULL OR %s <= m.effective_end_date)
-        """
-        params = (self.entry_date, self.entry_date)
-        with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(query, params)
-            rows = cur.fetchall()
+        cache_key = self.country or "__ALL__"
+        cached = _cache_get_s232(cache_key)
+        if cached is None:
+            query = """
+                SELECT
+                    m.id,
+                    m.heading,
+                    m.country_iso2,
+                    m.melt_pour_origin_iso2,
+                    m.origin_exclude_iso2,
+                    m.ad_valorem_rate,
+                    m.effective_start_date,
+                    m.effective_end_date,
+                    m.is_potential,
+                    COALESCE(h.description, '') AS description
+                FROM s232_measures AS m
+                LEFT JOIN LATERAL (
+                    SELECT description
+                    FROM hts_codes hc
+                    WHERE hc.hts_number = m.heading
+                    ORDER BY hc.row_order
+                    LIMIT 1
+                ) AS h ON TRUE
+                WHERE m.country_iso2 IS NULL OR m.country_iso2 = %s
+            """
+            params = (self.country,)
+            with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(query, params)
+                measure_rows = cur.fetchall()
+
+            measure_ids = [row["id"] for row in measure_rows]
+            scope_map: Dict[int, Dict[str, List[Dict]]] = {}
+            if measure_ids:
+                scope_query = """
+                    SELECT
+                        map.measure_id,
+                        map.relation,
+                        scope.key,
+                        scope.key_type,
+                        scope.country_iso2,
+                        scope.source_label,
+                        scope.effective_start_date,
+                        scope.effective_end_date
+                    FROM s232_scope_measure_map AS map
+                    JOIN s232_scope AS scope ON scope.id = map.scope_id
+                    WHERE map.measure_id = ANY(%s)
+                """
+                with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
+                    cur.execute(scope_query, (measure_ids,))
+                    scope_rows = cur.fetchall()
+                for row in scope_rows:
+                    rel = row.get("relation")
+                    if rel not in {"include", "exclude"}:
+                        continue
+                    mid = row["measure_id"]
+                    bucket = scope_map.setdefault(mid, {"include": [], "exclude": []})
+                    bucket[rel].append(row)
+            cached = {"measures": measure_rows, "scopes": scope_map}
+            _cache_set_s232(cache_key, cached)
+
+        rows = cached.get("measures", [])
+        scope_map_cached = cached.get("scopes", {})
+        for mid, scopes in scope_map_cached.items():
+            self.scope_cache[mid] = scopes
 
         filtered = [
             row
             for row in rows
-            if self._country_allows_measure(row) and self._melt_origin_allows_measure(row)
+            if self._country_allows_measure(row)
+            and self._melt_origin_allows_measure(row)
+            and row.get("effective_start_date") <= self.entry_date
+            and (
+                row.get("effective_end_date") is None
+                or self.entry_date <= row.get("effective_end_date")
+            )
         ]
         return filtered
 
@@ -473,6 +581,8 @@ def compute_section232_duty(
     if not isinstance(entry_date, date):
         raise TypeError("entry_date must be a datetime.date instance")
 
+    start_time = time.perf_counter()
+
     if psycopg2 is None:  # pragma: no cover - runtime enforcement
         raise RuntimeError(
             "psycopg2 is required to compute Section 232 duties. "
@@ -495,6 +605,14 @@ def compute_section232_duty(
     if not dsn:
         raise RuntimeError("DATABASE_DSN environment variable is required for Section 232 calculations.")
 
+    logger.info(
+        "Section232 computation start hts=%s country=%s entry=%s",
+        hts_number,
+        origin,
+        entry_date,
+    )
+
+    eval_start = time.perf_counter()
     with psycopg2.connect(dsn) as conn:
         evaluator = Section232Evaluator(
             conn,
@@ -511,6 +629,13 @@ def compute_section232_duty(
                 applicable_measures.append(measure)
             elif exclusions:
                 excluded_measures.append((measure, exclusions))
+    logger.info(
+        "Section232 evaluated measures in %.3fs (loaded=%s applicable=%s excluded=%s)",
+        time.perf_counter() - eval_start,
+        len(getattr(evaluator, "measures", []) or []),
+        len(applicable_measures),
+        len(excluded_measures),
+    )
 
     rated_measures: List[Dict] = []
     zero_rate_matches: List[Dict] = []
@@ -608,6 +733,10 @@ def compute_section232_duty(
                 "Applied Section 232 measures: "
                 + ", ".join(f"{entry.ch99_id} (0%)" for entry in zero_entries)
             ]
+            logger.info(
+                "Section232 applied special zero measures in %.3fs",
+                time.perf_counter() - start_time,
+            )
             return Section232Computation(
                 module_id="232",
                 module_name="Section 232 Tariffs",
@@ -618,6 +747,10 @@ def compute_section232_duty(
                 ch99_list=zero_entries,
                 notes=notes,
             )
+        logger.info(
+            "Section232 returning without rated measures in %.3fs",
+            time.perf_counter() - start_time,
+        )
         notes = [
             "No active Section 232 measures matched the provided HTS number on the given entry date."
         ]
@@ -691,11 +824,17 @@ def compute_section232_duty(
                 + zero_headings
             )
 
+    amount_start = time.perf_counter()
     amount, missing_measurement_fields = _compute_section232_amount(
         hts_number,
         ch99_list,
         import_value_decimal,
         normalized_measurements,
+    )
+    logger.info(
+        "Section232 amount computed in %.3fs (missing_fields=%s)",
+        time.perf_counter() - amount_start,
+        len(missing_measurement_fields),
     )
     if missing_measurement_fields:
         missing_list = ", ".join(sorted(set(missing_measurement_fields)))
@@ -704,6 +843,12 @@ def compute_section232_duty(
             f"{missing_list} (provide as fractional values, e.g., 0.25 for 25%)."
         )
 
+    logger.info(
+        "Section232 completed in %.3fs applicable_measures=%s rated=%s",
+        time.perf_counter() - start_time,
+        len(applicable_measures),
+        len(rated_measures),
+    )
     return Section232Computation(
         module_id="232",
         module_name="Section 232 Tariffs",

@@ -48,7 +48,15 @@ BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 
 DEFAULT_HEADINGS = [
-    "9903.01.25"
+    # "9903.02.02",
+    # "9903.01.10",
+    # "9903.01.24",
+    # "9903.01.25",
+    # "9903.01.24",
+    # "9903.01.77",
+    # "9903.01.84",
+    "9903.01.01",
+    "9903.01.04",
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section ieepa derivative steel measures.
@@ -60,6 +68,7 @@ From the following text, extract:
 5. **melt_pour_origin_iso2** – ISO-2 code for where the steel must be melted and poured (e.g., “US” when the text says “melted and poured in the United States”). Use null if not stated.
 6. **origin_exclude_iso2** – an array of ISO-2 codes for origin countries explicitly excluded (e.g., ["UK"]). When the text implies “all countries except the United Kingdom” for derivative products made from U.S.-melted steel, output ["UK"] even if the exclusion is implicit.
 7. **is_potential** – true only when the text describes a conditional or potential scenario (e.g., treatment of goods that might later enter commerce, or goods admitted to a foreign trade zone before a cut-off time). False when the measure is in force without such contingencies. When `is_potential` is true, leave `effective_period.end_date` null unless the text explicitly states when the measure itself expires. Dates that merely reference entry/admission timing do **not** impose an end date.
+8. If the text states “Compiler's note: provision suspended”, treat the heading as suspended: return empty include/except arrays, null dates, null country/melt_pour/origin_exclude values, and set `is_potential` to false. Do not infer any scope.
 
 Input text:
 \"\"\"{description}\"\"\"
@@ -189,7 +198,7 @@ C. Identify all **except** items:
      * Only add headings to `except` if they represent FULL exemptions.
      * Do NOT add headings that represent partial exemptions (where some portion is still taxable).
 
-   - When the language says "As provided in heading 9903.01.32 ... shall not apply to products classified in the following subheadings", treat the enumerated HTS codes as the actual `except` entries and do not output the referencing heading itself (e.g., 9903.01.32).
+   - Special handling for clauses like "As provided for in heading 9903.01.32, the additional duties imposed by headings 9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, and 9903.02.01-9903.02.73 shall not apply to products classified in the following subheadings …": the listed subheadings (e.g., 0201.10.05, 0201.10.10) are the contents of heading 9903.01.32. Add **9903.01.32** itself to the `except` set for each imposing heading (9903.01.25, 9903.01.35, 9903.01.39, 9903.01.63, 9903.02.01-9903.02.73). Do not add the enumerated subheadings directly to `except` in this scenario.
    
    - **Checking Applicability**: 
      * For an exemption to apply to `input_htscode`, the text must indicate that the exemption applies to the additional duties imposed by a list of headings that includes `input_htscode`.
@@ -340,6 +349,13 @@ def classify_code_type(code: str) -> str:
     return "heading"
 
 
+def _is_s232_heading(heading: str) -> bool:
+    """Return True for 9903.81.xx / 9903.85.xx headings that belong to Section 232."""
+    normalized = heading.strip()
+    digits = normalized.replace(".", "")
+    return digits.startswith("990381") or digits.startswith("990385")
+
+
 class Section232Database:
     """Minimal database helper around psycopg2."""
 
@@ -389,7 +405,7 @@ class Section232Database:
 
     def fetch_hts_code(self, heading: str) -> Optional[Dict[str, Any]]:
         query = """
-            SELECT hts_number, description, status, additional_duties
+            SELECT hts_number, description, status, additional_duties, general_rate_of_duty
             FROM hts_codes
             WHERE hts_number = %s
             ORDER BY row_order
@@ -1128,6 +1144,10 @@ class Section232Agent:
         normalized = heading.strip()
         if not normalized:
             return None
+        if _is_s232_heading(normalized):
+            LOGGER.info("Heading %s belongs to Section 232; skipping measure/note processing", normalized)
+            self._measure_cache[normalized] = None
+            return None
         if normalized in self._measure_cache:
             LOGGER.debug("Heading %s already processed; reusing measure id %s", normalized, self._measure_cache[normalized])
             return self._measure_cache[normalized]
@@ -1153,6 +1173,10 @@ class Section232Agent:
             description = (row.get("description") or "").strip()
             if not description:
                 LOGGER.warning("Heading %s has empty description; skipping", normalized)
+                self._measure_cache[normalized] = None
+                return None
+            if "compiler's note: provision suspended" in description.lower():
+                LOGGER.info("Heading %s marked as suspended by compiler's note; skipping measure insertion", normalized)
                 self._measure_cache[normalized] = None
                 return None
 
@@ -1370,7 +1394,7 @@ class Section232Agent:
             note_label=scope.source_label,
             text_criteria=None,
         )
-        if scope.key.startswith("99"):
+        if scope.key.startswith("99") and not _is_s232_heading(scope.key):
             self.process_heading(scope.key)
 
     def _process_note_references(
@@ -1639,14 +1663,22 @@ class Section232Agent:
         fallback_start: date,
         fallback_end: Optional[date],
     ) -> None:
-        child_measure_id = self.process_heading(child_heading)
-        if not child_measure_id:
+        skip_child_measure = _is_s232_heading(child_heading)
+        child_measure_id = None
+        if not skip_child_measure:
+            child_measure_id = self.process_heading(child_heading)
+            if not child_measure_id:
+                LOGGER.info(
+                    "Child heading %s could not be processed; skipping linkage to %s",
+                    child_heading,
+                    parent_heading,
+                )
+                return
+        else:
             LOGGER.info(
-                "Child heading %s could not be processed; skipping linkage to %s",
+                "Child heading %s belongs to Section 232; skipping measure/note processing",
                 child_heading,
-                parent_heading,
             )
-            return
 
         scope = ScopeRecord(
             key=child_heading,
@@ -1686,14 +1718,22 @@ class Section232Agent:
         fallback_start: date,
         fallback_end: Optional[date],
     ) -> None:
-        child_measure_id = self.process_heading(child_heading)
-        if not child_measure_id:
+        skip_child_measure = _is_s232_heading(child_heading)
+        child_measure_id = None
+        if not skip_child_measure:
+            child_measure_id = self.process_heading(child_heading)
+            if not child_measure_id:
+                LOGGER.info(
+                    "Child heading %s could not be processed; skipping reference linkage to %s",
+                    child_heading,
+                    parent_heading,
+                )
+                return
+        else:
             LOGGER.info(
-                "Child heading %s could not be processed; skipping reference linkage to %s",
+                "Child heading %s belongs to Section 232; skipping measure/note processing",
                 child_heading,
-                parent_heading,
             )
-            return
 
         scope = ScopeRecord(
             key=child_heading,

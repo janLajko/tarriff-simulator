@@ -1,0 +1,15 @@
+INFO:simulator.app:simulate_tariff start hts=2106.90.99.98 country=BR entry=2025-10-20
+INFO:simulator.app:simulate_tariff fetched HTS record in 2.339s
+INFO:simulator.app:simulate_tariff basic duty computed in 0.057s
+[BasicRateComputation(case_id='GENERAL_RATE', calculated=True, amount=Decimal('6400.000'), currency='USD', formula='0.064 * usd', required_units=['usd'], provided_inputs={'usd': Decimal('100000')}, notes=[]), BasicRateComputation(case_id='SPECIAL_RATE_FREE', calculated=False, amount=Decimal('0'), currency='USD', formula=None, required_units=[], provided_inputs={}, notes=["Special rate 'Free' applies for country BR; qualifying program codes: A (Generalized System of Preferences)."])]
+INFO:simulator.section301_rate:Section301 computation start hts=2106.90.99.98 country=BR entry=2025-10-20
+INFO:simulator.section301_rate:Section301 skipped for non-CN origin in 0.000s
+INFO:simulator.app:simulate_tariff section301 computed in 0.000s
+INFO:simulator.sectionieepa_rate:SectionIEEPA computation start hts=2106.90.99.98 country=BR entry=2025-10-20
+INFO:simulator.section232_rate:Section232 computation start hts=2106.90.99.98 country=BR entry=2025-10-20
+INFO:simulator.section232_rate:Section232 evaluated measures in 3.866s (loaded=9 applicable=2 excluded=0)
+INFO:simulator.section232_rate:Section232 returning without rated measures in 3.866s
+INFO:simulator.app:simulate_tariff section232 computed in 3.867s
+DEBUG:simulator.sectionieepa_rate:Section IEEPA _load_measures country=BR entry_date=2025-10-20 raw=43 filtered=43
+INFO:simulator.sectionieepa_rate:SectionIEEPA returning without rated measures in 35.310s
+INFO:simulator.app:simulate_tariff sectionieepa computed in 35.312s
