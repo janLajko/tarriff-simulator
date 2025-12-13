@@ -1,0 +1,124 @@
+{
+  "schema": "public",
+  "table": "sieepa_measures",
+  "heading_column": "heading",
+  "country_column": "country_iso2",
+  "rate_column": "ad_valorem_rate",
+  "headings_in_a": 156,
+  "headings_in_b": 165,
+  "common_headings": 155,
+  "only_in_a_headings": 1,
+  "only_in_b_headings": 10,
+  "diff_headings": 6,
+  "sample_only_in_a_headings": [
+    "9903.74.07"
+  ],
+  "sample_only_in_b_headings": [
+    "9903.02.79",
+    "9903.02.80",
+    "9903.02.81",
+    "9903.76.23",
+    "9903.94.60",
+    "9903.94.61",
+    "9903.94.62",
+    "9903.94.63",
+    "9903.94.64",
+    "9903.94.65"
+  ],
+  "sample_diff_headings": [
+    {
+      "heading": "9903.01.04",
+      "only_in_a_pairs": [
+        {
+          "country_iso2": "MX",
+          "ad_valorem_rate": "25.000"
+        }
+      ],
+      "only_in_b_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "25.000"
+        }
+      ]
+    },
+    {
+      "heading": "9903.01.24",
+      "only_in_a_pairs": [
+        {
+          "country_iso2": "CN",
+          "ad_valorem_rate": "10.000"
+        }
+      ],
+      "only_in_b_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "10.000"
+        }
+      ]
+    },
+    {
+      "heading": "9903.02.19",
+      "only_in_a_pairs": [
+        {
+          "country_iso2": "EU",
+          "ad_valorem_rate": "0.000"
+        }
+      ],
+      "only_in_b_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "0.000"
+        }
+      ]
+    },
+    {
+      "heading": "9903.02.75",
+      "only_in_a_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "0.000"
+        }
+      ],
+      "only_in_b_pairs": [
+        {
+          "country_iso2": "EU",
+          "ad_valorem_rate": "0.000"
+        }
+      ]
+    },
+    {
+      "heading": "9903.02.76",
+      "only_in_a_pairs": [
+        {
+          "country_iso2": "EU",
+          "ad_valorem_rate": "0.000"
+        }
+      ],
+      "only_in_b_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "0.000"
+        }
+      ]
+    },
+    {
+      "heading": "9903.94.50",
+      "only_in_a_pairs": [
+        {
+          "country_iso2": "EU",
+          "ad_valorem_rate": "0.000"
+        }
+      ],
+      "only_in_b_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "0.000"
+        }
+      ]
+    }
+  ],
+  "dsn_a": "postgresql://postgres:***@34.94.60.174:5432/tariff-simulate",
+  "dsn_b": "postgresql://postgres:***@34.129.224.77:5432/tariff-simulate",
+  "generated_at": "2025-12-13T01:43:21Z",
+  "partial": false
+}
