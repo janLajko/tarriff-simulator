@@ -6,11 +6,11 @@ python agent/chapter99note-agent/notes_agent.py --dsn postgresql://postgres:Xylx
 测试notes_agent
 python agent/chapter99note-agent/test_notes_agent.py --dsn postgresql://postgres:Xylx1.t123@34.129.224.77:5432/tariff-simulate
 
-301同步数据
+99同步数据
+python agent/section301-agent/section301_agent.py --dsn postgresql://postgres:Xylx1.t123@34.129.224.77:5432/tariff-simulate
+nohup python agent/section232-agent/section232_agent.py --dsn postgresql://postgres:Xylx1.t123@34.129.224.77:5432/tariff-simulate >/dev/null 2>&1 &
+nohup python agent/sectionieepa/sectionieepa_openai_agent.py --dsn postgresql://postgres:Xylx1.t123@34.129.224.77:5432/tariff-simulate >/dev/null 2>&1 &
 
-
-
-301数据同步
 
 本地启动simulator服务
  uvicorn simulator.app:app
