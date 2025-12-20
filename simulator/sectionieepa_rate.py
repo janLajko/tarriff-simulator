@@ -948,6 +948,8 @@ def compute_sectionieepa_duty(
     for measure in applicable_measures:
         rate = _coerce_decimal(measure.get("ad_valorem_rate"))
         heading = (measure.get("heading") or "").strip()
+        if not heading.startswith("9903.02") and not heading.startswith("9903.01"):
+            continue
         if base_rate_decimal is not None and heading in {"9903.02.19", "9903.02.72","9903.02.79"} and base_rate_decimal < Decimal("15"):
             # if heading == "9903.02.72" and base_rate_decimal < Decimal("15"):
                 continue
