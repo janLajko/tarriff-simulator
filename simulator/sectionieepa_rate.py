@@ -499,23 +499,23 @@ class SectionIEEPAEvaluator:
         ]
         for mid, scopes in scope_map_cached.items():
             self.scope_cache[mid] = scopes
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(
-                "Section IEEPA _load_measures country=%s entry_date=%s raw=%s filtered=%s",
-                self.country,
-                self.entry_date,
-                len(rows) if rows else 0,
-                len(filtered),
-            )
-            for row in filtered:
-                if row["heading"] in {"9903.02.29", "9903.02.30", "9903.02.31"}:
-                    logger.debug(
-                        "IEEPA measure kept heading=%s country_iso2=%s excludes=%s rate=%s",
-                        row.get("heading"),
-                        row.get("country_iso2"),
-                        row.get("origin_exclude_iso2"),
-                        row.get("ad_valorem_rate"),
-                    )
+        # if logger.isEnabledFor(logging.DEBUG):
+        #     logger.debug(
+        #         "Section IEEPA _load_measures country=%s entry_date=%s raw=%s filtered=%s",
+        #         self.country,
+        #         self.entry_date,
+        #         len(rows) if rows else 0,
+        #         len(filtered),
+        #     )
+            # for row in filtered:
+            #     # if row["heading"] in {"9903.02.29", "9903.02.30", "9903.02.31"}:
+            #     logger.debug(
+            #         "IEEPA measure kept heading=%s country_iso2=%s excludes=%s rate=%s",
+            #         row.get("heading"),
+            #         row.get("country_iso2"),
+            #         row.get("origin_exclude_iso2"),
+            #         row.get("ad_valorem_rate"),
+            #     )
         return filtered
 
     def _load_scopes(self, measure_id: int) -> Dict[str, List[Dict]]:
@@ -860,26 +860,6 @@ def compute_sectionieepa_duty(
                 applicable_measures.append(measure)
             elif exclusions:
                 excluded_measures.append((measure, exclusions))
-            # elif logger.isEnabledFor(logging.DEBUG):
-                # logger.debug(
-                #     "IEEPA measure no match heading=%s country=%s exclusions=%s",
-                #     measure.get("heading"),
-                #     measure.get("country_iso2"),
-                #     exclusions,
-                # )
-        # if logger.isEnabledFor(logging.INFO):
-        #     logger.info(
-        #         "IEEPA applicable_measures count=%s items=%s",
-        #         len(applicable_measures),
-        #         [(m.get("heading"), m.get("country_iso2")) for m in applicable_measures],
-        #     )
-    # logger.info(
-    #     "SectionIEEPA evaluated measures in %.3fs (loaded=%s applicable=%s excluded=%s)",
-    #     time.perf_counter() - eval_start,
-    #     len(getattr(evaluator, "measures", []) or []),
-    #     len(applicable_measures),
-    #     len(excluded_measures),
-    # )
 
     steel_share = _extract_share(measurements, "steel_percentage")
     aluminum_share = _extract_share(measurements, "aluminum_percentage")
@@ -912,12 +892,14 @@ def compute_sectionieepa_duty(
     for measure in applicable_measures:
         rate = _coerce_decimal(measure.get("ad_valorem_rate"))
         heading = (measure.get("heading") or "").strip()
-        if base_rate_decimal is not None and heading in {"9903.02.72", "9903.02.73"}:
-            if heading == "9903.02.72" and base_rate_decimal < Decimal("15"):
+        # if base_rate_decimal is not None and heading in {"9903.02.19", "9903.02.72"} and base_rate_decimal < Decimal("15"):
+            # if heading == "9903.02.72" and base_rate_decimal < Decimal("15"):
+                # continue
+            # if heading == "9903.02.73" and base_rate_decimal >= Decimal("15"):
+            #     continue
+        if base_rate_decimal is not None and heading in {"9903.02.20", "9903.02.73"}:
+            if base_rate_decimal > Decimal("15"):
                 continue
-            if heading == "9903.02.73" and base_rate_decimal >= Decimal("15"):
-                continue
-        if base_rate_decimal is not None and heading in {"9903.02.19", "9903.02.72"}:
             adjusted = Decimal("15") - base_rate_decimal
             if adjusted < 0:
                 adjusted = Decimal("0")
