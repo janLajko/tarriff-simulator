@@ -5,12 +5,14 @@
   "country_column": "country_iso2",
   "rate_column": "ad_valorem_rate",
   "headings_in_a": 156,
-  "headings_in_b": 165,
-  "common_headings": 155,
-  "only_in_a_headings": 1,
+  "headings_in_b": 163,
+  "common_headings": 153,
+  "only_in_a_headings": 3,
   "only_in_b_headings": 10,
-  "diff_headings": 6,
+  "diff_headings": 1,
   "sample_only_in_a_headings": [
+    "9903.02.30",
+    "9903.02.56",
     "9903.74.07"
   ],
   "sample_only_in_b_headings": [
@@ -27,51 +29,6 @@
   ],
   "sample_diff_headings": [
     {
-      "heading": "9903.01.04",
-      "only_in_a_pairs": [
-        {
-          "country_iso2": "MX",
-          "ad_valorem_rate": "25.000"
-        }
-      ],
-      "only_in_b_pairs": [
-        {
-          "country_iso2": null,
-          "ad_valorem_rate": "25.000"
-        }
-      ]
-    },
-    {
-      "heading": "9903.01.24",
-      "only_in_a_pairs": [
-        {
-          "country_iso2": "CN",
-          "ad_valorem_rate": "10.000"
-        }
-      ],
-      "only_in_b_pairs": [
-        {
-          "country_iso2": null,
-          "ad_valorem_rate": "10.000"
-        }
-      ]
-    },
-    {
-      "heading": "9903.02.19",
-      "only_in_a_pairs": [
-        {
-          "country_iso2": "EU",
-          "ad_valorem_rate": "0.000"
-        }
-      ],
-      "only_in_b_pairs": [
-        {
-          "country_iso2": null,
-          "ad_valorem_rate": "0.000"
-        }
-      ]
-    },
-    {
       "heading": "9903.02.75",
       "only_in_a_pairs": [
         {
@@ -85,40 +42,10 @@
           "ad_valorem_rate": "0.000"
         }
       ]
-    },
-    {
-      "heading": "9903.02.76",
-      "only_in_a_pairs": [
-        {
-          "country_iso2": "EU",
-          "ad_valorem_rate": "0.000"
-        }
-      ],
-      "only_in_b_pairs": [
-        {
-          "country_iso2": null,
-          "ad_valorem_rate": "0.000"
-        }
-      ]
-    },
-    {
-      "heading": "9903.94.50",
-      "only_in_a_pairs": [
-        {
-          "country_iso2": "EU",
-          "ad_valorem_rate": "0.000"
-        }
-      ],
-      "only_in_b_pairs": [
-        {
-          "country_iso2": null,
-          "ad_valorem_rate": "0.000"
-        }
-      ]
     }
   ],
   "dsn_a": "postgresql://postgres:***@34.94.60.174:5432/tariff-simulate",
   "dsn_b": "postgresql://postgres:***@34.129.224.77:5432/tariff-simulate",
-  "generated_at": "2025-12-13T01:43:21Z",
+  "generated_at": "2025-12-20T09:21:46Z",
   "partial": false
 }

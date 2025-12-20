@@ -24,12 +24,12 @@
     "formula": "0"
   },
   "0101.30.00.00": {
-    "general_rate_of_duty": "16.8%",
+    "general_rate_of_duty": "6.8%",
     "hts_general": "Ad Valorem",
     "unit": [
       "usd"
     ],
-    "formula": "0.168 * usd"
+    "formula": "0.068 * usd"
   },
   "0101.90.30.00": {
     "general_rate_of_duty": "Free",

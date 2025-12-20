@@ -518,6 +518,7 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
             canonical_hts,
             country,
             entry,
+            date_of_landing=payload.date_of_landing,
             import_value=import_value_amount,
             melt_pour_origin_iso2=melt_origin,
             measurements=measurements,
