@@ -34,6 +34,7 @@ from .anti_scraping import (
 from .section301_rate import Section301Computation, compute_section301_duty
 from .section232_rate import Section232Computation, compute_section232_duty
 from .sectionieepa_rate import SectionIEEPAComputation, compute_sectionieepa_duty
+from .other_rate import OtherComputation, compute_note33_duty
 
 logger = logging.getLogger(__name__)
 HTS_CACHE_TTL_SECONDS = 24 * 60 * 60
@@ -341,7 +342,7 @@ def _build_meta_info(
 
 
 def _build_modules(
-    *sections: Section301Computation | Section232Computation | SectionIEEPAComputation,
+    *sections: Section301Computation | Section232Computation | SectionIEEPAComputation | OtherComputation,
 ) -> List[TariffModule]:
     modules: List[TariffModule] = []
     for computation in sections:
@@ -501,7 +502,7 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         finally:
             logger.info("simulate_tariff %s computed in %.3fs", name, time.perf_counter() - started)
 
-    with ThreadPoolExecutor(max_workers=3) as executor:
+    with ThreadPoolExecutor(max_workers=4) as executor:
         fut_301 = executor.submit(
             _timed_call,
             "section301",
@@ -538,10 +539,22 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
             steel_percentage=payload.steel_percentage,
             aluminum_percentage=payload.aluminum_percentage,
         )
+        fut_note33 = executor.submit(
+            _timed_call,
+            "note33",
+            compute_note33_duty,
+            canonical_hts,
+            country,
+            entry,
+            date_of_landing=payload.date_of_landing,
+            import_value=import_value_amount,
+            base_rate_decimal=base_duty_rate_percent,
+        )
         section_301_result = fut_301.result()
         section_232_result = fut_232.result()
         section_ieepa_result = fut_ieepa.result()
-    modules = _build_modules(section_301_result, section_232_result, section_ieepa_result)
+        note33_result = fut_note33.result()
+    modules = _build_modules(section_301_result, section_232_result, section_ieepa_result, note33_result)
     request_echo = _build_request_echo(
         payload, measurements, canonical_hts, entry, melt_origin
     )

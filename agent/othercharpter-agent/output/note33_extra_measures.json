@@ -1,0 +1,681 @@
+{
+  "note_number": 33,
+  "note_label": "note(33)",
+  "measures": [
+    {
+      "heading": "9903.78.01",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Vehicles and parts under specified 9903.94.xx headings are not subject to this heading per note 33."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Goods entered under these headings are not subject to 9903.78.01.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.02",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Vehicles and parts under specified 9903.94.xx headings are not subject to aluminum duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.12",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Vehicles and parts under specified 9903.94.xx headings are not subject to this aluminum duty."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.04",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts under specified 9903.94.xx headings are not subject to derivative aluminum duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.07",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts under specified 9903.94.xx headings are not subject to derivative aluminum duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.08",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts under specified 9903.94.xx headings are not subject to derivative aluminum duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.13",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts under specified 9903.94.xx headings are not subject to derivative aluminum duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.14",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts under specified 9903.94.xx headings are not subject to derivative aluminum duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.15",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts under specified 9903.94.xx headings are not subject to derivative aluminum duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.87",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to this iron/steel duty."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.88",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to this iron/steel duty."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.94",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to this iron/steel duty."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.95",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to this iron/steel duty."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.89",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to derivative iron/steel duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.90",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to derivative iron/steel duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.91",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to derivative iron/steel duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.93",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to derivative iron/steel duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.96",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to derivative iron/steel duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.97",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to derivative iron/steel duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.98",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to derivative iron/steel duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.99",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified 9903.94.xx headings are not subject to derivative iron/steel duties."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.01.10",
+      "country_iso2": "CA",
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified headings are not subject to Canadian measures under this heading per note 33."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": "CA",
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to automobiles and automotive parts entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.01.01",
+      "country_iso2": "MX",
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "exclusion_applies_to": "Automobiles and parts in specified headings are not subject to Mexican measures under this heading per note 33."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": "MX",
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Not applicable to automobiles and automotive parts entries under these headings.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.76.01",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "wood_products_duties_exclusion": "Automobile parts under specified 9903.94.xx headings are not subject to these wood product duties per note 33."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Automotive parts under these headings are excluded.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.76.02",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "wood_products_duties_exclusion": "Automobile parts under specified 9903.94.xx headings are not subject to these wood product duties per note 33."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Automotive parts under these headings are excluded.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.76.03",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "wood_products_duties_exclusion": "Automobile parts under specified 9903.94.xx headings are not subject to these wood product duties per note 33."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Automotive parts under these headings are excluded.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.76.23",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "wood_products_duties_exclusion": "Certain South Korea automotive parts under specified headings are not subject to this wood product duty per note 33(t)."
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": "KR",
+          "source_label": "U.S. note 33",
+          "note_label": "note(33)",
+          "text_criteria": "Automotive parts products of South Korea under these headings are excluded.",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    }
+  ]
+}

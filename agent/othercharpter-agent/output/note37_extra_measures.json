@@ -1,0 +1,727 @@
+{
+  "note_number": 37,
+  "note_label": "note(37)",
+  "measures": [
+    {
+      "heading": "9903.74.01",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "fta_collection": "in_addition_to",
+        "chapter98_9802_00_60_full_value": true,
+        "chapter99_lower_rate_disallowed": true,
+        "additional_ch99_in_addition_to": true,
+        "ad_cvd_in_addition_to": true,
+        "except_as_provided_by": [
+          "9903.74.03",
+          "9903.74.05",
+          "9903.74.06",
+          "9903.74.07"
+        ],
+        "not_subject_to_other_additional_duties_listed_in_note_38a": true
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.03,9903.74.05,9903.74.06,9903.74.07",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Except as provided in these headings",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.74.02",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "fta_collection": "in_addition_to",
+        "chapter98_9802_00_60_full_value": true,
+        "chapter99_lower_rate_disallowed": true,
+        "additional_ch99_in_addition_to": true,
+        "ad_cvd_in_addition_to": true,
+        "except_as_provided_by": [
+          "9903.74.03",
+          "9903.74.05",
+          "9903.74.06",
+          "9903.74.07"
+        ],
+        "not_subject_to_other_additional_duties_listed_in_note_38a": true
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.03,9903.74.05,9903.74.06,9903.74.07",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Except as provided in these headings",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.74.03",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "referenced_as_exception_in_note_38a": true
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.74.05",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "referenced_as_exception_in_note_38a": true
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.74.06",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "referenced_as_exception_in_note_38a": true
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.74.07",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": false,
+      "notes": {
+        "referenced_as_exception_in_note_38a": true
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.78.01",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Entries of medium- and heavy-duty vehicles are not subject to the additional duties under this heading",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.02",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "aluminum"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.12",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "aluminum"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.04",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative aluminum products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.07",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative aluminum products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.08",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative aluminum products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.13",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative aluminum products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.14",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative aluminum products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.85.15",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative aluminum products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.87",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.88",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.94",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.95",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.89",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.90",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.91",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.93",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.96",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.97",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.98",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.81.99",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "derivative iron or steel products"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Not subject for entries of medium- and heavy-duty vehicles",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.01.10",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "retaliatory/additional duties (Canada products referenced)"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Entries of medium- and heavy-duty vehicles are not subject to this heading",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    },
+    {
+      "heading": "9903.01.01",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "exemption_for_medium_heavy_vehicles_under_9903_74_01_and_9903_74_02": true,
+        "category": "retaliatory/additional duties (Mexico products referenced)"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": [
+        {
+          "keys": "9903.74.01,9903.74.02",
+          "key_type": "heading",
+          "relation": "exclude",
+          "country_iso2": null,
+          "source_label": "U.S. Note 38(a)",
+          "note_label": "note(38)(a)",
+          "text_criteria": "Entries of medium- and heavy-duty vehicles are not subject to this heading",
+          "effective_start_date": null,
+          "effective_end_date": null
+        }
+      ]
+    }
+  ]
+}
