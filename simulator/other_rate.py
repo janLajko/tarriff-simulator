@@ -308,7 +308,7 @@ def compute_note_duty(
     entry_date: date,
     date_of_landing: Optional[date],
     import_value: Optional[Decimal],
-    copper_content_value: Optional[Decimal] = None,
+    copper_percentage: Optional[Decimal] = None,
     base_rate_decimal: Optional[Decimal] = None,
 ) -> OtherComputation:
     if not isinstance(entry_date, date):
@@ -401,11 +401,13 @@ def compute_note_duty(
     seen_headings: set[str] = set()
 
     import_value_decimal = _coerce_decimal(import_value)
-    copper_value_decimal = _coerce_decimal(copper_content_value)
+    copper_percentage_decimal = _coerce_decimal(copper_percentage)
 
     def _measure_base_value(heading: str) -> Optional[Decimal]:
         if heading == "9903.78.01":
-            return copper_value_decimal
+            if import_value_decimal is None or copper_percentage_decimal is None:
+                return None
+            return import_value_decimal * copper_percentage_decimal
         return import_value_decimal
 
     for measure in applicable_measures:
