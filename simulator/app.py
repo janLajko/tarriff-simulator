@@ -57,6 +57,18 @@ DISCLAIMER = (
 EXTRA_MEASURES_DIR = Path(__file__).resolve().parent.parent / "agent" / "othercharpter-agent" / "output"
 EXTRA_MEASURES_NOTES = (33, 36, 37, 38)
 _extra_measures_exclusions: Optional[Dict[str, set[str]]] = None
+NOTE_PREFIX_TO_MODULE = {
+    "9903.94": "Passenger vehicles or light trucks",
+    "9903.78": "Semi-finished copper products and copper derivative products",
+    "9903.76": "Wood products",
+    "9903.74": "Medium- and heavy-duty vehicles",
+}
+NOTE_MODULE_NAMES = {
+    "Passenger vehicles or light trucks": "Chapter 99 Note 33 Tariffs",
+    "Semi-finished copper products and copper derivative products": "Chapter 99 Note 36 Tariffs",
+    "Wood products": "Chapter 99 Note 37 Tariffs",
+    "Medium- and heavy-duty vehicles": "Chapter 99 Note 38 Tariffs",
+}
 
 
 @contextmanager
@@ -93,9 +105,9 @@ class SimulationRequest(BaseModel):
         default=None,
         description="Declared import value; mapped to the usd measurement when provided.",
     )
-    copper_content_value: Optional[Decimal] = Field(
+    copper_percentage: Optional[Decimal] = Field(
         default=None,
-        description="Copper content value used for 9903.78.01 duty calculations.",
+        description="Percentage of import value attributed to copper content for 9903.78.01.",
     )
     measurements: Dict[str, Decimal] = Field(
         default_factory=dict,
@@ -235,8 +247,8 @@ def _normalize_measurements(payload: SimulationRequest) -> Dict[str, Decimal]:
     }
     if payload.import_value is not None:
         measurements.setdefault("usd", payload.import_value)
-    if payload.copper_content_value is not None:
-        measurements["copper_content_value"] = payload.copper_content_value
+    if payload.copper_percentage is not None:
+        measurements["copper_percentage"] = payload.copper_percentage
     if payload.steel_percentage is not None:
         measurements["steel_percentage"] = payload.steel_percentage
     if payload.aluminum_percentage is not None:
@@ -416,6 +428,17 @@ def _build_modules(
             if all_note_headings.intersection(exclusions):
                 excluded_headings.add(heading)
 
+    def _note_module_for_heading(heading: str, fallback: str) -> str:
+        for prefix, module_id in NOTE_PREFIX_TO_MODULE.items():
+            if heading.startswith(prefix):
+                return module_id
+        return fallback
+
+    def _format_rate(rate: Decimal) -> str:
+        normalized = rate.normalize()
+        prefix = "+" if normalized > 0 else ""
+        return f"{prefix}{normalized}%"
+
     for computation in sections:
         entries = computation.ch99_list
         if computation.module_id in {"232", "ieepa"} and excluded_headings:
@@ -424,6 +447,64 @@ def _build_modules(
                 for entry in entries
                 if entry.ch99_id and entry.ch99_id.strip() not in excluded_headings
             ]
+        if computation.module_id.startswith("note"):
+            grouped_entries: Dict[str, List[Ch99Entry]] = {}
+            for entry in entries:
+                heading = str(entry.ch99_id or "").strip()
+                if not heading:
+                    continue
+                module_id = _note_module_for_heading(heading, computation.module_id)
+                grouped_entries.setdefault(module_id, []).append(entry)
+            if not grouped_entries:
+                continue
+            constraint_notes = [
+                note
+                for note in computation.notes
+                if not note.startswith("Applied Chapter 99 note")
+            ]
+            for module_id, group in grouped_entries.items():
+                if not group:
+                    continue
+                ch99_entries = [
+                    Ch99Entry(
+                        ch99_id=entry.ch99_id,
+                        alias=entry.alias,
+                        general_rate=entry.general_rate,
+                        ch99_description=entry.ch99_description,
+                        amount=entry.amount,
+                        is_potential=entry.is_potential,
+                    )
+                    for entry in group
+                ]
+                applied_details = ", ".join(
+                    f"{entry.ch99_id} ({_format_rate(entry.general_rate)})"
+                    for entry in group
+                )
+                notes = []
+                if module_id.startswith("note") and applied_details:
+                    note_number = module_id[4:]
+                    if note_number.isdigit():
+                        notes.append(
+                            f"Applied Chapter 99 note {note_number} measures: {applied_details}"
+                        )
+                if constraint_notes:
+                    notes.extend(constraint_notes)
+                total_rate = sum((entry.general_rate for entry in group), Decimal("0"))
+                rate_display = f"{total_rate.normalize()}%"
+                amount = sum((entry.amount for entry in group), Decimal("0"))
+                modules.append(
+                    TariffModule(
+                        module_id=module_id,
+                        module_name=NOTE_MODULE_NAMES.get(module_id, computation.module_name),
+                        ch99_list=ch99_entries,
+                        notes=notes,
+                        applicable=bool(group),
+                        amount=amount,
+                        currency=computation.currency,
+                        rate=rate_display,
+                    )
+                )
+            continue
         ch99_entries = [
             Ch99Entry(
                 ch99_id=entry.ch99_id,
@@ -627,7 +708,7 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
             entry_date=entry,
             date_of_landing=payload.date_of_landing,
             import_value=import_value_amount,
-            copper_content_value=payload.copper_content_value,
+            copper_percentage=payload.copper_percentage,
             base_rate_decimal=base_duty_rate_percent,
         )
         section_301_result = fut_301.result()
