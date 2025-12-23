@@ -22,6 +22,11 @@ try:  # pragma: no cover - optional dependency for cross-module scope checks
 except Exception:  # pragma: no cover
     Section232Evaluator = None  # type: ignore[assignment]
 
+try:  # pragma: no cover - optional dependency for other chapter 99 notes
+    from .other_rate import OtherNoteEvaluator
+except Exception:  # pragma: no cover
+    OtherNoteEvaluator = None  # type: ignore[assignment]
+
 # try:  # pragma: no cover - optional cache dependency
 from theine import Cache as TheineCache
 # except Exception:  # pragma: no cover
@@ -95,10 +100,21 @@ ALWAYS_INCLUDE_HEADINGS = {
     "9903.01.39",
     "9903.01.63",
     "9903.01.77",
-    "9903.01.84"
+    "9903.01.84",
+    "9903.02.79",
+    "9903.02.80"
 }
 ALWAYS_INCLUDE_RANGE_START = 99030201  # exclusive
 ALWAYS_INCLUDE_RANGE_END = 99030274  # exclusive
+
+OTHER_NOTE_PREFIX_TO_NUMBER = {
+    "9903.74": 38,
+    "9903.76": 37,
+    "9903.78": 36,
+    "9903.94": 33,
+}
+OTHER_NOTE_PREFIXES = tuple(OTHER_NOTE_PREFIX_TO_NUMBER)
+OTHER_NOTE_NUMBERS = tuple(sorted(set(OTHER_NOTE_PREFIX_TO_NUMBER.values())))
 
 EU_MEMBER_CODES = {
     "AT",
@@ -214,6 +230,15 @@ def _normalize_country_iso2_or_name(value: str) -> str:
     return normalized
 
 
+def _expand_country_aliases(country: str) -> set[str]:
+    if not country:
+        return set()
+    aliases = {country}
+    if country == "HK":
+        aliases.add("CN")
+    return aliases
+
+
 def _cache_get(key: str) -> Optional[Dict]:
     if _ieepa_cache is not None:
         try:
@@ -283,6 +308,8 @@ def _refresh_global_measure_cache(conn) -> Dict[str, object]:
             m.origin_exclude_iso2,
             m.effective_start_date,
             m.effective_end_date,
+            m.date_of_loading,
+            m.entry_date,
             m.is_potential,
             COALESCE(h.description, '') AS description
         FROM sieepa_measures AS m
@@ -379,18 +406,29 @@ def _is_always_include_heading(heading: str) -> bool:
     return ALWAYS_INCLUDE_RANGE_START < num < ALWAYS_INCLUDE_RANGE_END
 
 
+def _other_note_number_for_heading(heading: str) -> Optional[int]:
+    for prefix, note_number in OTHER_NOTE_PREFIX_TO_NUMBER.items():
+        if heading.startswith(prefix):
+            return note_number
+    return None
+
+
 class SectionIEEPAEvaluator:
     def __init__(
         self,
         conn,
         entry_date: date,
+        date_of_landing: Optional[date],
         country: str,
         melt_pour_origin: Optional[str],
         section232_evaluator: Optional[object] = None,
+        other_note_evaluators: Optional[Dict[int, object]] = None,
         ):
         self.conn = conn
         self.entry_date = entry_date
+        self.date_of_landing = date_of_landing
         self.country = _normalize_country_iso2_or_name(country)
+        self.country_aliases = _expand_country_aliases(self.country)
         self.melt_origin = _normalize_country_iso2_or_name(melt_pour_origin)
         self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
         measures_start = time.perf_counter()
@@ -408,24 +446,58 @@ class SectionIEEPAEvaluator:
         self.id_to_measure: Dict[int, Dict] = {m["id"]: m for m in self.measures}
         self.match_cache: Dict[Tuple[int, str, bool], Tuple[bool, List[str]]] = {}
         self.section232_evaluator = section232_evaluator
+        self.other_note_evaluators = other_note_evaluators or {}
+
+    def _other_note_measure_id(self, evaluator: object, heading: str) -> Optional[int]:
+        measure = getattr(evaluator, "heading_to_measure", {}).get(heading)  # type: ignore[attr-defined]
+        if measure:
+            return measure.get("id")
+        normalized = _normalize_hts(heading)
+        measure = getattr(evaluator, "heading_to_measure_norm", {}).get(normalized)  # type: ignore[attr-defined]
+        if measure:
+            return measure.get("id")
+        return None
 
     def _country_allows_measure(self, measure: Dict) -> bool:
         """Mirror Section 232 country filtering: explicit country must match, otherwise honor exclusions."""
         target_country = (measure.get("country_iso2") or "").upper()
         if target_country:
-            return self.country == target_country
+            return bool(self.country_aliases) and target_country in self.country_aliases
         excluded = measure.get("origin_exclude_iso2") or []
         excluded_upper = {(code or "").upper() for code in excluded}
-        if not self.country:
+        if not self.country_aliases:
             return not excluded_upper
-        return self.country not in excluded_upper
+        return excluded_upper.isdisjoint(self.country_aliases)
+
+    def _is_exempt_by_loading_entry(self, measure: Dict) -> Tuple[bool, Optional[str]]:
+        load_cutoff = measure.get("date_of_loading")
+        entry_cutoff = measure.get("entry_date")
+        if not load_cutoff and not entry_cutoff:
+            return False, None
+        if load_cutoff:
+            if self.date_of_landing is None or self.date_of_landing > load_cutoff:
+                return False, None
+        if entry_cutoff and self.entry_date > entry_cutoff:
+            return False, None
+        reasons: List[str] = []
+        if load_cutoff:
+            reasons.append(f"loaded on/before {load_cutoff.isoformat()}")
+        if entry_cutoff:
+            reasons.append(f"entered on/before {entry_cutoff.isoformat()}")
+        return True, "Exempt due to " + " and ".join(reasons)
 
     def _load_measures(self) -> List[Dict]:
         cache_key = self.country or "__ALL__"
         cache_start = time.perf_counter()
         cached = _cache_get(cache_key)
         if cached is None:
-            query = """
+            country_filters = sorted(self.country_aliases)
+            where_clause = "WHERE m.country_iso2 IS NULL"
+            params: List[object] = []
+            if country_filters:
+                where_clause = "WHERE m.country_iso2 IS NULL OR m.country_iso2 = ANY(%s)"
+                params.append(country_filters)
+            query = f"""
                 SELECT
                     m.id,
                     m.heading,
@@ -436,6 +508,8 @@ class SectionIEEPAEvaluator:
                     m.origin_exclude_iso2,
                     m.effective_start_date,
                     m.effective_end_date,
+                    m.date_of_loading,
+                    m.entry_date,
                     m.is_potential,
                     COALESCE(h.description, '') AS description
                 FROM sieepa_measures AS m
@@ -446,9 +520,8 @@ class SectionIEEPAEvaluator:
                     ORDER BY hc.row_order
                     LIMIT 1
                 ) AS h ON TRUE
-                WHERE m.country_iso2 IS NULL OR m.country_iso2 = %s
+                {where_clause}
             """
-            params: List[object] = [self.country]
             with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute(query, params)
                 measure_rows = cur.fetchall()
@@ -499,23 +572,23 @@ class SectionIEEPAEvaluator:
         ]
         for mid, scopes in scope_map_cached.items():
             self.scope_cache[mid] = scopes
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(
-                "Section IEEPA _load_measures country=%s entry_date=%s raw=%s filtered=%s",
-                self.country,
-                self.entry_date,
-                len(rows) if rows else 0,
-                len(filtered),
-            )
-            for row in filtered:
-                if row["heading"] in {"9903.02.29", "9903.02.30", "9903.02.31"}:
-                    logger.debug(
-                        "IEEPA measure kept heading=%s country_iso2=%s excludes=%s rate=%s",
-                        row.get("heading"),
-                        row.get("country_iso2"),
-                        row.get("origin_exclude_iso2"),
-                        row.get("ad_valorem_rate"),
-                    )
+        # if logger.isEnabledFor(logging.DEBUG):
+        #     logger.debug(
+        #         "Section IEEPA _load_measures country=%s entry_date=%s raw=%s filtered=%s",
+        #         self.country,
+        #         self.entry_date,
+        #         len(rows) if rows else 0,
+        #         len(filtered),
+        #     )
+            # for row in filtered:
+            #     # if row["heading"] in {"9903.02.29", "9903.02.30", "9903.02.31"}:
+            #     logger.debug(
+            #         "IEEPA measure kept heading=%s country_iso2=%s excludes=%s rate=%s",
+            #         row.get("heading"),
+            #         row.get("country_iso2"),
+            #         row.get("origin_exclude_iso2"),
+            #         row.get("ad_valorem_rate"),
+            #     )
         return filtered
 
     def _load_scopes(self, measure_id: int) -> Dict[str, List[Dict]]:
@@ -618,6 +691,8 @@ class SectionIEEPAEvaluator:
                 m.origin_exclude_iso2,
                 m.effective_start_date,
                 m.effective_end_date,
+                m.date_of_loading,
+                m.entry_date,
                 m.is_potential,
                 COALESCE(h.description, '') AS description
             FROM sieepa_measures AS m
@@ -668,8 +743,12 @@ class SectionIEEPAEvaluator:
             return False, f"Origin {self.country or 'UNKNOWN'} not eligible for {measure.get('heading', '')}"
         excluded = measure.get("origin_exclude_iso2") or []
         normalized_excludes = {str(entry or "").upper() for entry in excluded}
-        if self.country and self.country in normalized_excludes:
+        if self.country_aliases and normalized_excludes.intersection(self.country_aliases):
             return False, f"Excluded origin {self.country}"
+
+        exempt, reason = self._is_exempt_by_loading_entry(measure)
+        if exempt:
+            return False, reason
 
         required_melt = (measure.get("melt_pour_origin_iso2") or "").upper()
         if required_melt:
@@ -712,7 +791,7 @@ class SectionIEEPAEvaluator:
             is_exclusion: bool = False,
         ) -> bool:
             country = (scope_row.get("country_iso2") or "").upper()
-            if country and country != self.country:
+            if country and country not in self.country_aliases:
                 return False
             if not _date_active(
                 self.entry_date,
@@ -728,6 +807,16 @@ class SectionIEEPAEvaluator:
                         return False
                     child_match, _ = self.section232_evaluator.measure_covers(child_id, hts_code)  # type: ignore[attr-defined]
                     return child_match
+                if key_value.startswith(OTHER_NOTE_PREFIXES):
+                    note_number = _other_note_number_for_heading(key_value)
+                    if note_number is not None:
+                        other_eval = self.other_note_evaluators.get(note_number)
+                        if other_eval is not None:
+                            child_id = self._other_note_measure_id(other_eval, key_value)
+                            if not child_id:
+                                return False
+                            child_match, _ = other_eval.measure_covers(child_id, hts_code)  # type: ignore[attr-defined]
+                            return child_match
                 if force_ch99:
                     return True
                 if not recurse:
@@ -796,6 +885,7 @@ def compute_sectionieepa_duty(
     hts_number: str,
     country_of_origin: str,
     entry_date: date,
+    date_of_landing: Optional[date] = None,
     import_value: Optional[Decimal] = None,
     melt_pour_origin_iso2: Optional[str] = None,
     measurements: Optional[Dict[str, Decimal]] = None,
@@ -805,6 +895,8 @@ def compute_sectionieepa_duty(
 
     if not isinstance(entry_date, date):
         raise TypeError("entry_date must be a datetime.date instance")
+    if date_of_landing is not None and not isinstance(date_of_landing, date):
+        raise TypeError("date_of_landing must be a datetime.date instance")
 
     start_time = time.perf_counter()
 
@@ -845,7 +937,28 @@ def compute_sectionieepa_duty(
                 )
             except Exception:
                 s232_eval = None
-        evaluator = SectionIEEPAEvaluator(conn, entry_date, origin, melt_origin, section232_evaluator=s232_eval)
+        other_note_evaluators: Dict[int, object] = {}
+        if OtherNoteEvaluator is not None:
+            for note_number in OTHER_NOTE_NUMBERS:
+                try:
+                    other_note_evaluators[note_number] = OtherNoteEvaluator(
+                        conn,
+                        entry_date,
+                        origin,
+                        note_number,
+                        date_of_landing,
+                    )
+                except Exception:
+                    continue
+        evaluator = SectionIEEPAEvaluator(
+            conn,
+            entry_date,
+            date_of_landing,
+            origin,
+            melt_origin,
+            section232_evaluator=s232_eval,
+            other_note_evaluators=other_note_evaluators,
+        )
         applicable_measures: List[Dict] = []
         excluded_measures: List[Tuple[Dict, List[str]]] = []
         constraint_notes: List[str] = []
@@ -860,26 +973,6 @@ def compute_sectionieepa_duty(
                 applicable_measures.append(measure)
             elif exclusions:
                 excluded_measures.append((measure, exclusions))
-            # elif logger.isEnabledFor(logging.DEBUG):
-                # logger.debug(
-                #     "IEEPA measure no match heading=%s country=%s exclusions=%s",
-                #     measure.get("heading"),
-                #     measure.get("country_iso2"),
-                #     exclusions,
-                # )
-        # if logger.isEnabledFor(logging.INFO):
-        #     logger.info(
-        #         "IEEPA applicable_measures count=%s items=%s",
-        #         len(applicable_measures),
-        #         [(m.get("heading"), m.get("country_iso2")) for m in applicable_measures],
-        #     )
-    # logger.info(
-    #     "SectionIEEPA evaluated measures in %.3fs (loaded=%s applicable=%s excluded=%s)",
-    #     time.perf_counter() - eval_start,
-    #     len(getattr(evaluator, "measures", []) or []),
-    #     len(applicable_measures),
-    #     len(excluded_measures),
-    # )
 
     steel_share = _extract_share(measurements, "steel_percentage")
     aluminum_share = _extract_share(measurements, "aluminum_percentage")
@@ -912,12 +1005,16 @@ def compute_sectionieepa_duty(
     for measure in applicable_measures:
         rate = _coerce_decimal(measure.get("ad_valorem_rate"))
         heading = (measure.get("heading") or "").strip()
-        if base_rate_decimal is not None and heading in {"9903.02.72", "9903.02.73"}:
-            if heading == "9903.02.72" and base_rate_decimal < Decimal("15"):
+        if not heading.startswith("9903.02") and not heading.startswith("9903.01"):
+            continue
+        if base_rate_decimal is not None and heading in {"9903.02.19", "9903.02.72","9903.02.79"} and base_rate_decimal < Decimal("15"):
+            # if heading == "9903.02.72" and base_rate_decimal < Decimal("15"):
                 continue
-            if heading == "9903.02.73" and base_rate_decimal >= Decimal("15"):
+            # if heading == "9903.02.73" and base_rate_decimal >= Decimal("15"):
+            #     continue
+        if base_rate_decimal is not None and heading in {"9903.02.20", "9903.02.73","9903.02.80"}:
+            if base_rate_decimal > Decimal("15"):
                 continue
-        if base_rate_decimal is not None and heading in {"9903.02.19", "9903.02.72"}:
             adjusted = Decimal("15") - base_rate_decimal
             if adjusted < 0:
                 adjusted = Decimal("0")

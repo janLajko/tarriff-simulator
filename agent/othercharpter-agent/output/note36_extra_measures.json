@@ -1,0 +1,149 @@
+{
+  "note_number": 36,
+  "note_label": "note(36)",
+  "measures": [
+    {
+      "heading": "9903.02.76",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.02.81",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.94.40",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.94.41",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.94.42",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.94.43",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.94.50",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.94.51",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.94.52",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.94.53",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    },
+    {
+      "heading": "9903.96.02",
+      "country_iso2": null,
+      "ad_valorem_rate": null,
+      "value_basis": "customs_value",
+      "is_potential": true,
+      "notes": {
+        "referenced_in": "U.S. note 36(a) as an exception to the application of heading 9903.78.01; specific terms not provided in this note"
+      },
+      "effective_start_date": null,
+      "effective_end_date": null,
+      "scopes": []
+    }
+  ]
+}

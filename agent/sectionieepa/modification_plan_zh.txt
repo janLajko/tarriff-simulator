@@ -1,0 +1,20 @@
+修改计划（Section IEEPA OpenAI Agent）
+
+1. 更新 LLM_MEASURE_PROMPT 规则与示例
+   - 明确 is_potential 仅在 USMCA 相关措辞（general note 11 / subchapter XXII/XXIII）时为 true，其余为 false。
+   - 增加 date_of_loading 与 entry_date 字段的提取说明（对应装船截止与申报/提领截止条件）。
+   - 增加 provision terminated 的判断：视为已过期，返回空范围并标记不入库。
+   - 修正“goods loaded/entered before …”示例：is_potential=false，同时填充 date_of_loading 与 entry_date。
+
+2. 扩展 LLM 解析输出
+   - 在 extract_measure 中解析 date_of_loading、entry_date 与 is_terminated（或等价字段）。
+   - 将这些字段加入 MeasureAnalysis 结构。
+
+3. 入库逻辑调整
+   - process_heading 中若 is_terminated 为 true，则跳过 measure 插入（与 suspended/expired 行为一致）。
+   - include 解析时：若 heading_note.json 中存在当前 heading，则使用其 note 列表替代 LLM 的 include；否则保留 LLM 结果。
+
+4. 数据库与 SQL 结构更新
+   - 在 public.sieepa_measures 增加 date_of_loading date 与 entry_date date 字段。
+   - 同步更新 agent/sectionieepa/ieepa.sql 定义。
+   - ensure_measure 插入时写入新增字段；必要时补齐已有记录的空值（如需）。

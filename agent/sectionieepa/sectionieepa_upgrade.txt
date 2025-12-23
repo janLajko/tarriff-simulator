@@ -1,0 +1,12 @@
+[sectionieepa_openai_agent.py](agent/sectionieepa/sectionieepa_openai_agent.py) 还存在以下问题
+- LLM_MEASURE_PROMPT 中is_potential理解有问题
+Except for goods loaded onto a vessel at the port of loading and in transit on the final mode of transit before 12:01 a.m. eastern daylight time on August 7, 2025, and entered for consumption or withdrawn from warehouse for consumption before 12:01 a.m. eastern daylight time on October 5, 2025, except for products described in headings 9903.01.30-9903.01.33 and 9903.02.78, and except as provided for in headings 9903.01.34 and 9903.02.01, articles the product of Vietnam, as provided for in subdivision (v) of U.S. note 2 to this subchapter
+is_potential应该是false
+这里应该理解为date_of_loading】在 2025 年 8 月 7 日東部夏令時間凌晨 12:01 前，已於裝貨港裝船，且在該時間點前正處於最終運輸方式途中
+【是在講: Entry Date】並且於 2025 年 10 月 5 日東部夏令時間凌晨 12:01 前 申報進口以供消費，或自保稅倉庫提領以供消費之貨品；
+
+is_potential=true,在ieepa中目前只考虑，出现 related to the USMCA，例如 Articles that are entered free of duty under the terms of general note 11 to the HTSUS, including any treatment set forth in subchapter XXIII of chapter 98 and subchapter XXII of chapter 99 of the HTS, as related to the USMCA，其他is_potential=false
+- 增加date_of_loading和 entry_data字段，并插入数据库
+
+- LLM_MEASURE_PROMPT 如果检测到provision terminated，表示已经过期了，不需要录入数据库中
+- 当前extract_measure中include = [item.strip() for item in payload.get("include", []) if item and item.strip()]，include的获取，如果在 heading_note.json中存在，那么使用heading_note.json中的note替代，如果heading_note.json中不存在，保持当前的解析结果

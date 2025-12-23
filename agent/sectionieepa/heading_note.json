@@ -1,0 +1,157 @@
+[
+  {
+    "9903.01.26": {
+      "note": [
+        "note2(v)(iv)"
+      ],
+      "is_include": false
+    }
+  },
+  {
+    "9903.01.27": {
+      "note": [
+        "note2(v)(v)"
+      ],
+      "is_include": false
+    }
+  },
+  {
+    "9903.01.32": {
+      "note": [
+        "note2(v)(iii)(a)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.01.81": {
+      "note": [
+        "note2(x)(iii)(a)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.01.82": {
+      "note": [
+        "note2(x)(iv)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.01.86": {
+      "note": [
+        "note2(z)(ii)",
+        "note2(v)(iii)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.01.90": {
+      "note": [
+        "note2(x)(iii)(b)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.02.19": {
+      "note": [
+        "note2(v)(xviii)"
+      ],
+      "is_include": false
+    }
+  },
+  {
+    "9903.02.20": {
+      "note": [
+        "note2(v)(xviii)"
+      ],
+      "is_include": false
+    }
+  },
+  {
+    "9903.02.72": {
+      "note": [
+        "note2(v)(xviii)"
+      ],
+      "is_include": false
+    }
+  },
+  {
+    "9903.02.73": {
+      "note": [
+        "note2(v)(xviii)"
+      ],
+      "is_include": false
+    }
+  },
+  {
+    "9903.02.74": {
+      "note": [
+        "note2(v)(xix)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.02.75": {
+      "note": [
+        "note2(v)(xx)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.02.76": {
+      "note": [
+        "note2(v)(xxi)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.02.77": {
+      "note": [
+        "note2(v)(xxii)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.02.78": {
+      "note": [
+        "note2(v)(iii)(b)"
+      ],
+      "is_include": true
+    }
+  },
+  {
+    "9903.02.79": {
+      "note": [
+        "note2(v)(xviii)",
+        "note2(v)(xxiii)(a)"
+      ],
+      "is_include": false
+    }
+  },
+  {
+    "9903.02.80": {
+      "note": [
+        "note2(v)(xviii)",
+        "note2(v)(xxiii)(a)"
+      ],
+      "is_include": false
+    }
+  },
+  {
+    "9903.02.81": {
+      "note": [
+        "note2(v)(xxiii)(b)"
+      ],
+      "is_include": true
+    }
+  }
+]

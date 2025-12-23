@@ -64,11 +64,14 @@ From the following text, extract:
 1. **Except sections** – heading numbers listed after phrases like “Except as provided in headings …”.
 2. **Include sections** – notes or subheadings mentioned after phrases such as “as provided for in …”.
 3. **Effective period** – explicit start / end dates (e.g., “Effective with respect to entries on or after …” or “through …”). Dates that refer only to transportation or entry-cutoff timing (e.g., “goods loaded before August 7, 2025” or “entered before October 5, 2025”) do **not** set the measure’s start date; treat them as eligibility criteria unless the text explicitly says the measure becomes effective on that date.
-4. **country_iso2** – ISO-2 code for the products covered by the measure. Use null when the measure applies to every country other than the excluded origins.
-5. **melt_pour_origin_iso2** – ISO-2 code for where the steel must be melted and poured (e.g., “US” when the text says “melted and poured in the United States”). Use null if not stated.
-6. **origin_exclude_iso2** – an array of ISO-2 codes for origin countries explicitly excluded (e.g., ["UK"]). When the text implies “all countries except the United Kingdom” for derivative products made from U.S.-melted steel, output ["UK"] even if the exclusion is implicit.
-7. **is_potential** – true only when the text describes a conditional or potential scenario (e.g., treatment of goods that might later enter commerce, or goods admitted to a foreign trade zone before a cut-off time). False when the measure is in force without such contingencies. When `is_potential` is true, leave `effective_period.end_date` null unless the text explicitly states when the measure itself expires. Dates that merely reference entry/admission timing do **not** impose an end date.
-8. If the text states “Compiler's note: provision suspended”, treat the heading as suspended: return empty include/except arrays, null dates, null country/melt_pour/origin_exclude values, and set `is_potential` to false. Do not infer any scope.
+4. **date_of_loading** – date used in a “loaded onto a vessel ... before [date/time]” eligibility clause. Output only the date (e.g., "August 7, 2025"). Use null if not stated.
+5. **entry_date** – date used in an “entered for consumption ... before [date/time]” or “withdrawn from warehouse ... before [date/time]” eligibility clause. Output only the date. Use null if not stated.
+6. **country_iso2** – ISO-2 code for the products covered by the measure. Use null when the measure applies to every country other than the excluded origins.
+7. **melt_pour_origin_iso2** – ISO-2 code for where the steel must be melted and poured (e.g., “US” when the text says “melted and poured in the United States”). Use null if not stated.
+8. **origin_exclude_iso2** – an array of ISO-2 codes for origin countries explicitly excluded (e.g., ["UK"]). When the text implies “all countries except the United Kingdom” for derivative products made from U.S.-melted steel, output ["UK"] even if the exclusion is implicit.
+9. **is_potential** – true only when the text is explicitly related to USMCA eligibility (e.g., references to general note 11, subchapter XXIII of chapter 98, or subchapter XXII of chapter 99). Otherwise false.
+10. If the text states “Compiler's note: provision suspended”, treat the heading as suspended: return empty include/except arrays, null dates, null country/melt_pour/origin_exclude values, and set `is_potential` to false. Do not infer any scope.
+11. If the text states “provision terminated”, treat the heading as expired: return empty include/except arrays, null dates, null country/melt_pour/origin_exclude values, set `is_potential` to false, and set `is_terminated` to true.
 
 Input text:
 \"\"\"{description}\"\"\"
@@ -85,10 +88,13 @@ Return JSON only. Use this schema:
     "start_date": "June 15, 2024",
     "end_date": "November 29, 2025"
   }},
+  "date_of_loading": "August 7, 2025",
+  "entry_date": "October 5, 2025",
   "country_iso2": "UK",
   "melt_pour_origin_iso2": "US",
   "origin_exclude_iso2": ["UK"],
-  "is_potential": false
+  "is_potential": false,
+  "is_terminated": false
 }}
 
 Examples:
@@ -99,10 +105,13 @@ Output:
   "except": [],
   "include": ["note16(m)", "note16(n)", "note16(t)", "note16(u)"],
   "effective_period": {{"start_date": null, "end_date": null}},
+  "date_of_loading": null,
+  "entry_date": null,
   "country_iso2": null,
   "melt_pour_origin_iso2": "US",
   "origin_exclude_iso2": ["UK"],
-  "is_potential": false
+  "is_potential": false,
+  "is_terminated": false
 }}
 
 2. Input:
@@ -112,10 +121,13 @@ Output:
   "except": ["9903.81.96", "9903.81.97", "9903.81.98"],
   "include": ["note16(q)"],
   "effective_period": {{"start_date": null, "end_date": null}},
+  "date_of_loading": null,
+  "entry_date": null,
   "country_iso2": "UK",
   "melt_pour_origin_iso2": null,
   "origin_exclude_iso2": [],
-  "is_potential": false
+  "is_potential": false,
+  "is_terminated": false
 }}
 
 3. Input:
@@ -125,10 +137,13 @@ Output:
   "except": ["9903.81.91", "9903.81.92"],
   "include": ["note16(l)", "note16(m)"],
   "effective_period": {{"start_date": null, "end_date": null}},
+  "date_of_loading": null,
+  "entry_date": null,
   "country_iso2": null,
   "melt_pour_origin_iso2": null,
   "origin_exclude_iso2": [],
-  "is_potential": true
+  "is_potential": true,
+  "is_terminated": false
 }}
 
 4. Input:
@@ -138,10 +153,13 @@ Output:
   "except": [],
   "include": [],
   "effective_period": {{"start_date": null, "end_date": null}},
+  "date_of_loading": "August 7, 2025",
+  "entry_date": "October 5, 2025",
   "country_iso2": null,
   "melt_pour_origin_iso2": null,
   "origin_exclude_iso2": [],
-  "is_potential": true
+  "is_potential": false,
+  "is_terminated": false
 }}
 """
 
@@ -278,10 +296,13 @@ class MeasureAnalysis:
     exclude: List[str]
     effective_start: Optional[date]
     effective_end: Optional[date]
+    date_of_loading: Optional[date]
+    entry_date: Optional[date]
     country_iso2: Optional[str]
     melt_pour_origin_iso2: Optional[str]
     origin_exclude_iso2: Optional[List[str]]
     is_potential: bool
+    is_terminated: bool
 
 
 @dataclass
@@ -426,6 +447,8 @@ class Section232Database:
         notes: Optional[Dict[str, Any]],
         start_date: date,
         end_date: Optional[date],
+        date_of_loading: Optional[date],
+        entry_date: Optional[date],
         is_potential: bool,
     ) -> Optional[int]:
         query_select = """
@@ -439,6 +462,10 @@ class Section232Database:
                   COALESCE(%s::text[], ARRAY[]::text[])
               AND effective_start_date = %s
               AND COALESCE(effective_end_date, DATE '9999-12-31') =
+                  COALESCE(%s, DATE '9999-12-31')
+              AND COALESCE(date_of_loading, DATE '9999-12-31') =
+                  COALESCE(%s, DATE '9999-12-31')
+              AND COALESCE(entry_date, DATE '9999-12-31') =
                   COALESCE(%s, DATE '9999-12-31')
               AND is_potential = %s
             LIMIT 1
@@ -455,6 +482,8 @@ class Section232Database:
                     origin_exclude_iso2,
                     start_date,
                     end_date,
+                    date_of_loading,
+                    entry_date,
                     is_potential,
                 ),
             )
@@ -466,8 +495,9 @@ class Section232Database:
             INSERT INTO sieepa_measures
             (heading, country_iso2, ad_valorem_rate, value_basis,
              melt_pour_origin_iso2, origin_exclude_iso2, notes,
-             effective_start_date, effective_end_date, is_potential)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+             effective_start_date, effective_end_date, date_of_loading,
+             entry_date, is_potential)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
         """
         payload_notes = Json(notes) if notes is not None else None
@@ -486,6 +516,8 @@ class Section232Database:
                         payload_notes,
                         start_date,
                         end_date,
+                        date_of_loading,
+                        entry_date,
                         is_potential,
                     ),
                 )
@@ -507,6 +539,8 @@ class Section232Database:
                                 origin_exclude_iso2,
                                 start_date,
                                 end_date,
+                                date_of_loading,
+                                entry_date,
                                 is_potential,
                             ),
                         )
@@ -1053,6 +1087,8 @@ class Section232LLM:
         eff_payload = payload.get("effective_period") or {}
         start = parse_date(eff_payload.get("start_date"))
         end = parse_date(eff_payload.get("end_date"))
+        date_of_loading = parse_date(payload.get("date_of_loading"))
+        entry_date = parse_date(payload.get("entry_date") or payload.get("entry_data"))
         
         def _normalize_iso(value: Any) -> Optional[str]:
             if value is None:
@@ -1091,16 +1127,20 @@ class Section232LLM:
                 return value.strip().lower() in {"1", "true", "yes", "y"}
             return False
         is_potential = _normalize_bool(payload.get("is_potential"))
+        is_terminated = _normalize_bool(payload.get("is_terminated"))
 
         return MeasureAnalysis(
             include=include,
             exclude=exclude,
             effective_start=start,
             effective_end=end,
+            date_of_loading=date_of_loading,
+            entry_date=entry_date,
             country_iso2=country_iso2,
             melt_pour_origin_iso2=melt_origin,
             origin_exclude_iso2=origin_exclude,
             is_potential=is_potential,
+            is_terminated=is_terminated,
         )
 
     def extract_note(self, note_text: str, context: Dict[str, Any]) -> Dict[str, Any]:
@@ -1135,6 +1175,40 @@ class Section232Agent:
         self._note_cache: Dict[Tuple[str, ...], Dict[str, Any]] = {}
         self._measure_cache: Dict[str, Optional[int]] = {}
         self._in_progress: set[str] = set()
+        self._heading_note_map = self._load_heading_note_map()
+
+    @staticmethod
+    def _load_heading_note_map() -> Dict[str, Optional[List[str]]]:
+        path = os.path.join(os.path.dirname(__file__), "heading_note.json")
+        if not os.path.exists(path):
+            return {}
+        try:
+            with open(path, "r", encoding="utf-8") as handle:
+                raw = json.load(handle)
+        except (OSError, json.JSONDecodeError) as exc:
+            LOGGER.warning("Failed to load heading_note.json: %s", exc)
+            return {}
+        if not isinstance(raw, list):
+            return {}
+        mapping: Dict[str, Optional[List[str]]] = {}
+        for item in raw:
+            if not isinstance(item, dict):
+                continue
+            for heading, payload in item.items():
+                if not heading:
+                    continue
+                notes: Optional[List[str]] = None
+                if isinstance(payload, dict) and "note" in payload:
+                    note_value = payload.get("note")
+                    cleaned: List[str] = []
+                    if isinstance(note_value, list):
+                        for entry in note_value:
+                            text = str(entry).strip()
+                            if text:
+                                cleaned.append(text)
+                    notes = cleaned
+                mapping[heading.strip()] = notes
+        return mapping
 
     def run(self, headings: Sequence[str]) -> None:
         for heading in headings:
@@ -1179,8 +1253,16 @@ class Section232Agent:
                 LOGGER.info("Heading %s marked as suspended by compiler's note; skipping measure insertion", normalized)
                 self._measure_cache[normalized] = None
                 return None
+            if "provision terminated" in description.lower():
+                LOGGER.info("Heading %s marked as terminated; skipping measure insertion", normalized)
+                self._measure_cache[normalized] = None
+                return None
 
             analysis = self.llm.extract_measure(description)
+            if analysis.is_terminated:
+                LOGGER.info("Heading %s marked terminated by LLM; skipping measure insertion", normalized)
+                self._measure_cache[normalized] = None
+                return None
             # LOGGER.info("analysis : %s", analysis)
             start_date = analysis.effective_start or date(1900, 1, 1)
             end_date = analysis.effective_end
@@ -1196,6 +1278,9 @@ class Section232Agent:
             rate = self._derive_rate(general_rate_of_duty)
 
             measure_country_iso2 = analysis.country_iso2 or self.country_iso2
+            includes = analysis.include
+            if normalized in self._heading_note_map:
+                includes = self._heading_note_map.get(normalized) or []
 
             existing_measure_id = self.db.find_existing_measure_id(normalized, measure_country_iso2)
             if existing_measure_id:
@@ -1217,6 +1302,8 @@ class Section232Agent:
                 notes=None,
                 start_date=start_date,
                 end_date=end_date,
+                date_of_loading=analysis.date_of_loading,
+                entry_date=analysis.entry_date,
                 is_potential=analysis.is_potential,
             )
             if not measure_id:
@@ -1232,7 +1319,7 @@ class Section232Agent:
                     country_iso2=measure_country_iso2,
                     start_date=start_date,
                     end_date=end_date,
-                    includes=analysis.include,
+                    includes=includes,
                     excludes=analysis.exclude,
                 )
                 self.db.commit()
