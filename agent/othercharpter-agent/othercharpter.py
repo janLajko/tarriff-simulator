@@ -658,7 +658,7 @@ class OtherChapterProcessor:
         allowed_headings = {str(code) for code in note_headings}
         primary_measures, extra_measures = self._split_measures_by_heading(analysis, allowed_headings)
         self._write_extra_measures(note_number, label, extra_measures)
-        self._persist(note_number, primary_measures)
+        # self._persist(note_number, primary_measures)
 
     def _build_note_text(self, rows: Sequence[Dict[str, Any]]) -> str:
         chunks = []

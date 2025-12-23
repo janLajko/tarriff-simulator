@@ -22,6 +22,11 @@ try:  # pragma: no cover - optional dependency for cross-module scope checks
 except Exception:  # pragma: no cover
     Section232Evaluator = None  # type: ignore[assignment]
 
+try:  # pragma: no cover - optional dependency for other chapter 99 notes
+    from .other_rate import OtherNoteEvaluator
+except Exception:  # pragma: no cover
+    OtherNoteEvaluator = None  # type: ignore[assignment]
+
 # try:  # pragma: no cover - optional cache dependency
 from theine import Cache as TheineCache
 # except Exception:  # pragma: no cover
@@ -101,6 +106,15 @@ ALWAYS_INCLUDE_HEADINGS = {
 }
 ALWAYS_INCLUDE_RANGE_START = 99030201  # exclusive
 ALWAYS_INCLUDE_RANGE_END = 99030274  # exclusive
+
+OTHER_NOTE_PREFIX_TO_NUMBER = {
+    "9903.74": 38,
+    "9903.76": 37,
+    "9903.78": 36,
+    "9903.94": 33,
+}
+OTHER_NOTE_PREFIXES = tuple(OTHER_NOTE_PREFIX_TO_NUMBER)
+OTHER_NOTE_NUMBERS = tuple(sorted(set(OTHER_NOTE_PREFIX_TO_NUMBER.values())))
 
 EU_MEMBER_CODES = {
     "AT",
@@ -392,6 +406,13 @@ def _is_always_include_heading(heading: str) -> bool:
     return ALWAYS_INCLUDE_RANGE_START < num < ALWAYS_INCLUDE_RANGE_END
 
 
+def _other_note_number_for_heading(heading: str) -> Optional[int]:
+    for prefix, note_number in OTHER_NOTE_PREFIX_TO_NUMBER.items():
+        if heading.startswith(prefix):
+            return note_number
+    return None
+
+
 class SectionIEEPAEvaluator:
     def __init__(
         self,
@@ -401,6 +422,7 @@ class SectionIEEPAEvaluator:
         country: str,
         melt_pour_origin: Optional[str],
         section232_evaluator: Optional[object] = None,
+        other_note_evaluators: Optional[Dict[int, object]] = None,
         ):
         self.conn = conn
         self.entry_date = entry_date
@@ -424,6 +446,17 @@ class SectionIEEPAEvaluator:
         self.id_to_measure: Dict[int, Dict] = {m["id"]: m for m in self.measures}
         self.match_cache: Dict[Tuple[int, str, bool], Tuple[bool, List[str]]] = {}
         self.section232_evaluator = section232_evaluator
+        self.other_note_evaluators = other_note_evaluators or {}
+
+    def _other_note_measure_id(self, evaluator: object, heading: str) -> Optional[int]:
+        measure = getattr(evaluator, "heading_to_measure", {}).get(heading)  # type: ignore[attr-defined]
+        if measure:
+            return measure.get("id")
+        normalized = _normalize_hts(heading)
+        measure = getattr(evaluator, "heading_to_measure_norm", {}).get(normalized)  # type: ignore[attr-defined]
+        if measure:
+            return measure.get("id")
+        return None
 
     def _country_allows_measure(self, measure: Dict) -> bool:
         """Mirror Section 232 country filtering: explicit country must match, otherwise honor exclusions."""
@@ -774,6 +807,16 @@ class SectionIEEPAEvaluator:
                         return False
                     child_match, _ = self.section232_evaluator.measure_covers(child_id, hts_code)  # type: ignore[attr-defined]
                     return child_match
+                if key_value.startswith(OTHER_NOTE_PREFIXES):
+                    note_number = _other_note_number_for_heading(key_value)
+                    if note_number is not None:
+                        other_eval = self.other_note_evaluators.get(note_number)
+                        if other_eval is not None:
+                            child_id = self._other_note_measure_id(other_eval, key_value)
+                            if not child_id:
+                                return False
+                            child_match, _ = other_eval.measure_covers(child_id, hts_code)  # type: ignore[attr-defined]
+                            return child_match
                 if force_ch99:
                     return True
                 if not recurse:
@@ -894,6 +937,19 @@ def compute_sectionieepa_duty(
                 )
             except Exception:
                 s232_eval = None
+        other_note_evaluators: Dict[int, object] = {}
+        if OtherNoteEvaluator is not None:
+            for note_number in OTHER_NOTE_NUMBERS:
+                try:
+                    other_note_evaluators[note_number] = OtherNoteEvaluator(
+                        conn,
+                        entry_date,
+                        origin,
+                        note_number,
+                        date_of_landing,
+                    )
+                except Exception:
+                    continue
         evaluator = SectionIEEPAEvaluator(
             conn,
             entry_date,
@@ -901,6 +957,7 @@ def compute_sectionieepa_duty(
             origin,
             melt_origin,
             section232_evaluator=s232_eval,
+            other_note_evaluators=other_note_evaluators,
         )
         applicable_measures: List[Dict] = []
         excluded_measures: List[Tuple[Dict, List[str]]] = []

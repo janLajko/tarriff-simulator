@@ -128,15 +128,18 @@ def _format_rate(rate: Decimal) -> str:
 
 
 class OtherNoteEvaluator:
-    def __init__(self, conn, entry_date: date, origin: str, note_number: int, date_of_landing: Optional[date]):
+    def __init__(self, conn, entry_date: date, origin: str, date_of_landing: Optional[date]):
         self.conn = conn
         self.entry_date = entry_date
         self.origin_raw = (origin or "").strip().upper()
         self.origin = _normalize_country(origin)
-        self.note_number = note_number
+        # self.note_number = note_number
         self.date_of_landing = date_of_landing
         self.measures = self._load_measures()
         self.heading_to_measure: Dict[str, Dict] = {m["heading"]: m for m in self.measures}
+        self.heading_to_measure_norm: Dict[str, Dict] = {
+            _normalize_hts(m["heading"]): m for m in self.measures if m.get("heading")
+        }
         self.scope_cache: Dict[int, Dict[str, List[Dict]]] = {}
         self.match_cache: Dict[Tuple[int, str], Tuple[bool, List[str]]] = {}
 
@@ -162,15 +165,15 @@ class OtherNoteEvaluator:
                 ORDER BY hc.row_order
                 LIMIT 1
             ) AS h ON TRUE
-            WHERE (m.notes ->> 'note_number') = %s
-              AND m.effective_start_date <= %s
+            WHERE
+               m.effective_start_date <= %s
               AND (m.effective_end_date IS NULL OR %s <= m.effective_end_date)
         """
         with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(
                 query,
                 (
-                    str(self.note_number),
+                    # str(self.note_number),
                     self.entry_date,
                     self.entry_date,
                 ),
@@ -298,13 +301,14 @@ class OtherNoteEvaluator:
         return True, []
 
 
-def _compute_note_duty(
+def compute_note_duty(
     note_number: int,
     hts_number: str,
     country_of_origin: str,
     entry_date: date,
     date_of_landing: Optional[date],
     import_value: Optional[Decimal],
+    copper_content_value: Optional[Decimal] = None,
     base_rate_decimal: Optional[Decimal] = None,
 ) -> OtherComputation:
     if not isinstance(entry_date, date):
@@ -336,7 +340,7 @@ def _compute_note_duty(
     )
 
     with psycopg2.connect(dsn) as conn:
-        evaluator = OtherNoteEvaluator(conn, entry_date, origin, note_number, date_of_landing)
+        evaluator = OtherNoteEvaluator(conn, entry_date, origin, date_of_landing)
         applicable_measures: List[Dict] = []
         excluded_measures: List[Tuple[Dict, List[str]]] = []
         constraint_notes: List[str] = []
@@ -368,7 +372,14 @@ def _compute_note_duty(
                     return False
                 if not evaluator._scope_allows_country(scope):
                     return False
-                return _normalize_hts(scope.get("key") or "") in active_headings
+                scope_heading = _normalize_hts(scope.get("key") or "")
+                if scope_heading not in active_headings:
+                    return False
+                scope_measure = evaluator.heading_to_measure_norm.get(scope_heading)
+                # print(scope_measure)
+                if scope_measure and scope_measure.get("is_potential"):
+                    return False
+                return True
 
             filtered_measures: List[Dict] = []
             for measure in applicable_measures:
@@ -390,6 +401,12 @@ def _compute_note_duty(
     seen_headings: set[str] = set()
 
     import_value_decimal = _coerce_decimal(import_value)
+    copper_value_decimal = _coerce_decimal(copper_content_value)
+
+    def _measure_base_value(heading: str) -> Optional[Decimal]:
+        if heading == "9903.78.01":
+            return copper_value_decimal
+        return import_value_decimal
 
     for measure in applicable_measures:
         rate = _coerce_decimal(measure.get("ad_valorem_rate"))
@@ -456,14 +473,17 @@ def _compute_note_duty(
         )
 
     total_rate = sum((m["ad_valorem_rate"] for m in rated_measures), Decimal("0"))
-    amount = Decimal("0")
-    if import_value_decimal is not None:
-        amount = (import_value_decimal * total_rate) / Decimal("100")
 
-    def _entry_amount(rate: Decimal) -> Decimal:
-        if import_value_decimal is None:
+    def _entry_amount(rate: Decimal, heading: str) -> Decimal:
+        base_value = _measure_base_value(heading)
+        if base_value is None:
             return Decimal("0")
-        return (import_value_decimal * rate) / Decimal("100")
+        return (base_value * rate) / Decimal("100")
+
+    amount = sum(
+        (_entry_amount(m["ad_valorem_rate"], m.get("heading") or "") for m in rated_measures),
+        Decimal("0"),
+    )
 
     display_measures: List[Dict] = []
     seen_display: set[str] = set()
@@ -480,7 +500,10 @@ def _compute_note_duty(
             alias=m["heading"],
             general_rate=_coerce_decimal(m.get("ad_valorem_rate")) or Decimal("0"),
             ch99_description=m.get("description") or "",
-            amount=_entry_amount(_coerce_decimal(m.get("ad_valorem_rate")) or Decimal("0")),
+            amount=_entry_amount(
+                _coerce_decimal(m.get("ad_valorem_rate")) or Decimal("0"),
+                m.get("heading") or "",
+            ),
             is_potential=bool(m.get("is_potential")),
         )
         for m in display_measures
@@ -517,101 +540,3 @@ def _compute_note_duty(
         ch99_list=ch99_list,
         notes=notes,
     )
-
-
-def compute_note33_duty(
-    hts_number: str,
-    country_of_origin: str,
-    entry_date: date,
-    date_of_landing: Optional[date] = None,
-    import_value: Optional[Decimal] = None,
-    base_rate_decimal: Optional[Decimal] = None,
-) -> OtherComputation:
-    return _compute_note_duty(
-        33,
-        hts_number,
-        country_of_origin,
-        entry_date,
-        date_of_landing,
-        import_value,
-        base_rate_decimal=base_rate_decimal,
-    )
-
-
-def compute_note36_duty(
-    hts_number: str,
-    country_of_origin: str,
-    entry_date: date,
-    date_of_landing: Optional[date] = None,
-    import_value: Optional[Decimal] = None,
-    base_rate_decimal: Optional[Decimal] = None,
-) -> OtherComputation:
-    return _compute_note_duty(
-        36,
-        hts_number,
-        country_of_origin,
-        entry_date,
-        date_of_landing,
-        import_value,
-        base_rate_decimal=base_rate_decimal,
-    )
-
-
-def compute_note37_duty(
-    hts_number: str,
-    country_of_origin: str,
-    entry_date: date,
-    date_of_landing: Optional[date] = None,
-    import_value: Optional[Decimal] = None,
-    base_rate_decimal: Optional[Decimal] = None,
-) -> OtherComputation:
-    return _compute_note_duty(
-        37,
-        hts_number,
-        country_of_origin,
-        entry_date,
-        date_of_landing,
-        import_value,
-        base_rate_decimal=base_rate_decimal,
-    )
-
-
-def compute_note38_duty(
-    hts_number: str,
-    country_of_origin: str,
-    entry_date: date,
-    date_of_landing: Optional[date] = None,
-    import_value: Optional[Decimal] = None,
-    base_rate_decimal: Optional[Decimal] = None,
-) -> OtherComputation:
-    return _compute_note_duty(
-        38,
-        hts_number,
-        country_of_origin,
-        entry_date,
-        date_of_landing,
-        import_value,
-        base_rate_decimal=base_rate_decimal,
-    )
-
-
-def compute_other_note_duties(
-    hts_number: str,
-    country_of_origin: str,
-    entry_date: date,
-    date_of_landing: Optional[date] = None,
-    import_value: Optional[Decimal] = None,
-    base_rate_decimal: Optional[Decimal] = None,
-) -> List[OtherComputation]:
-    return [
-        _compute_note_duty(
-            note,
-            hts_number,
-            country_of_origin,
-            entry_date,
-            date_of_landing,
-            import_value,
-            base_rate_decimal=base_rate_decimal,
-        )
-        for note in sorted(NOTE_MODULES)
-    ]

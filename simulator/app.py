@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
+import json
 import os
 import time
 from contextlib import contextmanager
 from datetime import date, datetime
 from decimal import Decimal
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 import psycopg2
@@ -34,7 +36,7 @@ from .anti_scraping import (
 from .section301_rate import Section301Computation, compute_section301_duty
 from .section232_rate import Section232Computation, compute_section232_duty
 from .sectionieepa_rate import SectionIEEPAComputation, compute_sectionieepa_duty
-from .other_rate import OtherComputation, compute_note33_duty
+from .other_rate import OtherComputation, compute_note_duty
 
 logger = logging.getLogger(__name__)
 HTS_CACHE_TTL_SECONDS = 24 * 60 * 60
@@ -51,6 +53,10 @@ DATABASE_DSN = (
 DISCLAIMER = (
     "Rates and applicability depend on full legal context and notes; confirm before filing."
 )
+
+EXTRA_MEASURES_DIR = Path(__file__).resolve().parent.parent / "agent" / "othercharpter-agent" / "output"
+EXTRA_MEASURES_NOTES = (33, 36, 37, 38)
+_extra_measures_exclusions: Optional[Dict[str, set[str]]] = None
 
 
 @contextmanager
@@ -86,6 +92,10 @@ class SimulationRequest(BaseModel):
     import_value: Optional[Decimal] = Field(
         default=None,
         description="Declared import value; mapped to the usd measurement when provided.",
+    )
+    copper_content_value: Optional[Decimal] = Field(
+        default=None,
+        description="Copper content value used for 9903.78.01 duty calculations.",
     )
     measurements: Dict[str, Decimal] = Field(
         default_factory=dict,
@@ -225,6 +235,8 @@ def _normalize_measurements(payload: SimulationRequest) -> Dict[str, Decimal]:
     }
     if payload.import_value is not None:
         measurements.setdefault("usd", payload.import_value)
+    if payload.copper_content_value is not None:
+        measurements["copper_content_value"] = payload.copper_content_value
     if payload.steel_percentage is not None:
         measurements["steel_percentage"] = payload.steel_percentage
     if payload.aluminum_percentage is not None:
@@ -341,11 +353,77 @@ def _build_meta_info(
     )
 
 
+def _load_extra_measure_exclusions() -> Dict[str, set[str]]:
+    global _extra_measures_exclusions
+    if _extra_measures_exclusions is not None:
+        return _extra_measures_exclusions
+    exclusions: Dict[str, set[str]] = {}
+    for note_number in EXTRA_MEASURES_NOTES:
+        path = EXTRA_MEASURES_DIR / f"note{note_number}_extra_measures.json"
+        try:
+            with path.open("r", encoding="utf-8") as handle:
+                payload = json.load(handle)
+        except FileNotFoundError:
+            continue
+        except Exception as exc:
+            logger.warning("Failed to load extra measures file %s: %s", path, exc)
+            continue
+        measures = payload.get("measures") or []
+        for measure in measures:
+            heading = str(measure.get("heading") or "").strip()
+            if not heading:
+                continue
+            for scope in measure.get("scopes") or []:
+                if scope.get("relation") != "exclude":
+                    continue
+                keys_value = scope.get("keys") or ""
+                if not keys_value:
+                    continue
+                if isinstance(keys_value, list):
+                    raw_keys = keys_value
+                else:
+                    raw_keys = str(keys_value).split(",")
+                keys = [str(key).strip() for key in raw_keys if str(key).strip()]
+                if not keys:
+                    continue
+                exclusions.setdefault(heading, set()).update(keys)
+    _extra_measures_exclusions = exclusions
+    return exclusions
+
+
 def _build_modules(
     *sections: Section301Computation | Section232Computation | SectionIEEPAComputation | OtherComputation,
 ) -> List[TariffModule]:
     modules: List[TariffModule] = []
+    note_headings: Dict[int, set[str]] = {}
     for computation in sections:
+        module_id = getattr(computation, "module_id", "")
+        if module_id.startswith("note"):
+            suffix = module_id[4:]
+            if suffix.isdigit():
+                headings = {
+                    str(entry.ch99_id).strip()
+                    for entry in computation.ch99_list
+                    if entry.ch99_id
+                }
+                if headings:
+                    note_headings[int(suffix)] = headings
+    excluded_headings: set[str] = set()
+    if note_headings:
+        extra_exclusions = _load_extra_measure_exclusions()
+        all_note_headings: set[str] = set().union(*note_headings.values())
+        for heading, exclusions in extra_exclusions.items():
+            if all_note_headings.intersection(exclusions):
+                excluded_headings.add(heading)
+
+    for computation in sections:
+        entries = computation.ch99_list
+        if computation.module_id in {"232", "ieepa"} and excluded_headings:
+            entries = [
+                entry
+                for entry in entries
+                if entry.ch99_id and entry.ch99_id.strip() not in excluded_headings
+            ]
         ch99_entries = [
             Ch99Entry(
                 ch99_id=entry.ch99_id,
@@ -355,7 +433,7 @@ def _build_modules(
                 amount=entry.amount,
                 is_potential=entry.is_potential
             )
-            for entry in computation.ch99_list
+            for entry in entries
         ]
         modules.append(
             TariffModule(
@@ -542,12 +620,14 @@ def simulate_tariff(payload: SimulationRequest) -> EncryptedEnvelope:
         fut_note33 = executor.submit(
             _timed_call,
             "note33",
-            compute_note33_duty,
-            canonical_hts,
-            country,
-            entry,
+            compute_note_duty,
+            note_number=33,
+            hts_number=canonical_hts,
+            country_of_origin=country,
+            entry_date=entry,
             date_of_landing=payload.date_of_landing,
             import_value=import_value_amount,
+            copper_content_value=payload.copper_content_value,
             base_rate_decimal=base_duty_rate_percent,
         )
         section_301_result = fut_301.result()
