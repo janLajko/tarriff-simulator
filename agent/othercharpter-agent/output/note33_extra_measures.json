@@ -9,19 +9,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Entries under listed 9903.94 headings are not subject to this heading's additional duties."
+        "exclusion_context": "Not applicable to certain PV/LT and auto parts under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject to 9903.78.01 when classifiable under these 9903.94 headings",
+          "text_criteria": "Entries under these headings are not subject to 9903.78.01 additional duties (copper/copper-intensive derivatives)",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -34,19 +34,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Entries under listed 9903.94 headings are not subject to this heading's additional duties (products of aluminum)."
+        "exclusion_context": "Not applicable to certain PV/LT and auto parts under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject to 9903.85.02 when classifiable under these 9903.94 headings",
+          "text_criteria": "Entries under these headings are not subject to 9903.85.02 additional aluminum duties",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -59,19 +59,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Entries under listed 9903.94 headings are not subject to this heading's additional duties (products of aluminum)."
+        "exclusion_context": "Not applicable to certain PV/LT and auto parts under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject to 9903.85.12 when classifiable under these 9903.94 headings",
+          "text_criteria": "Entries under these headings are not subject to 9903.85.12 additional aluminum duties",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -84,19 +84,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Entries under listed 9903.94 headings are not subject to this heading's derivative aluminum additional duties."
+        "exclusion_context": "Not applicable to certain PV/LT and auto parts (derivative aluminum products) under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject to 9903.85.04 when classifiable under these 9903.94 headings",
+          "text_criteria": "Not subject to derivative aluminum duties under 9903.85.04 for these headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -109,19 +109,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Entries under listed 9903.94 headings are not subject to this heading's derivative aluminum additional duties."
+        "exclusion_context": "Not applicable to certain PV/LT and auto parts (derivative aluminum products) under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject to 9903.85.07 when classifiable under these 9903.94 headings",
+          "text_criteria": "Not subject to derivative aluminum duties under 9903.85.07 for these headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -134,19 +134,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Entries under listed 9903.94 headings are not subject to this heading's derivative aluminum additional duties."
+        "exclusion_context": "Not applicable to certain PV/LT and auto parts (derivative aluminum products) under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject to 9903.85.08 when classifiable under these 9903.94 headings",
+          "text_criteria": "Not subject to derivative aluminum duties under 9903.85.08 for these headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -159,19 +159,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Entries under listed 9903.94 headings are not subject to this heading's derivative aluminum additional duties."
+        "exclusion_context": "Not applicable to certain PV/LT and auto parts (derivative aluminum products) under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject to 9903.85.13 when classifiable under these 9903.94 headings",
+          "text_criteria": "Not subject to derivative aluminum duties under 9903.85.13 for these headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -184,19 +184,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Entries under listed 9903.94 headings are not subject to this heading's derivative aluminum additional duties."
+        "exclusion_context": "Not applicable to certain PV/LT and auto parts (derivative aluminum products) under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject to 9903.85.14 when classifiable under these 9903.94 headings",
+          "text_criteria": "Not subject to derivative aluminum duties under 9903.85.14 for these headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -209,19 +209,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Entries under listed 9903.94 headings are not subject to this heading's derivative aluminum additional duties."
+        "exclusion_context": "Not applicable to certain PV/LT and auto parts (derivative aluminum products) under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject to 9903.85.15 when classifiable under these 9903.94 headings",
+          "text_criteria": "Not subject to derivative aluminum duties under 9903.85.15 for these headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -234,30 +234,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Iron or steel products: entries under listed 9903.94 headings are not subject to this heading."
+        "exclusion_context": "Iron or steel products additional duties not applicable to certain PV/LT and auto parts under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Vehicle headings not subject to this iron/steel duty",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 33",
-          "note_label": "note(33)",
-          "text_criteria": "Parts headings not subject to this iron/steel duty",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -270,19 +259,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Iron or steel products: entries under listed 9903.94 headings are not subject to this heading."
+        "exclusion_context": "Iron or steel products additional duties not applicable to certain PV/LT and auto parts under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -295,19 +284,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Iron or steel products: entries under listed 9903.94 headings are not subject to this heading."
+        "exclusion_context": "Iron or steel products additional duties not applicable to certain PV/LT and auto parts under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -320,19 +309,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Iron or steel products: entries under listed 9903.94 headings are not subject to this heading."
+        "exclusion_context": "Iron or steel products additional duties not applicable to certain PV/LT and auto parts under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -345,19 +334,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Derivative iron or steel products: entries under listed 9903.94 headings are not subject."
+        "exclusion_context": "Derivative iron or steel products additional duties not applicable under U.S. note 33 for certain headings"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -370,19 +359,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Derivative iron or steel products: entries under listed 9903.94 headings are not subject."
+        "exclusion_context": "Derivative iron or steel products additional duties not applicable under U.S. note 33 for certain headings"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -395,19 +384,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Derivative iron or steel products: entries under listed 9903.94 headings are not subject."
+        "exclusion_context": "Derivative iron or steel products additional duties not applicable under U.S. note 33 for certain headings"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -420,19 +409,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Derivative iron or steel products: entries under listed 9903.94 headings are not subject."
+        "exclusion_context": "Derivative iron or steel products additional duties not applicable under U.S. note 33 for certain headings"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -445,19 +434,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Derivative iron or steel products: entries under listed 9903.94 headings are not subject."
+        "exclusion_context": "Derivative iron or steel products additional duties not applicable under U.S. note 33 for certain headings"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -470,19 +459,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Derivative iron or steel products: entries under listed 9903.94 headings are not subject."
+        "exclusion_context": "Derivative iron or steel products additional duties not applicable under U.S. note 33 for certain headings"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -495,19 +484,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Derivative iron or steel products: entries under listed 9903.94 headings are not subject."
+        "exclusion_context": "Derivative iron or steel products additional duties not applicable under U.S. note 33 for certain headings"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -520,19 +509,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Derivative iron or steel products: entries under listed 9903.94 headings are not subject."
+        "exclusion_context": "Derivative iron or steel products additional duties not applicable under U.S. note 33 for certain headings"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.31,9903.94.32,9903.94.40,9903.94.41,9903.94.42,9903.94.43,9903.94.50,9903.94.51,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.60,9903.94.61,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.01,9903.94.31,9903.94.40,9903.94.41,9903.94.50,9903.94.51,9903.94.60,9903.94.61,9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(a),(f),(i),(j),(k),(l),(n),(o),(p),(q),(r),(s),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these 9903.94 headings",
+          "text_criteria": "Not subject for entries under these 9903.94 headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -540,12 +529,12 @@
     },
     {
       "heading": "9903.01.10",
-      "country_iso2": null,
+      "country_iso2": "CA",
       "ad_valorem_rate": null,
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Additional duties on articles the product of Canada do not apply to entries under certain 9903.94 headings."
+        "exclusion_context": "Canada product-specific additional duties not applicable to certain PV/LT and auto parts under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
@@ -554,10 +543,10 @@
           "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "country_iso2": "CA",
+          "source_label": "U.S. note 33(a),(f),(p),(r)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these headings (Canada duties exemption clauses)",
+          "text_criteria": "Not subject for entries under these headings per U.S. note 33",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -565,12 +554,12 @@
     },
     {
       "heading": "9903.01.01",
-      "country_iso2": null,
+      "country_iso2": "MX",
       "ad_valorem_rate": null,
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Additional duties on articles the product of Mexico do not apply to entries under certain 9903.94 headings."
+        "exclusion_context": "Mexico product-specific additional duties not applicable to certain PV/LT and auto parts under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
@@ -579,10 +568,10 @@
           "keys": "9903.94.01,9903.94.05,9903.94.07,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "country_iso2": "MX",
+          "source_label": "U.S. note 33(a),(f),(p),(r)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these headings (Mexico duties exemption clauses)",
+          "text_criteria": "Not subject for entries under these headings per U.S. note 33",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -595,19 +584,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Wood products: entries under certain 9903.94 parts headings are not subject."
+        "exclusion_context": "Wood products additional duties not applicable to certain auto parts headings under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(f),(j),(l),(o),(p),(q),(r),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these parts headings (wood products exemption)",
+          "text_criteria": "Not subject for entries under these auto parts headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -620,19 +609,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Wood products: entries under certain 9903.94 parts headings are not subject."
+        "exclusion_context": "Wood products additional duties not applicable to certain auto parts headings under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(f),(j),(l),(o),(p),(q),(r),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these parts headings (wood products exemption)",
+          "text_criteria": "Not subject for entries under these auto parts headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -645,19 +634,19 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Wood products: entries under certain 9903.94 parts headings are not subject."
+        "exclusion_context": "Wood products additional duties not applicable to certain auto parts headings under U.S. note 33"
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.62,9903.94.63,9903.94.64,9903.94.65",
+          "keys": "9903.94.05,9903.94.07,9903.94.32,9903.94.42,9903.94.43,9903.94.52,9903.94.53,9903.94.62,9903.94.63,9903.94.33,9903.94.44,9903.94.45,9903.94.54,9903.94.55,9903.94.64,9903.94.65",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(f),(j),(l),(o),(p),(q),(r),(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these parts headings (wood products exemption)",
+          "text_criteria": "Not subject for entries under these auto parts headings",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -670,7 +659,7 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "exempted_by": "Wood products: entries under certain Korean parts headings are not subject."
+        "exclusion_context": "Specific wood product duty excluded only for certain South Korea auto parts headings under U.S. note 33(t)"
       },
       "effective_start_date": null,
       "effective_end_date": null,
@@ -680,9 +669,9 @@
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 33",
+          "source_label": "U.S. note 33(t)",
           "note_label": "note(33)",
-          "text_criteria": "Not subject when entered under these Korean parts headings (wood products exemption in subdivision (t))",
+          "text_criteria": "Not subject for South Korea parts headings listed",
           "effective_start_date": null,
           "effective_end_date": null
         }

@@ -48,15 +48,17 @@ BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 
 DEFAULT_HEADINGS = [
-    "9903.02.02",
-    "9903.01.10",
-    "9903.01.24",
-    "9903.01.25",
-    "9903.01.24",
-    "9903.01.77",
-    "9903.01.84",
+    # "9903.02.02",
+    # "9903.01.10",
+    # "9903.01.24",
+    # "9903.01.25",
+    # "9903.01.77",
+    # "9903.01.84",
     "9903.01.01",
-    "9903.01.04",
+    # "9903.01.04",
+    "9903.01.87",
+    "9903.01.88",
+    "9903.01.89",
 ]
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section ieepa derivative steel measures.
@@ -374,7 +376,7 @@ def _is_s232_heading(heading: str) -> bool:
     """Return True for 9903.81.xx / 9903.85.xx headings that belong to Section 232."""
     normalized = heading.strip()
     digits = normalized.replace(".", "")
-    return digits.startswith("990381") or digits.startswith("990385")
+    return digits.startswith("990381") or digits.startswith("990385") or digits.startswith("990374") or digits.startswith("990376") or digits.startswith("990378") or digits.startswith("990394")
 
 
 class Section232Database:
