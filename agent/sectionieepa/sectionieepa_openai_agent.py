@@ -374,7 +374,7 @@ def _is_s232_heading(heading: str) -> bool:
     """Return True for 9903.81.xx / 9903.85.xx headings that belong to Section 232."""
     normalized = heading.strip()
     digits = normalized.replace(".", "")
-    return digits.startswith("990381") or digits.startswith("990385")
+    return digits.startswith("990381") or digits.startswith("990385") or digits.startswith("990374") or digits.startswith("990376") or digits.startswith("990378") or digits.startswith("990394")
 
 
 class Section232Database:

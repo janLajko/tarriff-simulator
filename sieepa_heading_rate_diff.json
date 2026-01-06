@@ -4,48 +4,38 @@
   "heading_column": "heading",
   "country_column": "country_iso2",
   "rate_column": "ad_valorem_rate",
-  "headings_in_a": 156,
+  "headings_in_a": 0,
   "headings_in_b": 163,
-  "common_headings": 153,
-  "only_in_a_headings": 3,
-  "only_in_b_headings": 10,
-  "diff_headings": 1,
-  "sample_only_in_a_headings": [
-    "9903.02.30",
-    "9903.02.56",
-    "9903.74.07"
-  ],
+  "common_headings": 0,
+  "only_in_a_headings": 0,
+  "only_in_b_headings": 163,
+  "diff_headings": 0,
+  "sample_only_in_a_headings": [],
   "sample_only_in_b_headings": [
-    "9903.02.79",
-    "9903.02.80",
-    "9903.02.81",
-    "9903.76.23",
-    "9903.94.60",
-    "9903.94.61",
-    "9903.94.62",
-    "9903.94.63",
-    "9903.94.64",
-    "9903.94.65"
+    "9903.01.01",
+    "9903.01.02",
+    "9903.01.03",
+    "9903.01.04",
+    "9903.01.05",
+    "9903.01.10",
+    "9903.01.11",
+    "9903.01.12",
+    "9903.01.13",
+    "9903.01.14",
+    "9903.01.15",
+    "9903.01.16",
+    "9903.01.21",
+    "9903.01.22",
+    "9903.01.23",
+    "9903.01.24",
+    "9903.01.25",
+    "9903.01.26",
+    "9903.01.27",
+    "9903.01.28"
   ],
-  "sample_diff_headings": [
-    {
-      "heading": "9903.02.75",
-      "only_in_a_pairs": [
-        {
-          "country_iso2": null,
-          "ad_valorem_rate": "0.000"
-        }
-      ],
-      "only_in_b_pairs": [
-        {
-          "country_iso2": "EU",
-          "ad_valorem_rate": "0.000"
-        }
-      ]
-    }
-  ],
+  "sample_diff_headings": [],
   "dsn_a": "postgresql://postgres:***@34.94.60.174:5432/tariff-simulate",
   "dsn_b": "postgresql://postgres:***@34.129.224.77:5432/tariff-simulate",
-  "generated_at": "2025-12-20T09:21:46Z",
+  "generated_at": "2026-01-06T09:12:19Z",
   "partial": false
 }
