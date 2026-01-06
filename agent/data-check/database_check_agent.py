@@ -143,6 +143,17 @@ def _normalize_value(value: Any) -> Any:
     return value
 
 
+def _normalize_optional_column(value: Optional[str]) -> Optional[str]:
+    if value is None:
+        return None
+    cleaned = value.strip()
+    if not cleaned:
+        return None
+    if cleaned.lower() in {"none", "null", "nil"}:
+        return None
+    return cleaned
+
+
 def diff_rows(row_a: Dict[str, Any], row_b: Dict[str, Any], columns: Sequence[str]) -> Dict[str, Any]:
     diffs: Dict[str, Any] = {}
     for col in columns:
@@ -282,6 +293,7 @@ class HeadingCountryRateDiffReport:
     heading_column: str
     country_column: str
     rate_column: str
+    potential_column: Optional[str]
     headings_in_a: int
     headings_in_b: int
     common_headings: int
@@ -304,22 +316,29 @@ def fetch_heading_country_rate_map(
     heading_column: str,
     country_column: str,
     rate_column: str,
+    potential_column: Optional[str],
     where_sql: Optional[str],
     fetch_size: int = 2000,
-) -> Dict[Any, Set[Tuple[Any, Any]]]:
+) -> Dict[Any, Set[Tuple[Any, ...]]]:
     assert sql is not None
     where_clause = sql.SQL("")
     if where_sql:
         where_clause = sql.SQL(" WHERE ") + sql.SQL(where_sql)
 
+    select_parts = [
+        sql.SQL("{heading} AS heading").format(heading=sql.Identifier(heading_column)),
+        sql.SQL("{country} AS country_iso2").format(country=sql.Identifier(country_column)),
+        sql.SQL("{rate} AS ad_valorem_rate").format(rate=sql.Identifier(rate_column)),
+    ]
+    if potential_column:
+        select_parts.append(
+            sql.SQL("{potential} AS is_potential").format(potential=sql.Identifier(potential_column))
+        )
+    select_list = sql.SQL(", ").join(select_parts)
     query = sql.SQL(
-        "SELECT {heading} AS heading, {country} AS country_iso2, {rate} AS ad_valorem_rate "
-        "FROM {schema}.{table}"
-        "{where_clause}"
+        "SELECT {select_list} FROM {schema}.{table}{where_clause}"
     ).format(
-        heading=sql.Identifier(heading_column),
-        country=sql.Identifier(country_column),
-        rate=sql.Identifier(rate_column),
+        select_list=select_list,
         schema=sql.Identifier(schema),
         table=sql.Identifier(table),
         where_clause=where_clause,
@@ -328,14 +347,23 @@ def fetch_heading_country_rate_map(
     cursor_name = f"heading_rate_{os.getpid()}_{id(conn)}"
     cur = conn.cursor(name=cursor_name)
     cur.itersize = fetch_size
-    mapping: Dict[Any, Set[Tuple[Any, Any]]] = {}
+    mapping: Dict[Any, Set[Tuple[Any, ...]]] = {}
     cur.execute(query)
     try:
-        for heading, country_iso2, ad_valorem_rate in cur:
+        for row in cur:
+            if potential_column:
+                heading, country_iso2, ad_valorem_rate, is_potential = row
+            else:
+                heading, country_iso2, ad_valorem_rate = row
+                is_potential = None
             heading_key = heading
             rate_norm = _normalize_value(ad_valorem_rate)
             country_norm = _normalize_value(country_iso2)
-            mapping.setdefault(heading_key, set()).add((country_norm, rate_norm))
+            if potential_column:
+                potential_norm = _normalize_value(is_potential)
+                mapping.setdefault(heading_key, set()).add((country_norm, rate_norm, potential_norm))
+            else:
+                mapping.setdefault(heading_key, set()).add((country_norm, rate_norm))
     finally:
         cur.close()
     return mapping
@@ -349,6 +377,7 @@ def compare_heading_country_rate(
     heading_column: str,
     country_column: str,
     rate_column: str,
+    potential_column: Optional[str],
     where_sql: Optional[str],
     fetch_size: int,
     sample_limit: int,
@@ -366,6 +395,8 @@ def compare_heading_country_rate(
     for required in (heading_column, country_column, rate_column):
         if required not in cols_a:
             raise SystemExit(f"Column {required!r} not found in {schema}.{table}.")
+    if potential_column and potential_column not in cols_a:
+        raise SystemExit(f"Column {potential_column!r} not found in {schema}.{table}.")
 
     map_a = fetch_heading_country_rate_map(
         conn_a,
@@ -374,6 +405,7 @@ def compare_heading_country_rate(
         heading_column=heading_column,
         country_column=country_column,
         rate_column=rate_column,
+        potential_column=potential_column,
         where_sql=where_sql,
         fetch_size=fetch_size,
     )
@@ -384,6 +416,7 @@ def compare_heading_country_rate(
         heading_column=heading_column,
         country_column=country_column,
         rate_column=rate_column,
+        potential_column=potential_column,
         where_sql=where_sql,
         fetch_size=fetch_size,
     )
@@ -408,6 +441,22 @@ def compare_heading_country_rate(
             return True
         return False
 
+    def _pair_to_dict(pair: Tuple[Any, ...]) -> Dict[str, Any]:
+        if potential_column:
+            country, rate, is_potential = pair
+            return {"country_iso2": country, "ad_valorem_rate": rate, "is_potential": is_potential}
+        country, rate = pair
+        return {"country_iso2": country, "ad_valorem_rate": rate}
+
+    def _pair_sort_key(item: Dict[str, Any]) -> Tuple[str, str, str]:
+        if potential_column:
+            return (
+                str(item.get("country_iso2")),
+                str(item.get("ad_valorem_rate")),
+                str(item.get("is_potential")),
+            )
+        return (str(item.get("country_iso2")), str(item.get("ad_valorem_rate")), "")
+
     for heading in common:
         pairs_a = map_a.get(heading, set())
         pairs_b = map_b.get(heading, set())
@@ -420,12 +469,12 @@ def compare_heading_country_rate(
                 {
                     "heading": _normalize_value(heading),
                     "only_in_a_pairs": sorted(
-                        [{"country_iso2": c, "ad_valorem_rate": r} for c, r in (pairs_a - pairs_b)],
-                        key=lambda x: (str(x["country_iso2"]), str(x["ad_valorem_rate"])),
+                        [_pair_to_dict(pair) for pair in (pairs_a - pairs_b)],
+                        key=_pair_sort_key,
                     ),
                     "only_in_b_pairs": sorted(
-                        [{"country_iso2": c, "ad_valorem_rate": r} for c, r in (pairs_b - pairs_a)],
-                        key=lambda x: (str(x["country_iso2"]), str(x["ad_valorem_rate"])),
+                        [_pair_to_dict(pair) for pair in (pairs_b - pairs_a)],
+                        key=_pair_sort_key,
                     ),
                 }
             )
@@ -436,6 +485,7 @@ def compare_heading_country_rate(
         heading_column=heading_column,
         country_column=country_column,
         rate_column=rate_column,
+        potential_column=potential_column,
         headings_in_a=len(headings_a),
         headings_in_b=len(headings_b),
         common_headings=len(common),
@@ -611,6 +661,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Rate column name for --mode heading-rate (default: ad_valorem_rate).",
     )
     parser.add_argument(
+        "--potential-column",
+        default=None,
+        help="Potential flag column name for --mode heading-rate (default: auto-detect is_potential; set to 'none' to disable).",
+    )
+    parser.add_argument(
         "--where",
         default=None,
         help="Optional raw SQL WHERE clause (without 'WHERE'). Use carefully.",
@@ -659,6 +714,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 raise SystemExit(
                     f"Unable to auto-detect heading column for {args.schema}.{args.table}; pass --heading-column."
                 )
+            potential_column = _normalize_optional_column(args.potential_column)
+            if potential_column is None and "is_potential" in cols:
+                potential_column = "is_potential"
             report = compare_heading_country_rate(
                 conn_a=conn_a,
                 conn_b=conn_b,
@@ -667,6 +725,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 heading_column=heading_column,
                 country_column=args.country_column,
                 rate_column=args.rate_column,
+                potential_column=potential_column,
                 where_sql=args.where,
                 fetch_size=int(args.fetch_size),
                 sample_limit=int(args.sample_limit),
@@ -697,6 +756,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                             "heading_column": report.heading_column,
                             "country_column": report.country_column,
                             "rate_column": report.rate_column,
+                            "potential_column": report.potential_column,
                             "headings_in_a": report.headings_in_a,
                             "headings_in_b": report.headings_in_b,
                             "common_headings": report.common_headings,
