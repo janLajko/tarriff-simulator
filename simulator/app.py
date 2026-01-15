@@ -37,6 +37,7 @@ from .section301_rate import Section301Computation, compute_section301_duty
 from .section232_rate import Section232Computation, compute_section232_duty
 from .sectionieepa_rate import SectionIEEPAComputation, compute_sectionieepa_duty
 from .other_rate import OtherComputation, compute_note_duty
+from .feedback_api import register_feedback_routes
 
 logger = logging.getLogger(__name__)
 HTS_CACHE_TTL_SECONDS = 24 * 60 * 60
@@ -234,6 +235,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+register_feedback_routes(app)
 
 
 @app.get("/health")
