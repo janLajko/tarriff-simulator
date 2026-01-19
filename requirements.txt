@@ -41,6 +41,6 @@ uvicorn==0.38.0
 cryptography==43.0.1
 pytest==8.4.2
 theine==2.0.0
-google-genai==1.52.0
+google-genai==1.59.0
 google-cloud-storage>=2.16.0
 python-multipart

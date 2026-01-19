@@ -1,0 +1,73 @@
+{
+  "schema": "public",
+  "table": "otherch_measures",
+  "heading_column": "heading",
+  "country_column": "country_iso2",
+  "rate_column": "ad_valorem_rate",
+  "potential_column": "is_potential",
+  "headings_in_a": 48,
+  "headings_in_b": 48,
+  "common_headings": 48,
+  "only_in_a_headings": 0,
+  "only_in_b_headings": 0,
+  "diff_headings": 3,
+  "sample_only_in_a_headings": [],
+  "sample_only_in_b_headings": [],
+  "sample_diff_headings": [
+    {
+      "heading": "9903.74.05",
+      "only_in_a_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "0.000",
+          "is_potential": false
+        }
+      ],
+      "only_in_b_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "0.000",
+          "is_potential": true
+        }
+      ]
+    },
+    {
+      "heading": "9903.76.04",
+      "only_in_a_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "0.000",
+          "is_potential": false
+        }
+      ],
+      "only_in_b_pairs": [
+        {
+          "country_iso2": null,
+          "ad_valorem_rate": "0.000",
+          "is_potential": true
+        }
+      ]
+    },
+    {
+      "heading": "9903.94.31",
+      "only_in_a_pairs": [
+        {
+          "country_iso2": "UK",
+          "ad_valorem_rate": "7.500",
+          "is_potential": true
+        }
+      ],
+      "only_in_b_pairs": [
+        {
+          "country_iso2": "UK",
+          "ad_valorem_rate": "7.500",
+          "is_potential": false
+        }
+      ]
+    }
+  ],
+  "dsn_a": "postgresql://postgres:***@34.94.60.174:5432/tariff-simulate",
+  "dsn_b": "postgresql://postgres:***@34.129.224.77:5432/tariff-simulate",
+  "generated_at": "2026-01-06T11:31:03Z",
+  "partial": false
+}
