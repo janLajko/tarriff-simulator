@@ -1,3 +1,4 @@
+import argparse
 import re
 import sys
 import time
@@ -22,6 +23,7 @@ RETRY_DELAY_SECONDS = 2
 MAX_FALLBACK_RETRIES = 3
 UPLOAD_HTTP_TIMEOUT_MS = 600_000
 IMPORT_HTTP_TIMEOUT_MS = 600_000
+TXT_OUTPUT_DIR = Path(__file__).resolve().parent / "charpter-data-txt"
 CHUNKING_CONFIG = {
     "white_space_config": {
         "max_tokens_per_chunk": 512,
@@ -110,6 +112,41 @@ def upload_via_files_import(
             time.sleep(RETRY_DELAY_SECONDS * attempt)
 
 
+def convert_pdfs_to_txt(output_dir: Path = TXT_OUTPUT_DIR) -> None:
+    try:
+        from pdfminer.high_level import extract_text
+        from pdfminer.layout import LAParams
+        from pypdf import PdfReader
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            "Missing PDF text extraction dependency. Install pypdf and pdfminer.six."
+        ) from exc
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    laparams = LAParams(
+        line_margin=0.2,
+        char_margin=2.0,
+        word_margin=0.1,
+        boxes_flow=0.5,
+    )
+
+    for file_path in get_files_to_upload():
+        reader = PdfReader(str(file_path), strict=False)
+        page_count = len(reader.pages)
+        parts: list[str] = []
+        for page_index in range(page_count):
+            page_text = extract_text(
+                str(file_path),
+                laparams=laparams,
+                page_numbers=[page_index],
+            ).strip()
+            parts.append(f"--- Page {page_index + 1} ---\n{page_text}")
+        text = "\n\n".join(parts).strip() + "\n"
+        out_path = output_dir / f"{file_path.stem}.txt"
+        out_path.write_text(text, encoding="utf-8")
+        print(f"Converted {file_path.name} -> {out_path}")
+
+
 def clear_store_documents(client: genai.Client, store_name: str) -> None:
     docs = list(client.file_search_stores.documents.list(parent=store_name))
     if not docs:
@@ -193,6 +230,41 @@ def list_uploaded_documents(store_display_name: str = DEFAULT_STORE_DISPLAY_NAME
         print(f"  metadata: {metadata}")
 
 
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Upload chapter PDFs and/or convert PDFs to text."
+    )
+    parser.add_argument(
+        "--convert",
+        action="store_true",
+        help="Convert PDFs to TXT and exit unless --upload/--list is also set.",
+    )
+    parser.add_argument(
+        "--convert-dir",
+        default=str(TXT_OUTPUT_DIR),
+        help="Output directory for converted TXT files.",
+    )
+    parser.add_argument(
+        "--upload",
+        action="store_true",
+        help="Upload PDFs to the file search store.",
+    )
+    parser.add_argument(
+        "--list",
+        action="store_true",
+        help="List documents in the file search store.",
+    )
+    args = parser.parse_args()
+
+    if args.convert:
+        convert_pdfs_to_txt(Path(args.convert_dir))
+
+    if args.upload or (not args.convert and not args.list):
+        upload_all_files()
+
+    if args.list or (not args.convert and not args.upload):
+        list_uploaded_documents()
+
+
 if __name__ == "__main__":
-    upload_all_files()
-    list_uploaded_documents()
+    main()

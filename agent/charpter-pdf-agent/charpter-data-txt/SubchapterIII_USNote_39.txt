@@ -1,0 +1,257 @@
+--- Page 1 ---
+Harmonized Tariff Schedule of the United States Revision 1 (2026)
+
+Annotated for Statistical Reporting Purposes
+
+XXII
+99 - III - 361
+
+U.S. Notes (con.)
+
+(l)
+
+Heading 9903.74.11 applies to all entries of articles classifiable under provisions of the HTSUS enumerated in subdivision
+
+(i) of this note that are not parts of medium- and heavy-duty vehicles.
+
+39.
+
+(a)
+
+Except as provided for in headings 9903.79.02–9903.79.09, heading 9903.79.01 provides the ordinary customs duty
+treatment of semiconductor articles of all countries as described in subdivision (b) of the note.
+
+For any such products that are eligible for special tariff treatment under any of the free trade agreements or preference
+
+programs listed in general note 3(c)(i) to the tariff schedule, the duties provided in heading 9903.79.01 shall be collected in
+addition to any special rate of duty otherwise applicable under the appropriate tariff subheading. Goods for which entry is
+
+claimed under a provision of chapter 98 and that are subject to the additional duties prescribed herein shall be eligible for
+
+and subject to the terms of such provision and applicable U.S. Customs and Border Protection (CBP) regulations, except
+that duties under subheading 9802.00.60 shall be assessed based upon the full value of the imported article. No claim for
+
+entry or for any duty exemption or reduction shall be allowed for semiconductor articles enumerated in subdivision (b) of this
+note under a provision of chapter 99 that may set forth a lower rate of duty or provide duty-free treatment, taking into account
+
+information supplied by CBP, but any additional duty prescribed in any provision of this subchapter or subchapter IV of chapter
+
+99 shall be imposed in addition to the duties in heading 9903.79.01.
+
+All antidumping, countervailing, or other duties and charges applicable to such goods shall continue to be imposed in addition
+
+to the duties in heading 9903.79.01, except that such articles shall not be subject to:
+
+(1)
+
+the additional duties imposed on entries of passenger vehicles and light trucks under headings 9903.94.01,
+
+9903.94.03, 9903.94.31, 9903.94.40, 9903.94.41, 9903.94.50, 9903.94.51, 9903.94.60 and 9903.94.61;
+
+(2)
+
+the additional duties imposed on entries of parts for passenger vehicles and light trucks under headings 9903.94.05,
+
+9903.94.07, 9903.94.32, 9903.94.33, 9903.94.42, 9903.94.43, 9903.94.44, 9903.94.45, 9903.94.52, 9903.94.53,
+
+9903.94.54, 9903.94.55, 9903.94.62, 9903.94.63, 9903.94.64 and 9903.94.65;
+
+(3)
+
+the additional duties imposed on entries of medium- and heavy-duty vehicles under headings 9903.74.01,
+
+9903.74.02 and 9903.74.03;
+
+(4)
+
+the additional duties imposed on entries of parts of medium- and heavy-duty vehicles under headings 9903.74.08
+
+and 9903.74.09;
+
+(5)
+
+the additional duties imposed on entries of semi-finished copper products and copper-intensive derivative products
+
+under heading 9903.78.01;
+
+(6)
+
+(7)
+
+the additional duties imposed on entries of products of aluminum under headings 9903.85.02 and 9903.85.12;
+
+the additional duties imposed on entries of derivative aluminum products under headings 9903.85.04, 9903.85.07,
+
+9903.85.08, 9903.85.13, 9903.85.14 and 9903.85.15;
+
+(8)
+
+the additional duties imposed on entries of iron or steel products under headings 9903.81.87, 9903.81.88,
+
+9903.81.94 and 9903.81.95;
+
+(9)
+
+the additional duties imposed on entries of derivative iron or steel products under headings 9903.81.89, 9903.81.90,
+
+9903.81.91, 9903.81.93, 9903.81.96, 9903.81.97, 9903.81.98 and 9903.81.99;
+
+(10)
+
+the additional duties imposed on entries of articles the product of Canada under heading 9903.01.10;
+
+(11)
+
+the additional duties imposed on entries of articles the product of Mexico under heading 9903.01.01; and
+
+(12)
+
+the additional duties imposed on entries of articles under headings 9903.01.24–9903.01.76 and
+
+9903.02.01–9903.02.71.
+
+--- Page 2 ---
+Harmonized Tariff Schedule of the United States Revision 1 (2026)
+
+Annotated for Statistical Reporting Purposes
+
+XXII
+99 - III - 362
+
+U.S. Notes (con.)
+
+(b)
+
+For the purposes of this note, “semiconductor articles” refers to imported products meeting certain technical parameters
+
+and that are classifiable in the provisions of the HTSUS enumerated in this subdivision:
+
+8471.50
+8471.80
+
+8473.30
+
+To be included within the definition of semiconductor articles, the imported products must be a logic integrated circuit, or an
+article that contains a logic integrated circuit, that meets the technical parameters of having:
+
+(1)
+
+a total processing performance greater than 14,000 and less than 17,500, and a total DRAM bandwidth greater
+
+than 4,500 GB/s and less than 5,000 GB/s; or
+
+(2)
+
+a total processing performance greater than 20,800 and less than 21,100, and total DRAM bandwidth greater
+
+than 5,800 GB/s and less than 6,200 GB/s.
+
+For the purposes of this note, total processing performance (TPP) is 2 × “MacTOPS” × “bit length of the operation,”
+aggregated over all processing units on the integrated circuit. “MacTOPS” is the theoretical peak number of Tera
+(1012) operations per second for multiply-accumulate computation (D = A × B + C). The 2 in the TPP formula is based
+on the industry convention of counting one multiply-accumulate computation (D = A × B + C) as two operations for
+
+purpose of product datasheets. Therefore, 2 × “MacTOPS” may correspond to the reported TOPS or FLOPS on a
+
+product datasheet. The “bit length of the operation” for a multiply-accumulate computation is the largest bit-length
+
+of the inputs to the multiply operation. The TPP for the imported product is determined by aggregating the TPP for
+
+each processing unit on the integrated circuit: TPP = TPP1 + TPP2 + … + TPPn (where n is the number of processing
+
+units on the integrated circuit). The rate of “MacTOPS” is to be calculated at its maximum value theoretically possible.
+
+The rate of “MacTOPS” is assumed to be the highest value the manufacturer claims in annual or brochure for the
+
+integrated circuit. For example, a “TPP” threshold of 4800 can be met with 600 tera integer operations (or 2 × 300
+
+“MacTOPS”) at 8 bits or 300 tera FLOPS (or 2 × 150 “MacTOPS”) at 16 bits. If the integrated circuit is designed for
+
+MAC computation with multiple bit lengths that achieve different “TPP” values, the highest “TPP” value should be
+
+used. For integrated circuits that provide processing of both sparse and dense matrices, the “TPP” values are the
+
+values for processing of dense matrices (e.g., without sparsity).
+
+For the purposes of this note, “total DRAM bandwidth” refers to the aggregate memory bandwidth in gigabytes per
+
+second between the integrated circuit (IC) and dynamic random access memory (DRAM) ICs, including copackaged
+
+DRAM ICs and non-copackaged DRAM ICs. Copackaged DRAM ICs include, for example, high bandwidth memory
+
+(HBM). Non-copackaged DRAM ICs include, for example, graphics double data rate (GDDR) ICs. “Total DRAM
+
+bandwidth” does not include bandwidth from DRAM ICs accessed remotely over an interconnect medium.
+
+(c)
+
+Heading 9903.79.02 applies to entries of articles that are classifiable under provisions of the HTSUS enumerated in
+
+subdivision (b) of this note but that do not meet the technical parameters specified in subdivision (b) of this note.
+
+(d)
+
+Certain semiconductor articles that would otherwise meet the requirements of subdivision (b) of this note are excluded
+
+from the additional rate of duty pursuant to heading 9903.79.01. Instead, such semiconductor articles are subject to the
+
+following headings:
+
+(i)
+
+(ii)
+
+Heading 9903.79.03 applies to semiconductor articles for use in U.S. data centers;
+
+Heading 9903.79.04 applies to semiconductor articles for repairs or replacements performed in the United States;
+
+(iii)
+
+Heading 9903.79.05 applies to semiconductor articles for research and development in the United States involving
+
+these chips;
+
+(iv)
+
+Heading 9903.79.06 applies to semiconductor articles for use by startups in the United States;
+
+(v)
+
+Heading 9903.79.07 applies to semiconductor articles for use in non-data center consumer electronics applications
+
+in the United States, including gaming, personal computing, professional visualization, workstation applications, and
+automotive applications;
+
+(vi)
+
+Heading 9903.79.08 applies to semiconductor articles for use in non-data center civil industrial applications in the
+
+United States, including factory robotics and industrial machinery; and
+
+--- Page 3 ---
+Harmonized Tariff Schedule of the United States Revision 1 (2026)
+
+Annotated for Statistical Reporting Purposes
+
+XXII
+99 - III - 363
+
+U.S. Notes (con.)
+
+(vii)
+
+Heading 9903.79.09 applies to semiconductor articles for use in United States public sector applications.
+
+For the purposes of this note, a “U.S. data center” refers to a facility that requires greater than 100 megawatts (MW) of new
+
+load dedicated to AI inference, training, simulation, or synthetic data generation.
+
+For the purposes of this note, “research and development” is defined as any activity that is (a) a systematic, intensive study
+directed toward greater knowledge or understanding of the subject studied; (b) a systematic study directed specifically toward
+
+applying new knowledge to meet a recognized need; or (c) a systematic application of knowledge toward the production of
+useful materials, devices, services or methods, and includes design, development and improvement of prototypes and new
+
+processes to meet specific requirements.
+
+For the purposes of this note, a “startup” is an “emerging growth company,” as defined at 15 U.S.C. § 77b(a)(19).

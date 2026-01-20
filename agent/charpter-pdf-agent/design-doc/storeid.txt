@@ -1,0 +1,5 @@
+openai vector store: vs_696dd82df8848191a264f5e7f65a7fe9
+
+top——k ---> vector --> llm 301 note16
+note33 ---> llm
+note38
