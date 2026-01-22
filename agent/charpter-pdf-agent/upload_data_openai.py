@@ -1,3 +1,4 @@
+import argparse
 import re
 import time
 from pathlib import Path
@@ -24,15 +25,32 @@ def get_files_to_upload() -> list[Path]:
     return files
 
 
+def resolve_files_to_upload(file_arg: Optional[str]) -> list[Path]:
+    if not file_arg:
+        return get_files_to_upload()
+    candidate = Path(file_arg)
+    if not candidate.is_absolute():
+        doc_candidate = DOC_DIR / candidate
+        if doc_candidate.exists():
+            candidate = doc_candidate
+    if not candidate.exists():
+        raise FileNotFoundError(f"PDF file not found: {file_arg}")
+    if candidate.is_dir():
+        raise IsADirectoryError(f"Expected a PDF file but found directory: {candidate}")
+    # if candidate.suffix.lower() != ".pdf":
+    #     raise ValueError(f"Expected a .pdf file but found: {candidate.name}")
+    return [candidate]
+
+
 def parse_filename(file_path: Path) -> tuple[str, str]:
-    match = re.match(r"^Subchapter([IVXLCDM]+)_USNote_(\d+)\.pdf$", file_path.name)
-    if not match:
-        raise ValueError(f"Unexpected filename format: {file_path.name}")
-    roman = match.group(1)
-    note_number = int(match.group(2))
-    charpter = f"Subchapter {roman}"
-    note = f"note({note_number})"
-    return charpter, note
+    # match = re.match(r"^Subchapter([IVXLCDM]+)_USNote_(\d+)\$", file_path.name)
+    # if not match:
+    #     raise ValueError(f"Unexpected filename format: {file_path.name}")
+    # roman = match.group(1)
+    # note_number = int(match.group(2))
+    # charpter = f"Subchapter {roman}"
+    # note = f"note({note_number})"
+    return "Subchapter III", "note(20)"
 
 
 def _iter_items(paged: object) -> Iterable[object]:
@@ -88,11 +106,15 @@ def wait_for_vector_store_file(
     raise TimeoutError(f"Timed out waiting for vector store file {file_id}")
 
 
-def upload_all_files(vector_store_name: str = VECTOR_STORE_NAME) -> None:
+def upload_all_files(
+    *,
+    vector_store_name: str = VECTOR_STORE_NAME,
+    file_arg: Optional[str] = None,
+) -> None:
     client = OpenAI()
     store = get_or_create_vector_store(client, vector_store_name)
 
-    for file_path in get_files_to_upload():
+    for file_path in resolve_files_to_upload(file_arg):
         charpter, note = parse_filename(file_path)
         print(f"Uploading {file_path.name} ({charpter}, {note})")
         file_obj = upload_file(client, file_path)
@@ -113,6 +135,18 @@ def list_vector_store_files(vector_store_name: str = VECTOR_STORE_NAME) -> None:
 
 
 if __name__ == "__main__":
-    upload_all_files()
-    list_vector_store_files()
-    
+    parser = argparse.ArgumentParser(description="Upload chapter PDFs to an OpenAI vector store.")
+    parser.add_argument(
+        "--vector-store-name",
+        default=VECTOR_STORE_NAME,
+        help="Vector store name (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--file",
+        dest="file_arg",
+        help="Specific PDF file to upload (path or filename under charpter-data).",
+    )
+    args = parser.parse_args()
+
+    upload_all_files(vector_store_name=args.vector_store_name, file_arg=args.file_arg)
+    list_vector_store_files(vector_store_name=args.vector_store_name)

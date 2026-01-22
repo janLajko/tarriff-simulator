@@ -3,6 +3,7 @@ import re
 import sys
 import time
 from pathlib import Path
+from typing import Optional
 
 from google import genai
 from google.genai.errors import ClientError, ServerError
@@ -24,6 +25,7 @@ MAX_FALLBACK_RETRIES = 3
 UPLOAD_HTTP_TIMEOUT_MS = 600_000
 IMPORT_HTTP_TIMEOUT_MS = 600_000
 TXT_OUTPUT_DIR = Path(__file__).resolve().parent / "charpter-data-txt"
+ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".txt"}
 CHUNKING_CONFIG = {
     "white_space_config": {
         "max_tokens_per_chunk": 512,
@@ -43,8 +45,36 @@ def get_files_to_upload() -> list[Path]:
     return files
 
 
+def resolve_files_to_upload(file_arg: Optional[str]) -> list[Path]:
+    if not file_arg:
+        return get_files_to_upload()
+    candidate = Path(file_arg)
+    resolved: Optional[Path] = None
+    if candidate.exists():
+        resolved = candidate
+    elif candidate.is_absolute():
+        raise FileNotFoundError(f"File not found: {file_arg}")
+    else:
+        for base_dir in (DOC_DIR, TXT_OUTPUT_DIR):
+            alt = base_dir / candidate
+            if alt.exists():
+                resolved = alt
+                break
+    if resolved is None:
+        raise FileNotFoundError(f"File not found: {file_arg}")
+    if resolved.is_dir():
+        raise IsADirectoryError(f"Expected a file but found directory: {resolved}")
+    if resolved.suffix.lower() not in ALLOWED_UPLOAD_EXTENSIONS:
+        raise ValueError(f"Expected a PDF or TXT file but found: {resolved.name}")
+    return [resolved]
+
+
 def parse_filename(file_path: Path) -> tuple[str, str]:
-    match = re.match(r"^Subchapter([IVXLCDM]+)_USNote_(\d+)\.pdf$", file_path.name)
+    match = re.match(
+        r"^Subchapter([IVXLCDM]+)_USNote_(\d+)(?:\.pdf|\.txt)$",
+        file_path.name,
+        re.IGNORECASE,
+    )
     if not match:
         raise ValueError(f"Unexpected filename format: {file_path.name}")
     roman = match.group(1)
@@ -164,12 +194,18 @@ def clear_store_documents(client: genai.Client, store_name: str) -> None:
     print(f"Cleared {len(docs)} documents from {store_name}")
 
 
-def upload_all_files(store_display_name: str = DEFAULT_STORE_DISPLAY_NAME) -> None:
+def upload_all_files(
+    store_display_name: str = DEFAULT_STORE_DISPLAY_NAME,
+    *,
+    file_arg: Optional[str] = None,
+    clear_existing: bool = True,
+) -> None:
     client = genai.Client()
     store = get_or_create_store(client, store_display_name)
-    clear_store_documents(client, store.name)
+    if clear_existing:
+        clear_store_documents(client, store.name)
 
-    for file_path in get_files_to_upload():
+    for file_path in resolve_files_to_upload(file_arg):
         charpter, note = parse_filename(file_path)
         metadata = {"charpter": charpter, "note": note}
         config = {
@@ -247,7 +283,17 @@ def main() -> None:
     parser.add_argument(
         "--upload",
         action="store_true",
-        help="Upload PDFs to the file search store.",
+        help="Upload PDFs (or a specified TXT) to the file search store.",
+    )
+    parser.add_argument(
+        "--store-display-name",
+        default=DEFAULT_STORE_DISPLAY_NAME,
+        help="File Search store display name (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--file",
+        dest="file_arg",
+        help="Upload a specific PDF/TXT (path or filename under charpter-data or charpter-data-txt).",
     )
     parser.add_argument(
         "--list",
@@ -260,10 +306,14 @@ def main() -> None:
         convert_pdfs_to_txt(Path(args.convert_dir))
 
     if args.upload or (not args.convert and not args.list):
-        upload_all_files()
+        upload_all_files(
+            args.store_display_name,
+            file_arg=args.file_arg,
+            clear_existing=args.file_arg is None,
+        )
 
     if args.list or (not args.convert and not args.upload):
-        list_uploaded_documents()
+        list_uploaded_documents(args.store_display_name)
 
 
 if __name__ == "__main__":

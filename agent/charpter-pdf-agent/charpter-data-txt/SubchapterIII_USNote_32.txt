@@ -1,251 +1,64 @@
 --- Page 1 ---
-Harmonized Tariff Schedule of the United States Revision 1 (2026)
-
-Annotated for Statistical Reporting Purposes
-
-XXII
-99 - III - 339
-
-U.S. Notes (con.)
-
-(B)
-
-the entity has entered into a licensing arrangement or other contract with another entity (a contractor)
-
-that entitles that other entity to exercise effective control over the manufacturing or assembly (collectively,
-“production”) of a ship-to-shore gantry crane, its components, assemblies, subassemblies, or other
-
-materials that would be attributed to the entity.
-
-(b)
-
-“The Government of the People’s Republic of China” means:
-
-(1)
-
-(2)
-
-(3)
-
-A national or subnational government of the People’s Republic of China;
-
-An agency or instrumentality of a national or subnational government of the People’s Republic of China;
-
-A dominant or ruling political party (e.g., Chinese Communist Party (CCP)) of the People’s Republic of China;
-or
-
-(4)
-
-A current or former senior foreign political figure of the People’s Republic of China.
-
-(c)
-
-“Senior foreign political figure” means:
-
-(1)
-
-a senior official, either in the executive, legislative, administrative, military, or judicial branches of the People’s
-
-Republic of China (whether elected or not);
-
-(2)
-
-(3)
-
-a senior official of a dominant or ruling foreign political party (e.g., CCP); or
-
-an immediate family member (spouse, parent, sibling, child, or a spouse’s parent and sibling) of any individual
-
-described in (v)(c)(1) or (v)(c)(2).
-
-In order to be considered “senior,” an official should be or have been in a position of substantial authority over policy,
-
-operations, or the use of government-owned resources.
-
-(d)
-
-For purposes of determining whether an entity indirectly holds board seats, voting rights, or equity interest in a
-
-tiered ownership structure:
-
-(1)
-
-If a “parent” entity that qualifies under subdivisions (v)(a)(1)–(3) directly holds 50 percent or more of a
-
-“subsidiary” entity’s board seats, voting rights, or equity interest, then the parent and subsidiary are treated
-
-as equivalent in the evaluation of control, as if the subsidiary were an extension of the parent. As such, any
-
-holdings of the subsidiary are fully attributed to the parent.
-
-(2)
-
-If a “parent” entity that qualifies under subdivisions (v)(a)(1)–(3) directly holds less than 50 percent of a
-
-“subsidiary” entity’s board seats, voting rights, or equity interest, then indirect ownership is attributed
-
-proportionately.
-
-(e)
-
-For purposes of determining whether an entity has effective control, an entity that qualifies under subdivisions
-
-(v)(a)(1)–(3) that has a contractual relationship to determine the quantity or timing of production; to determine
-
-which entities may purchase or use the output of production; to restrict access to the site of production to the
-
-contractor’s own personnel; or the exclusive right to maintain, repair, or operate equipment that is critical to
-
-production, is deemed to have effective control over an entity.
-
 32.
-
 Action Applicable to Imports of Fine Denier Polyester Staple Fiber. [Compiler's note: text of note may appear on following
-
 page.]
-
 (a)
-
 For the purposes of subheading 9903.55.01 of this subchapter, the maximum annual aggregate quantity of all fine denier
-
 PSF products as defined in paragraph (c) below, that are admitted into the United States temporarily free of duty under
-
 bond and entered under statistical reporting number 9813.00.0520, when such goods are not the product of a country
-
 subject to exclusion as defined in paragraph (b), in any of the periods enumerated below shall be as follows:
-
 If entered during the period from November 23, 2024, through November 22, 2025 ............ 0 kilograms
-
 If entered during the period from November 23, 2025, through November 22, 2026 ............ 453,592 kilograms
-
 If entered during the period from November 23, 2026, through November 22, 2027 ............ 907,185 kilograms
-
 If entered during the period from November 23, 2027, through November 22, 2028 ............ 1,360,777 kilograms
 
 --- Page 2 ---
 Harmonized Tariff Schedule of the United States Revision 1 (2026)
-
 Annotated for Statistical Reporting Purposes
-
 XXII
 99 - III - 340
-
 U.S. Notes (con.)
-
 (b)
-
 For the purposes of this note and the application of subheading 9903.55.01, the following countries shall not be subject
-
 to the quantitative restriction for goods admitted into the United States temporarily free of duty under bond which are
 entered under statistical reporting number 9813.00.0520 provided for herein:
-
 (i)
-
-(ii)
-
 Canada and Mexico;
-
+(ii)
 Australia, Costa Rica, Dominican Republic, El Salvador, Guatemala, Honduras, Nicaragua, Colombia, Israel, Panama,
-
 Peru, and Singapore;
-
 (iii)
-
 The following developing countries:
-
 Afghanistan, Albania, Algeria, Angola, Armenia, Azerbaijan, Belize, Benin, Bhutan, Bolivia, Bosnia and Hercegovina,
 Botswana, Brazil, Burkina Faso, Burma, Burundi, Cambodia, Cameroon, Cape Verde, Central African Republic, Chad,
-
 Comoros, Congo (Brazzaville), Congo (Kinshasa), Côte d'Ivoire, Djibouti, Dominica, Ecuador, Egypt, Eritrea, Eswatini,
-
 Ethiopia, Fiji, Gabon, The Gambia, Georgia, Ghana, Grenada, Guinea, Guinea-Bissau, Guyana, Haiti, Iraq, Jamaica,
 Jordan, Kazakhstan, Kenya, Kiribati, Kosovo, Kyrgyzstan, Lebanon, Lesotho, Liberia, Madagascar, Malawi, Maldives,
-
 Mali, Mauritania, Mauritius, Moldova, Mongolia, Montenegro, Mozambique, Namibia, Nepal, Niger, Nigeria, North
 Macedonia, Pakistan, Papua New Guinea, Paraguay, Philippines, Rwanda, Saint Lucia, Saint Vincent and the Grenadines,
-
 Samoa, Sao Tomé and Principe, Senegal, Serbia, Sierra Leone, Solomon Islands, Somalia, South Africa, South Sudan,
-
 Sri Lanka, Suriname, Tanzania, Timor-Leste, Togo, Tonga, Tunisia, Tuvalu, Uganda, Ukraine, Uzbekistan, Vanuatu,
-
 Yemen (Republic of), Zambia and Zimbabwe; and
-
 (iv)
-
 The following Caribbean Basin Economic Recovery Act beneficiary countries and territories:
-
 Antigua and Barbuda, Aruba, the Bahamas, Barbados, Belize, British Virgin Islands, Curaçao, Dominica, Grenada,
-
 Guyana, Haiti, Jamaica, Montserrat, St. Kitts and Nevis, Saint Lucia, Saint Vincent and the Grenadines, and Trinidad
-
 and Tobago.
-
 (c)
-
 Scope.
-
 (i)
-
 For the purposes of subheading 9903.55.01 of this subchapter, the term "fine denier polyester staple fiber" ("fine
-
 denier PSF") means fine denier polyester staple fiber, not carded or combed, measuring less than 3.3 decitex (3
-
 denier) in diameter, whether coated or uncoated. The scope covers products classifiable in subheading 5503.20.00
-
 and described in statistical reporting number 5503.20.0025 or 9813.00.0520.
-
 (ii)
-
 Subheading 9903.55.01 shall not cover—
-
 (1)
-
 PSF equal to or greater than 3.3 decitex (more than 3 denier, inclusive) currently classifiable under HTS subheading
-
 5503.20.00 and described in statistical reporting numbers 5503.20.0045 and 5503.20.0065; and
-
 (2)
-
 Low-melt PSF defined as a bi-component polyester fiber having a polyester fiber component that melts at a lower
-
 temperature than the other polyester fiber component, which is currently classifiable in HTS statistical reporting
-
 number 5503.20.0015.
-
 33. (a)
-
 Except as provided for in headings 9903.94.02, 9903.94.03, 9903.94.04, 9903.94.31, 9903.94.40, 9903.94.41, 9903.94.50,
-
-9903.94.51, 9903.94.60, and 9903.94.61, heading 9903.94.01 provides the ordinary customs duty treatment applicable
-
-to all entries of passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans, and cargo vans)
-
-and light trucks (hereinafter, automobiles) from all countries classifiable in the headings or subheadings enumerated in
-
-subdivision (b) of this note.
-
-Except as provided for in subdivision (d) to this note, for any such products that are eligible for special tariff treatment under
-
-any of the free trade agreements or preference programs listed in general note 3(c)(i) to the tariff schedule, the duty provided
-
-in heading 9903.94.01 shall be collected in addition to any special rate of duty otherwise applicable under the appropriate
-
-tariff subheading. Goods for which entry is claimed under a provision of chapter 98 and which are subject to the additional
-
-duties prescribed herein shall be eligible for and subject to the terms of such provision and applicable U.S. Customs and
-
-Border Protection (“CBP”) regulations, except that duties under subheading 9802.00.60 shall be assessed based upon the
-
-full value of the imported article. Except as provided in headings 9903.94.31, 9903.94.40, 9903.94.41, 9903.94.50, 9903.94.51,
-
-9903.94.60, and 9903.94.61, no claim for entry or for any duty exemption or reduction shall be allowed for the passenger
-
-vehicles and light trucks enumerated in subdivision (b) of this note under a provision of chapter 99 that may set forth a lower
-
-rate of duty or provide duty-free treatment, taking into account information supplied by CBP, but any additional duty prescribed
-
-in any provision of this subchapter or subchapter IV of chapter 99 shall be imposed in addition to the duty in heading 9903.94.01.
-All antidumping, countervailing, or other duties and charges applicable to such goods shall continue to be imposed in addition
-
-to the duty in heading 9903.94.01, except that entries of passenger vehicles (sedans, sport utility vehicles, crossover utility
-vehicles, minivans, and cargo vans) and entries of light trucks shall not be subject to:

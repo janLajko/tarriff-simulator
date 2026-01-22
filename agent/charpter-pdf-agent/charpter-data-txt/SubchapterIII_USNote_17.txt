@@ -1,563 +1,256 @@
 --- Page 1 ---
-Harmonized Tariff Schedule of the United States Revision 1 (2026)
-
-Annotated for Statistical Reporting Purposes
-
-XXII
-99 - III - 65
-
-U.S. Notes (con.)
-
-(v)
-
-Any importer entering the iron or steel products covered by this note under headings 9903.81.94 or 9903.81.95, or any
-
-importer of the derivative iron or steel products covered by this note under headings 9903.81.96, 9903.81.97, 9903.81.98,
-or 9903.81.99 shall provide any information that may be required, and in such form, as is deemed necessary by CBP in
-
-order to permit the administration of these headings.
-
 17. (a)
-
 Subheadings 9903.45.01 through 9903.45.06 and any superior texts thereto establish temporary modifications applicable
 to entries of goods described herein and classified in the enumerated provisions of chapter 84 of the tariff schedule.
-
 Whenever any such subheading specifies that the annual aggregate quantity of such goods shall not exceed the quantity
-
 established under the terms of this note, when such goods are not the product of a country enumerated in subdivision (b)
 of this note, any entry of such goods that is in excess of the quantity specified for such provision shall be entered under
-
 the over-quota subheading set forth herein for such goods. All such goods shall be subject to duty as provided herein,
 and such duties shall be cumulative and imposed in addition to the rate of duty established for any such goods in chapter
-
 84 of the tariff schedule. [Compiler's note: The actions taken under this note and related subheadings expired at
-
 the close of Feb. 7, 2023.]
-
 (b)
-
 For the purposes of this note and the application of subheadings 9903.45.01 through 9903.45.06, inclusive, the following
 countries shall not be subject to the rates of duty and tariff-rate quotas provided for herein:
-
 (1)
-
-(2)
-
 Canada; and
-
-the following developing countries that are members of the World Trade Organization: Afghanistan, Albania, Algeria,
-
-Angola, Armenia, Azerbaijan, Belize, Benin, Bhutan, Bolivia, Bosnia and Herzegovina, Botswana, Brazil, Burkina
-
-Faso, Burma, Burundi, Cambodia, Cameroon, Cape Verde, Central African Republic, Chad, Comoros, Congo
-
-(Brazzaville), Congo (Kinshasa), Côte d’Ivoire, Djibouti, Dominica, Ecuador, Egypt, Eritrea, Ethiopia, Fiji, Gabon, The
-
-Gambia, Georgia, Ghana, Grenada, Guinea, Guinea-Bissau, Guyana, Haiti, Indonesia, Iraq, Jamaica, Jordan,
-
-Kazakhstan, Kenya, Kiribati, Kosovo, Kyrgyzstan, Lebanon, Lesotho, Liberia, Madagascar, Malawi, Maldives, Mali,
-
-Mauritania, Mauritius, Moldova, Mongolia, Montenegro, Mozambique, Namibia, Nepal, Niger, Nigeria, North Macedonia,
-
-Pakistan, Papua New Guinea, Paraguay, Philippines, Rwanda, Saint Lucia, Saint Vincent and the Grenadines, Samoa,
-
-Sao Tomé and Principe, Senegal, Serbia, Sierra Leone, Solomon Island, Somalia, South Africa, South Sudan, Sri
-
-Lanka, Suriname, Swaziland [Eswatini], Tanzania, Timor-Leste, Togo, Tonga, Tunisia, Tuvalu, Uganda, Ukraine,
-
-Uzbekistan, Vanuatu, Yemen (Republic of), Zambia and Zimbabwe.
-
-(c)
-
-(1)
-
-For the purposes of subheadings 9903.45.01 and 9903.45.02 of this subchapter, “household-type (residential) washing
-
-machines, including machines which both wash and dry, whether or not with a dry linen capacity exceeding 10 kg”
-
-(such goods provided for in subheadings 8450.11.00 and 8450.20.00 and reported under statistical reporting numbers
-
-8450.11.0040, 8450.11.0080, 8450.20.0040 and 8450.20.0080, respectively, on the effective date of this note) shall
-
-include the following goods: automatic clothes washing machines, regardless of the orientation of the rotational axis,
-
-each with a cabinet width (measured from its widest point) of at least 62.23 cm and no more than 81.28 cm, except
-
-as provided in this note.
-
 (2)
-
+the following developing countries that are members of the World Trade Organization: Afghanistan, Albania, Algeria,
+Angola, Armenia, Azerbaijan, Belize, Benin, Bhutan, Bolivia, Bosnia and Herzegovina, Botswana, Brazil, Burkina
+Faso, Burma, Burundi, Cambodia, Cameroon, Cape Verde, Central African Republic, Chad, Comoros, Congo
+(Brazzaville), Congo (Kinshasa), Côte d’Ivoire, Djibouti, Dominica, Ecuador, Egypt, Eritrea, Ethiopia, Fiji, Gabon, The
+Gambia, Georgia, Ghana, Grenada, Guinea, Guinea-Bissau, Guyana, Haiti, Indonesia, Iraq, Jamaica, Jordan,
+Kazakhstan, Kenya, Kiribati, Kosovo, Kyrgyzstan, Lebanon, Lesotho, Liberia, Madagascar, Malawi, Maldives, Mali,
+Mauritania, Mauritius, Moldova, Mongolia, Montenegro, Mozambique, Namibia, Nepal, Niger, Nigeria, North Macedonia,
+Pakistan, Papua New Guinea, Paraguay, Philippines, Rwanda, Saint Lucia, Saint Vincent and the Grenadines, Samoa,
+Sao Tomé and Principe, Senegal, Serbia, Sierra Leone, Solomon Island, Somalia, South Africa, South Sudan, Sri
+Lanka, Suriname, Swaziland [Eswatini], Tanzania, Timor-Leste, Togo, Tonga, Tunisia, Tuvalu, Uganda, Ukraine,
+Uzbekistan, Vanuatu, Yemen (Republic of), Zambia and Zimbabwe.
+(c)
+(1)
+For the purposes of subheadings 9903.45.01 and 9903.45.02 of this subchapter, “household-type (residential) washing
+machines, including machines which both wash and dry, whether or not with a dry linen capacity exceeding 10 kg”
+(such goods provided for in subheadings 8450.11.00 and 8450.20.00 and reported under statistical reporting numbers
+8450.11.0040, 8450.11.0080, 8450.20.0040 and 8450.20.0080, respectively, on the effective date of this note) shall
+include the following goods: automatic clothes washing machines, regardless of the orientation of the rotational axis,
+each with a cabinet width (measured from its widest point) of at least 62.23 cm and no more than 81.28 cm, except
+as provided in this note.
+(2)
 Subheadings 9903.45.01 and 9903.45.02 shall not apply to the washing machines specified below:
-
 (A)
-
 all stacked washer-dryers and all commercial washers:
-
 (i)
-
 The term “stacked washer-dryers” denotes distinct washing and drying machines that are built on a unitary
-
 frame and share a common console that controls both the washer and the dryer.
-
 (ii)
-
 The term “commercial washer” denotes an automatic clothes washing machine designed for the “pay per
-
 use” segment meeting either of the following two definitions:
-
 (aa)(I)
-
 it contains payment system electronics;
-
 (II)
-
 it is configured with an externally mounted steel frame at least 15.24 cm high that is designed to
-
 house a coin/token operated payment system (whether or not the actual coin/token operated payment
-
 system is installed at the time of importation);
-
 (III)
-
 it contains a push button user interface with a maximum of six manually selectable wash cycle settings,
-
 with no ability of the end user to otherwise modify water temperature, water level or spin speed for
-
 a selected wash cycle setting; and
-
 (IV)
-
 the console containing the user interface is made of steel and is assembled with security fasteners;
-
 or
-
 (bb)(I)
-
 it contains payment system electronics;
 
 --- Page 2 ---
 Harmonized Tariff Schedule of the United States Revision 1 (2026)
-
 Annotated for Statistical Reporting Purposes
-
 XXII
 99 - III - 66
-
 U.S. Notes (con.)
-
 (II)
-
 the payment system electronics are enabled (whether or not the payment acceptance device has
-
 been installed at the time of importation) such that, in normal operation, the unit cannot begin a wash
 cycle without first receiving a signal from a bona fide payment acceptance device such as an electronic
-
 credit card reader;
-
 (III)
-
 it contains a push button user interface with a maximum of six manually selectable wash cycle settings,
 with no ability of the end user to otherwise modify water temperature, water level or spin speed for
-
 a selected wash cycle setting; and
-
 (IV)
-
 the console containing the user interface is made of steel and is assembled with security fasteners.
-
 (B)
-
 automatic clothes washing machines that meet all of the following conditions:
-
 (i)
-
-(ii)
-
-(iii)
-
 they have a vertical rotational axis,
-
+(ii)
 they are top loading; and
-
+(iii)
 they have a drive train consisting, inter alia, of (aa) a permanent split capacitor motor, (bb) a belt drive and
 (cc) a flat wrap spring clutch.
-
 (C)
-
 automatic clothes washing machines that meet all of the following conditions:
-
 (i)
-
-(ii)
-
 they have a horizontal rotational axis;
-
+(ii)
 they are front loading; and
-
 (iii)
-
 they have a drive train consisting, inter alia, of (aa) a controlled induction motor and (bb) a belt drive.
-
 (D)
-
 automatic clothes washing machines that meet all of the following conditions:
-
 (i)
-
-(ii)
-
 they have a horizontal rotational axis;
-
+(ii)
 they are front loading; and
-
 (iii)
-
 they have cabinet width (measured from its widest point) of more than 72.39 cm.
-
 (d)
-
 Subject to the provisions of subdivision (i) of this note, for purposes of subheading 9903.45.01 of this subchapter, the duty
-
 rate in the Rates of Duty 1-General subcolumn (and in the Rates of Duty 2 column, as provided therein) for goods entered
-
 under such subheading, and not the product of a country enumerated in subdivision (b) of this note, shall be as follows,
-
 with the duty rates set forth herein applied in addition to those applicable under subheading 8450.11.00 or 8450.20.00:
-
 If entered during the period from
-
 February 7, 2018 through February 6, 2019....................................................
-
 20%
-
 If entered during the period from
-
 February 7, 2019 through February 6, 2020 ...................................................
-
 18%
-
 If entered during the period from
-
 February 7, 2020 through February 7, 2021....................................................
-
 16%
-
 If entered during the period from February 8, 2021
-
 through February 7, 2022 ................................................................................
-
 15%
-
 If entered during the period from February 8, 2022
-
 through February 7, 2023 ................................................................................
-
 14%
 
 --- Page 3 ---
 Harmonized Tariff Schedule of the United States Revision 1 (2026)
-
 Annotated for Statistical Reporting Purposes
-
 XXII
 99 - III - 67
-
 U.S. Notes (con.)
-
 (e)
-
 For purposes of subheading 9903.45.02 of this subchapter, the duty rate in the Rates of Duty 1-General subcolumn (and
-
 in the Rates of Duty 2 column, as provided therein) for goods entered under such subheading, and not the product of a
 country enumerated in subdivision (b) of this note, shall be as follows, with the duty rates set forth herein applied in addition
-
 to those applicable under subheading 8450.11.00 or 8450.20.00:
-
 If entered during the period from
 February 7, 2018 through February 6, 2019....................................................
-
 50%
-
 If entered during the period from
-
 February 7, 2019 through February 6, 2020....................................................
-If entered during the period from
-
 45%
-
+If entered during the period from
 February 7, 2020 through February 7, 2021....................................................
-If entered during the period from February 8, 2021
-
 40%
-
+If entered during the period from February 8, 2021
 through February 7, 2022 ................................................................................
-
 35%
-
 If entered during the period from February 8, 2022
 through February 7, 2023 ................................................................................
-
 30%
-
 (f)
-
 For purposes of subheadings 9903.45.05 and 9903.45.06 of this subchapter, the term “parts of household-type (residential)
-
 washing machines” shall include the following goods provided for in subheading 8450.90.20 or 8450.90.60 of the tariff
 schedule:
-
 (1)
-
 all cabinets, or portions thereof, provided for in subheading 8450.90.60 and designed for use in the washing machines
-
 defined in subdivision (c) of this note;
-
 (2)
-
 all assembled tubs provided for in subheading 8450.90.20 and designed for use in such washing machines defined
-
 in such subdivision (c) which incorporate, at a minimum: (A) a tub and (B) a seal;
-
 (3)
-
 all assembled baskets provided for in subheading 8450.90.60 and designed for use in the washing machines defined
-
 in subdivision (c) of this note, which incorporate, at a minimum: (A) a side wrapper, (B) a base and (C) a drive hub;
-
 and
-
 (4)
-
 any combination of the foregoing parts or subassemblies, provided for in subheading 8450.90.20 or 8540.90.60.
-
 (g)
-
 For the purposes of subheading 9903.45.05 of this subchapter, the annual aggregate quantity of all parts of household-type
-
 (residential) washing machines, as defined in subdivision (f) above, that is eligible to enter under such subheading in any
-
 of the periods enumerated below shall be as follows:
-
 If entered during the period from
-
 February 7, 2018 through February 6, 2019....................................................
-
 50,000 units
-
 If entered during the period from
-
 February 7, 2019 through February 6, 2020 ...................................................
-
 70,000 units
-
 If entered during the period from
-
 February 7, 2020 through February 7, 2021....................................................
-
 90,000 units
-
 If entered during the period from February 8, 2021
-
 through February 7, 2022 ................................................................................
-If entered during the period from February 8, 2022
-
 110,000 units
-
+If entered during the period from February 8, 2022
 through February 7, 2023 ................................................................................
-
 130,000 units
-
 (h)
-
 For purposes of subheading 9903.45.06 of this subchapter, the duty rate in the Rates of Duty 1-General subcolumn (and
-
 in the Rates of Duty 2 column, as provided therein) for goods entered in any of the periods enumerated below shall be as
-
 follows, with the duty rates set forth herein applied in addition to those applicable under subheading 8450.90.20 or
-
 8450.90.60, as appropriate:
-
 If entered during the period from
-
 February 7, 2018 through February 6, 2019....................................................
-
 50%
-
 If entered during the period from
-
 February 7, 2019 through February 6, 2020....................................................
-
 45%
-
 If entered during the period from
 February 7, 2020 through February 7, 2021....................................................
-
 40%
-
 If entered during the period from February 8, 2021
-
 through February 7, 2022 ................................................................................
-
 35%
-
 If entered during the period from February 8, 2022
-
 through February 7, 2023 ................................................................................
-
 30%
 
 --- Page 4 ---
 Harmonized Tariff Schedule of the United States Revision 1 (2026)
-
 Annotated for Statistical Reporting Purposes
-
 XXII
 99 - III - 68
-
 U.S. Notes (con.)
-
 (i)
-
 For the purposes of subheading 9903.45.01 of this subchapter, the aggregate quantity of all household-type (residential)
-
 washing machines, as defined in subdivision (c) above, that is eligible to enter under such subheading in any of the periods
 enumerated below shall be as follows:
-
 If entered during the period from
-
 February 7, 2020 through May 6, 2020.............................................
+300,000 units
 If entered during the period from
-
-300,000 units
-
 May 7, 2020 through August 6, 2020................................................
-
 300,000 units
-
 If entered during the period from
 August 7, 2020 through November 6, 2020......................................
-
+300,000 units
 If entered during the period from
 November 7, 2020 through February 7, 2021...................................
-
 300,000 units
-
-300,000 units
-
 If entered during the period from February 8, 2021
-
 through May 7, 2021.........................................................................
+300,000 units
 If entered during the period from May 8, 2021
-
 through August 7, 2021 ....................................................................
+300,000 units
 If entered during the period from August 8, 2021
-
-300,000 units
-
-300,000 units
-
 through November 7, 2021...............................................................
-
 300,000 units
-
 If entered during the period from November 8, 2021
 through February 7, 2022 .................................................................
-
 300,000 units
-
 If entered during the period from February 8, 2022
-
 through May 7, 2022.........................................................................
-
 300,000 units
-
 If entered during the period from May 8, 2022
-
 through August 7, 2022 ....................................................................
-
 300,000 units
-
 If entered during the period from August 8, 2022
-
 through November 7, 2022...............................................................
-
 300,000 units
-
 If entered during the period from November 8, 2022
-
 through February 7, 2023..................................................................
-
 300,000 units
-
 18. (a)
-
 Subheadings 9903.45.21 through 9903.45.29 and any superior texts thereto establish temporary modifications applicable
-
-to entries of goods described herein and classified in the enumerated provisions of chapter 85 of the tariff schedule.
-
-Whenever any such subheading specifies that the annual aggregate quantity of such goods shall not exceed the quantity
-
-established under the terms of this note, when such goods are not the product of a country enumerated in subdivision (b)
-
-of this note, any entry of such goods that is in excess of the quantity specified for such provision shall be entered under
-
-the over-quota subheading set forth herein for such goods. All such goods shall be subject to duty as provided herein;
-
-and such duties shall be cumulative and imposed in addition to the rate of duty established for any such goods in chapter
-
-85 of the tariff schedule, except as may be specified for duties imposed under the Rates of Duty 2 column.
-
-(b)
-
-For the purposes of this note and the application of subheadings 9903.45.21 through 9903.45.29, inclusive, the following
-
-developing countries that are members of the World Trade Organization shall not be subject to the rates of duty and
-
-tariff-rate quotas provided for therein: Afghanistan, Albania, Algeria, Angola, Armenia, Azerbaijan, Belize, Benin, Bhutan,
-
-Bolivia, Bosnia and Herzegovina, Botswana, Brazil, Burkina Faso, Burma, Burundi, Cambodia, Cameroon, Cape Verde,
-
-Central African Republic, Chad, Comoros, Congo (Brazzaville), Congo (Kinshasa), Côte d’Ivoire, Djibouti, Dominica,
-
-Ecuador, Egypt, Eritrea, Ethiopia, Fiji, Gabon, The Gambia, Georgia, Ghana, Grenada, Guinea, Guinea-Bissau, Guyana,
-
-Haiti, Indonesia, Iraq, Jamaica, Jordan, Kazakhstan, Kenya, Kiribati, Kosovo, Kyrgyzstan, Lebanon, Lesotho, Liberia,
-
-Madagascar, Malawi, Maldives, Mali, Mauritania, Mauritius, Moldova, Mongolia, Montenegro, Mozambique, Namibia,
-
-Nepal, Niger, Nigeria, North Macedonia, Pakistan, Papua New Guinea, Paraguay, Rwanda, Saint Lucia, Saint Vincent
-
-and the Grenadines, Samoa, Sao Tomé and Principe, Senegal, Serbia, Sierra Leone, Solomon Island, Somalia, South
-
-Africa, South Sudan, Sri Lanka, Suriname, Swaziland [Eswatini], Tanzania, Timor-Leste, Togo, Tonga, Tunisia, Tuvalu,
-
-Uganda, Ukraine, Uzbekistan, Vanuatu, Yemen (Republic of), Zambia and Zimbabwe.
-
-(c)
-
-(i)
-
-For the purposes of subheadings 9903.45.21 and 9903.45.22 and heading 9903.45.27, except as otherwise provided
-
-herein, the term “crystalline silicon photovoltaic cells” (“CSPV cells”) means crystalline silicon photovoltaic cells of a
-
-thickness equal to or greater than 20 micrometers, having a p/n junction (or variant thereof) formed by any means,
-
-whether or not the cell (or subassemblies thereof provided for in subheading 8541.42.00 and imported under statistical
-
-reporting number 8541.42.0010) has undergone other processing, including, but not limited to, cleaning, etching,
-
-coating, and/or addition of materials (including, but not limited to, metallization and conductor patterns) to collect and
-forward the electricity that is generated by the cell. Such cells include photovoltaic cells that contain crystalline silicon
-
-in addition to other photovoltaic materials. This includes, but is not limited to, passivated emitter rear contact cells,
-
-heterojunction with intrinsic thin-layer cells, and other so-called hybrid cells. Subheadings 9903.45.21 and 9903.45.22
-
-include goods presented in cell form and which at the time of importation are not presented assembled into circuits,
-
-laminates or modules or made up into panels.
-
-(ii)
-
-Subheadings 9903.45.21 and 9903.45.22 and heading 9903.45.27 shall not cover-
