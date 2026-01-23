@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTSUS Chapter 99 审核平台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { color: #333; margin-bottom: 30px; }
+
+        /* Note列表 */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .note-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .note-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        .note-card h3 { margin-bottom: 10px; }
+        .status { padding: 5px 10px; border-radius: 4px; color: white; display: inline-block; font-size: 12px; }
+        .status.not_processed { background: #999; }
+        .status.has_conflicts { background: #e74c3c; }
+        .status.consistent { background: #27ae60; }
+
+        /* 审核界面 */
+        #reviewPanel {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #ddd;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* 冲突卡片 */
+        .conflict-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .conflict-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        .comparison-table th { background: #ecf0f1; }
+
+        /* 按钮 */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #229954; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Scope差异展示 */
+        .scope-diff {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .scope-list {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        .scope-list h4 {
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+        .scope-item {
+            padding: 5px;
+            margin: 2px 0;
+            background: #ecf0f1;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HTSUS Chapter 99 Notes 审核平台</h1>
+
+        <!-- Note列表 -->
+        <div id="notesList" class="notes-grid">
+            <!-- 动态加载 -->
+        </div>
+
+        <!-- 审核面板 -->
+        <div id="reviewPanel">
+            <h2 id="reviewTitle">Note <span id="noteNumber"></span> <span id="reviewStage">冲突审核</span></h2>
+
+            <!-- 进度条 -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+
+            <!-- 冲突展示区 -->
+            <div id="conflictDisplay">
+                <!-- 动态加载冲突内容 -->
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="action-buttons">
+                <div>
+                    <button class="btn btn-secondary" onclick="previousConflict()">上一个</button>
+                    <button class="btn btn-secondary" onclick="nextConflict()">下一个</button>
+                </div>
+                <div>
+                    <button class="btn btn-primary" onclick="backToList()">返回列表</button>
+                    <button class="btn btn-success" onclick="primaryAction()" id="primaryBtn" disabled>下一步</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSession = null;
+        let llmConflicts = null;
+        let dbConflicts = null;
+        let reviewStage = 'llm';
+        let currentConflictIndex = 0;
+        let resolutions = {};
+
+        // 加载Note列表
+        async function loadNotes() {
+            const response = await fetch('/api/notes');
+            const notes = await response.json();
+
+            const container = document.getElementById('notesList');
+            container.innerHTML = notes.map(note => `
+                <div class="note-card" onclick="startReview(${note.note_number})">
+                    <h3>Note ${note.note_number}</h3>
+                    <span class="status ${note.status}">
+                        ${note.status === 'has_conflicts' ? '有冲突待审核' :
+                          note.status === 'consistent' ? '已一致' : '未处理'}
+                    </span>
+                    ${note.has_conflicts ? '<p style="margin-top: 10px; color: #e74c3c;">需要人工审核</p>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // 启动审核
+        async function startReview(noteNumber) {
+            const response = await fetch(`/api/notes/${noteNumber}/start-review`, {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                alert('无法启动审核');
+                return;
+            }
+
+            const data = await response.json();
+            currentSession = data.session_id;
+            llmConflicts = data.conflicts;
+            dbConflicts = null;
+            reviewStage = 'llm';
+            currentConflictIndex = 0;
+            resolutions = {};
+
+            document.getElementById('noteNumber').textContent = noteNumber;
+            document.getElementById('reviewStage').textContent = '冲突审核';
+            document.getElementById('notesList').style.display = 'none';
+            document.getElementById('reviewPanel').style.display = 'block';
+
+            displayCurrentConflict();
+        }
+
+        // 显示当前冲突
+        function displayCurrentConflict() {
+            const activeConflicts = reviewStage === 'db' ? dbConflicts : llmConflicts;
+            if (!activeConflicts) return;
+
+            const allConflicts = [...activeConflicts.measure_conflicts, ...activeConflicts.scope_conflicts];
+            const primaryBtn = document.getElementById('primaryBtn');
+            primaryBtn.textContent = reviewStage === 'db' ? '更新数据库' : '下一步';
+            primaryBtn.disabled = true;
+            if (currentConflictIndex >= allConflicts.length) {
+                document.getElementById('conflictDisplay').innerHTML = reviewStage === 'db'
+                    ? '<h3>所有数据库差异已解决！</h3>'
+                    : '<h3>所有冲突已解决！</h3>';
+                primaryBtn.disabled = false;
+                primaryBtn.textContent = reviewStage === 'db' ? '更新数据库' : '下一步';
+                updateProgress();
+                return;
+            }
+
+            const conflict = allConflicts[currentConflictIndex];
+            let html = '';
+
+            if (reviewStage === 'db') {
+                if (conflict.type === 'db_field_diff') {
+                    const unified_data = conflict.unified_data || {};
+                    const db_data = conflict.db_data || {};
+                    const differences = conflict.differences || [];
+                    html = `
+                        <div class="conflict-card">
+                            <div class="conflict-header">
+                                差异 ${currentConflictIndex + 1} / ${allConflicts.length}:
+                                Heading ${conflict.heading} - 字段差异
+                            </div>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>字段</th>
+                                        <th>统一结果</th>
+                                        <th>数据库</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${differences.map(diff => `
+                                        <tr>
+                                            <td>${diff.label}</td>
+                                            <td style="${diff.openai_value !== diff.grok_value ? 'background: #ffe5e5;' : ''}">
+                                                ${diff.openai_value === null || diff.openai_value === undefined ? '无' :
+                                                  diff.openai_value === true ? '是' :
+                                                  diff.openai_value === false ? '否' :
+                                                  diff.openai_value}
+                                            </td>
+                                            <td style="${diff.openai_value !== diff.grok_value ? 'background: #e5ffe5;' : ''}">
+                                                ${diff.grok_value === null || diff.grok_value === undefined ? '无' :
+                                                  diff.grok_value === true ? '是' :
+                                                  diff.grok_value === false ? '否' :
+                                                  diff.grok_value}
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                            <div style="margin-top: 15px;">
+                                <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'unified')">使用统一结果</button>
+                                <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'db')">使用数据库</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (conflict.type === 'only_in_unified' || conflict.type === 'only_in_db') {
+                    const measure_data = conflict.type === 'only_in_unified' ? conflict.unified_data : conflict.db_data;
+                    html = `
+                        <div class="conflict-card">
+                            <div class="conflict-header">
+                                差异 ${currentConflictIndex + 1} / ${allConflicts.length}:
+                                Heading ${conflict.heading}
+                            </div>
+                            <p>此措施仅存在于 <strong>${conflict.type === 'only_in_unified' ? '统一结果' : '数据库'}</strong> 中</p>
+                            ${measure_data ? `
+                                <table class="comparison-table" style="margin-top: 10px;">
+                                    <tbody>
+                                        <tr><td width="30%">国家</td><td>${measure_data.country_iso2 || '无'}</td></tr>
+                                        <tr><td>生效日期</td><td>${measure_data.effective_start_date || '无'}</td></tr>
+                                        <tr><td>结束日期</td><td>${measure_data.effective_end_date || '无'}</td></tr>
+                                        <tr><td>是否潜在</td><td>${measure_data.is_potential === true ? '是' : measure_data.is_potential === false ? '否' : '无'}</td></tr>
+                                        <tr><td>税率</td><td>${measure_data.ad_valorem_rate || '无'}</td></tr>
+                                    </tbody>
+                                </table>
+                            ` : ''}
+                            <div style="margin-top: 15px;">
+                                ${conflict.type === 'only_in_unified'
+                                    ? `<button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'insert')">插入</button>
+                                       <button class="btn btn-secondary" onclick="resolveConflict('${conflict.id}', 'skip')">忽略</button>`
+                                    : `<button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'keep')">保留</button>
+                                       <button class="btn btn-secondary" onclick="resolveConflict('${conflict.id}', 'delete')">删除</button>`
+                                }
+                            </div>
+                        </div>
+                    `;
+                } else if (conflict.type === 'db_scope_diff') {
+                    html = `
+                        <div class="conflict-card">
+                            <div class="conflict-header">
+                                差异 ${currentConflictIndex + 1} / ${allConflicts.length}:
+                                Heading ${conflict.heading} - Scope差异
+                            </div>
+                            <div class="scope-diff">
+                                <div class="scope-list">
+                                    <h4>仅统一结果有 (${conflict.only_in_unified}个)</h4>
+                                    <div style="max-height: 200px; overflow-y: auto;">
+                                        ${conflict.unified_scopes.slice(0, 10).map(s =>
+                                            `<div class="scope-item">${s.key_raw || s.key || s}</div>`
+                                        ).join('')}
+                                        ${conflict.only_in_unified > 10 ? '<div>...</div>' : ''}
+                                    </div>
+                                </div>
+                                <div class="scope-list">
+                                    <h4>仅数据库有 (${conflict.only_in_db}个)</h4>
+                                    <div style="max-height: 200px; overflow-y: auto;">
+                                        ${conflict.db_scopes.slice(0, 10).map(s =>
+                                            `<div class="scope-item">${s.key_raw || s.key || s}</div>`
+                                        ).join('')}
+                                        ${conflict.only_in_db > 10 ? '<div>...</div>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'unified')">使用统一结果</button>
+                                <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'db')">使用数据库</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                if (conflict.type === 'field_diff') {
+                    const openai_data = conflict.openai_data || {};
+                    const grok_data = conflict.grok_data || {};
+                    const differences = conflict.differences || [];
+
+                    html = `
+                        <div class="conflict-card">
+                            <div class="conflict-header">
+                                冲突 ${currentConflictIndex + 1} / ${allConflicts.length}:
+                                Heading ${conflict.heading} - 字段差异
+                            </div>
+                            <p>国家: ${openai_data.country_iso2 || grok_data.country_iso2 || '无'}</p>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>字段</th>
+                                        <th>OpenAI</th>
+                                        <th>Grok</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${differences.map(diff => `
+                                        <tr>
+                                            <td>${diff.label}</td>
+                                            <td style="${diff.openai_value !== diff.grok_value ? 'background: #ffe5e5;' : ''}">
+                                                ${diff.openai_value === null || diff.openai_value === undefined ? '无' :
+                                                  diff.openai_value === true ? '是' :
+                                                  diff.openai_value === false ? '否' :
+                                                  diff.openai_value}
+                                            </td>
+                                            <td style="${diff.openai_value !== diff.grok_value ? 'background: #e5ffe5;' : ''}">
+                                                ${diff.grok_value === null || diff.grok_value === undefined ? '无' :
+                                                  diff.grok_value === true ? '是' :
+                                                  diff.grok_value === false ? '否' :
+                                                  diff.grok_value}
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                            <div style="margin-top: 15px;">
+                                <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'openai')">使用OpenAI数据</button>
+                                <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'grok')">使用Grok数据</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (conflict.type === 'only_in_openai' || conflict.type === 'only_in_grok') {
+                    const measure_data = conflict.type === 'only_in_openai' ? conflict.openai_data : conflict.grok_data;
+                    html = `
+                        <div class="conflict-card">
+                            <div class="conflict-header">
+                                冲突 ${currentConflictIndex + 1} / ${allConflicts.length}:
+                                Heading ${conflict.heading}
+                            </div>
+                            <p>此措施仅存在于 <strong>${conflict.type === 'only_in_openai' ? 'OpenAI' : 'Grok'}</strong> 结果中</p>
+                            ${measure_data ? `
+                                <table class="comparison-table" style="margin-top: 10px;">
+                                    <tbody>
+                                        <tr><td width="30%">国家</td><td>${measure_data.country_iso2 || '无'}</td></tr>
+                                        <tr><td>生效日期</td><td>${measure_data.effective_start_date || '无'}</td></tr>
+                                        <tr><td>结束日期</td><td>${measure_data.effective_end_date || '无'}</td></tr>
+                                        <tr><td>是否潜在</td><td>${measure_data.is_potential === true ? '是' : measure_data.is_potential === false ? '否' : '无'}</td></tr>
+                                        <tr><td>税率</td><td>${measure_data.ad_valorem_rate || '无'}</td></tr>
+                                    </tbody>
+                                </table>
+                            ` : ''}
+                            <div style="margin-top: 15px;">
+                                <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'accept')">接受</button>
+                                <button class="btn btn-secondary" onclick="resolveConflict('${conflict.id}', 'reject')">拒绝</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (conflict.measure_key) {
+                    html = `
+                        <div class="conflict-card">
+                            <div class="conflict-header">
+                                冲突 ${currentConflictIndex + 1} / ${allConflicts.length}:
+                                Heading ${conflict.heading} - Scope差异
+                            </div>
+                            <div class="scope-diff">
+                                <div class="scope-list">
+                                    <h4>仅OpenAI有 (${conflict.only_in_openai}个)</h4>
+                                    <div style="max-height: 200px; overflow-y: auto;">
+                                        ${conflict.openai_scopes.slice(0, 10).map(s =>
+                                            `<div class="scope-item">${s.key_raw || s.key || s}</div>`
+                                        ).join('')}
+                                        ${conflict.only_in_openai > 10 ? '<div>...</div>' : ''}
+                                    </div>
+                                </div>
+                                <div class="scope-list">
+                                    <h4>仅Grok有 (${conflict.only_in_grok}个)</h4>
+                                    <div style="max-height: 200px; overflow-y: auto;">
+                                        ${conflict.grok_scopes.slice(0, 10).map(s =>
+                                            `<div class="scope-item">${s.key_raw || s.key || s}</div>`
+                                        ).join('')}
+                                        ${conflict.only_in_grok > 10 ? '<div>...</div>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'openai')">使用OpenAI</button>
+                                <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'grok')">使用Grok</button>
+                                <button class="btn btn-success" onclick="resolveConflict('${conflict.id}', 'union')">使用并集</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            document.getElementById('conflictDisplay').innerHTML = html;
+            updateProgress();
+        }
+
+        // 解决冲突
+        async function resolveConflict(conflictId, resolution) {
+            const endpoint = reviewStage === 'db'
+                ? `/api/sessions/${currentSession}/resolve-db`
+                : `/api/sessions/${currentSession}/resolve`;
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    conflict_id: conflictId,
+                    resolution: resolution
+                })
+            });
+
+            if (response.ok) {
+                resolutions[conflictId] = resolution;
+                nextConflict();
+            }
+        }
+
+        // 下一个冲突
+        function nextConflict() {
+            currentConflictIndex++;
+            displayCurrentConflict();
+        }
+
+        // 上一个冲突
+        function previousConflict() {
+            if (currentConflictIndex > 0) {
+                currentConflictIndex--;
+                displayCurrentConflict();
+            }
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const activeConflicts = reviewStage === 'db' ? dbConflicts : llmConflicts;
+            if (!activeConflicts) return;
+            const allConflicts = [...activeConflicts.measure_conflicts, ...activeConflicts.scope_conflicts];
+            const resolved = Object.keys(resolutions).length;
+            const total = allConflicts.length;
+            const percentage = total > 0 ? Math.round((resolved / total) * 100) : 0;
+
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${percentage}%`;
+            progressFill.textContent = `${percentage}% (${resolved}/${total})`;
+        }
+
+        // 主按钮动作
+        async function primaryAction() {
+            if (reviewStage === 'db') {
+                await updateDatabase();
+            } else {
+                await nextStep();
+            }
+        }
+
+        // 下一步：生成统一文件并执行数据库比对
+        async function nextStep() {
+            const response = await fetch(`/api/sessions/${currentSession}/next-step`, {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                alert(err.error || '无法执行下一步');
+                return;
+            }
+
+            const data = await response.json();
+            if (data.status === 'db_conflicts') {
+                reviewStage = 'db';
+                dbConflicts = data.conflicts;
+                currentConflictIndex = 0;
+                resolutions = {};
+                document.getElementById('reviewStage').textContent = '数据库差异审核';
+                displayCurrentConflict();
+            } else if (data.status === 'ready_to_commit') {
+                reviewStage = 'db';
+                dbConflicts = { measure_conflicts: [], scope_conflicts: [] };
+                currentConflictIndex = 0;
+                resolutions = {};
+                document.getElementById('reviewStage').textContent = '数据库差异审核';
+                displayCurrentConflict();
+            }
+        }
+
+        // 更新数据库
+        async function updateDatabase() {
+            const response = await fetch(`/api/sessions/${currentSession}/update-db`, {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                alert(err.error || '更新数据库失败');
+                return;
+            }
+
+            const data = await response.json();
+            alert(`数据库更新完成！\n插入措施：${data.inserted_measures}\n插入Scopes：${data.inserted_scopes}`);
+            backToList();
+        }
+
+        // 返回列表
+        function backToList() {
+            document.getElementById('reviewPanel').style.display = 'none';
+            document.getElementById('notesList').style.display = 'grid';
+            loadNotes();
+        }
+
+        // 页面加载时初始化
+        window.onload = loadNotes;
+
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('reviewPanel').style.display === 'none') return;
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    previousConflict();
+                    break;
+                case 'ArrowRight':
+                    nextConflict();
+                    break;
+                case '1':
+                    document.querySelector('.btn-primary')?.click();
+                    break;
+                case '2':
+                    document.querySelectorAll('.btn-primary')[1]?.click();
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>

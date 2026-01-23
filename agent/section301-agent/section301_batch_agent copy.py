@@ -762,7 +762,7 @@ class Section301BatchAgent:
 
         LOGGER.info("Starting batch processing of %d headings", len(headings))
 
-        # Limit to first 2 headings for testing (to avoid token limit issues)
+        # Limit to first 2 headings for testing (to avoid token limit issues) 9903.88.01
         if len(headings) > 2:
             LOGGER.warning(f"Limiting processing to first 2 headings (out of {len(headings)}) for testing")
             headings = headings[:2]
