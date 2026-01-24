@@ -1193,6 +1193,7 @@ def _collect_scope_counters(
 ) -> Tuple[Counter, Dict[Tuple[str, str], List[str]]]:
     counter: Counter = Counter()
     raw_map: Dict[Tuple[str, str], List[str]] = defaultdict(list)
+    seen_pairs: set[Tuple[str, str]] = set()
     for entry in scopes:
         relation = _normalize_relation(entry.get("relation"))
         keys = entry.get("keys")
@@ -1213,6 +1214,9 @@ def _collect_scope_counters(
             if not key_norm:
                 continue
             pair = (key_norm, relation)
+            if pair in seen_pairs:
+                continue
+            seen_pairs.add(pair)
             counter[pair] += 1
             raw_map[pair].append(key_raw)
     return counter, raw_map

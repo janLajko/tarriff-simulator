@@ -8,6 +8,7 @@ import os
 from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
+import shutil
 from typing import Any, Dict, List, Optional, Tuple
 
 try:  # pragma: no cover - runtime dependency
@@ -25,6 +26,7 @@ CORS(app)
 # 数据目录
 OUTPUT_DIR = Path(__file__).parent.parent / "othercharpter-agent" / "output"
 SESSIONS = {}  # 简单的内存存储
+HISTORY_DIR = Path(__file__).parent / "history"
 
 DB_DSN = os.getenv("DATABASE_URL")
 TABLE_PREFIX = os.getenv("OTHERCH_TABLE_PREFIX", "otherch")
@@ -260,6 +262,14 @@ def update_db(session_id):
     final_data = apply_db_resolutions(unified_data, db_data, session.get('db_resolutions', {}))
     result = persist_measures_to_db(session['note_id'], final_data.get('measures', []))
 
+    HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+    history_subdir = HISTORY_DIR / f"{session['note_id']}_{session_id}"
+    history_subdir.mkdir(parents=True, exist_ok=True)
+    for suffix in ("openai", "grok", "llm_compare", "unified"):
+        source = OUTPUT_DIR / f"note{session['note_id']}_{suffix}.json"
+        if source.exists():
+            shutil.move(str(source), history_subdir / source.name)
+
     session['status'] = 'committed'
     return jsonify({
         'status': 'success',
@@ -301,6 +311,13 @@ def _parse_date(value: Optional[Any]) -> Optional[date]:
         except ValueError:
             return None
     return None
+
+
+def _normalize_effective_date(value: Optional[Any]) -> Optional[date]:
+    parsed = _parse_date(value)
+    if parsed == DEFAULT_START_DATE:
+        return None
+    return parsed
 
 
 def _parse_rate(value: Optional[Any]) -> Optional[Decimal]:
@@ -434,6 +451,123 @@ def _scope_union(openai_scopes: List[Dict[str, Any]], grok_scopes: List[Dict[str
             merged[(key_norm, relation)] = scope
     return list(merged.values())
 
+def _build_manual_scope_selection(value: Optional[Any]) -> List[Dict[str, Any]]:
+    if isinstance(value, dict):
+        selected = value.get("selected", [])
+    elif isinstance(value, list):
+        selected = value
+    else:
+        selected = []
+
+    manual_entries: List[Dict[str, Any]] = []
+    for item in selected:
+        if not isinstance(item, dict):
+            continue
+        key_raw = _normalize_code(item.get("key") or item.get("key_raw") or "")
+        relation = _normalize_relation(item.get("relation"))
+        side = (item.get("side") or "").strip().lower() or None
+        if not key_raw:
+            continue
+        manual_entries.append({"key": key_raw, "relation": relation, "side": side})
+    return manual_entries
+
+
+def _scope_manual_merge(
+    openai_scopes: List[Dict[str, Any]],
+    grok_scopes: List[Dict[str, Any]],
+    manual_entries: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    openai_map: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    grok_map: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    merged: Dict[Tuple[str, str], Dict[str, Any]] = {}
+
+    for scope in _expand_scope_entries(openai_scopes):
+        relation = _normalize_relation(scope.get("relation"))
+        key_norm = _normalize_scope_key_digits(scope.get("key", ""))
+        if not key_norm:
+            continue
+        signature = (key_norm, relation)
+        if signature not in openai_map:
+            openai_map[signature] = scope
+
+    for scope in _expand_scope_entries(grok_scopes):
+        relation = _normalize_relation(scope.get("relation"))
+        key_norm = _normalize_scope_key_digits(scope.get("key", ""))
+        if not key_norm:
+            continue
+        signature = (key_norm, relation)
+        if signature not in grok_map:
+            grok_map[signature] = scope
+
+    for signature, scope in openai_map.items():
+        if signature in grok_map:
+            merged[signature] = scope
+
+    for entry in manual_entries:
+        relation = _normalize_relation(entry.get("relation"))
+        key_norm = _normalize_scope_key_digits(entry.get("key", ""))
+        if not key_norm:
+            continue
+        signature = (key_norm, relation)
+        if signature not in merged:
+            side = entry.get("side")
+            if side == "grok" and signature in grok_map:
+                merged[signature] = grok_map[signature]
+            elif side == "openai" and signature in openai_map:
+                merged[signature] = openai_map[signature]
+            else:
+                merged[signature] = {"key": entry.get("key"), "relation": relation}
+
+    return list(merged.values())
+
+def _scope_manual_merge_db(
+    unified_scopes: List[Dict[str, Any]],
+    db_scopes: List[Dict[str, Any]],
+    manual_entries: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    unified_map: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    db_map: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    merged: Dict[Tuple[str, str], Dict[str, Any]] = {}
+
+    for scope in _expand_scope_entries(unified_scopes):
+        relation = _normalize_relation(scope.get("relation"))
+        key_norm = _normalize_scope_key_digits(scope.get("key", ""))
+        if not key_norm:
+            continue
+        signature = (key_norm, relation)
+        if signature not in unified_map:
+            unified_map[signature] = scope
+
+    for scope in _expand_scope_entries(db_scopes):
+        relation = _normalize_relation(scope.get("relation"))
+        key_norm = _normalize_scope_key_digits(scope.get("key", ""))
+        if not key_norm:
+            continue
+        signature = (key_norm, relation)
+        if signature not in db_map:
+            db_map[signature] = scope
+
+    for signature, scope in unified_map.items():
+        if signature in db_map:
+            merged[signature] = scope
+
+    for entry in manual_entries:
+        relation = _normalize_relation(entry.get("relation"))
+        key_norm = _normalize_scope_key_digits(entry.get("key", ""))
+        if not key_norm:
+            continue
+        signature = (key_norm, relation)
+        if signature not in merged:
+            side = entry.get("side")
+            if side == "db" and signature in db_map:
+                merged[signature] = db_map[signature]
+            elif side == "unified" and signature in unified_map:
+                merged[signature] = unified_map[signature]
+            else:
+                merged[signature] = {"key": entry.get("key"), "relation": relation}
+
+    return list(merged.values())
+
 
 def _collect_scope_counters(
     scopes: List[Dict[str, Any]]
@@ -470,8 +604,8 @@ def _normalize_measure(entry: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     if not heading:
         return None
     country_iso2 = _normalize_iso(entry.get("country_iso2"))
-    effective_start_date = _parse_date(entry.get("effective_start_date"))
-    effective_end_date = _parse_date(entry.get("effective_end_date"))
+    effective_start_date = _normalize_effective_date(entry.get("effective_start_date"))
+    effective_end_date = _normalize_effective_date(entry.get("effective_end_date"))
     is_potential = _coerce_bool(entry.get("is_potential"))
     ad_valorem_rate = _parse_rate(entry.get("ad_valorem_rate"))
     scopes = entry.get("scopes") or []
@@ -517,8 +651,8 @@ def _build_measure_key_index(measures: List[Dict[str, Any]]) -> Dict[str, Dict[s
         key = _make_measure_key(
             heading,
             _normalize_iso(measure.get("country_iso2")),
-            _parse_date(measure.get("effective_start_date")),
-            _parse_date(measure.get("effective_end_date")),
+            _normalize_effective_date(measure.get("effective_start_date")),
+            _normalize_effective_date(measure.get("effective_end_date")),
             _coerce_bool(measure.get("is_potential")),
         )
         if key not in index:
@@ -814,13 +948,17 @@ def build_unified_json(session):
         merged_measure = dict(base_measure)
 
         if measure_key in scope_diff_keys:
-            scope_resolution = resolutions.get(f"scope_diff|{measure_key}", {}).get("resolution")
+            scope_entry = resolutions.get(f"scope_diff|{measure_key}", {})
+            scope_resolution = scope_entry.get("resolution")
             openai_scopes = openai_index.get(measure_key, {}).get("scopes", [])
             grok_scopes = grok_index.get(measure_key, {}).get("scopes", [])
             if scope_resolution == "grok":
                 merged_measure["scopes"] = grok_scopes
             elif scope_resolution == "union":
                 merged_measure["scopes"] = _scope_union(openai_scopes, grok_scopes)
+            elif scope_resolution == "manual":
+                manual_entries = _build_manual_scope_selection(scope_entry.get("value"))
+                merged_measure["scopes"] = _scope_manual_merge(openai_scopes, grok_scopes, manual_entries)
             else:
                 merged_measure["scopes"] = openai_scopes
         else:
@@ -928,27 +1066,61 @@ def parse_db_conflicts(db_compare: Dict[str, Any], unified_data: Dict[str, Any],
             'differences': compare_measure_fields(unified_m, db_m)
         })
 
-    for measure_key in db_compare.get('missing_in_db', []):
-        unified_m = _serialize_measure(unified_index.get(measure_key, {}))
-        heading = measure_key.split('|')[0] if '|' in measure_key else measure_key
-        conflicts['measure_conflicts'].append({
-            'id': f"db_only_in_unified|{measure_key}",
-            'type': 'only_in_unified',
-            'measure_key': measure_key,
-            'heading': heading,
-            'unified_data': unified_m
-        })
+    missing_in_db = list(db_compare.get('missing_in_db', []))
+    extra_in_db = list(db_compare.get('extra_in_db', []))
 
-    for measure_key in db_compare.get('extra_in_db', []):
-        db_m = _serialize_measure(db_index.get(measure_key, {}))
+    unified_by_heading: Dict[str, List[str]] = {}
+    db_by_heading: Dict[str, List[str]] = {}
+    for measure_key in missing_in_db:
         heading = measure_key.split('|')[0] if '|' in measure_key else measure_key
-        conflicts['measure_conflicts'].append({
-            'id': f"db_only_in_db|{measure_key}",
-            'type': 'only_in_db',
-            'measure_key': measure_key,
-            'heading': heading,
-            'db_data': db_m
-        })
+        unified_by_heading.setdefault(heading, []).append(measure_key)
+    for measure_key in extra_in_db:
+        heading = measure_key.split('|')[0] if '|' in measure_key else measure_key
+        db_by_heading.setdefault(heading, []).append(measure_key)
+
+    for heading in sorted(set(unified_by_heading) & set(db_by_heading)):
+        unified_list = sorted(unified_by_heading.get(heading, []))
+        db_list = sorted(db_by_heading.get(heading, []))
+        while unified_list and db_list:
+            unified_key = unified_list.pop(0)
+            db_key = db_list.pop(0)
+            unified_m = _serialize_measure(unified_index.get(unified_key, {}))
+            db_m = _serialize_measure(db_index.get(db_key, {}))
+            conflicts['measure_conflicts'].append({
+                'id': f"db_field_diff::{unified_key}::{db_key}",
+                'type': 'db_field_diff',
+                'stable_key': heading,
+                'unified_measure_key': unified_key,
+                'db_measure_key': db_key,
+                'heading': heading,
+                'unified_data': unified_m,
+                'db_data': db_m,
+                'differences': compare_measure_fields(unified_m, db_m)
+            })
+        unified_by_heading[heading] = unified_list
+        db_by_heading[heading] = db_list
+
+    for heading, keys in unified_by_heading.items():
+        for measure_key in keys:
+            unified_m = _serialize_measure(unified_index.get(measure_key, {}))
+            conflicts['measure_conflicts'].append({
+                'id': f"db_only_in_unified|{measure_key}",
+                'type': 'only_in_unified',
+                'measure_key': measure_key,
+                'heading': heading,
+                'unified_data': unified_m
+            })
+
+    for heading, keys in db_by_heading.items():
+        for measure_key in keys:
+            db_m = _serialize_measure(db_index.get(measure_key, {}))
+            conflicts['measure_conflicts'].append({
+                'id': f"db_only_in_db|{measure_key}",
+                'type': 'only_in_db',
+                'measure_key': measure_key,
+                'heading': heading,
+                'db_data': db_m
+            })
 
     for measure_key, scope_diff in db_compare.get('scope_diffs', {}).items():
         conflicts['scope_conflicts'].append({
@@ -973,6 +1145,23 @@ def apply_db_resolutions(unified_data: Dict[str, Any], db_data: List[Dict[str, A
 
     for conflict_id, resolution in db_resolutions.items():
         decision = resolution.get("resolution")
+        if "||" in conflict_id:
+            continue
+        if conflict_id.startswith("db_field_diff::"):
+            parts = conflict_id.split("::", 2)
+            if len(parts) != 3:
+                continue
+            unified_key = parts[1]
+            db_key = parts[2]
+            if decision == "db":
+                db_measure = db_index.get(db_key)
+                if db_measure:
+                    existing = final_measures.get(unified_key, {})
+                    db_copy = dict(db_measure)
+                    db_copy["scopes"] = existing.get("scopes", db_measure.get("scopes", []))
+                    final_measures[unified_key] = db_copy
+            continue
+
         if "|" not in conflict_id:
             continue
         _, measure_key = conflict_id.split("|", 1)
@@ -987,14 +1176,6 @@ def apply_db_resolutions(unified_data: Dict[str, Any], db_data: List[Dict[str, A
                     final_measures[measure_key] = db_measure
             elif decision == "delete":
                 final_measures.pop(measure_key, None)
-        elif conflict_id.startswith("db_field_diff|"):
-            if decision == "db":
-                db_measure = db_index.get(measure_key)
-                if db_measure:
-                    existing = final_measures.get(measure_key, {})
-                    db_copy = dict(db_measure)
-                    db_copy["scopes"] = existing.get("scopes", db_measure.get("scopes", []))
-                    final_measures[measure_key] = db_copy
         elif conflict_id.startswith("db_scope_diff|"):
             if decision == "db":
                 db_measure = db_index.get(measure_key)
@@ -1003,6 +1184,16 @@ def apply_db_resolutions(unified_data: Dict[str, Any], db_data: List[Dict[str, A
                     merged = dict(existing)
                     merged["scopes"] = db_measure.get("scopes", [])
                     final_measures[measure_key] = merged
+            elif decision == "manual":
+                db_measure = db_index.get(measure_key, {})
+                existing = final_measures.get(measure_key, {})
+                unified_scopes = existing.get("scopes", [])
+                db_scopes = db_measure.get("scopes", [])
+                manual_entries = _build_manual_scope_selection(resolution.get("value"))
+                merged_scopes = _scope_manual_merge_db(unified_scopes, db_scopes, manual_entries)
+                merged = dict(existing)
+                merged["scopes"] = merged_scopes
+                final_measures[measure_key] = merged
 
     return {
         "note_number": unified_data.get("note_number"),

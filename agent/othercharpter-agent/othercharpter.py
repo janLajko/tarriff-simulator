@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Other Chapter (notes 33/36/37/38) processing agent.
 
-Reads note content from local text files and HTS descriptions from hts_codes,
+Reads note content from database notes and HTS descriptions from hts_codes,
 uses an LLM to extract measures with scoped relations, and stores them into
 tables that mirror sieepa_measures, sieepa_scope, and sieepa_scope_measure_map.
 """
@@ -9,6 +9,7 @@ tables that mirror sieepa_measures, sieepa_scope, and sieepa_scope_measure_map.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import inspect
 import json
 import logging
@@ -65,68 +66,13 @@ NOTE_LABELS = {
     38: "note(38)",
 }
 NOTE_HEADINGS = {
-    33: [
-        "9903.94.01",
-        "9903.94.02",
-        "9903.94.03",
-        "9903.94.04",
-        "9903.94.05",
-        "9903.94.06",
-        "9903.94.07",
-        "9903.94.31",
-        "9903.94.32",
-        "9903.94.33",
-        "9903.94.40",
-        "9903.94.41",
-        "9903.94.42",
-        "9903.94.43",
-        "9903.94.44",
-        "9903.94.45",
-        "9903.94.50",
-        "9903.94.51",
-        "9903.94.52",
-        "9903.94.53",
-        "9903.94.54",
-        "9903.94.55",
-        "9903.94.60",
-        "9903.94.61",
-        "9903.94.62",
-        "9903.94.63",
-        "9903.94.64",
-        "9903.94.65",
-    ],
     36: ["9903.78.01", "9903.78.02"],
-    37: [
-        "9903.76.01",
-        "9903.76.02",
-        "9903.76.03",
-        "9903.76.04",
-        "9903.76.20",
-        "9903.76.21",
-        "9903.76.22",
-        "9903.76.23",
-    ],
-    38: [
-        "9903.74.01",
-        "9903.74.02",
-        "9903.74.03",
-        "9903.74.05",
-        "9903.74.06",
-        "9903.74.07",
-        "9903.74.08",
-        "9903.74.09",
-        "9903.74.10",
-        "9903.74.11",
-    ],
 }
-NOTE_PDF_DIR = Path(__file__).resolve().parent / "pdf"
-NOTE_PDF_FILES = {
-    33: "note33.txt",
-    36: "note36.txt",
-    37: "note37.txt",
-    38: "note38.txt",
+NOTE_HEADING_PREFIX = {
+    33: "9903.94",
+    37: "9903.76",
+    38: "9903.74",
 }
-NOTE38_SUBVISIONI_PATH = NOTE_PDF_DIR / "note38subvisioni.txt"
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
 EXTRA_MEASURES_DIR = OUTPUT_DIR
 OUTPUT_HEADING_PREFIX = {
@@ -135,6 +81,24 @@ OUTPUT_HEADING_PREFIX = {
     37: "9903.76",
     38: "9903.74",
 }
+
+_NOTES_UTILS = None
+
+
+def _load_notes_utils():
+    global _NOTES_UTILS
+    if _NOTES_UTILS is not None:
+        return _NOTES_UTILS
+    module_path = Path(__file__).resolve().parents[1] / "chapter99note-agent" / "notes_utils.py"
+    if not module_path.exists():
+        raise FileNotFoundError(f"notes_utils.py not found at {module_path}")
+    spec = importlib.util.spec_from_file_location("notes_utils", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Unable to load notes_utils module")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    _NOTES_UTILS = module
+    return module
 
 HTS_CODE_RE = re.compile(r"\b\d{4}\.\d{2}\.\d{2}(?:\d{2})?\b")
 RANGE_SHORT_RE = re.compile(r"\b(\d{4}\.\d{2}\.)(\d{2})\s*[~\u2013-]\s*(\d{2})\b")
@@ -516,27 +480,9 @@ class OtherChapterDB:
             self._conn.close()
 
     def fetch_note_rows(self, label: str) -> List[Dict[str, Any]]:
-        base_query = (
-            "SELECT chapter, subchapter, label, content, raw_html, path "
-            "FROM hts_notes WHERE lower(label) = lower(%s) "
-            "ORDER BY subchapter, array_length(path, 1), path"
-        )
-        with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(base_query, (label,))
-            anchor = cur.fetchone()
-            if not anchor:
-                return []
-            cur.execute(
-                """
-                SELECT chapter, subchapter, label, content, raw_html, path
-                FROM hts_notes
-                WHERE chapter=%s AND subchapter=%s AND path[1:%s] = %s
-                ORDER BY id, path
-                """,
-                (anchor["chapter"], anchor["subchapter"], len(anchor["path"]), anchor["path"]),
-            )
-            rows = cur.fetchall()
-            return rows or [anchor]
+        notes_utils = _load_notes_utils()
+        rows = notes_utils.get_note(self._conn, label, "SUBCHAPTER III")
+        return rows or []
 
     def fetch_hts_descriptions(self, codes: Sequence[str]) -> Dict[str, Dict[str, str]]:
         if not codes:
@@ -561,6 +507,22 @@ class OtherChapterDB:
                         "ad_valorem_rate": str(rate),
                     }
         return descriptions
+
+    def fetch_headings_by_prefix(self, prefix: str) -> List[str]:
+        if not prefix:
+            return []
+        query = (
+            "SELECT hts_number "
+            "FROM hts_codes "
+            "WHERE hts_number LIKE %s "
+            "AND status IS NULL "
+            "AND description NOT ILIKE %s "
+            "ORDER BY hts_number"
+        )
+        with self._conn.cursor() as cur:
+            cur.execute(query, (f"{prefix}%", "%provision suspended%"))
+            rows = cur.fetchall()
+        return [_normalize_code(row[0]) for row in rows if row and row[0]]
 
     def fetch_measures_with_scopes_for_note(self, note_number: int) -> List[Dict[str, Any]]:
         query = (
@@ -767,14 +729,20 @@ class OtherChapterProcessor:
     def process_note(self, note_number: int) -> None:
         label = NOTE_LABELS[note_number]
         try:
-            note_text = self._load_note_text(note_number)
+            note_text = self._load_note_text(label)
         except FileNotFoundError as exc:
-            LOGGER.warning("Note %s PDF missing: %s", label, exc)
+            LOGGER.warning("Note %s missing: %s", label, exc)
             return
         except Exception as exc:
-            LOGGER.warning("Failed to load note %s PDF: %s", label, exc)
+            LOGGER.warning("Failed to load note %s: %s", label, exc)
             return
         note_headings = NOTE_HEADINGS.get(note_number, [])
+        if not note_headings:
+            prefix = NOTE_HEADING_PREFIX.get(note_number)
+            if prefix:
+                note_headings = self.db.fetch_headings_by_prefix(prefix)
+            if not note_headings:
+                LOGGER.warning("No headings found for note %s", note_number)
         # extracted_codes = _extract_codes(note_text)
         codes = sorted({*note_headings})
         descriptions = self.db.fetch_hts_descriptions(codes)
@@ -858,20 +826,17 @@ class OtherChapterProcessor:
             chunks.append(f"{label}\n{content}")
         return "\n\n".join(chunks)
 
-    def _load_note_text(self, note_number: int) -> str:
-        filename = NOTE_PDF_FILES.get(note_number)
-        if not filename:
-            raise FileNotFoundError(f"no note file mapping for note {note_number}")
-        note_path = NOTE_PDF_DIR / filename
-        if not note_path.exists():
-            raise FileNotFoundError(str(note_path))
-        return note_path.read_text(encoding="utf-8").strip()
+    def _load_note_text(self, note_label: str) -> str:
+        rows = self.db.fetch_note_rows(note_label)
+        if not rows:
+            raise FileNotFoundError(f"note rows not found for {note_label}")
+        return self._build_note_text(rows).strip()
 
     def _load_note38_subvision_i_text(self) -> str:
-        if not NOTE38_SUBVISIONI_PATH.exists():
-            LOGGER.warning("Note 38 subdivision (i) file missing: %s", NOTE38_SUBVISIONI_PATH)
+        rows = self.db.fetch_note_rows("note(38)(i)")
+        if not rows:
             return ""
-        return NOTE38_SUBVISIONI_PATH.read_text(encoding="utf-8").strip()
+        return self._build_note_text(rows).strip()
 
     def _split_measures_by_heading(
         self, payload: Any, allowed_headings: set[str]
@@ -1193,6 +1158,7 @@ def _collect_scope_counters(
 ) -> Tuple[Counter, Dict[Tuple[str, str], List[str]]]:
     counter: Counter = Counter()
     raw_map: Dict[Tuple[str, str], List[str]] = defaultdict(list)
+    seen_pairs: set[Tuple[str, str]] = set()
     for entry in scopes:
         relation = _normalize_relation(entry.get("relation"))
         keys = entry.get("keys")
@@ -1213,6 +1179,9 @@ def _collect_scope_counters(
             if not key_norm:
                 continue
             pair = (key_norm, relation)
+            if pair in seen_pairs:
+                continue
+            seen_pairs.add(pair)
             counter[pair] += 1
             raw_map[pair].append(key_raw)
     return counter, raw_map

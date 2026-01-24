@@ -7,7 +7,9 @@ HTS Version Monitor
 import json
 import logging
 import os
+import subprocess
 import sys
+from pathlib import Path
 from datetime import datetime
 from typing import Optional, Dict, Any
 
@@ -26,6 +28,9 @@ logger = logging.getLogger(__name__)
 HTS_API_URL = "https://hts.usitc.gov/reststop/releaseList"
 LARK_WEBHOOK_URL = "https://open.larksuite.com/open-apis/bot/v2/hook/461e14b8-75ae-49ce-b3c9-73b39d06d659"
 USER_AGENT = "Mozilla/5.0 (compatible; HTS-Monitor/1.0)"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+BASE_HTS_AGENT = PROJECT_ROOT / "agent" / "basic-hts-agent" / "basic_hts_agent.py"
+OTHERCHAPTER_AGENT = PROJECT_ROOT / "agent" / "othercharpter-agent" / "othercharpter.py"
 
 
 class HTSVersionMonitor:
@@ -201,6 +206,25 @@ class HTSVersionMonitor:
         self.conn.commit()
         logger.info(f"版本信息已保存到数据库: {version_info.get('name')}")
 
+    def _run_agent_script(self, script_path: Path, args: list[str]) -> None:
+        if not script_path.exists():
+            raise FileNotFoundError(f"脚本不存在: {script_path}")
+        env = os.environ.copy()
+        env.setdefault("DATABASE_DSN", self.dsn)
+        env.setdefault("DATABASE_URL", self.dsn)
+        cmd = [sys.executable, str(script_path), *args]
+        logger.info("执行脚本: %s", " ".join(cmd))
+        result = subprocess.run(cmd, env=env, cwd=str(PROJECT_ROOT), check=False, capture_output=True, text=True)
+        if result.returncode != 0:
+            logger.error("脚本执行失败: %s\nstdout:\n%s\nstderr:\n%s", script_path, result.stdout, result.stderr)
+            raise RuntimeError(f"Script failed: {script_path}")
+        if result.stdout:
+            logger.info("脚本输出: %s", result.stdout.strip())
+
+    def _run_update_pipeline(self) -> None:
+        self._run_agent_script(BASE_HTS_AGENT, ["--dsn", self.dsn])
+        self._run_agent_script(OTHERCHAPTER_AGENT, ["--dsn", self.dsn, "--note", "all"])
+
     def run(self):
         """执行监控任务"""
         logger.info("开始执行HTS版本监控任务")
@@ -229,6 +253,7 @@ class HTSVersionMonitor:
             logger.info(f"发现新版本! 旧版本: {db_latest_version}, 新版本: {current_version_name}")
             self.send_lark_notification(current_version)
             self.save_version_to_db(current_version)
+            self._run_update_pipeline()
 
         else:
             # 版本未变化

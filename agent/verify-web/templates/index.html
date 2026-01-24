@@ -334,8 +334,15 @@
                                 <div class="scope-list">
                                     <h4>仅统一结果有 (${conflict.only_in_unified}个)</h4>
                                     <div style="max-height: 200px; overflow-y: auto;">
-                                        ${conflict.unified_scopes.slice(0, 10).map(s =>
-                                            `<div class="scope-item">${s.key_raw || s.key || s}</div>`
+                                        ${conflict.unified_scopes.slice(0, 10).map((s, idx) =>
+                                            `<label class="scope-item">
+                                                <input type="checkbox" class="scope-checkbox"
+                                                    data-side="unified"
+                                                    data-index="${idx}"
+                                                    data-key="${s.key_raw || s.key || s}"
+                                                    data-relation="${s.relation || 'include'}">
+                                                ${s.key_raw || s.key || s}
+                                            </label>`
                                         ).join('')}
                                         ${conflict.only_in_unified > 10 ? '<div>...</div>' : ''}
                                     </div>
@@ -343,8 +350,15 @@
                                 <div class="scope-list">
                                     <h4>仅数据库有 (${conflict.only_in_db}个)</h4>
                                     <div style="max-height: 200px; overflow-y: auto;">
-                                        ${conflict.db_scopes.slice(0, 10).map(s =>
-                                            `<div class="scope-item">${s.key_raw || s.key || s}</div>`
+                                        ${conflict.db_scopes.slice(0, 10).map((s, idx) =>
+                                            `<label class="scope-item">
+                                                <input type="checkbox" class="scope-checkbox"
+                                                    data-side="db"
+                                                    data-index="${idx}"
+                                                    data-key="${s.key_raw || s.key || s}"
+                                                    data-relation="${s.relation || 'include'}">
+                                                ${s.key_raw || s.key || s}
+                                            </label>`
                                         ).join('')}
                                         ${conflict.only_in_db > 10 ? '<div>...</div>' : ''}
                                     </div>
@@ -353,6 +367,7 @@
                             <div style="margin-top: 15px;">
                                 <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'unified')">使用统一结果</button>
                                 <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'db')">使用数据库</button>
+                                <button class="btn btn-secondary" onclick="resolveDbScopeSelection('${conflict.id}')">使用选择项</button>
                             </div>
                         </div>
                     `;
@@ -441,8 +456,15 @@
                                 <div class="scope-list">
                                     <h4>仅OpenAI有 (${conflict.only_in_openai}个)</h4>
                                     <div style="max-height: 200px; overflow-y: auto;">
-                                        ${conflict.openai_scopes.slice(0, 10).map(s =>
-                                            `<div class="scope-item">${s.key_raw || s.key || s}</div>`
+                                        ${conflict.openai_scopes.slice(0, 10).map((s, idx) =>
+                                            `<label class="scope-item">
+                                                <input type="checkbox" class="scope-checkbox"
+                                                    data-side="openai"
+                                                    data-index="${idx}"
+                                                    data-key="${s.key_raw || s.key || s}"
+                                                    data-relation="${s.relation || 'include'}">
+                                                ${s.key_raw || s.key || s}
+                                            </label>`
                                         ).join('')}
                                         ${conflict.only_in_openai > 10 ? '<div>...</div>' : ''}
                                     </div>
@@ -450,8 +472,15 @@
                                 <div class="scope-list">
                                     <h4>仅Grok有 (${conflict.only_in_grok}个)</h4>
                                     <div style="max-height: 200px; overflow-y: auto;">
-                                        ${conflict.grok_scopes.slice(0, 10).map(s =>
-                                            `<div class="scope-item">${s.key_raw || s.key || s}</div>`
+                                        ${conflict.grok_scopes.slice(0, 10).map((s, idx) =>
+                                            `<label class="scope-item">
+                                                <input type="checkbox" class="scope-checkbox"
+                                                    data-side="grok"
+                                                    data-index="${idx}"
+                                                    data-key="${s.key_raw || s.key || s}"
+                                                    data-relation="${s.relation || 'include'}">
+                                                ${s.key_raw || s.key || s}
+                                            </label>`
                                         ).join('')}
                                         ${conflict.only_in_grok > 10 ? '<div>...</div>' : ''}
                                     </div>
@@ -461,6 +490,7 @@
                                 <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'openai')">使用OpenAI</button>
                                 <button class="btn btn-primary" onclick="resolveConflict('${conflict.id}', 'grok')">使用Grok</button>
                                 <button class="btn btn-success" onclick="resolveConflict('${conflict.id}', 'union')">使用并集</button>
+                                <button class="btn btn-secondary" onclick="resolveScopeSelection('${conflict.id}')">使用选择项</button>
                             </div>
                         </div>
                     `;
@@ -487,6 +517,82 @@
 
             if (response.ok) {
                 resolutions[conflictId] = resolution;
+                nextConflict();
+            }
+        }
+
+        async function resolveScopeSelection(conflictId) {
+            if (reviewStage === 'db') {
+                return;
+            }
+            const checked = Array.from(document.querySelectorAll('.scope-checkbox:checked'));
+            if (!checked.length) {
+                alert('请至少选择一项');
+                return;
+            }
+            const seen = new Set();
+            const selected = [];
+            checked.forEach(input => {
+                const key = (input.dataset.key || '').trim();
+                const side = (input.dataset.side || '').trim().toLowerCase();
+                const relation = (input.dataset.relation || 'include').trim().toLowerCase() || 'include';
+                if (!key) return;
+                const signature = `${side}|${key}|${relation}`;
+                if (seen.has(signature)) return;
+                seen.add(signature);
+                selected.push({ key_raw: key, relation, side });
+            });
+
+            const response = await fetch(`/api/sessions/${currentSession}/resolve`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    conflict_id: conflictId,
+                    resolution: 'manual',
+                    value: { selected }
+                })
+            });
+
+            if (response.ok) {
+                resolutions[conflictId] = 'manual';
+                nextConflict();
+            }
+        }
+
+        async function resolveDbScopeSelection(conflictId) {
+            if (reviewStage !== 'db') {
+                return;
+            }
+            const checked = Array.from(document.querySelectorAll('.scope-checkbox:checked'));
+            if (!checked.length) {
+                alert('请至少选择一项');
+                return;
+            }
+            const seen = new Set();
+            const selected = [];
+            checked.forEach(input => {
+                const key = (input.dataset.key || '').trim();
+                const side = (input.dataset.side || '').trim().toLowerCase();
+                const relation = (input.dataset.relation || 'include').trim().toLowerCase() || 'include';
+                if (!key) return;
+                const signature = `${side}|${key}|${relation}`;
+                if (seen.has(signature)) return;
+                seen.add(signature);
+                selected.push({ key_raw: key, relation, side });
+            });
+
+            const response = await fetch(`/api/sessions/${currentSession}/resolve-db`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    conflict_id: conflictId,
+                    resolution: 'manual',
+                    value: { selected }
+                })
+            });
+
+            if (response.ok) {
+                resolutions[conflictId] = 'manual';
                 nextConflict();
             }
         }

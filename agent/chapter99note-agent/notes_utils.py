@@ -31,7 +31,7 @@ def db_connect(dsn):
     # export PGHOST, PGUSER, PGPASSWORD, PGPORT, PGDATABASE
     return psycopg2.connect(dsn)
 
-def get_note(conn, label, subchapter):
+def get_note(conn, label, subchapter = "SUBCHAPTER III"):
     """label 形如 'note(16)(a)(ii)' 或 'note 16 a ii' 都可"""
     norm = normalize_label(label)
     with conn, conn.cursor(cursor_factory=pgx.RealDictCursor) as cur:
@@ -68,7 +68,7 @@ def main():
     conn = db_connect(args.dsn)
     # db_init(conn)
 
-    hit = get_note(conn, "note(20)(a)", "SUBCHAPTER III")
+    hit = get_note(conn, "note(38)", "SUBCHAPTER III")
     if hit:
         print(f"found {len(hit)} rows for note(16)(a)")
         for r in hit[:]:
