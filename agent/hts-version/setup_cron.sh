@@ -73,8 +73,29 @@ if [ "$set_dsn" = "y" ] || [ "$set_dsn" = "Y" ]; then
     fi
 fi
 
+# 可选：设置API Key
+OPENAI_KEY_LINE=""
+XAI_KEY_LINE=""
+echo ""
+read -p "是否设置OPENAI_API_KEY？(y/n，默认n): " set_openai
+if [ "$set_openai" = "y" ] || [ "$set_openai" = "Y" ]; then
+    read -p "请输入OPENAI_API_KEY: " openai_key
+    if [ -n "$openai_key" ]; then
+        OPENAI_KEY_LINE="OPENAI_API_KEY='$openai_key' "
+    fi
+fi
+
+echo ""
+read -p "是否设置XAI_API_KEY？(y/n，默认n): " set_xai
+if [ "$set_xai" = "y" ] || [ "$set_xai" = "Y" ]; then
+    read -p "请输入XAI_API_KEY: " xai_key
+    if [ -n "$xai_key" ]; then
+        XAI_KEY_LINE="XAI_API_KEY='$xai_key' "
+    fi
+fi
+
 # 生成crontab行
-CRON_LINE="$CRON_SCHEDULE ${DATABASE_DSN_LINE}$RUN_SCRIPT"
+CRON_LINE="$CRON_SCHEDULE ${DATABASE_DSN_LINE}${OPENAI_KEY_LINE}${XAI_KEY_LINE}$RUN_SCRIPT"
 
 echo ""
 echo "========================================="
