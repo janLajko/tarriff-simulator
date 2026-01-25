@@ -9,6 +9,7 @@ import logging
 import os
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from datetime import datetime
 from typing import Optional, Dict, Any
@@ -31,6 +32,9 @@ USER_AGENT = "Mozilla/5.0 (compatible; HTS-Monitor/1.0)"
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BASE_HTS_AGENT = PROJECT_ROOT / "agent" / "basic-hts-agent" / "basic_hts_agent.py"
 OTHERCHAPTER_AGENT = PROJECT_ROOT / "agent" / "othercharpter-agent" / "othercharpter.py"
+SECTION232_AGENT = PROJECT_ROOT / "agent" / "section232-agent" / "section232_agent.py"
+SECTION301_AGENT = PROJECT_ROOT / "agent" / "section301-agent" / "section301_batch_agent.py"
+SECTIONIEEPA_AGENT = PROJECT_ROOT / "agent" / "sectionieepa" / "sectionieepa_openai_agent.py"
 
 
 class HTSVersionMonitor:
@@ -223,7 +227,25 @@ class HTSVersionMonitor:
 
     def _run_update_pipeline(self) -> None:
         self._run_agent_script(BASE_HTS_AGENT, ["--dsn", self.dsn])
-        self._run_agent_script(OTHERCHAPTER_AGENT, ["--dsn", self.dsn, "--note", "all"])
+        scripts = [
+            (OTHERCHAPTER_AGENT, ["--dsn", self.dsn, "--note", "all"]),
+            (SECTION301_AGENT, ["--dsn", self.dsn]),
+            (SECTION232_AGENT, ["--dsn", self.dsn]),
+            (SECTIONIEEPA_AGENT, ["--dsn", self.dsn]),
+        ]
+        errors: list[Exception] = []
+        with ThreadPoolExecutor(max_workers=len(scripts)) as executor:
+            futures = [
+                executor.submit(self._run_agent_script, script_path, args)
+                for script_path, args in scripts
+            ]
+            for future in as_completed(futures):
+                try:
+                    future.result()
+                except Exception as exc:
+                    errors.append(exc)
+        if errors:
+            raise RuntimeError(f"One or more agent scripts failed: {errors}")
 
     def run(self):
         """执行监控任务"""

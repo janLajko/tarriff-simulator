@@ -24,16 +24,62 @@ app = Flask(__name__)
 CORS(app)
 
 # 数据目录
-OUTPUT_DIR = Path(__file__).parent.parent / "othercharpter-agent" / "output"
+OTHERCH_OUTPUT_DIR = Path(__file__).parent.parent / "othercharpter-agent" / "output"
+SECTION301_OUTPUT_DIR = Path(__file__).parent.parent / "section301-agent" / "output"
+SECTION232_OUTPUT_DIR = Path(__file__).parent.parent / "section232-agent" / "output"
+SECTIONIEEPA_OUTPUT_DIR = Path(__file__).parent.parent / "sectionieepa" / "output"
 SESSIONS = {}  # 简单的内存存储
 HISTORY_DIR = Path(__file__).parent / "history"
 
 DB_DSN = os.getenv("DATABASE_URL")
 TABLE_PREFIX = os.getenv("OTHERCH_TABLE_PREFIX", "otherch")
-MEASURES_TABLE = f"{TABLE_PREFIX}_measures"
-SCOPE_TABLE = f"{TABLE_PREFIX}_scope"
-MAP_TABLE = f"{TABLE_PREFIX}_scope_measure_map"
 DEFAULT_START_DATE = date(1900, 1, 1)
+
+NOTE_IDS = [33, 36, 37, 38, 20, 16, 2]
+
+
+def _get_module_config(note_id: int) -> Dict[str, Any]:
+    if note_id in {33, 36, 37, 38}:
+        return {
+            "module": "otherchapter",
+            "output_dir": OTHERCH_OUTPUT_DIR,
+            "file_prefix": f"note{note_id}",
+            "measures_table": f"{TABLE_PREFIX}_measures",
+            "scope_table": f"{TABLE_PREFIX}_scope",
+            "map_table": f"{TABLE_PREFIX}_scope_measure_map",
+            "query_by": "note_number",
+        }
+    if note_id == 20:
+        return {
+            "module": "section301",
+            "output_dir": SECTION301_OUTPUT_DIR,
+            "file_prefix": "note20",
+            "measures_table": "s301_measures",
+            "scope_table": "s301_scope",
+            "map_table": "s301_scope_measure_map",
+            "query_by": "headings",
+        }
+    if note_id == 16:
+        return {
+            "module": "section232",
+            "output_dir": SECTION232_OUTPUT_DIR,
+            "file_prefix": "note16",
+            "measures_table": "s232_measures",
+            "scope_table": "s232_scope",
+            "map_table": "s232_scope_measure_map",
+            "query_by": "headings",
+        }
+    if note_id == 2:
+        return {
+            "module": "sectionieepa",
+            "output_dir": SECTIONIEEPA_OUTPUT_DIR,
+            "file_prefix": "note2",
+            "measures_table": "sieepa_measures",
+            "scope_table": "sieepa_scope",
+            "map_table": "sieepa_scope_measure_map",
+            "query_by": "headings",
+        }
+    raise ValueError(f"Unsupported note id: {note_id}")
 
 @app.route('/')
 def index():
@@ -44,8 +90,9 @@ def index():
 def get_notes():
     """获取所有可审核的Note列表"""
     notes = []
-    for note_num in [33, 36, 37, 38]:
-        compare_file = OUTPUT_DIR / f"note{note_num}_llm_compare.json"
+    for note_num in NOTE_IDS:
+        config = _get_module_config(note_num)
+        compare_file = config["output_dir"] / f"{config['file_prefix']}_llm_compare.json"
         status = "not_processed"
         has_conflicts = False
 
@@ -57,6 +104,7 @@ def get_notes():
 
         notes.append({
             'note_number': note_num,
+            'module': config["module"],
             'status': status,
             'has_conflicts': has_conflicts
         })
@@ -66,10 +114,11 @@ def get_notes():
 @app.route('/api/notes/<int:note_id>/start-review', methods=['POST'])
 def start_review(note_id):
     """启动审核会话"""
+    config = _get_module_config(note_id)
     # 加载文件
-    openai_file = OUTPUT_DIR / f"note{note_id}_openai.json"
-    grok_file = OUTPUT_DIR / f"note{note_id}_grok.json"
-    compare_file = OUTPUT_DIR / f"note{note_id}_llm_compare.json"
+    openai_file = config["output_dir"] / f"{config['file_prefix']}_openai.json"
+    grok_file = config["output_dir"] / f"{config['file_prefix']}_grok.json"
+    compare_file = config["output_dir"] / f"{config['file_prefix']}_llm_compare.json"
 
     if not all([openai_file.exists(), grok_file.exists(), compare_file.exists()]):
         return jsonify({'error': 'Required files not found'}), 404
@@ -86,6 +135,13 @@ def start_review(note_id):
     SESSIONS[session_id] = {
         'session_id': session_id,
         'note_id': note_id,
+        'module': config["module"],
+        'output_dir': str(config["output_dir"]),
+        'file_prefix': config["file_prefix"],
+        'measures_table': config["measures_table"],
+        'scope_table': config["scope_table"],
+        'map_table': config["map_table"],
+        'query_by': config["query_by"],
         'status': 'conflict_review',
         'openai_data': openai_data,
         'grok_data': grok_data,
@@ -148,7 +204,8 @@ def generate_unified(session_id):
     unified_data = build_unified_json(session)
 
     # 保存文件
-    output_file = OUTPUT_DIR / f"note{session['note_id']}_unified.json"
+    output_dir = Path(session.get("output_dir") or OTHERCH_OUTPUT_DIR)
+    output_file = output_dir / f"{_session_file_prefix(session)}_unified.json"
     with open(output_file, 'w') as f:
         json.dump(unified_data, f, indent=2)
 
@@ -176,22 +233,25 @@ def next_step(session_id):
         return jsonify({'error': 'Not all conflicts resolved'}), 400
 
     unified_data = build_unified_json(session)
-    output_file = OUTPUT_DIR / f"note{session['note_id']}_unified.json"
+    output_dir = Path(session.get("output_dir") or OTHERCH_OUTPUT_DIR)
+    output_file = output_dir / f"{_session_file_prefix(session)}_unified.json"
     with open(output_file, 'w') as f:
         json.dump(unified_data, f, indent=2)
 
     session['unified_json'] = unified_data
     session['status'] = 'unified_generated'
 
-    db_compare_file = OUTPUT_DIR / f"note{session['note_id']}_db_compare.json"
+    db_compare_file = output_dir / f"{_session_file_prefix(session)}_db_compare.json"
     use_file_compare = compare_data.get('consistent') and db_compare_file.exists()
 
     if use_file_compare:
         with open(db_compare_file) as f:
             db_compare = json.load(f)
-        db_data = fetch_db_measures(session['note_id'])
+        headings = [m.get("heading") for m in unified_data.get("measures", []) if m.get("heading")]
+        db_data = fetch_db_measures(session['note_id'], session, headings)
     else:
-        db_data = fetch_db_measures(session['note_id'])
+        headings = [m.get("heading") for m in unified_data.get("measures", []) if m.get("heading")]
+        db_data = fetch_db_measures(session['note_id'], session, headings)
         db_compare = compare_unified_with_db(unified_data.get('measures', []), db_data)
 
     session['db_compare'] = db_compare
@@ -260,13 +320,14 @@ def update_db(session_id):
         return jsonify({'error': 'Not all DB conflicts resolved'}), 400
 
     final_data = apply_db_resolutions(unified_data, db_data, session.get('db_resolutions', {}))
-    result = persist_measures_to_db(session['note_id'], final_data.get('measures', []))
+    result = persist_measures_to_db(session['note_id'], final_data.get('measures', []), session)
 
     HISTORY_DIR.mkdir(parents=True, exist_ok=True)
     history_subdir = HISTORY_DIR / f"{session['note_id']}_{session_id}"
     history_subdir.mkdir(parents=True, exist_ok=True)
     for suffix in ("openai", "grok", "llm_compare", "unified"):
-        source = OUTPUT_DIR / f"note{session['note_id']}_{suffix}.json"
+        output_dir = Path(session.get("output_dir") or OTHERCH_OUTPUT_DIR)
+        source = output_dir / f"{_session_file_prefix(session)}_{suffix}.json"
         if source.exists():
             shutil.move(str(source), history_subdir / source.name)
 
@@ -290,6 +351,12 @@ def get_session_status(session_id):
         'note_id': session['note_id'],
         'resolved_count': len(session.get('resolutions', {}))
     })
+
+def _session_file_prefix(session: Dict[str, Any]) -> str:
+    prefix = session.get("file_prefix")
+    if prefix:
+        return prefix
+    return f"note{session['note_id']}"
 
 def _normalize_code(value: str) -> str:
     return (value or "").strip().strip(",;")
@@ -986,20 +1053,36 @@ def compare_unified_with_db(unified_measures: List[Dict[str, Any]], db_measures:
     }
 
 
-def fetch_db_measures(note_number: int) -> List[Dict[str, Any]]:
+def fetch_db_measures(note_number: int, config: Dict[str, Any], headings: Optional[List[str]] = None) -> List[Dict[str, Any]]:
     if psycopg2 is None:
         raise RuntimeError("psycopg2 is required for database access")
     if not DB_DSN:
         raise RuntimeError("DATABASE_URL is required for database access")
     conn = psycopg2.connect(DB_DSN)
     try:
+        measures_table = config.get("measures_table")
+        scope_table = config.get("scope_table")
+        map_table = config.get("map_table")
+        query_by = config.get("query_by")
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(
-                f"SELECT id, heading, country_iso2, ad_valorem_rate, value_basis, notes, "
-                f"effective_start_date, effective_end_date, is_potential "
-                f"FROM {MEASURES_TABLE} WHERE notes->>'note_number' = %s",
-                (str(note_number),),
-            )
+            if query_by == "note_number":
+                cur.execute(
+                    f"SELECT id, heading, country_iso2, ad_valorem_rate, value_basis, notes, "
+                    f"effective_start_date, effective_end_date, is_potential "
+                    f"FROM {measures_table} WHERE notes->>'note_number' = %s",
+                    (str(note_number),),
+                )
+            elif query_by == "headings":
+                if not headings:
+                    return []
+                cur.execute(
+                    f"SELECT id, heading, country_iso2, ad_valorem_rate, value_basis, notes, "
+                    f"effective_start_date, effective_end_date, is_potential "
+                    f"FROM {measures_table} WHERE heading = ANY(%s)",
+                    (headings,),
+                )
+            else:
+                return []
             rows = cur.fetchall() or []
 
         if not rows:
@@ -1028,8 +1111,8 @@ def fetch_db_measures(note_number: int) -> List[Dict[str, Any]]:
         with conn.cursor() as cur:
             cur.execute(
                 f"SELECT m.measure_id, s.key, m.relation "
-                f"FROM {MAP_TABLE} AS m "
-                f"JOIN {SCOPE_TABLE} AS s ON s.id = m.scope_id "
+                f"FROM {map_table} AS m "
+                f"JOIN {scope_table} AS s ON s.id = m.scope_id "
                 "WHERE m.measure_id = ANY(%s)",
                 (measure_ids,),
             )
@@ -1261,7 +1344,7 @@ def _expand_scope_entries_for_db(entries: List[Dict[str, Any]]) -> List[Dict[str
     return expanded
 
 
-def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]]) -> Dict[str, Any]:
+def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]], config: Dict[str, Any]) -> Dict[str, Any]:
     if psycopg2 is None:
         raise RuntimeError("psycopg2 is required for database access")
     if not DB_DSN:
@@ -1271,20 +1354,41 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]]) -> 
 
     conn = psycopg2.connect(DB_DSN)
     try:
+        measures_table = config.get("measures_table")
+        scope_table = config.get("scope_table")
+        map_table = config.get("map_table")
+        query_by = config.get("query_by")
         with conn:
             with conn.cursor() as cur:
-                cur.execute(
-                    f"SELECT id FROM {MEASURES_TABLE} WHERE notes->>'note_number' = %s",
-                    (str(note_number),),
-                )
-                measure_ids = [row[0] for row in cur.fetchall()]
+                if query_by == "note_number":
+                    cur.execute(
+                        f"SELECT id FROM {measures_table} WHERE notes->>'note_number' = %s",
+                        (str(note_number),),
+                    )
+                    measure_ids = [row[0] for row in cur.fetchall()]
+                elif query_by == "headings":
+                    headings = [
+                        _normalize_code(str(entry.get("heading", "")))
+                        for entry in measures
+                        if entry.get("heading")
+                    ]
+                    if headings:
+                        cur.execute(
+                            f"SELECT id FROM {measures_table} WHERE heading = ANY(%s)",
+                            (headings,),
+                        )
+                        measure_ids = [row[0] for row in cur.fetchall()]
+                    else:
+                        measure_ids = []
+                else:
+                    measure_ids = []
                 if measure_ids:
                     cur.execute(
-                        f"DELETE FROM {MAP_TABLE} WHERE measure_id = ANY(%s)",
+                        f"DELETE FROM {map_table} WHERE measure_id = ANY(%s)",
                         (measure_ids,),
                     )
                     cur.execute(
-                        f"DELETE FROM {MEASURES_TABLE} WHERE id = ANY(%s)",
+                        f"DELETE FROM {measures_table} WHERE id = ANY(%s)",
                         (measure_ids,),
                     )
 
@@ -1299,7 +1403,8 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]]) -> 
             notes = entry.get("notes") or {}
             if not isinstance(notes, dict):
                 notes = {"value": notes}
-            notes.setdefault("note_number", note_number)
+            if query_by == "note_number":
+                notes.setdefault("note_number", note_number)
             record = {
                 "heading": heading,
                 "country_iso2": _normalize_iso(entry.get("country_iso2")),
@@ -1334,7 +1439,7 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]]) -> 
             for record in measure_records
         ]
         insert_query = (
-            f"INSERT INTO {MEASURES_TABLE} "
+            f"INSERT INTO {measures_table} "
             "(heading, country_iso2, ad_valorem_rate, value_basis, melt_pour_origin_iso2, "
             "origin_exclude_iso2, notes, effective_start_date, effective_end_date, is_potential) "
             "VALUES %s ON CONFLICT DO NOTHING"
@@ -1355,7 +1460,7 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]]) -> 
                 lookup_query = (
                     f"SELECT v.idx, m.id "
                     f"FROM (VALUES %s) AS v(idx, heading, country_iso2, start_date, end_date) "
-                    f"JOIN {MEASURES_TABLE} AS m "
+                    f"JOIN {measures_table} AS m "
                     "ON m.heading = v.heading "
                     "AND COALESCE(m.country_iso2, '') = COALESCE(v.country_iso2, '') "
                     "AND m.effective_start_date = v.start_date "
@@ -1405,7 +1510,7 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]]) -> 
                 for scope in unique_scopes
             ]
             scope_insert = (
-                f"INSERT INTO {SCOPE_TABLE} "
+                f"INSERT INTO {scope_table} "
                 "(key, key_type, country_iso2, source_label, effective_start_date, effective_end_date) "
                 "VALUES %s ON CONFLICT DO NOTHING"
             )
@@ -1426,7 +1531,7 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]]) -> 
                     lookup_query = (
                         f"SELECT v.idx, s.id "
                         f"FROM (VALUES %s) AS v(idx, key, key_type, country_iso2, start_date, end_date) "
-                        f"JOIN {SCOPE_TABLE} AS s "
+                        f"JOIN {scope_table} AS s "
                         "ON s.key = v.key "
                         "AND s.key_type = v.key_type "
                         "AND COALESCE(s.country_iso2, '') = COALESCE(v.country_iso2, '') "
@@ -1472,7 +1577,7 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]]) -> 
 
         if map_entries:
             map_insert = (
-                f"INSERT INTO {MAP_TABLE} "
+                f"INSERT INTO {map_table} "
                 "(scope_id, measure_id, relation, note_label, text_criteria, effective_start_date, effective_end_date) "
                 "VALUES %s ON CONFLICT DO NOTHING"
             )

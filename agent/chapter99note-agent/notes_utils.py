@@ -48,7 +48,29 @@ def get_note(conn, label, subchapter = "SUBCHAPTER III"):
             WHERE chapter=%s AND subchapter=%s AND path[1:%s] = %s
             ORDER BY id, path
         """, (row["chapter"], row["subchapter"], len(row["path"]), row["path"]))
-        return cur.fetchall()
+        rows = cur.fetchall()
+        if not rows:
+            return rows
+        expired_paths = []
+        for item in rows:
+            content = (item.get("content") or "").lower()
+            if "compiler's note: expired." in content:
+                expired_paths.append(item.get("path") or [])
+        if not expired_paths:
+            return rows
+
+        def _is_descendant(path, parent):
+            if not parent:
+                return False
+            return path[: len(parent)] == parent
+
+        filtered = []
+        for item in rows:
+            path = item.get("path") or []
+            if any(_is_descendant(path, parent) for parent in expired_paths):
+                continue
+            filtered.append(item)
+        return filtered
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Import HTS CSV data into PostgreSQL.")

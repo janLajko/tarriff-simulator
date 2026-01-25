@@ -12,11 +12,14 @@ This module processes Section 301 measures in batch mode:
 from __future__ import annotations
 
 import argparse
-import asyncio
+import importlib.util
+import inspect
 import json
 import logging
 import os
 import re
+from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -57,14 +60,131 @@ except ImportError as exc:
 else:
     _OPENAI_IMPORT_ERROR = None
 
+try:  # pragma: no cover - allows linting without xai-sdk installed
+    from xai_sdk import Client as XAIClient
+    from xai_sdk.chat import system as xai_system
+    from xai_sdk.chat import user as xai_user
+except ImportError as exc:  # pragma: no cover
+    XAIClient = None  # type: ignore
+    xai_system = None  # type: ignore
+    xai_user = None  # type: ignore
+    _XAI_SDK_IMPORT_ERROR = exc
+else:
+    _XAI_SDK_IMPORT_ERROR = None
+
 
 LOGGER = logging.getLogger("section301_batch_agent")
 
 DEFAULT_START_DATE = date(1900, 1, 1)
+NOTE_LABEL = "note(20)"
+OUTPUT_DIR = Path(__file__).resolve().parent / "output"
 NOTE20_VECTOR_STORE_ID = os.getenv(
     "NOTE20_VECTOR_STORE_ID",
     "vs_6970dc14f3bc819191b66e0645e91c2c",
 )
+
+LLM_PROMPT = '''You are a structured extractor for HTSUS Section 301 (U.S. note 20 to subchapter III of chapter 99).
+Return JSON only.
+
+Output must be a JSON object with a top-level key "measures" that is an array.
+Each element represents one Chapter 99 heading referenced in this note.
+
+Required measure fields:
+- heading
+- country_iso2
+- ad_valorem_rate
+- value_basis
+- is_potential
+- notes (object)
+- effective_start_date
+- effective_end_date
+- scopes (array)
+
+Each scope item must include:
+- key or keys (HTS heading/subheading)
+- key_type
+- relation (include/exclude)
+- country_iso2
+- source_label
+- note_label
+- text_criteria
+- effective_start_date
+- effective_end_date
+
+Rules:
+- Output all Chapter 99 headings for this note as separate array elements (no omissions).
+- Use context.chapter99_headings as the required list of Chapter 99 headings to output.
+- Do not output duplicate heading entries.
+- Set country_iso2 to "CN" unless the text explicitly states another country.
+- Set ad_valorem_rate by extracting the numeric percent from context.hts_codes[].general_rate_of_duty (ignore note text).
+  If general_rate_of_duty only says "the duty provided in the applicable subheading" (no percent), set ad_valorem_rate to 0.
+  If no percent is present and it is not that phrase, or the heading is missing from context.hts_codes, set ad_valorem_rate to null and value_basis to "customs_value".
+- Use ad_valorem_rate=0 for exemptions.
+- Use ISO-2 for country_iso2 (EU as "EU").
+- Use ISO date strings when explicit dates are present; otherwise null.
+- key_type must be one of: heading, hts8, hts10. Do not use "note".
+- You may group codes with identical attributes using "keys" (comma-separated) instead of "key".
+- scopes can be an empty array when no explicit scope is stated.
+- Only use HTS codes explicitly printed in the note text or listed in context.hts_codes. Do not invent codes.
+- Expand printed ranges such as "9903.88.01-9903.88.03" into discrete headings.
+- Exclude scopes indicate the scope key supersedes the current measure: if the scope key applies, the current measure does not.
+- When the heading description says goods under heading A are "not subject to" duties under heading B, attach an exclude scope to heading B with key=A.
+
+Context (JSON):
+{context_json}
+
+Note text:
+<<<NOTE_TEXT
+{note_text}
+NOTE_TEXT>>>
+'''
+
+_NOTES_UTILS = None
+
+
+def _load_notes_utils():
+    global _NOTES_UTILS
+    if _NOTES_UTILS is not None:
+        return _NOTES_UTILS
+    module_path = Path(__file__).resolve().parents[1] / "chapter99note-agent" / "notes_utils.py"
+    if not module_path.exists():
+        raise FileNotFoundError(f"notes_utils.py not found at {module_path}")
+    spec = importlib.util.spec_from_file_location("notes_utils", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Unable to load notes_utils module")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    _NOTES_UTILS = module
+    return module
+
+
+def _build_note_text(rows: Sequence[Dict[str, Any]]) -> str:
+    chunks = []
+    for row in rows:
+        label = row.get("label") or ""
+        content = row.get("content") or ""
+        chunks.append(f"{label}\n{content}")
+    return "\n\n".join(chunks)
+
+
+def _load_note_text(conn, label: str) -> str:
+    notes_utils = _load_notes_utils()
+    rows = notes_utils.get_note(conn, label, "SUBCHAPTER III")
+    if not rows:
+        raise FileNotFoundError(f"note rows not found for {label}")
+    return _build_note_text(rows).strip()
+
+
+def _write_output_json(note_label: str, suffix: str, payload: Any) -> Path:
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    output_name = note_label.replace("note(", "note").replace(")", "").replace(" ", "")
+    output_path = OUTPUT_DIR / f"{output_name}_{suffix}.json"
+    output_path.write_text(
+        json.dumps(payload, ensure_ascii=True, indent=2),
+        encoding="utf-8",
+    )
+    LOGGER.info("Wrote %s output to %s", suffix, output_path)
+    return output_path
 
 LLM_BATCH_PROMPT = """You are a legal text structure analyzer for Section 301 tariffs.
 
@@ -181,6 +301,71 @@ def derive_rate(description: str) -> Decimal:
     return Decimal("25.000")  # Default
 
 
+def _normalize_code(value: str) -> str:
+    return value.strip().strip(",;")
+
+
+def _parse_date(value: Optional[Any]) -> Optional[date]:
+    if not value:
+        return None
+    if isinstance(value, date):
+        return value
+    if isinstance(value, str):
+        cleaned = value.strip()
+        if not cleaned or cleaned.lower() in {"null", "none"}:
+            return None
+        if "/" in cleaned:
+            cleaned = cleaned.replace("/", "-")
+        try:
+            return date.fromisoformat(cleaned)
+        except ValueError:
+            return None
+    return None
+
+
+def _parse_rate(value: Optional[Any]) -> Optional[Decimal]:
+    if value is None:
+        return None
+    if isinstance(value, Decimal):
+        return value
+    if isinstance(value, (int, float)):
+        return Decimal(str(value))
+    if isinstance(value, str):
+        cleaned = value.strip().replace("%", "")
+        if not cleaned:
+            return None
+        try:
+            return Decimal(cleaned)
+        except Exception:
+            return None
+    return None
+
+
+def _normalize_iso(value: Optional[str]) -> Optional[str]:
+    if not value:
+        return None
+    cleaned = value.strip().upper()
+    return cleaned or None
+
+
+def _split_keys(value: str) -> List[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def _coerce_bool(value: Any) -> Optional[bool]:
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        cleaned = value.strip().lower()
+        if cleaned in {"true", "yes", "1"}:
+            return True
+        if cleaned in {"false", "no", "0"}:
+            return False
+    return None
+
+
 def classify_code_type(code: str) -> str:
     """Classify a code as heading, hts8, or hts10."""
     digits_only = code.replace(".", "")
@@ -193,6 +378,26 @@ def classify_code_type(code: str) -> str:
     if len(digits_only) == 4:
         return "heading"
     return "heading"
+
+
+def _infer_key_type(code: str) -> str:
+    digits = "".join(ch for ch in code if ch.isdigit())
+    if len(digits) >= 10:
+        return "hts10"
+    if len(digits) == 8:
+        return "hts8"
+    return "heading"
+
+
+def _normalize_key_type(raw: Optional[str], code: str) -> str:
+    if not raw:
+        return _infer_key_type(code)
+    cleaned = raw.strip().lower()
+    if cleaned == "hts":
+        return _infer_key_type(code)
+    if cleaned in {"heading", "hts8", "hts10"}:
+        return cleaned
+    return _infer_key_type(code)
 
 
 def normalize_note_label(raw_label: str) -> str:
@@ -264,6 +469,314 @@ def iter_paged_items(paged: object) -> Iterable[object]:
     return data
 
 
+def _strip_json_fence(raw: str) -> str:
+    text = raw.strip()
+    if text.startswith("```"):
+        lines = text.splitlines()
+        if len(lines) >= 3:
+            return "\n".join(lines[1:-1]).strip()
+    return text
+
+
+def _parse_json_payload(raw: str) -> Dict[str, Any]:
+    cleaned = _strip_json_fence(raw)
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError as exc:
+        LOGGER.error("Failed to decode JSON from LLM: %s", cleaned)
+        raise RuntimeError("LLM JSON decode failed") from exc
+
+
+def _coerce_measure_payload(payload: Any) -> List[Dict[str, Any]]:
+    if isinstance(payload, list):
+        return payload
+    if isinstance(payload, dict):
+        measures = payload.get("measures")
+        if isinstance(measures, list):
+            return measures
+    return []
+
+
+def _format_date_key(value: Optional[date]) -> str:
+    return value.isoformat() if value else "null"
+
+
+def _format_bool_key(value: Optional[bool]) -> str:
+    if value is None:
+        return "null"
+    return "true" if value else "false"
+
+
+def _normalize_scope_key_digits(value: str) -> str:
+    return "".join(ch for ch in value if ch.isdigit())
+
+
+def _normalize_relation(value: Optional[str]) -> str:
+    cleaned = (value or "include").strip().lower()
+    return cleaned or "include"
+
+
+def _collect_scope_counters(
+    scopes: Sequence[Dict[str, Any]]
+) -> Tuple[Counter, Dict[Tuple[str, str], List[str]]]:
+    counter: Counter = Counter()
+    raw_map: Dict[Tuple[str, str], List[str]] = defaultdict(list)
+    seen_pairs: set[Tuple[str, str]] = set()
+    for entry in scopes:
+        relation = _normalize_relation(entry.get("relation"))
+        keys = entry.get("keys")
+        key = entry.get("key")
+        if isinstance(keys, list):
+            raw_keys = [str(item) for item in keys if item is not None]
+        elif keys:
+            raw_keys = _split_keys(str(keys))
+        elif key:
+            raw_keys = [str(key)]
+        else:
+            raw_keys = []
+        for raw in raw_keys:
+            key_raw = _normalize_code(raw)
+            if not key_raw:
+                continue
+            key_norm = _normalize_scope_key_digits(key_raw)
+            if not key_norm:
+                continue
+            pair = (key_norm, relation)
+            if pair in seen_pairs:
+                continue
+            seen_pairs.add(pair)
+            counter[pair] += 1
+            raw_map[pair].append(key_raw)
+    return counter, raw_map
+
+
+def _normalize_rate_value(value: Any) -> Optional[Decimal]:
+    return _parse_rate(value)
+
+
+def _make_measure_key(
+    heading: str,
+    country_iso2: Optional[str],
+    effective_start_date: Optional[date],
+    effective_end_date: Optional[date],
+    is_potential: Optional[bool],
+) -> str:
+    return "|".join(
+        [
+            heading or "null",
+            country_iso2 or "null",
+            _format_date_key(effective_start_date),
+            _format_date_key(effective_end_date),
+            _format_bool_key(is_potential),
+        ]
+    )
+
+
+def _normalize_measure_entry(entry: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    heading = _normalize_code(str(entry.get("heading") or ""))
+    if not heading:
+        return None
+    country_iso2 = _normalize_iso(entry.get("country_iso2"))
+    effective_start_date = _parse_date(entry.get("effective_start_date"))
+    effective_end_date = _parse_date(entry.get("effective_end_date"))
+    is_potential = _coerce_bool(entry.get("is_potential"))
+    ad_valorem_rate = _normalize_rate_value(entry.get("ad_valorem_rate"))
+    scopes = entry.get("scopes") or []
+    scope_counter, scope_raw_map = _collect_scope_counters(scopes)
+    measure_key = _make_measure_key(
+        heading,
+        country_iso2,
+        effective_start_date,
+        effective_end_date,
+        is_potential,
+    )
+    return {
+        "measure_key": measure_key,
+        "heading": heading,
+        "country_iso2": country_iso2,
+        "ad_valorem_rate": ad_valorem_rate,
+        "is_potential": is_potential,
+        "effective_start_date": effective_start_date,
+        "effective_end_date": effective_end_date,
+        "scope_counter": scope_counter,
+        "scope_raw_map": scope_raw_map,
+    }
+
+
+def _index_measures(entries: Sequence[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    index: Dict[str, Dict[str, Any]] = {}
+    for entry in entries:
+        normalized = _normalize_measure_entry(entry)
+        if not normalized:
+            continue
+        key = normalized["measure_key"]
+        if key in index:
+            LOGGER.warning("Duplicate measure key %s encountered; keeping first", key)
+            continue
+        index[key] = normalized
+    return index
+
+
+def _serialize_value(value: Any) -> Any:
+    if isinstance(value, Decimal):
+        return str(value)
+    if isinstance(value, date):
+        return value.isoformat()
+    return value
+
+
+def _values_equal(left: Any, right: Any) -> bool:
+    return left == right
+
+
+def _build_scope_entries(
+    pair: Tuple[str, str], raw_list: List[str], count: int
+) -> List[Dict[str, Any]]:
+    entries: List[Dict[str, Any]] = []
+    if raw_list:
+        for raw in raw_list[:count]:
+            entries.append({"key_raw": raw, "key_norm": pair[0], "relation": pair[1]})
+        if len(raw_list) < count:
+            for _ in range(count - len(raw_list)):
+                entries.append({"key_raw": raw_list[0], "key_norm": pair[0], "relation": pair[1]})
+    else:
+        for _ in range(count):
+            entries.append({"key_raw": pair[0], "key_norm": pair[0], "relation": pair[1]})
+    return entries
+
+
+def _diff_scope_counters(
+    left_counter: Counter,
+    right_counter: Counter,
+    left_raw_map: Dict[Tuple[str, str], List[str]],
+    right_raw_map: Dict[Tuple[str, str], List[str]],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    only_in_left: List[Dict[str, Any]] = []
+    only_in_right: List[Dict[str, Any]] = []
+    all_pairs = set(left_counter) | set(right_counter)
+    for pair in sorted(all_pairs):
+        left_count = left_counter.get(pair, 0)
+        right_count = right_counter.get(pair, 0)
+        if left_count > right_count:
+            only_in_left.extend(
+                _build_scope_entries(pair, left_raw_map.get(pair, []), left_count - right_count)
+            )
+        elif right_count > left_count:
+            only_in_right.extend(
+                _build_scope_entries(pair, right_raw_map.get(pair, []), right_count - left_count)
+            )
+    only_in_left.sort(key=lambda item: (item["key_norm"], item["relation"], item["key_raw"]))
+    only_in_right.sort(key=lambda item: (item["key_norm"], item["relation"], item["key_raw"]))
+    return only_in_left, only_in_right
+
+
+def _compare_measure_maps(
+    left: Dict[str, Dict[str, Any]],
+    right: Dict[str, Dict[str, Any]],
+    left_label: str,
+    right_label: str,
+) -> Dict[str, Any]:
+    missing_in_left = sorted(set(right) - set(left))
+    missing_in_right = sorted(set(left) - set(right))
+    field_diffs: Dict[str, Any] = {}
+    scope_diffs: Dict[str, Any] = {}
+    matched_count = 0
+
+    for key in sorted(set(left) & set(right)):
+        left_entry = left[key]
+        right_entry = right[key]
+        diffs: Dict[str, Any] = {}
+        for field in [
+            "country_iso2",
+            "ad_valorem_rate",
+            "is_potential",
+            "effective_start_date",
+            "effective_end_date",
+        ]:
+            left_val = left_entry[field]
+            right_val = right_entry[field]
+            if not _values_equal(left_val, right_val):
+                diffs[field] = {
+                    left_label: _serialize_value(left_val),
+                    right_label: _serialize_value(right_val),
+                }
+
+        only_in_left, only_in_right = _diff_scope_counters(
+            left_entry["scope_counter"],
+            right_entry["scope_counter"],
+            left_entry["scope_raw_map"],
+            right_entry["scope_raw_map"],
+        )
+        if only_in_left or only_in_right:
+            scope_diffs[key] = {
+                f"only_in_{left_label}": only_in_left,
+                f"only_in_{right_label}": only_in_right,
+            }
+
+        if diffs:
+            field_diffs[key] = diffs
+        if not diffs and not (only_in_left or only_in_right):
+            matched_count += 1
+
+    summary = {
+        f"{left_label}_count": len(left),
+        f"{right_label}_count": len(right),
+        "matched_count": matched_count,
+    }
+    consistent = not missing_in_left and not missing_in_right and not field_diffs and not scope_diffs
+    return {
+        "consistent": consistent,
+        "summary": summary,
+        "missing_in_left": missing_in_left,
+        "missing_in_right": missing_in_right,
+        "field_diffs": field_diffs,
+        "scope_diffs": scope_diffs,
+    }
+
+
+def _compare_llm_measures(
+    openai_measures: Sequence[Dict[str, Any]],
+    grok_measures: Sequence[Dict[str, Any]],
+) -> Dict[str, Any]:
+    openai_map = _index_measures(openai_measures)
+    grok_map = _index_measures(grok_measures)
+    base = _compare_measure_maps(openai_map, grok_map, "openai", "grok")
+    return {
+        "consistent": base["consistent"],
+        "summary": base["summary"],
+        "missing_in_openai": base["missing_in_left"],
+        "missing_in_grok": base["missing_in_right"],
+        "field_diffs": base["field_diffs"],
+        "scope_diffs": base["scope_diffs"],
+    }
+
+
+def _compare_llm_db_measures(
+    llm_measures: Sequence[Dict[str, Any]],
+    db_measures: Sequence[Dict[str, Any]],
+) -> Dict[str, Any]:
+    llm_map = _index_measures(llm_measures)
+    db_map = _index_measures(db_measures)
+    base = _compare_measure_maps(llm_map, db_map, "llm", "db")
+    return {
+        "consistent": base["consistent"],
+        "summary": base["summary"],
+        "missing_in_db": base["missing_in_right"],
+        "extra_in_db": base["missing_in_left"],
+        "field_diffs": base["field_diffs"],
+        "scope_diffs": base["scope_diffs"],
+    }
+
+
+def _filter_callable_kwargs(func: Any, candidate_kwargs: Dict[str, Any]) -> Dict[str, Any]:
+    try:
+        signature = inspect.signature(func)
+    except (TypeError, ValueError):
+        return {}
+    allowed = set(signature.parameters.keys())
+    return {key: value for key, value in candidate_kwargs.items() if key in allowed}
+
+
 @dataclass
 class MeasureRecord:
     heading: str
@@ -296,8 +809,85 @@ class ScopeMapEntry:
     effective_end_date: Optional[date]
 
 
+@dataclass
+class ScopeMapDraft:
+    scope: ScopeRecord
+    relation: str
+    note_label: Optional[str]
+    text_criteria: Optional[str]
+    map_start: date
+    map_end: Optional[date]
+
+
+def _scope_signature(scope: ScopeRecord) -> Tuple[str, str, Optional[str], date, Optional[date]]:
+    return (
+        scope.key,
+        scope.key_type,
+        scope.country_iso2,
+        scope.effective_start_date,
+        scope.effective_end_date,
+    )
+
+
+def _expand_scope_entry(entry: Dict[str, Any]) -> List[ScopeRecord]:
+    scopes: List[ScopeRecord] = []
+    keys = entry.get("keys")
+    key = entry.get("key")
+    raw_keys: List[str] = []
+    if isinstance(keys, list):
+        raw_keys = [str(item) for item in keys if item is not None]
+    elif keys:
+        raw_keys = _split_keys(str(keys))
+    elif key:
+        raw_keys = [str(key)]
+    if not raw_keys:
+        return scopes
+    country_iso2 = _normalize_iso(entry.get("country_iso2"))
+    source_label = entry.get("source_label")
+    start = _parse_date(entry.get("effective_start_date")) or DEFAULT_START_DATE
+    end = _parse_date(entry.get("effective_end_date"))
+    key_type_raw = entry.get("key_type")
+    for raw in raw_keys:
+        cleaned = _normalize_code(raw)
+        if not cleaned:
+            continue
+        scopes.append(
+            ScopeRecord(
+                key=cleaned,
+                key_type=_normalize_key_type(key_type_raw, cleaned),
+                country_iso2=country_iso2,
+                source_label=source_label,
+                effective_start_date=start,
+                effective_end_date=end,
+            )
+        )
+    return scopes
+
+
+def _expand_scope_entries(entries: Sequence[Dict[str, Any]]) -> List[ScopeMapDraft]:
+    expanded: List[ScopeMapDraft] = []
+    for entry in entries:
+        relation = entry.get("relation") or "include"
+        note_label = entry.get("note_label")
+        text_criteria = entry.get("text_criteria")
+        map_start = _parse_date(entry.get("effective_start_date")) or DEFAULT_START_DATE
+        map_end = _parse_date(entry.get("effective_end_date"))
+        for scope in _expand_scope_entry(entry):
+            expanded.append(
+                ScopeMapDraft(
+                    scope=scope,
+                    relation=relation,
+                    note_label=note_label,
+                    text_criteria=text_criteria,
+                    map_start=map_start,
+                    map_end=map_end,
+                )
+            )
+    return expanded
+
+
 class Section301BatchLLM:
-    """OpenAI LLM client for batch processing."""
+    """OpenAI LLM client for note(20) extraction."""
 
     def __init__(
         self,
@@ -306,86 +896,87 @@ class Section301BatchLLM:
         base_url: Optional[str] = None,
         timeout: int = 36000,
     ):
-        self.model = model or os.getenv("OPENAI_MODEL", "GPT-5.2")
+        if OpenAI is None:  # pragma: no cover
+            raise RuntimeError("openai package required") from _OPENAI_IMPORT_ERROR
+        self.model = model or os.getenv("OPENAI_MODEL", "gpt-5")
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.base_url = base_url or os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
         self.timeout = timeout
 
         if not self.api_key:
             raise RuntimeError("OPENAI_API_KEY required")
+        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=self.timeout)
 
-    def extract_batch(self, headings_data: Dict[str, Dict[str, Any]], note20_content: str) -> List[Dict[str, Any]]:
-        """Extract measures from all headings in one LLM call."""
-        headings_json = json.dumps(headings_data, ensure_ascii=False, indent=2)
-        system_prompt = "You are a precise legal text parser. Respond with JSON only."
-
-        if NOTE20_VECTOR_STORE_ID and note20_content.strip() == "":
-            if OpenAI is None:
-                raise RuntimeError("openai package required for file_search") from _OPENAI_IMPORT_ERROR
-            message = LLM_BATCH_PROMPT_FILE_SEARCH.format(headings_json=headings_json)
-            LOGGER.info("OpenAI prompt (system): %s", system_prompt)
-            LOGGER.info("OpenAI prompt (user): %s", message)
-            client = OpenAI(api_key=self.api_key, base_url=self.base_url)
-            response = client.responses.create(
+    def extract(self, note_text: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        message = LLM_PROMPT.format(
+            note_text=note_text.strip(),
+            context_json=json.dumps(context, ensure_ascii=True),
+        )
+        try:
+            response = self.client.chat.completions.create(
                 model=self.model,
-                input=message,
-                instructions=system_prompt,
-                tools=[{
-                    "type": "file_search",
-                    "vector_store_ids": [NOTE20_VECTOR_STORE_ID],
-                }],
-            )
-
-            content = getattr(response, "output_text", None)
-            if not content:
-                for item in getattr(response, "output", []) or []:
-                    if getattr(item, "type", None) != "message":
-                        continue
-                    for part in getattr(item, "content", []) or []:
-                        if getattr(part, "type", None) == "output_text":
-                            content = getattr(part, "text", "")
-                            break
-                    if content:
-                        break
-        else:
-            message = LLM_BATCH_PROMPT.format(
-                headings_json=headings_json,
-                note20_content=note20_content
-            )
-            LOGGER.info("OpenAI prompt (system): %s", system_prompt)
-            LOGGER.info("OpenAI prompt (user): %s", message)
-
-            url = self.base_url.rstrip("/") + "/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json",
-            }
-            payload = {
-                "model": self.model,
-                "response_format": {"type": "json_object"},
-                "messages": [
-                    {"role": "system", "content": system_prompt},
+                temperature=1,
+                response_format={"type": "json_object"},
+                messages=[
+                    {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
                     {"role": "user", "content": message},
                 ],
-            }
+                timeout=1200.0,
+            )
+        except Exception as exc:
+            raise RuntimeError(f"LLM SDK error: {exc}") from exc
+        try:
+            return _parse_json_payload(response.choices[0].message.content)
+        except (AttributeError, IndexError) as exc:
+            raise RuntimeError(f"Unexpected LLM response structure: {response}") from exc
 
-            response = requests.post(url, headers=headers, json=payload, timeout=self.timeout)
-            response.raise_for_status()
 
-            data = response.json()
-            content = data["choices"][0]["message"]["content"]
+class Section301GrokLLM:
+    """Grok LLM client for note(20) extraction."""
 
+    def __init__(
+        self,
+        model: Optional[str] = None,
+        api_key: Optional[str] = None,
+        timeout: int = 36000,
+    ) -> None:
+        if XAIClient is None:  # pragma: no cover
+            raise RuntimeError("xai-sdk package required") from _XAI_SDK_IMPORT_ERROR
+        self.model = model or os.getenv("GROK_MODEL") or os.getenv("XAI_MODEL") or "grok-4"
+        self.api_key = api_key or os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY")
+        self.timeout = timeout
+        if not self.api_key:
+            raise RuntimeError("GROK_API_KEY or XAI_API_KEY is required for Grok LLM calls")
+        self.client = XAIClient(api_key=self.api_key, timeout=self.timeout)
+
+    def extract(self, note_text: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        message = LLM_PROMPT.format(
+            note_text=note_text.strip(),
+            context_json=json.dumps(context, ensure_ascii=True),
+        )
+        LOGGER.info("Grok request for %s", NOTE_LABEL)
+        chat_kwargs = _filter_callable_kwargs(
+            self.client.chat.create,
+            {
+                "temperature": 0,
+            },
+        )
+        chat_kwargs["model"] = self.model
+        chat = self.client.chat.create(**chat_kwargs)
+        chat.append(xai_system("You are a precise legal text parser. Respond with JSON only."))
+        chat.append(xai_user(message))
+        sample_kwargs = _filter_callable_kwargs(
+            chat.sample,
+            {
+                "temperature": 0,
+            },
+        )
+        response = chat.sample(**sample_kwargs)
+        content = getattr(response, "content", None) or getattr(response, "text", None)
         if not content:
-            raise RuntimeError("OpenAI response missing content")
-
-        result = json.loads(content)
-        # Handle both array and object with "measures" key
-        if isinstance(result, dict) and "measures" in result:
-            return result["measures"]
-        elif isinstance(result, list):
-            return result
-        else:
-            return [result]
+            raise RuntimeError("Grok response missing content")
+        LOGGER.info("Grok response length: %d chars", len(content))
+        return _parse_json_payload(content)
 
 
 class Section301GeminiLLM:
@@ -498,6 +1089,66 @@ class Section301BatchDatabase:
         with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(query, (list(headings),))
             return {row["hts_number"]: dict(row) for row in cur.fetchall()}
+
+    def fetch_note_rows(self, label: str) -> List[Dict[str, Any]]:
+        notes_utils = _load_notes_utils()
+        rows = notes_utils.get_note(self._conn, label, "SUBCHAPTER III")
+        return rows or []
+
+    def fetch_measures_with_scopes(self, headings: Sequence[str]) -> List[Dict[str, Any]]:
+        if not headings:
+            return []
+        query = (
+            "SELECT id, heading, country_iso2, ad_valorem_rate, "
+            "effective_start_date, effective_end_date "
+            "FROM s301_measures "
+            "WHERE heading = ANY(%s)"
+        )
+        with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(query, (list(headings),))
+            rows = cur.fetchall() or []
+
+        if not rows:
+            return []
+
+        measures: List[Dict[str, Any]] = []
+        measure_map: Dict[int, Dict[str, Any]] = {}
+        measure_ids: List[int] = []
+        for row in rows:
+            measure_id = int(row["id"])
+            measure_ids.append(measure_id)
+            measure_entry = {
+                "heading": row["heading"],
+                "country_iso2": row["country_iso2"],
+                "ad_valorem_rate": row["ad_valorem_rate"],
+                "effective_start_date": row["effective_start_date"],
+                "effective_end_date": row["effective_end_date"],
+                "is_potential": False,
+                "scopes": [],
+            }
+            measures.append(measure_entry)
+            measure_map[measure_id] = measure_entry
+
+        scope_query = (
+            "SELECT m.measure_id, s.key, m.relation "
+            "FROM s301_scope_measure_map AS m "
+            "JOIN s301_scope AS s ON s.id = m.scope_id "
+            "WHERE m.measure_id = ANY(%s)"
+        )
+        with self._conn.cursor() as cur:
+            cur.execute(scope_query, (measure_ids,))
+            for measure_id, key, relation in cur.fetchall():
+                target = measure_map.get(int(measure_id))
+                if not target:
+                    continue
+                target["scopes"].append(
+                    {
+                        "key": key,
+                        "relation": relation,
+                    }
+                )
+
+        return measures
 
     def load_note20_from_file(self) -> str:
         """Load Note 20 content from local file."""
@@ -646,11 +1297,41 @@ class Section301BatchDatabase:
                    ON CONFLICT (key, key_type, COALESCE(country_iso2, ''),
                                effective_start_date,
                                COALESCE(effective_end_date, DATE '9999-12-31'))
-                   DO NOTHING
-                   RETURNING id""",
-                values
+                   DO NOTHING""",
+                values,
             )
-            return [row[0] for row in cur.fetchall()]
+            lookup_values = [
+                (
+                    idx,
+                    record.key,
+                    record.key_type,
+                    record.country_iso2,
+                    record.effective_start_date,
+                    record.effective_end_date,
+                )
+                for idx, record in enumerate(records)
+            ]
+            lookup_query = (
+                "SELECT v.idx, s.id "
+                "FROM (VALUES %s) AS v(idx, key, key_type, country_iso2, start_date, end_date) "
+                "JOIN s301_scope AS s "
+                "ON s.key = v.key "
+                "AND s.key_type = v.key_type "
+                "AND COALESCE(s.country_iso2, '') = COALESCE(v.country_iso2, '') "
+                "AND s.effective_start_date = v.start_date "
+                "AND COALESCE(s.effective_end_date, DATE '9999-12-31') = "
+                "COALESCE(v.end_date, DATE '9999-12-31') "
+                "ORDER BY v.idx"
+            )
+            execute_values(
+                cur,
+                lookup_query,
+                lookup_values,
+                template="(%s::int,%s::text,%s::text,%s::text,%s::date,%s::date)",
+                page_size=len(lookup_values),
+            )
+            rows = cur.fetchall()
+            return [row[1] for row in rows]
 
     def insert_scope_maps_batch(self, entries: Sequence[ScopeMapEntry]) -> None:
         """Batch insert scope-measure mappings."""
@@ -1162,8 +1843,205 @@ class Section301BatchAgent:
         return unique
 
 
+class Section301Note20Processor:
+    def __init__(
+        self,
+        db: Section301BatchDatabase,
+        openai_llm: Section301BatchLLM,
+        grok_llm: Section301GrokLLM,
+        *,
+        country_iso2: str = "CN",
+        persist: bool = False,
+    ) -> None:
+        self.db = db
+        self.openai_llm = openai_llm
+        self.grok_llm = grok_llm
+        self.country_iso2 = country_iso2
+        self.persist = persist
+
+    def process(self, headings: Optional[Sequence[str]] = None) -> None:
+        if not headings:
+            LOGGER.info("No headings provided, fetching Section 301 headings from database...")
+            headings = self.db.fetch_section301_headings()
+            LOGGER.info("Found %d Section 301 headings in database", len(headings))
+            if not headings:
+                LOGGER.warning("No Section 301 headings found in database (9903.88%%)")
+                return
+
+        LOGGER.info("Starting batch processing of %d headings", len(headings))
+
+        if len(headings) > 2:
+            LOGGER.warning("Limiting processing to first 2 headings (out of %d) for testing", len(headings))
+            headings = headings[:2]
+            LOGGER.info("Processing only: %s", headings)
+
+        hts_data = self.db.fetch_hts_codes_batch(headings)
+        LOGGER.info("Fetched %d HTS records", len(hts_data))
+        if not hts_data:
+            LOGGER.warning("No HTS data found for provided headings")
+            return
+
+        try:
+            note_rows = self.db.fetch_note_rows(NOTE_LABEL)
+            if not note_rows:
+                LOGGER.warning("No note rows found for %s", NOTE_LABEL)
+                return
+            note_text = _build_note_text(note_rows).strip()
+        except Exception as exc:
+            LOGGER.warning("Failed to load %s: %s", NOTE_LABEL, exc)
+            return
+
+        context = self._build_context(headings, hts_data)
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            openai_future = executor.submit(self.openai_llm.extract, note_text, context)
+            grok_future = executor.submit(self.grok_llm.extract, note_text, context)
+            openai_result = openai_future.result()
+            grok_result = grok_future.result()
+
+        openai_payload = self._normalize_payload(openai_result, headings, hts_data)
+        grok_payload = self._normalize_payload(grok_result, headings, hts_data)
+
+        _write_output_json("note20", "openai", openai_payload)
+        _write_output_json("note20", "grok", grok_payload)
+
+        llm_compare = _compare_llm_measures(
+            openai_payload["measures"],
+            grok_payload["measures"],
+        )
+        _write_output_json("note20", "llm_compare", llm_compare)
+        if not llm_compare.get("consistent"):
+            LOGGER.warning("LLM results differ for %s; skipping DB compare and persistence", NOTE_LABEL)
+            return
+
+        db_measures = self.db.fetch_measures_with_scopes(headings)
+        db_compare = _compare_llm_db_measures(openai_payload["measures"], db_measures)
+        _write_output_json("note20", "db_compare", db_compare)
+
+        if self.persist:
+            self._persist(openai_payload["measures"])
+            self.db.commit()
+
+    def _build_context(
+        self, headings: Sequence[str], hts_data: Dict[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        context_codes = []
+        for code in headings:
+            record = hts_data.get(code, {})
+            general_rate = (record.get("general_rate_of_duty") or "").strip()
+            context_codes.append(
+                {
+                    "code": code,
+                    "description": record.get("description", "") or "",
+                    "general_rate_of_duty": general_rate,
+                    "ad_valorem_rate": str(derive_rate(general_rate)),
+                }
+            )
+        return {
+            "note_label": NOTE_LABEL,
+            "chapter99_headings": list(headings),
+            "hts_codes": context_codes,
+        }
+
+    def _normalize_payload(
+        self,
+        payload: Any,
+        allowed_headings: Sequence[str],
+        hts_data: Dict[str, Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        allowed = {_normalize_code(str(item)) for item in allowed_headings if item}
+        measures = _coerce_measure_payload(payload)
+        normalized: List[Dict[str, Any]] = []
+        rate_map: Dict[str, str] = {}
+        for code, record in hts_data.items():
+            general_rate = (record.get("general_rate_of_duty") or "").strip()
+            rate_map[_normalize_code(code)] = str(derive_rate(general_rate))
+        for measure in measures:
+            heading = _normalize_code(str(measure.get("heading") or ""))
+            if not heading or heading not in allowed:
+                continue
+            measure["heading"] = heading
+            if not measure.get("country_iso2"):
+                measure["country_iso2"] = self.country_iso2
+            if measure.get("value_basis") is None:
+                measure["value_basis"] = "customs_value"
+            if measure.get("is_potential") is None:
+                measure["is_potential"] = False
+            if measure.get("ad_valorem_rate") is None and heading in rate_map:
+                measure["ad_valorem_rate"] = rate_map[heading]
+            scopes = measure.get("scopes")
+            if not isinstance(scopes, list):
+                measure["scopes"] = []
+            normalized.append(measure)
+        return {"measures": normalized}
+
+    def _persist(self, measure_entries: Sequence[Dict[str, Any]]) -> None:
+        if not measure_entries:
+            return
+        measure_records: List[MeasureRecord] = []
+        scopes_by_measure: List[List[ScopeMapDraft]] = []
+
+        for entry in measure_entries:
+            heading = _normalize_code(entry.get("heading", ""))
+            if not heading:
+                continue
+            start = _parse_date(entry.get("effective_start_date")) or DEFAULT_START_DATE
+            end = _parse_date(entry.get("effective_end_date"))
+            notes = entry.get("notes") if isinstance(entry.get("notes"), dict) else None
+            record = MeasureRecord(
+                heading=heading,
+                country_iso2=_normalize_iso(entry.get("country_iso2")) or self.country_iso2,
+                ad_valorem_rate=_parse_rate(entry.get("ad_valorem_rate")) or Decimal("0"),
+                value_basis=entry.get("value_basis") or "customs_value",
+                notes=notes,
+                effective_start_date=start,
+                effective_end_date=end,
+            )
+            measure_records.append(record)
+            scopes_by_measure.append(_expand_scope_entries(entry.get("scopes") or []))
+
+        measure_ids = self.db.insert_measures_batch(measure_records)
+        unique_scopes: List[ScopeRecord] = []
+        scope_index: Dict[Tuple[str, str, Optional[str], date, Optional[date]], int] = {}
+        pending_maps: List[Tuple[Tuple[str, str, Optional[str], date, Optional[date]], int, ScopeMapDraft]] = []
+
+        for measure_id, scope_entries in zip(measure_ids, scopes_by_measure):
+            for entry in scope_entries:
+                signature = _scope_signature(entry.scope)
+                if signature not in scope_index:
+                    scope_index[signature] = len(unique_scopes)
+                    unique_scopes.append(entry.scope)
+                pending_maps.append((signature, measure_id, entry))
+
+        scope_ids = self.db.insert_scopes_batch(unique_scopes)
+        signature_to_id = {
+            signature: scope_ids[index] for signature, index in scope_index.items()
+        }
+        map_entries: List[ScopeMapEntry] = []
+        seen_maps: set[Tuple[int, int, str, date, Optional[date]]] = set()
+        for signature, measure_id, entry in pending_maps:
+            scope_id = signature_to_id[signature]
+            map_sig = (scope_id, measure_id, entry.relation, entry.map_start, entry.map_end)
+            if map_sig in seen_maps:
+                continue
+            seen_maps.add(map_sig)
+            map_entries.append(
+                ScopeMapEntry(
+                    scope_id=scope_id,
+                    measure_id=measure_id,
+                    relation=entry.relation,
+                    note_label=entry.note_label,
+                    text_criteria=entry.text_criteria,
+                    effective_start_date=entry.map_start,
+                    effective_end_date=entry.map_end,
+                )
+            )
+
+        self.db.insert_scope_maps_batch(map_entries)
+
+
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Section 301 batch processing agent with dual LLM verification")
+    parser = argparse.ArgumentParser(description="Section 301 note(20) processing agent with dual LLM verification")
     parser.add_argument(
         "--dsn",
         default=os.getenv("DATABASE_DSN"),
@@ -1175,19 +2053,34 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         help="Logging level",
     )
     parser.add_argument(
-        "--no-require-match",
-        action="store_true",
-        help="Don't require OpenAI and Gemini results to match before inserting (default: require match)",
-    )
-    parser.add_argument(
-        "--openai-model",
-        default=os.getenv("OPENAI_MODEL", "gpt-5.2"),
+        "--model",
+        default=os.getenv("OPENAI_MODEL", "gpt-5"),
         help="OpenAI model to use",
     )
     parser.add_argument(
-        "--gemini-model",
-        default=os.getenv("GEMINI_MODEL", "gemini-3-flash-preview"),
-        help="Gemini model to use",
+        "--base-url",
+        default=os.getenv("OPENAI_API_BASE"),
+        help="OpenAI API base URL",
+    )
+    parser.add_argument(
+        "--api-key",
+        default=os.getenv("OPENAI_API_KEY"),
+        help="OpenAI API key",
+    )
+    parser.add_argument(
+        "--grok-model",
+        default=os.getenv("GROK_MODEL") or os.getenv("XAI_MODEL"),
+        help="Grok model to use",
+    )
+    parser.add_argument(
+        "--grok-api-key",
+        default=os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY"),
+        help="Grok API key",
+    )
+    parser.add_argument(
+        "--persist",
+        action="store_true",
+        help="Persist measures/scopes after successful LLM comparison",
     )
     return parser.parse_args(argv)
 
@@ -1207,30 +2100,36 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
 
     # Initialize both LLM clients
     try:
-        openai_llm = Section301BatchLLM(model=args.openai_model)
-        LOGGER.info("Initialized OpenAI client with model: %s", args.openai_model)
+        openai_llm = Section301BatchLLM(
+            model=args.model,
+            base_url=args.base_url,
+            api_key=args.api_key,
+        )
+        LOGGER.info("Initialized OpenAI client with model: %s", args.model)
     except Exception as e:
         LOGGER.error("Failed to initialize OpenAI client: %s", e)
         raise
 
     try:
-        gemini_llm = Section301GeminiLLM(model=args.gemini_model)
-        LOGGER.info("Initialized Gemini client with model: %s", args.gemini_model)
+        grok_llm = Section301GrokLLM(
+            model=args.grok_model,
+            api_key=args.grok_api_key,
+        )
+        LOGGER.info("Initialized Grok client with model: %s", args.grok_model)
     except Exception as e:
-        LOGGER.error("Failed to initialize Gemini client: %s", e)
+        LOGGER.error("Failed to initialize Grok client: %s", e)
         raise
 
-    # Initialize agent with dual LLM support
-    agent = Section301BatchAgent(
+    processor = Section301Note20Processor(
         db=db,
         openai_llm=openai_llm,
-        gemini_llm=gemini_llm,
-        require_match=not args.no_require_match
+        grok_llm=grok_llm,
+        persist=args.persist,
     )
 
     try:
-        # Don't pass headings argument, let the agent fetch from database
-        agent.run()
+        # Don't pass headings argument, let the processor fetch from database
+        processor.process()
     except Exception as e:
         LOGGER.error("Batch processing failed: %s", e, exc_info=True)
         db.rollback()
