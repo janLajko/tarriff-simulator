@@ -768,7 +768,11 @@ class OtherChapterProcessor:
                 note38_subvision_i_text,
             )
             openai_result = openai_future.result()
-            grok_result = grok_future.result()
+            try:
+                grok_result = grok_future.result()
+            except Exception:
+                LOGGER.exception("Grok request failed for note %s; using OpenAI result", note_number)
+                grok_result = openai_result
 
         output_prefix = OUTPUT_HEADING_PREFIX.get(note_number)
         self._write_output_json(

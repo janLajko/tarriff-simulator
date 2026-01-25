@@ -2689,7 +2689,11 @@ class SectionIeepaNote2Processor:
             openai_future = executor.submit(self.openai_llm.extract, note_text, context)
             grok_future = executor.submit(self.grok_llm.extract, note_text, context)
             openai_result = openai_future.result()
-            grok_result = grok_future.result()
+            try:
+                grok_result = grok_future.result()
+            except Exception:
+                LOGGER.exception("Grok request failed for %s; using OpenAI result", NOTE_LABEL)
+                grok_result = openai_result
 
         openai_payload = self._normalize_payload(openai_result, headings, hts_data)
         grok_payload = self._normalize_payload(grok_result, headings, hts_data)

@@ -245,7 +245,8 @@ class HTSVersionMonitor:
                 except Exception as exc:
                     errors.append(exc)
         if errors:
-            raise RuntimeError(f"One or more agent scripts failed: {errors}")
+            logger.error("One or more agent scripts failed: %s", errors, exc_info=True)
+            return
 
     def run(self):
         """执行监控任务"""
