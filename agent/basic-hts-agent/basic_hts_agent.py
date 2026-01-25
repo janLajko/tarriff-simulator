@@ -1,7 +1,7 @@
 """HTS CSV ingestion utility.
 
-Reads all CSV files in the HTS data directory, fixes known data issues, and
-loads the normalized rows into PostgreSQL.
+Downloads the HTS CSV export, fixes known data issues, and loads the normalized
+rows into PostgreSQL.
 
 Fixes implemented:
 1. Pads missing leading zeros in the first segment of HTS numbers (e.g. 410 → 0410).
@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS hts_codes (
 
 HTS_STATUS_ENDPOINT = "https://hts.usitc.gov/reststop/getRates"
 HTS_STATUS_ENDPOINT_99 = "https://hts.usitc.gov/reststop/getRates99"
+HTS_EXPORT_URL = "https://hts.usitc.gov/reststop/exportList?from=0101&to=9922.52.12&format=CSV&styles=true"
 _HTS_STATUS_CACHE: Dict[str, Dict[str, Optional[str]]] = {}
 
 
@@ -393,6 +394,34 @@ def discover_csv_paths(data_dir: Path) -> List[Path]:
     return sorted(p for p in data_dir.glob("*.csv") if p.is_file())
 
 
+def download_csv(data_dir: Path) -> Path:
+    """Download the HTS CSV export to the data directory."""
+    data_dir.mkdir(parents=True, exist_ok=True)
+    target = data_dir / "hts_export.csv"
+    headers = {
+        "User-Agent": "tariff-simulate-v2/hts-importer (+https://hts.usitc.gov/)",
+        "Accept": "text/csv",
+    }
+
+    if requests is not None:
+        try:
+            response = requests.get(HTS_EXPORT_URL, headers=headers, timeout=60)
+            response.raise_for_status()
+        except Exception as exc:  # pragma: no cover - network error handling
+            raise RuntimeError(f"Failed to download HTS CSV: {exc}") from exc
+        target.write_bytes(response.content)
+        return target
+
+    try:
+        request = Request(HTS_EXPORT_URL, headers=headers, method="GET")
+        with urlopen(request, timeout=60) as response:
+            target.write_bytes(response.read())
+    except (HTTPError, URLError, TimeoutError) as exc:  # pragma: no cover - network error handling
+        raise RuntimeError(f"Failed to download HTS CSV: {exc}") from exc
+
+    return target
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Import HTS CSV data into PostgreSQL.")
     parser.add_argument(
@@ -405,7 +434,7 @@ def parse_args() -> argparse.Namespace:
         "--data-dir",
         type=Path,
         default=Path(__file__).parent,
-        help="Directory containing HTS CSV files (default: this script's directory).",
+        help="Directory for storing the downloaded HTS CSV (default: this script's directory).",
     )
     parser.add_argument(
         "--keep-existing",
@@ -422,9 +451,8 @@ def main() -> None:
     if psycopg2 is None or execute_values is None:  # pragma: no cover - defensive
         raise SystemExit("psycopg2 is required to run this script. Install via `pip install psycopg2-binary`.")
 
-    csv_paths = discover_csv_paths(args.data_dir)
-    if not csv_paths:
-        raise SystemExit(f"No CSV files found in {args.data_dir}")
+    csv_path = download_csv(args.data_dir)
+    csv_paths = [csv_path]
 
     normalized_rows = normalize_rows(csv_paths)
 
