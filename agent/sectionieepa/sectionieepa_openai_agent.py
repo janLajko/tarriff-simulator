@@ -118,24 +118,15 @@ Each scope item must include:
 - effective_end_date
 
 Rules:
-- Output all Chapter 99 headings for this note as separate array elements (no omissions).
-- Use context.chapter99_headings as the required list of Chapter 99 headings to output.
-- Do not output duplicate heading entries.
-- Set ad_valorem_rate by extracting the numeric percent from context.hts_codes[].general_rate_of_duty (ignore note text).
-  If general_rate_of_duty only says "the duty provided in the applicable subheading" (no percent), set ad_valorem_rate to 0.
-  If no percent is present and it is not that phrase, or the heading is missing from context.hts_codes, set ad_valorem_rate to null and value_basis to "customs_value".
-- Use ad_valorem_rate=0 for exemptions.
-- Use ISO-2 for country_iso2 (EU as "EU").
-- Use ISO date strings when explicit dates are present; otherwise null.
-- key_type must be one of: heading, hts8, hts10. Do not use "note".
-- You may group codes with identical attributes using "keys" (comma-separated) instead of "key".
-- scopes can be an empty array when no explicit scope is stated.
-- Only use HTS codes explicitly printed in the note text or listed in context.hts_codes. Do not invent codes.
-- Expand printed ranges such as "9903.02.01-9903.02.73" into discrete headings.
-- Exclude scopes indicate the scope key supersedes the current measure: if the scope key applies, the current measure does not.
-- Partial exemptions should NOT be emitted as exclude scopes. Only full exemptions become exclude scopes.
-- If the text includes loading/entry cutoff clauses, store dates in notes as date_of_loading and entry_date (ISO dates).
-- If the text states "provision suspended" or "provision terminated", set notes.is_suspended or notes.is_terminated accordingly and output empty scopes.
+- The note text includes multiple subdivisions for multiple headings. Treat each subdivision separately.
+- Ownership-first rule: identify the owning heading of each subdivision by explicit text like “heading 9903.xx.xx”.
+  Only that heading may use that subdivision’s HTS list. If the current measure’s heading is different, ignore that subdivision entirely.
+- Only output headings in context.chapter99_headings; ignore other headings even if present in note text.
+- ad_valorem_rate must be derived ONLY from context.hts_codes[].general_rate_of_duty; if it says “the duty provided in the applicable subheading” with no percent, set 0; otherwise null.
+- country_iso2: use ISO-2; if not explicitly stated, use null (section301 default “CN”).
+- key_type must be one of: heading, hts8, hts10. No “note”.
+- Combine codes with identical attributes into one scope using "keys".
+- Output JSON only; no code fences or commentary.
 
 Context (JSON):
 {context_json}
