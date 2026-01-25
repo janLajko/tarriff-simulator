@@ -46,6 +46,14 @@ except ImportError as exc:  # pragma: no cover - allows linting without psycopg2
 else:
     _PSYCOPG2_IMPORT_ERROR = None
 
+try:  # pragma: no cover - allows linting without openai installed
+    from openai import OpenAI
+except ImportError as exc:  # pragma: no cover
+    OpenAI = None  # type: ignore
+    _OPENAI_IMPORT_ERROR = exc
+else:
+    _OPENAI_IMPORT_ERROR = None
+
 try:  # pragma: no cover - allows linting without xai-sdk installed
     from xai_sdk import Client as XAIClient
     from xai_sdk.chat import system as xai_system
@@ -1735,38 +1743,34 @@ class Section232LLM:
         base_url: Optional[str] = None,
         timeout: int = 36000,
     ):
+        if OpenAI is None:  # pragma: no cover
+            raise RuntimeError("openai package required") from _OPENAI_IMPORT_ERROR
         self.model = model or os.getenv("OPENAI_MODEL", "gpt-5")
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.base_url = base_url or os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
         self.timeout = timeout
-
-    def _post(self, message: str) -> str:
         if not self.api_key:
             raise RuntimeError("OPENAI_API_KEY (or explicit api_key) is required for LLM calls")
+        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=self.timeout)
 
-        url = self.base_url.rstrip("/") + "/chat/completions"
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json",
-        }
-        payload = {
-            "model": self.model,
-            "response_format": {"type": "json_object"},
-            "messages": [
-                {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
-                {"role": "user", "content": message},
-            ],
-        }
-        response = requests.post(url, headers=headers, json=payload, timeout=self.timeout)
+    def _post(self, message: str) -> str:
         try:
-            response.raise_for_status()
-        except requests.HTTPError as exc:  # pragma: no cover - network error handling
-            raise RuntimeError(f"LLM HTTP error: {exc} → {response.text}") from exc
-        data = response.json()
+            response = self.client.chat.completions.create(
+                model=self.model,
+                temperature=1,
+                response_format={"type": "json_object"},
+                messages=[
+                    {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
+                    {"role": "user", "content": message},
+                ],
+                timeout=7200.0,
+            )
+        except Exception as exc:  # pragma: no cover - network error handling
+            raise RuntimeError(f"LLM SDK error: {exc}") from exc
         try:
-            return data["choices"][0]["message"]["content"]
-        except (KeyError, IndexError) as exc:  # pragma: no cover - defensive
-            raise RuntimeError(f"Unexpected LLM response structure: {data}") from exc
+            return response.choices[0].message.content
+        except (AttributeError, IndexError) as exc:  # pragma: no cover - defensive
+            raise RuntimeError(f"Unexpected LLM response structure: {response}") from exc
 
     def extract(self, note_text: str, context: Dict[str, Any]) -> Dict[str, Any]:
         message = LLM_PROMPT.format(

@@ -921,7 +921,7 @@ class Section301BatchLLM:
                     {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
                     {"role": "user", "content": message},
                 ],
-                timeout=1200.0,
+                timeout=7200.0,
             )
         except Exception as exc:
             raise RuntimeError(f"LLM SDK error: {exc}") from exc
