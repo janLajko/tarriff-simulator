@@ -15,5 +15,5 @@ echo "Installing dependencies..."
 pip install -r requirements.txt
 
 # 启动Flask服务器
-echo "Starting Flask server on http://localhost:5000"
+echo "Starting Flask server on http://localhost:8081"
 python3 app.py

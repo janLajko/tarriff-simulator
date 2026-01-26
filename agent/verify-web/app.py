@@ -1590,4 +1590,4 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]], con
         conn.close()
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8081)
