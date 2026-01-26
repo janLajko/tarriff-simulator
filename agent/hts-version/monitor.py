@@ -233,20 +233,11 @@ class HTSVersionMonitor:
             (SECTION232_AGENT, ["--dsn", self.dsn]),
             (SECTIONIEEPA_AGENT, ["--dsn", self.dsn]),
         ]
-        errors: list[Exception] = []
-        with ThreadPoolExecutor(max_workers=len(scripts)) as executor:
-            futures = [
-                executor.submit(self._run_agent_script, script_path, args)
-                for script_path, args in scripts
-            ]
-            for future in as_completed(futures):
-                try:
-                    future.result()
-                except Exception as exc:
-                    errors.append(exc)
-        if errors:
-            logger.error("One or more agent scripts failed: %s", errors, exc_info=True)
-            return
+        for script_path, args in scripts:
+            try:
+                self._run_agent_script(script_path, args)
+            except Exception as exc:
+                logger.error("Agent script failed: %s", exc, exc_info=True)
 
     def run(self):
         """执行监控任务"""
