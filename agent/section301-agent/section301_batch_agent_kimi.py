@@ -18,6 +18,7 @@ import json
 import logging
 import os
 import re
+import time
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -904,6 +905,8 @@ class Section301BatchLLM:
             note_text=note_text.strip(),
             context_json=json.dumps(context, ensure_ascii=True),
         )
+        start_time = time.monotonic()
+        LOGGER.info("OpenAI request start for %s (model=%s)", NOTE_LABEL, self.model)
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -916,7 +919,11 @@ class Section301BatchLLM:
                 timeout=7200.0,
             )
         except Exception as exc:
+            elapsed = time.monotonic() - start_time
+            LOGGER.exception("OpenAI request failed after %.2fs for %s", elapsed, NOTE_LABEL)
             raise RuntimeError(f"LLM SDK error: {exc}") from exc
+        elapsed = time.monotonic() - start_time
+        LOGGER.info("OpenAI request done in %.2fs for %s", elapsed, NOTE_LABEL)
         try:
             return _parse_json_payload(response.choices[0].message.content)
         except (AttributeError, IndexError) as exc:
@@ -949,6 +956,8 @@ class Section301KimiLLM:
             note_text=note_text.strip(),
             context_json=json.dumps(context, ensure_ascii=True),
         )
+        start_time = time.monotonic()
+        LOGGER.info("Kimi request start for %s (model=%s)", NOTE_LABEL, self.model)
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -961,7 +970,11 @@ class Section301KimiLLM:
                 timeout=7200.0,
             )
         except Exception as exc:
+            elapsed = time.monotonic() - start_time
+            LOGGER.exception("Kimi request failed after %.2fs for %s", elapsed, NOTE_LABEL)
             raise RuntimeError(f"LLM SDK error: {exc}") from exc
+        elapsed = time.monotonic() - start_time
+        LOGGER.info("Kimi request done in %.2fs for %s", elapsed, NOTE_LABEL)
         try:
             return _parse_json_payload(response.choices[0].message.content)
         except (AttributeError, IndexError) as exc:
