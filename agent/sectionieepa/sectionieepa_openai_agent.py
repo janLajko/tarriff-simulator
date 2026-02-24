@@ -2667,6 +2667,8 @@ class SectionIeepaNote2Processor:
             return
 
         context = self._build_context(headings, hts_data)
+        LOGGER.info(context)
+        print(context)
 
         with ThreadPoolExecutor(max_workers=2) as executor:
             openai_future = executor.submit(self.openai_llm.extract, note_text, context)
