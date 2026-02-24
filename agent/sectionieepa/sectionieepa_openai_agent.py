@@ -73,19 +73,6 @@ BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 DEFAULT_START_DATE = date(1900, 1, 1)
 
-DEFAULT_HEADINGS = [
-    "9903.02.02",
-    "9903.01.10",
-    "9903.01.24",
-    "9903.01.25",
-    "9903.01.77",
-    "9903.01.84",
-    "9903.01.01",
-    "9903.01.87",
-    "9903.01.88",
-    "9903.01.89",
-]
-
 NOTE_LABEL = "note(2)"
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
 
@@ -1057,18 +1044,17 @@ class Section232Database:
             cur.execute(query, (heading,))
             return cur.fetchone()
 
-    def fetch_hts_codes_batch(self, headings: Sequence[str]) -> Dict[str, Dict[str, Any]]:
-        if not headings:
-            return {}
+    def fetch_hts_codes_batch(self) -> Dict[str, Dict[str, Any]]:
         query = """
-            SELECT hts_number, description, status, additional_duties, general_rate_of_duty
+            SELECT DISTINCT ON (hts_number)
+                   hts_number, description, status, additional_duties, general_rate_of_duty
             FROM hts_codes
-            WHERE hts_number = ANY(%s)
+            WHERE (hts_number LIKE '9903.01%%' OR hts_number LIKE '9903.02%%')
               AND COALESCE(status, '') != 'expired'
-            ORDER BY hts_number
+            ORDER BY hts_number, row_order
         """
         with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(query, (list(headings),))
+            cur.execute(query)
             return {row["hts_number"]: dict(row) for row in cur.fetchall()}
 
     def fetch_note_rows(self, label: str) -> List[Dict[str, Any]]:
@@ -2663,15 +2649,12 @@ class SectionIeepaNote2Processor:
         self.grok_llm = grok_llm
         self.persist = persist
 
-    def process(self, headings: Sequence[str]) -> None:
-        if not headings:
-            LOGGER.warning("No headings provided")
-            return
-
-        hts_data = self.db.fetch_hts_codes_batch(headings)
+    def process(self) -> None:
+        hts_data = self.db.fetch_hts_codes_batch()
         if not hts_data:
             LOGGER.warning("No HTS data found for headings")
             return
+        headings = sorted(hts_data.keys())
 
         try:
             note_rows = self.db.fetch_note_rows(NOTE_LABEL)
@@ -2845,12 +2828,6 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         help="PostgreSQL DSN (default: DATABASE_DSN env variable).",
     )
     parser.add_argument(
-        "--headings",
-        nargs="*",
-        default=DEFAULT_HEADINGS,
-        help="HTS headings to process (default: 9903.88.01/.02/.03/.04/.15).",
-    )
-    parser.add_argument(
         "--log-level",
         default="INFO",
         help="Logging level (default: INFO).",
@@ -2922,7 +2899,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     )
 
     try:
-        processor.process(args.headings)
+        processor.process()
     finally:
         db.close()
 
