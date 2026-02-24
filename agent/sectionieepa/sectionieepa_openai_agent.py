@@ -72,6 +72,7 @@ LOGGER = logging.getLogger("sectionieepa_agent")
 BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 DEFAULT_START_DATE = date(1900, 1, 1)
+NOTE2_BATCH_SIZE = 20
 
 NOTE_LABEL = "note(2)"
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
@@ -2666,22 +2667,46 @@ class SectionIeepaNote2Processor:
             LOGGER.warning("Failed to load %s: %s", NOTE_LABEL, exc)
             return
 
-        context = self._build_context(headings, hts_data)
-        LOGGER.info(context)
-        print(context)
+        openai_measures: List[Dict[str, Any]] = []
+        grok_measures: List[Dict[str, Any]] = []
+        heading_batches = list(chunked(headings, NOTE2_BATCH_SIZE))
+        total_batches = len(heading_batches)
+        for batch_index, heading_batch in enumerate(heading_batches, start=1):
+            batch_headings = list(heading_batch)
+            batch_hts_data = {code: hts_data[code] for code in batch_headings if code in hts_data}
+            context = self._build_context(batch_headings, batch_hts_data)
+            LOGGER.info(
+                "Processing %s batch %s/%s (%s headings)",
+                NOTE_LABEL,
+                batch_index,
+                total_batches,
+                len(batch_headings),
+            )
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                openai_future = executor.submit(self.openai_llm.extract, note_text, context)
+                grok_future = executor.submit(self.grok_llm.extract, note_text, context)
+                openai_result = openai_future.result()
+                try:
+                    grok_result = grok_future.result()
+                except Exception:
+                    LOGGER.exception(
+                        "Grok request failed for %s batch %s; using OpenAI result",
+                        NOTE_LABEL,
+                        batch_index,
+                    )
+                    grok_result = openai_result
 
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            openai_future = executor.submit(self.openai_llm.extract, note_text, context)
-            grok_future = executor.submit(self.grok_llm.extract, note_text, context)
-            openai_result = openai_future.result()
-            try:
-                grok_result = grok_future.result()
-            except Exception:
-                LOGGER.exception("Grok request failed for %s; using OpenAI result", NOTE_LABEL)
-                grok_result = openai_result
+            batch_openai_payload = self._normalize_payload(
+                openai_result, batch_headings, batch_hts_data
+            )
+            batch_grok_payload = self._normalize_payload(
+                grok_result, batch_headings, batch_hts_data
+            )
+            openai_measures.extend(batch_openai_payload["measures"])
+            grok_measures.extend(batch_grok_payload["measures"])
 
-        openai_payload = self._normalize_payload(openai_result, headings, hts_data)
-        grok_payload = self._normalize_payload(grok_result, headings, hts_data)
+        openai_payload = {"measures": openai_measures}
+        grok_payload = {"measures": grok_measures}
 
         _write_output_json("note2", "openai", openai_payload)
         _write_output_json("note2", "grok", grok_payload)
