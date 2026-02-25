@@ -107,9 +107,24 @@ Each scope item must include:
 
 Rules:
 - The note text includes multiple subdivisions for multiple headings. Treat each subdivision separately.
-- Ownership-first rule: identify the owning heading of each subdivision by explicit text like “heading 9903.xx.xx”.
-  Only that heading may use that subdivision’s HTS list. If the current measure’s heading is different, ignore that subdivision entirely.
-- Only output headings in context.chapter99_headings; ignore other headings even if present in note text.
+- Scope construction order:
+  1) Build the base scope from context.hts_codes[].description for measure.heading (including all "except/except as provided" clauses as exclude scopes).
+  2) Apply NOTE_TEXT subdivisions that either (a) explicitly say "For the purposes of heading <measure.heading>" OR (b) list measure.heading inside "additional duties imposed by headings ..." (group-exception rule).
+  These subdivisions may only add exclude scopes or value apportionment notes; they must not create generic include scopes like "chapters 1-97".
+- HTS-only keys: scopes[].keys must contain only valid HTS identifiers (Chapter 99 heading or HTS 8/10). Disallow any semantic or synthetic keys.
+- Scope deduplication: Merge scopes with identical attributes; deduplicate and sort keys; always use 'keys' (array) not 'key'."
+- Group-exception rule:
+  If a subdivision states "The additional duties imposed by headings H1, H2, ..." and measure.heading is in that list, treat that subdivision as applicable to the current measure even if it is not the owning heading.
+- Ownership-first rule:
+  Use explicit ownership (e.g., "heading 9903.xx.xx") only when neither scope construction condition (2a)/(2b) is met.
+- Description-driven exclusions:
+  Parse and expand heading ranges in description text (e.g., 9903.01.26–9903.01.33) into individual Chapter 99 headings. Create exclude scopes for each with key_type="heading".
+- Value apportionment carve-outs:
+  For text like "shall not apply to the declared value of X content ... but shall apply to the non-X content", create exclude scopes for the referenced headings and set scope.notes.value_apportionment describing the excluded portion and that duty still applies to the remaining portion.
+- Do not generate placeholder include scopes such as keys=["01-97"].
+  Represent applicability using text_criteria and exclusions.
+- Only output measure headings in context.chapter99_headings.
+  If a referenced heading is filtered out by this constraint, add it to notes.missing_scope_references with the original citation text.
 - ad_valorem_rate must be derived ONLY from context.hts_codes[].general_rate_of_duty; if it says “the duty provided in the applicable subheading” with no percent, set 0; otherwise null.
 - country_iso2: use ISO-2; if not explicitly stated, use null (section301 default “CN”).
 - key_type must be one of: heading, hts8, hts10. No “note”.
@@ -171,6 +186,13 @@ def _write_output_json(note_label: str, suffix: str, payload: Any) -> Path:
     )
     LOGGER.info("Wrote %s output to %s", suffix, output_path)
     return output_path
+
+
+def _print_llm_debug(tag: str, content: Any) -> None:
+    text = str(content) if content is not None else ""
+    print(f"\n===== {tag} START =====")
+    print(text)
+    print(f"===== {tag} END =====\n", flush=True)
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section ieepa derivative steel measures.
 From the following text, extract:
@@ -1650,6 +1672,7 @@ class Section232Database:
             SELECT chapter, subchapter, label, content, raw_html, path
             FROM hts_notes
             WHERE lower(label) = lower(%s)
+              AND subchapter = 'SUBCHAPTER III'
             ORDER BY subchapter, array_length(path, 1), path
         """
         with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -1755,7 +1778,9 @@ class Section232LLM:
             note_text=note_text.strip(),
             context_json=json.dumps(context, ensure_ascii=True),
         )
+        _print_llm_debug("OPENAI_PROMPT", message)
         raw = self._post(message)
+        _print_llm_debug("OPENAI_RESPONSE", raw)
         return _parse_json_payload(raw)
 
 
@@ -1782,6 +1807,7 @@ class SectionIeepaGrokLLM:
             note_text=note_text.strip(),
             context_json=json.dumps(context, ensure_ascii=True),
         )
+        _print_llm_debug("GROK_PROMPT", message)
         LOGGER.info("Grok request for %s", NOTE_LABEL)
         chat_kwargs = _filter_callable_kwargs(
             self.client.chat.create,
@@ -1803,6 +1829,7 @@ class SectionIeepaGrokLLM:
         content = getattr(response, "content", None) or getattr(response, "text", None)
         if not content:
             raise RuntimeError("Grok response missing content")
+        _print_llm_debug("GROK_RESPONSE", content)
         LOGGER.info("Grok response length: %d chars", len(content))
         return _parse_json_payload(content)
 
