@@ -72,7 +72,7 @@ LOGGER = logging.getLogger("sectionieepa_agent")
 BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 DEFAULT_START_DATE = date(1900, 1, 1)
-NOTE2_BATCH_SIZE = 20
+NOTE2_BATCH_SIZE = 10
 
 NOTE_LABEL = "note(2)"
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
