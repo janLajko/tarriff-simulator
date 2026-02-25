@@ -101,7 +101,6 @@ Each scope item must include:
 - country_iso2
 - source_label
 - note_label
-- text_criteria
 - effective_start_date
 - effective_end_date
 
