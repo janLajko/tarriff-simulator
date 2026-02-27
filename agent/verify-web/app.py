@@ -49,6 +49,8 @@ def _get_module_config(note_id: int) -> Dict[str, Any]:
             "map_table": f"{TABLE_PREFIX}_scope_measure_map",
             "query_by": "note_number",
             "has_is_potential": True,
+            "has_melt_pour_origin_iso2": True,
+            "has_origin_exclude_iso2": True,
         }
     if note_id == 20:
         return {
@@ -60,6 +62,8 @@ def _get_module_config(note_id: int) -> Dict[str, Any]:
             "map_table": "s301_scope_measure_map",
             "query_by": "headings",
             "has_is_potential": False,
+            "has_melt_pour_origin_iso2": False,
+            "has_origin_exclude_iso2": False,
         }
     if note_id == 16:
         return {
@@ -71,6 +75,8 @@ def _get_module_config(note_id: int) -> Dict[str, Any]:
             "map_table": "s232_scope_measure_map",
             "query_by": "headings",
             "has_is_potential": True,
+            "has_melt_pour_origin_iso2": True,
+            "has_origin_exclude_iso2": True,
         }
     if note_id == 2:
         return {
@@ -82,16 +88,34 @@ def _get_module_config(note_id: int) -> Dict[str, Any]:
             "map_table": "sieepa_scope_measure_map",
             "query_by": "headings",
             "has_is_potential": True,
+            "has_melt_pour_origin_iso2": True,
+            "has_origin_exclude_iso2": True,
         }
     raise ValueError(f"Unsupported note id: {note_id}")
 
 
-def _config_has_is_potential(config: Dict[str, Any]) -> bool:
-    if "has_is_potential" in config:
-        return bool(config.get("has_is_potential"))
+def _config_has_column(config: Dict[str, Any], column_name: str) -> bool:
+    flag_map = {
+        "is_potential": "has_is_potential",
+        "melt_pour_origin_iso2": "has_melt_pour_origin_iso2",
+        "origin_exclude_iso2": "has_origin_exclude_iso2",
+    }
+    flag_key = flag_map.get(column_name)
+    if flag_key and flag_key in config:
+        return bool(config.get(flag_key))
     measures_table = str(config.get("measures_table") or "").strip().lower()
-    # Backward-compatible fallback for older sessions lacking has_is_potential.
-    return measures_table != "s301_measures"
+    # Backward-compatible fallback for older sessions lacking column capability flags.
+    if measures_table == "s301_measures" and column_name in {
+        "is_potential",
+        "melt_pour_origin_iso2",
+        "origin_exclude_iso2",
+    }:
+        return False
+    return True
+
+
+def _config_has_is_potential(config: Dict[str, Any]) -> bool:
+    return _config_has_column(config, "is_potential")
 
 @app.route('/')
 def index():
@@ -155,6 +179,8 @@ def start_review(note_id):
         'map_table': config["map_table"],
         'query_by': config["query_by"],
         'has_is_potential': config["has_is_potential"],
+        'has_melt_pour_origin_iso2': config.get("has_melt_pour_origin_iso2", True),
+        'has_origin_exclude_iso2': config.get("has_origin_exclude_iso2", True),
         'status': 'conflict_review',
         'openai_data': openai_data,
         'grok_data': grok_data,
@@ -1376,6 +1402,8 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]], con
         map_table = config.get("map_table")
         query_by = config.get("query_by")
         has_is_potential = _config_has_is_potential(config)
+        has_melt_pour_origin_iso2 = _config_has_column(config, "melt_pour_origin_iso2")
+        has_origin_exclude_iso2 = _config_has_column(config, "origin_exclude_iso2")
         with conn:
             with conn.cursor() as cur:
                 if query_by == "note_number":
@@ -1441,49 +1469,48 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]], con
         if not measure_records:
             return {"inserted_measures": 0, "inserted_scopes": 0}
 
+        insert_columns = [
+            "heading",
+            "country_iso2",
+            "ad_valorem_rate",
+            "value_basis",
+        ]
+        if has_melt_pour_origin_iso2:
+            insert_columns.append("melt_pour_origin_iso2")
+        if has_origin_exclude_iso2:
+            insert_columns.append("origin_exclude_iso2")
+        insert_columns.extend(["notes", "effective_start_date", "effective_end_date"])
         if has_is_potential:
-            values = [
-                (
-                    record["heading"],
-                    record["country_iso2"],
-                    record["ad_valorem_rate"],
-                    record["value_basis"],
-                    record["melt_pour_origin_iso2"],
-                    record["origin_exclude_iso2"],
+            insert_columns.append("is_potential")
+
+        values = []
+        for record in measure_records:
+            row_values: List[Any] = [
+                record["heading"],
+                record["country_iso2"],
+                record["ad_valorem_rate"],
+                record["value_basis"],
+            ]
+            if has_melt_pour_origin_iso2:
+                row_values.append(record["melt_pour_origin_iso2"])
+            if has_origin_exclude_iso2:
+                row_values.append(record["origin_exclude_iso2"])
+            row_values.extend(
+                [
                     Json(record["notes"]),
                     record["effective_start_date"],
                     record["effective_end_date"],
-                    record["is_potential"],
-                )
-                for record in measure_records
-            ]
-            insert_query = (
-                f"INSERT INTO {measures_table} "
-                "(heading, country_iso2, ad_valorem_rate, value_basis, melt_pour_origin_iso2, "
-                "origin_exclude_iso2, notes, effective_start_date, effective_end_date, is_potential) "
-                "VALUES %s ON CONFLICT DO NOTHING"
+                ]
             )
-        else:
-            values = [
-                (
-                    record["heading"],
-                    record["country_iso2"],
-                    record["ad_valorem_rate"],
-                    record["value_basis"],
-                    record["melt_pour_origin_iso2"],
-                    record["origin_exclude_iso2"],
-                    Json(record["notes"]),
-                    record["effective_start_date"],
-                    record["effective_end_date"],
-                )
-                for record in measure_records
-            ]
-            insert_query = (
-                f"INSERT INTO {measures_table} "
-                "(heading, country_iso2, ad_valorem_rate, value_basis, melt_pour_origin_iso2, "
-                "origin_exclude_iso2, notes, effective_start_date, effective_end_date) "
-                "VALUES %s ON CONFLICT DO NOTHING"
-            )
+            if has_is_potential:
+                row_values.append(record["is_potential"])
+            values.append(tuple(row_values))
+
+        insert_query = (
+            f"INSERT INTO {measures_table} "
+            f"({', '.join(insert_columns)}) "
+            "VALUES %s ON CONFLICT DO NOTHING"
+        )
         with conn:
             with conn.cursor() as cur:
                 execute_values(cur, insert_query, values, page_size=len(values))
