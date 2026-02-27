@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 from decimal import Decimal
 import logging
+import re
 import time
 from typing import Dict, List, Optional, Tuple
 
@@ -80,15 +81,6 @@ def _date_active(entry: date, start: Optional[date], end: Optional[date]) -> boo
     return True
 
 
-PARTIAL_HEADING_SET = {
-    "9903.01.25",
-    "9903.01.35",
-    "9903.01.39",
-    "9903.01.63",
-}
-PARTIAL_RANGE_START = 99030201
-PARTIAL_RANGE_END = 99030273
-
 ALWAYS_INCLUDE_HEADINGS = {
     "9903.01.01",
     "9903.01.10",
@@ -101,6 +93,7 @@ ALWAYS_INCLUDE_HEADINGS = {
     "9903.01.63",
     "9903.01.77",
     "9903.01.84",
+    "9903.03.01",
     "9903.02.79",
     "9903.02.80"
 }
@@ -219,6 +212,33 @@ def _extract_share(measurements: Optional[Dict[str, Decimal]], key: str) -> Opti
     if share > 1:
         return None
     return share
+
+
+def _normalize_component_token(token: str) -> str:
+    cleaned = "".join(ch for ch in (token or "").strip().lower() if ch.isalpha())
+    if cleaned == "aluminium":
+        return "aluminum"
+    return cleaned
+
+
+def _component_fields_from_text_criteria(text_criteria: Optional[str]) -> List[str]:
+    if not text_criteria:
+        return []
+    text = str(text_criteria).strip().lower().replace("aluminium", "aluminum")
+    if not text:
+        return []
+
+    fields: set[str] = set()
+    patterns = (
+        r"non[-\s]+([a-z][a-z\-]*)\s+content",
+        r"declared value of (?:the\s+)?([a-z][a-z\-]*)\s+content",
+    )
+    for pattern in patterns:
+        for match in re.finditer(pattern, text):
+            token = _normalize_component_token(match.group(1))
+            if token:
+                fields.add(f"{token}_percentage")
+    return sorted(fields)
 
 
 def _normalize_country_iso2_or_name(value: str) -> str:
@@ -378,20 +398,6 @@ def _get_global_measure_for_heading(
     return None, True
 
 
-def _is_partial_ieepa_heading(heading: str) -> bool:
-    normalized = heading.strip()
-    if normalized in PARTIAL_HEADING_SET:
-        return True
-    digits = _normalize_hts(normalized)
-    if len(digits) < 8:
-        return False
-    try:
-        num = int(digits[:8])
-    except ValueError:
-        return False
-    return PARTIAL_RANGE_START < num < PARTIAL_RANGE_END
-
-
 def _is_always_include_heading(heading: str) -> bool:
     normalized = heading.strip()
     if normalized in ALWAYS_INCLUDE_HEADINGS:
@@ -445,6 +451,7 @@ class SectionIEEPAEvaluator:
         }
         self.id_to_measure: Dict[int, Dict] = {m["id"]: m for m in self.measures}
         self.match_cache: Dict[Tuple[int, str, bool], Tuple[bool, List[str]]] = {}
+        self.match_context_cache: Dict[Tuple[int, str, bool], Dict[str, List[Dict]]] = {}
         self.section232_evaluator = section232_evaluator
         self.other_note_evaluators = other_note_evaluators or {}
 
@@ -532,6 +539,7 @@ class SectionIEEPAEvaluator:
                     SELECT
                         map.measure_id,
                         map.relation,
+                        map.text_criteria,
                         scope.key,
                         scope.key_type,
                         scope.country_iso2,
@@ -609,6 +617,7 @@ class SectionIEEPAEvaluator:
         query = """
             SELECT
                 map.relation,
+                map.text_criteria,
                 scope.key,
                 scope.key_type,
                 scope.country_iso2,
@@ -758,6 +767,55 @@ class SectionIEEPAEvaluator:
                 return False, f"Requires melt/pour origin {required_melt}"
         return True, None
 
+    def taxable_share_for_measure(
+        self,
+        measure_id: int,
+        hts_code: str,
+        measurements: Optional[Dict[str, Decimal]],
+        require_scope_match: bool = False,
+    ) -> Tuple[Optional[Decimal], List[str]]:
+        normalized_hts = _normalize_hts(hts_code)
+        key = (measure_id, normalized_hts, require_scope_match)
+        if key not in self.match_context_cache:
+            self.measure_covers(
+                measure_id,
+                hts_code,
+                visited=None,
+                require_scope_match=require_scope_match,
+            )
+
+        context = self.match_context_cache.get(key) or {}
+        partial_excludes = context.get("matched_partial_excludes", [])
+        if not partial_excludes:
+            return Decimal("1"), []
+
+        required_fields: set[str] = set()
+        for scope in partial_excludes:
+            fields = _component_fields_from_text_criteria(scope.get("text_criteria"))
+            required_fields.update(fields)
+
+        if not required_fields:
+            return Decimal("1"), []
+
+        missing_fields: List[str] = []
+        excluded_share = Decimal("0")
+        for field in sorted(required_fields):
+            share = _extract_share(measurements, field)
+            if share is None:
+                missing_fields.append(field)
+                continue
+            excluded_share += share
+
+        if missing_fields:
+            return None, missing_fields
+
+        if excluded_share > Decimal("1"):
+            excluded_share = Decimal("1")
+        taxable_share = Decimal("1") - excluded_share
+        if taxable_share < Decimal("0"):
+            taxable_share = Decimal("0")
+        return taxable_share, []
+
     def measure_covers(
         self,
         measure_id: int,
@@ -836,19 +894,29 @@ class SectionIEEPAEvaluator:
         measure = self.id_to_measure.get(measure_id)
         heading = (measure.get("heading") if measure else "") or ""
         always_include = _is_always_include_heading(heading)
+        matched_include_scopes: List[Dict] = []
 
         if always_include and not require_scope_match:
             include_hit = True
         elif includes:
             # logger.info(includes)
-            include_hit = any(matches_scope(scope, True) for scope in includes)
+            include_hit = False
+            for scope in includes:
+                if matches_scope(scope, True):
+                    include_hit = True
+                    matched_include_scopes.append(scope)
         else:
             include_hit = False
         if not include_hit:
+            self.match_context_cache[key] = {
+                "matched_includes": matched_include_scopes,
+                "matched_partial_excludes": [],
+            }
             self.match_cache[key] = (False, [])
             return False, []
 
         matched_exclusions: List[str] = []
+        matched_partial_excludes: List[Dict] = []
         for scope in excludes:
             # logger.info("exclude scope %s, measure_id: %s",scope, measure_id)
             key_value = scope.get("key", "") or ""
@@ -860,7 +928,42 @@ class SectionIEEPAEvaluator:
                 force_ch99=False,
                 is_exclusion=True,
             ):
+                partial_fields = _component_fields_from_text_criteria(
+                    scope.get("text_criteria")
+                )
+                if partial_fields:
+                    matched_partial_excludes.append(scope)
+                    continue
+
+                # Bridge partial-content logic across chapter-99 exclusion keys.
+                # Example: 9903.03.01 excludes 9903.03.06; 9903.03.06 include scopes
+                # may carry text_criteria like "non-steel content remains subject".
+                # In that case this should be treated as partial, not full exclusion.
+                if key_value.startswith("99"):
+                    child_id = self._measure_id_for_heading(key_value)
+                    if child_id:
+                        child_key = (child_id, normalized_hts, False)
+                        child_ctx = self.match_context_cache.get(child_key) or {}
+                        child_partial_candidates = list(
+                            child_ctx.get("matched_partial_excludes", [])
+                        ) + list(child_ctx.get("matched_includes", []))
+                        child_partial_scopes = [
+                            row
+                            for row in child_partial_candidates
+                            if _component_fields_from_text_criteria(
+                                row.get("text_criteria")
+                            )
+                        ]
+                        if child_partial_scopes:
+                            matched_partial_excludes.extend(child_partial_scopes)
+                            continue
+
                 matched_exclusions.append(str(scope.get("key") or ""))
+
+        self.match_context_cache[key] = {
+            "matched_includes": matched_include_scopes,
+            "matched_partial_excludes": matched_partial_excludes,
+        }
 
         if matched_exclusions:
             self.match_cache[key] = (False, matched_exclusions)
@@ -945,7 +1048,6 @@ def compute_sectionieepa_duty(
                         conn,
                         entry_date,
                         origin,
-                        note_number,
                         date_of_landing,
                     )
                 except Exception:
@@ -970,12 +1072,17 @@ def compute_sectionieepa_duty(
                 continue
             covers, exclusions = evaluator.measure_covers(measure["id"], hts_number)
             if covers:
+                taxable_share, missing_fields = evaluator.taxable_share_for_measure(
+                    measure["id"],
+                    hts_number,
+                    measurements,
+                )
+                measure["_taxable_share"] = taxable_share
+                measure["_missing_apportionment_fields"] = missing_fields
                 applicable_measures.append(measure)
             elif exclusions:
                 excluded_measures.append((measure, exclusions))
 
-    steel_share = _extract_share(measurements, "steel_percentage")
-    aluminum_share = _extract_share(measurements, "aluminum_percentage")
     rated_measures: List[Dict] = []
     zero_rate_matches: List[Dict] = []
 
@@ -989,23 +1096,14 @@ def compute_sectionieepa_duty(
 
     scoring_start = time.perf_counter()
 
-    def _taxable_share(heading: str) -> Decimal:
-        if not _is_partial_ieepa_heading(heading):
-            return Decimal("1")
-        s = steel_share or Decimal("0")
-        a = aluminum_share or Decimal("0")
-        total = s + a
-        if total > Decimal("1"):
-            total = Decimal("1")
-        portion = Decimal("1") - total
-        if portion < 0:
-            portion = Decimal("0")
-        return portion
-
     for measure in applicable_measures:
         rate = _coerce_decimal(measure.get("ad_valorem_rate"))
         heading = (measure.get("heading") or "").strip()
-        if not heading.startswith("9903.02") and not heading.startswith("9903.01"):
+        if (
+            not heading.startswith("9903.02")
+            and not heading.startswith("9903.01")
+            and not heading.startswith("9903.03")
+        ):
             continue
         if base_rate_decimal is not None and heading in {"9903.02.19", "9903.02.72","9903.02.79"} and base_rate_decimal < Decimal("15"):
             # if heading == "9903.02.72" and base_rate_decimal < Decimal("15"):
@@ -1081,10 +1179,12 @@ def compute_sectionieepa_duty(
 
     total_rate = sum((m["ad_valorem_rate"] for m in rated_measures), Decimal("0"))
 
-    def _entry_amount(rate: Decimal, heading: str) -> Decimal:
+    def _entry_amount(measure: Dict, rate: Decimal) -> Decimal:
         if import_value_decimal is None:
             return Decimal("0")
-        share = _taxable_share(heading)
+        share = measure.get("_taxable_share")
+        if share is None:
+            return Decimal("0")
         return (import_value_decimal * share * rate) / Decimal("100")
 
     ch99_start = time.perf_counter()
@@ -1099,7 +1199,7 @@ def compute_sectionieepa_duty(
                 alias=m.get("alias") or heading,
                 general_rate=rate_val,
                 ch99_description=m.get("description") or "",
-                amount=_entry_amount(rate_val, heading),
+                amount=_entry_amount(m, rate_val),
                 is_potential=bool(m.get("is_potential")),
             )
         )
@@ -1138,6 +1238,18 @@ def compute_sectionieepa_duty(
         f"{m['heading']} ({_format_rate(m['ad_valorem_rate'])})" for m in rated_measures
     )
     notes = ["Applied Section IEEPA measures: " + applied_details]
+    missing_apportionment_fields = sorted(
+        {
+            field
+            for measure in rated_measures
+            for field in (measure.get("_missing_apportionment_fields") or [])
+        }
+    )
+    if missing_apportionment_fields:
+        notes.append(
+            "Partial-content apportionment requires additional measurements: "
+            + ", ".join(missing_apportionment_fields)
+        )
     if zero_rate_matches:
         zero_headings = ", ".join(
             m["heading"]

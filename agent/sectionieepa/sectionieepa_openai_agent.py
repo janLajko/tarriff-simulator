@@ -72,7 +72,7 @@ LOGGER = logging.getLogger("sectionieepa_agent")
 BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
 DEFAULT_START_DATE = date(1900, 1, 1)
-NOTE2_BATCH_SIZE = 10
+NOTE2_BATCH_SIZE = 15
 
 NOTE_LABEL = "note(2)"
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
@@ -109,8 +109,21 @@ Rules:
 - Scope construction order:
   1) Build the base scope from context.hts_codes[].description for measure.heading (including all "except/except as provided" clauses as exclude scopes).
   2) Apply NOTE_TEXT subdivisions that either (a) explicitly say "For the purposes of heading <measure.heading>" OR (b) list measure.heading inside "additional duties imposed by headings ..." (group-exception rule).
-  These subdivisions may only add exclude scopes or value apportionment notes; they must not create generic include scopes like "chapters 1-97".
+  These subdivisions may add exclude scopes or value apportionment notes. Include scopes are allowed only when the subdivision explicitly defines the owning heading's positive coverage using concrete HTS keys.
+- Scope relation template (generic; apply to any headings):
+  include = positive coverage of the current measure.heading; exclude = carve-outs from the current measure.heading.
+  For patterns like "As provided in heading HX, the additional duty imposed by heading HY shall not apply to products classifiable in LIST":
+  for measure HY, add an exclude scope for heading HX (handoff to exception heading);
+  for measure HX, add include scopes for LIST (HTS8/HTS10/heading as printed).
+  Do not duplicate LIST directly under HY unless the text explicitly states HY excludes LIST itself.
 - HTS-only keys: scopes[].keys must contain only valid HTS identifiers (Chapter 99 heading or HTS 8/10). Disallow any semantic or synthetic keys.
+- Exhaustive list rule:
+  When NOTE_TEXT contains an explicit enumerated list of HTS headings/subheadings/statistical reporting numbers
+  (especially after phrases like "classifiable in the following subheadings"), scopes must include ALL explicitly listed codes.
+  Do not truncate, summarize, sample, or provide a representative subset.
+- Subset language is forbidden:
+  Do not output wording such as "subset", "representative", "sample", "partial list", or "not enumerated here due to volume".
+  If codes are explicitly present in NOTE_TEXT, they must be fully enumerated in scopes[].keys.
 - Scope deduplication: Merge scopes with identical attributes; deduplicate and sort keys; always use 'keys' (array) not 'key'."
 - Group-exception rule:
   If a subdivision states "The additional duties imposed by headings H1, H2, ..." and measure.heading is in that list, treat that subdivision as applicable to the current measure even if it is not the owning heading.
@@ -122,8 +135,9 @@ Rules:
   For text like "shall not apply to the declared value of X content ... but shall apply to the non-X content", create exclude scopes for the referenced headings and set scope.notes.value_apportionment describing the excluded portion and that duty still applies to the remaining portion.
 - Do not generate placeholder include scopes such as keys=["01-97"].
   Represent applicability using text_criteria and exclusions.
-- Only output measure headings in context.chapter99_headings.
-  If a referenced heading is filtered out by this constraint, add it to notes.missing_scope_references with the original citation text.
+- Only output measure.heading values that exist in context.chapter99_headings.
+  This constraint does NOT apply to scopes[].keys: scope keys may include any explicitly listed valid HTS identifiers (Chapter 99 headings, HTS8, HTS10) from NOTE_TEXT.
+  If a referenced heading is filtered out for measure.heading, add it to notes.missing_scope_references with the original citation text.
 - ad_valorem_rate must be derived ONLY from context.hts_codes[].general_rate_of_duty; if it says “the duty provided in the applicable subheading” with no percent, set 0; otherwise null.
 - country_iso2: use ISO-2; if not explicitly stated, use null (section301 default “CN”).
 - key_type must be one of: heading, hts8, hts10. No “note”.
@@ -459,11 +473,11 @@ class ScopeMapDraft:
     map_end: Optional[date]
 
 
-def _scope_signature(scope: ScopeRecord) -> Tuple[str, str, Optional[str], date, Optional[date]]:
+def _scope_signature(scope: ScopeRecord) -> Tuple[str, str, str, date, Optional[date]]:
     return (
         scope.key,
         scope.key_type,
-        scope.country_iso2,
+        scope.country_iso2 or "",
         scope.effective_start_date,
         scope.effective_end_date,
     )
@@ -510,6 +524,14 @@ def _expand_scope_entries(entries: Sequence[Dict[str, Any]]) -> List[ScopeMapDra
         relation = entry.get("relation") or "include"
         note_label = entry.get("note_label")
         text_criteria = entry.get("text_criteria")
+        if not text_criteria:
+            notes = entry.get("notes")
+            if isinstance(notes, dict):
+                value_apportionment = notes.get("value_apportionment")
+                if isinstance(value_apportionment, str):
+                    cleaned = value_apportionment.strip()
+                    if cleaned:
+                        text_criteria = cleaned
         map_start = _parse_date(entry.get("effective_start_date")) or DEFAULT_START_DATE
         map_end = _parse_date(entry.get("effective_end_date"))
         for scope in _expand_scope_entry(entry):
@@ -1071,7 +1093,7 @@ class Section232Database:
             SELECT DISTINCT ON (hts_number)
                    hts_number, description, status, additional_duties, general_rate_of_duty
             FROM hts_codes
-            WHERE (hts_number LIKE '9903.01%%' OR hts_number LIKE '9903.02%%')
+            WHERE (hts_number LIKE '9903.03%%')
               AND COALESCE(status, '') != 'expired'
             ORDER BY hts_number, row_order
         """

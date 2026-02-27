@@ -90,9 +90,9 @@ def main():
     conn = db_connect(args.dsn)
     # db_init(conn)
 
-    hit = get_note(conn, "note(38)", "SUBCHAPTER III")
+    hit = get_note(conn, "note(2)", "SUBCHAPTER III")
     if hit:
-        print(f"found {len(hit)} rows for note(16)(a)")
+        print(f"found {len(hit)} rows for note(2)(a)")
         for r in hit[:]:
             print(r["label"], "", r["content"])
     else:
