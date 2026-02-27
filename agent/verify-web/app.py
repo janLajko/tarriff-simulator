@@ -48,6 +48,7 @@ def _get_module_config(note_id: int) -> Dict[str, Any]:
             "scope_table": f"{TABLE_PREFIX}_scope",
             "map_table": f"{TABLE_PREFIX}_scope_measure_map",
             "query_by": "note_number",
+            "has_is_potential": True,
         }
     if note_id == 20:
         return {
@@ -58,6 +59,7 @@ def _get_module_config(note_id: int) -> Dict[str, Any]:
             "scope_table": "s301_scope",
             "map_table": "s301_scope_measure_map",
             "query_by": "headings",
+            "has_is_potential": False,
         }
     if note_id == 16:
         return {
@@ -68,6 +70,7 @@ def _get_module_config(note_id: int) -> Dict[str, Any]:
             "scope_table": "s232_scope",
             "map_table": "s232_scope_measure_map",
             "query_by": "headings",
+            "has_is_potential": True,
         }
     if note_id == 2:
         return {
@@ -78,8 +81,17 @@ def _get_module_config(note_id: int) -> Dict[str, Any]:
             "scope_table": "sieepa_scope",
             "map_table": "sieepa_scope_measure_map",
             "query_by": "headings",
+            "has_is_potential": True,
         }
     raise ValueError(f"Unsupported note id: {note_id}")
+
+
+def _config_has_is_potential(config: Dict[str, Any]) -> bool:
+    if "has_is_potential" in config:
+        return bool(config.get("has_is_potential"))
+    measures_table = str(config.get("measures_table") or "").strip().lower()
+    # Backward-compatible fallback for older sessions lacking has_is_potential.
+    return measures_table != "s301_measures"
 
 @app.route('/')
 def index():
@@ -142,6 +154,7 @@ def start_review(note_id):
         'scope_table': config["scope_table"],
         'map_table': config["map_table"],
         'query_by': config["query_by"],
+        'has_is_potential': config["has_is_potential"],
         'status': 'conflict_review',
         'openai_data': openai_data,
         'grok_data': grok_data,
@@ -1064,11 +1077,16 @@ def fetch_db_measures(note_number: int, config: Dict[str, Any], headings: Option
         scope_table = config.get("scope_table")
         map_table = config.get("map_table")
         query_by = config.get("query_by")
+        has_is_potential = _config_has_is_potential(config)
+        is_potential_expr = "is_potential" if has_is_potential else "NULL::boolean AS is_potential"
+        select_fields = (
+            "id, heading, country_iso2, ad_valorem_rate, value_basis, notes, "
+            f"effective_start_date, effective_end_date, {is_potential_expr}"
+        )
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             if query_by == "note_number":
                 cur.execute(
-                    f"SELECT id, heading, country_iso2, ad_valorem_rate, value_basis, notes, "
-                    f"effective_start_date, effective_end_date, is_potential "
+                    f"SELECT {select_fields} "
                     f"FROM {measures_table} WHERE notes->>'note_number' = %s",
                     (str(note_number),),
                 )
@@ -1076,8 +1094,7 @@ def fetch_db_measures(note_number: int, config: Dict[str, Any], headings: Option
                 if not headings:
                     return []
                 cur.execute(
-                    f"SELECT id, heading, country_iso2, ad_valorem_rate, value_basis, notes, "
-                    f"effective_start_date, effective_end_date, is_potential "
+                    f"SELECT {select_fields} "
                     f"FROM {measures_table} WHERE heading = ANY(%s)",
                     (headings,),
                 )
@@ -1358,6 +1375,7 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]], con
         scope_table = config.get("scope_table")
         map_table = config.get("map_table")
         query_by = config.get("query_by")
+        has_is_potential = _config_has_is_potential(config)
         with conn:
             with conn.cursor() as cur:
                 if query_by == "note_number":
@@ -1423,27 +1441,49 @@ def persist_measures_to_db(note_number: int, measures: List[Dict[str, Any]], con
         if not measure_records:
             return {"inserted_measures": 0, "inserted_scopes": 0}
 
-        values = [
-            (
-                record["heading"],
-                record["country_iso2"],
-                record["ad_valorem_rate"],
-                record["value_basis"],
-                record["melt_pour_origin_iso2"],
-                record["origin_exclude_iso2"],
-                Json(record["notes"]),
-                record["effective_start_date"],
-                record["effective_end_date"],
-                record["is_potential"],
+        if has_is_potential:
+            values = [
+                (
+                    record["heading"],
+                    record["country_iso2"],
+                    record["ad_valorem_rate"],
+                    record["value_basis"],
+                    record["melt_pour_origin_iso2"],
+                    record["origin_exclude_iso2"],
+                    Json(record["notes"]),
+                    record["effective_start_date"],
+                    record["effective_end_date"],
+                    record["is_potential"],
+                )
+                for record in measure_records
+            ]
+            insert_query = (
+                f"INSERT INTO {measures_table} "
+                "(heading, country_iso2, ad_valorem_rate, value_basis, melt_pour_origin_iso2, "
+                "origin_exclude_iso2, notes, effective_start_date, effective_end_date, is_potential) "
+                "VALUES %s ON CONFLICT DO NOTHING"
             )
-            for record in measure_records
-        ]
-        insert_query = (
-            f"INSERT INTO {measures_table} "
-            "(heading, country_iso2, ad_valorem_rate, value_basis, melt_pour_origin_iso2, "
-            "origin_exclude_iso2, notes, effective_start_date, effective_end_date, is_potential) "
-            "VALUES %s ON CONFLICT DO NOTHING"
-        )
+        else:
+            values = [
+                (
+                    record["heading"],
+                    record["country_iso2"],
+                    record["ad_valorem_rate"],
+                    record["value_basis"],
+                    record["melt_pour_origin_iso2"],
+                    record["origin_exclude_iso2"],
+                    Json(record["notes"]),
+                    record["effective_start_date"],
+                    record["effective_end_date"],
+                )
+                for record in measure_records
+            ]
+            insert_query = (
+                f"INSERT INTO {measures_table} "
+                "(heading, country_iso2, ad_valorem_rate, value_basis, melt_pour_origin_iso2, "
+                "origin_exclude_iso2, notes, effective_start_date, effective_end_date) "
+                "VALUES %s ON CONFLICT DO NOTHING"
+            )
         with conn:
             with conn.cursor() as cur:
                 execute_values(cur, insert_query, values, page_size=len(values))
