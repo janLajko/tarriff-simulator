@@ -523,12 +523,12 @@ def main():
 
     conn = db_connect(args.dsn)
     db_init(conn)
-    html = fetch_chapter_notes()
-    notes = parse_html_to_notes(html, chapter=99)
-    upsert_notes(conn, notes)
+    # html = fetch_chapter_notes()
+    # notes = parse_html_to_notes(html, chapter=99)
+    # upsert_notes(conn, notes)
 
     # 示例查询
-    hit = get_note(conn, "note(16)(a)")
+    hit = get_note(conn, "note(20)(a)")
     if hit:
         print(f"found {len(hit)} rows for note(16)(a)")
         for r in hit[:5]:

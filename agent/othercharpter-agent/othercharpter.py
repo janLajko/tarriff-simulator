@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Other Chapter (notes 33/36/37/38) processing agent.
 
-Reads note content from local text files and HTS descriptions from hts_codes,
+Reads note content from database notes and HTS descriptions from hts_codes,
 uses an LLM to extract measures with scoped relations, and stores them into
 tables that mirror sieepa_measures, sieepa_scope, and sieepa_scope_measure_map.
 """
@@ -9,10 +9,14 @@ tables that mirror sieepa_measures, sieepa_scope, and sieepa_scope_measure_map.
 from __future__ import annotations
 
 import argparse
+import importlib.util
+import inspect
 import json
 import logging
 import os
 import re
+from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
@@ -30,13 +34,26 @@ except ImportError as exc:  # pragma: no cover
 else:
     _PSYCOPG2_IMPORT_ERROR = None
 
-try:  # pragma: no cover - allows linting without requests installed
-    import requests
+try:  # pragma: no cover - allows linting without openai installed
+    from openai import OpenAI
 except ImportError as exc:  # pragma: no cover
-    requests = None  # type: ignore
-    _REQUESTS_IMPORT_ERROR = exc
+    OpenAI = None  # type: ignore
+    _OPENAI_IMPORT_ERROR = exc
 else:
-    _REQUESTS_IMPORT_ERROR = None
+    _OPENAI_IMPORT_ERROR = None
+
+try:  # pragma: no cover - allows linting without xai-sdk installed
+    from xai_sdk import Client as XAIClient
+    from xai_sdk.chat import system as xai_system
+    from xai_sdk.chat import user as xai_user
+except ImportError as exc:  # pragma: no cover
+    XAIClient = None  # type: ignore
+    xai_system = None  # type: ignore
+    xai_user = None  # type: ignore
+    _XAI_SDK_IMPORT_ERROR = exc
+else:
+    _XAI_SDK_IMPORT_ERROR = None
+
 
 LOGGER = logging.getLogger("otherchapter_agent")
 
@@ -49,69 +66,39 @@ NOTE_LABELS = {
     38: "note(38)",
 }
 NOTE_HEADINGS = {
-    33: [
-        "9903.94.01",
-        "9903.94.02",
-        "9903.94.03",
-        "9903.94.04",
-        "9903.94.05",
-        "9903.94.06",
-        "9903.94.07",
-        "9903.94.31",
-        "9903.94.32",
-        "9903.94.33",
-        "9903.94.40",
-        "9903.94.41",
-        "9903.94.42",
-        "9903.94.43",
-        "9903.94.44",
-        "9903.94.45",
-        "9903.94.50",
-        "9903.94.51",
-        "9903.94.52",
-        "9903.94.53",
-        "9903.94.54",
-        "9903.94.55",
-        "9903.94.60",
-        "9903.94.61",
-        "9903.94.62",
-        "9903.94.63",
-        "9903.94.64",
-        "9903.94.65",
-    ],
     36: ["9903.78.01", "9903.78.02"],
-    37: [
-        "9903.76.01",
-        "9903.76.02",
-        "9903.76.03",
-        "9903.76.04",
-        "9903.76.20",
-        "9903.76.21",
-        "9903.76.22",
-        "9903.76.23",
-    ],
-    38: [
-        "9903.74.01",
-        "9903.74.02",
-        "9903.74.03",
-        "9903.74.05",
-        "9903.74.06",
-        "9903.74.07",
-        "9903.74.08",
-        "9903.74.09",
-        "9903.74.10",
-        "9903.74.11",
-    ],
 }
-NOTE_PDF_DIR = Path(__file__).resolve().parent / "pdf"
-NOTE_PDF_FILES = {
-    33: "note33.txt",
-    36: "note36.txt",
-    37: "note37.txt",
-    38: "note38.txt",
+NOTE_HEADING_PREFIX = {
+    33: "9903.94",
+    37: "9903.76",
+    38: "9903.74",
 }
-NOTE38_SUBVISIONI_PATH = NOTE_PDF_DIR / "note38subvisioni.txt"
-EXTRA_MEASURES_DIR = Path(__file__).resolve().parent / "output"
+OUTPUT_DIR = Path(__file__).resolve().parent / "output"
+EXTRA_MEASURES_DIR = OUTPUT_DIR
+OUTPUT_HEADING_PREFIX = {
+    33: "9903.94",
+    36: "9903.78",
+    37: "9903.76",
+    38: "9903.74",
+}
+
+_NOTES_UTILS = None
+
+
+def _load_notes_utils():
+    global _NOTES_UTILS
+    if _NOTES_UTILS is not None:
+        return _NOTES_UTILS
+    module_path = Path(__file__).resolve().parents[1] / "chapter99note-agent" / "notes_utils.py"
+    if not module_path.exists():
+        raise FileNotFoundError(f"notes_utils.py not found at {module_path}")
+    spec = importlib.util.spec_from_file_location("notes_utils", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Unable to load notes_utils module")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    _NOTES_UTILS = module
+    return module
 
 HTS_CODE_RE = re.compile(r"\b\d{4}\.\d{2}\.\d{2}(?:\d{2})?\b")
 RANGE_SHORT_RE = re.compile(r"\b(\d{4}\.\d{2}\.)(\d{2})\s*[~\u2013-]\s*(\d{2})\b")
@@ -362,43 +349,34 @@ class OtherChapterLLM:
         api_key: Optional[str] = None,
         timeout: int = 36000,
     ) -> None:
-        if requests is None:  # pragma: no cover - runtime dependency
-            raise _REQUESTS_IMPORT_ERROR
+        if OpenAI is None:  # pragma: no cover - runtime dependency
+            raise RuntimeError("openai package required") from _OPENAI_IMPORT_ERROR
         self.model = model or os.getenv("OPENAI_MODEL", "gpt-5")
         self.base_url = base_url or os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.timeout = timeout
         if not self.api_key:
             raise RuntimeError("OPENAI_API_KEY (or explicit api_key) is required for LLM calls")
+        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=self.timeout)
 
     def _chat(self, message: str) -> str:
-        payload = {
-            "model": self.model,
-            "response_format": {"type": "json_object"},
-            "messages": [
-                {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
-                {"role": "user", "content": message},
-            ],
-        }
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json",
-        }
-        response = requests.post(
-            f"{self.base_url}/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=self.timeout,
-        )
         try:
-            response.raise_for_status()
+            response = self.client.chat.completions.create(
+                model=self.model,
+                temperature=1,  # openai 只支持1，不支持0
+                response_format={"type": "json_object"},
+                messages=[
+                    {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
+                    {"role": "user", "content": message},
+                ],
+                timeout=7200.0
+            )
         except Exception as exc:
-            raise RuntimeError(f"LLM HTTP error: {exc} -> {response.text}") from exc
-        data = response.json()
+            raise RuntimeError(f"LLM SDK error: {exc}") from exc
         try:
-            return data["choices"][0]["message"]["content"]
-        except (KeyError, IndexError, TypeError) as exc:
-            raise RuntimeError(f"Unexpected LLM response structure: {data}") from exc
+            return response.choices[0].message.content
+        except (AttributeError, IndexError) as exc:
+            raise RuntimeError(f"Unexpected LLM response structure: {response}") from exc
 
     def extract(
         self,
@@ -414,6 +392,66 @@ class OtherChapterLLM:
         )
         raw = self._chat(message)
         return _parse_json_payload(raw)
+
+
+class OtherChapterGrokLLM:
+    """Grok LLM client for Chapter 99 note extraction."""
+
+    def __init__(
+        self,
+        model: Optional[str] = None,
+        api_key: Optional[str] = None,
+        timeout: int = 36000,
+    ) -> None:
+        if XAIClient is None:  # pragma: no cover - runtime dependency
+            raise RuntimeError("xai-sdk package required") from _XAI_SDK_IMPORT_ERROR
+        self.model = model or os.getenv("GROK_MODEL") or os.getenv("XAI_MODEL") or "grok-4"
+        self.api_key = api_key or os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY")
+        self.timeout = timeout
+        if not self.api_key:
+            raise RuntimeError("GROK_API_KEY or XAI_API_KEY is required for Grok LLM calls")
+        self.client = XAIClient(api_key=self.api_key, timeout=self.timeout)
+
+    def extract(
+        self,
+        note_number: int,
+        note_text: str,
+        context: Dict[str, Any],
+        note38_subvision_i_text: str,
+    ) -> Dict[str, Any]:
+        message = LLM_PROMPT.format(
+            note_text=note_text.strip(),
+            context_json=json.dumps(context, ensure_ascii=True),
+            note38_subvision_i_text=note38_subvision_i_text.strip(),
+        )
+        LOGGER.info("Grok request for note %s", note_number)
+        chat_kwargs = _filter_callable_kwargs(
+            self.client.chat.create,
+            {
+                "temperature": 0,
+            },
+        )
+        chat_kwargs["model"] = self.model
+        chat = self.client.chat.create(**chat_kwargs)
+        chat.append(xai_system("You are a precise legal text parser. Respond with JSON only."))
+        chat.append(xai_user(message))
+        sample_kwargs = _filter_callable_kwargs(
+            chat.sample,
+            {
+                "temperature": 0,
+            },
+        )
+        response = chat.sample(**sample_kwargs)
+        content = getattr(response, "content", None) or getattr(response, "text", None)
+        if not content:
+            raise RuntimeError("Grok response missing content")
+        LOGGER.info("Grok response length: %d chars", len(content))
+        try:
+            return _parse_json_payload(content)
+        except RuntimeError:
+            raw_path = _write_raw_llm_output(note_number, "grok", content)
+            LOGGER.error("Grok JSON decode failed; raw output saved to %s", raw_path)
+            raise
 
 
 class OtherChapterDB:
@@ -432,27 +470,9 @@ class OtherChapterDB:
             self._conn.close()
 
     def fetch_note_rows(self, label: str) -> List[Dict[str, Any]]:
-        base_query = (
-            "SELECT chapter, subchapter, label, content, raw_html, path "
-            "FROM hts_notes WHERE lower(label) = lower(%s) "
-            "ORDER BY subchapter, array_length(path, 1), path"
-        )
-        with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(base_query, (label,))
-            anchor = cur.fetchone()
-            if not anchor:
-                return []
-            cur.execute(
-                """
-                SELECT chapter, subchapter, label, content, raw_html, path
-                FROM hts_notes
-                WHERE chapter=%s AND subchapter=%s AND path[1:%s] = %s
-                ORDER BY id, path
-                """,
-                (anchor["chapter"], anchor["subchapter"], len(anchor["path"]), anchor["path"]),
-            )
-            rows = cur.fetchall()
-            return rows or [anchor]
+        notes_utils = _load_notes_utils()
+        rows = notes_utils.get_note(self._conn, label, "SUBCHAPTER III")
+        return rows or []
 
     def fetch_hts_descriptions(self, codes: Sequence[str]) -> Dict[str, Dict[str, str]]:
         if not codes:
@@ -477,6 +497,75 @@ class OtherChapterDB:
                         "ad_valorem_rate": str(rate),
                     }
         return descriptions
+
+    def fetch_headings_by_prefix(self, prefix: str) -> List[str]:
+        if not prefix:
+            return []
+        query = (
+            "SELECT hts_number "
+            "FROM hts_codes "
+            "WHERE hts_number LIKE %s "
+            "AND status IS NULL "
+            "AND description NOT ILIKE %s "
+            "ORDER BY hts_number"
+        )
+        with self._conn.cursor() as cur:
+            cur.execute(query, (f"{prefix}%", "%provision suspended%"))
+            rows = cur.fetchall()
+        return [_normalize_code(row[0]) for row in rows if row and row[0]]
+
+    def fetch_measures_with_scopes_for_note(self, note_number: int) -> List[Dict[str, Any]]:
+        query = (
+            f"SELECT id, heading, country_iso2, ad_valorem_rate, "
+            f"effective_start_date, effective_end_date, is_potential "
+            f"FROM {self.measures_table} "
+            "WHERE notes->>'note_number' = %s"
+        )
+        with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(query, (str(note_number),))
+            rows = cur.fetchall() or []
+
+        if not rows:
+            return []
+
+        measures: List[Dict[str, Any]] = []
+        measure_map: Dict[int, Dict[str, Any]] = {}
+        measure_ids: List[int] = []
+        for row in rows:
+            measure_id = int(row["id"])
+            measure_ids.append(measure_id)
+            measure_entry = {
+                "heading": row["heading"],
+                "country_iso2": row["country_iso2"],
+                "ad_valorem_rate": row["ad_valorem_rate"],
+                "effective_start_date": row["effective_start_date"],
+                "effective_end_date": row["effective_end_date"],
+                "is_potential": row["is_potential"],
+                "scopes": [],
+            }
+            measures.append(measure_entry)
+            measure_map[measure_id] = measure_entry
+
+        scope_query = (
+            f"SELECT m.measure_id, s.key, m.relation "
+            f"FROM {self.map_table} AS m "
+            f"JOIN {self.scope_table} AS s ON s.id = m.scope_id "
+            "WHERE m.measure_id = ANY(%s)"
+        )
+        with self._conn.cursor() as cur:
+            cur.execute(scope_query, (measure_ids,))
+            for measure_id, key, relation in cur.fetchall():
+                target = measure_map.get(int(measure_id))
+                if not target:
+                    continue
+                target["scopes"].append(
+                    {
+                        "key": key,
+                        "relation": relation,
+                    }
+                )
+
+        return measures
 
     def insert_measures(self, records: Sequence[MeasureRecord]) -> List[int]:
         if not records:
@@ -605,9 +694,15 @@ class OtherChapterDB:
 
 
 class OtherChapterProcessor:
-    def __init__(self, db: OtherChapterDB, llm: OtherChapterLLM) -> None:
+    def __init__(
+        self,
+        db: OtherChapterDB,
+        openai_llm: OtherChapterLLM,
+        grok_llm: OtherChapterGrokLLM,
+    ) -> None:
         self.db = db
-        self.llm = llm
+        self.openai_llm = openai_llm
+        self.grok_llm = grok_llm
 
     def deal_note33(self) -> None:
         self.process_note(33)
@@ -624,15 +719,20 @@ class OtherChapterProcessor:
     def process_note(self, note_number: int) -> None:
         label = NOTE_LABELS[note_number]
         try:
-            note_text = self._load_note_text(note_number)
+            note_text = self._load_note_text(label)
         except FileNotFoundError as exc:
-            LOGGER.warning("Note %s PDF missing: %s", label, exc)
+            LOGGER.warning("Note %s missing: %s", label, exc)
             return
         except Exception as exc:
-            LOGGER.warning("Failed to load note %s PDF: %s", label, exc)
+            LOGGER.warning("Failed to load note %s: %s", label, exc)
             return
-        print(note_text)
         note_headings = NOTE_HEADINGS.get(note_number, [])
+        if not note_headings:
+            prefix = NOTE_HEADING_PREFIX.get(note_number)
+            if prefix:
+                note_headings = self.db.fetch_headings_by_prefix(prefix)
+            if not note_headings:
+                LOGGER.warning("No headings found for note %s", note_number)
         # extracted_codes = _extract_codes(note_text)
         codes = sorted({*note_headings})
         descriptions = self.db.fetch_hts_descriptions(codes)
@@ -651,14 +751,66 @@ class OtherChapterProcessor:
             ],
         }
         note38_subvision_i_text = self._load_note38_subvision_i_text()
-        analysis = self.llm.extract(note_number, note_text, context, note38_subvision_i_text)
-        print("=======================")
-        print(analysis)
-        print("=======================")
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            openai_future = executor.submit(
+                self.openai_llm.extract,
+                note_number,
+                note_text,
+                context,
+                note38_subvision_i_text,
+            )
+            grok_future = executor.submit(
+                self.grok_llm.extract,
+                note_number,
+                note_text,
+                context,
+                note38_subvision_i_text,
+            )
+            openai_result = openai_future.result()
+            try:
+                grok_result = grok_future.result()
+            except Exception:
+                LOGGER.exception("Grok request failed for note %s; using OpenAI result", note_number)
+                grok_result = openai_result
+
+        output_prefix = OUTPUT_HEADING_PREFIX.get(note_number)
+        self._write_output_json(
+            note_number,
+            "openai",
+            _filter_output_measures(openai_result, output_prefix),
+        )
+        self._write_output_json(
+            note_number,
+            "grok",
+            _filter_output_measures(grok_result, output_prefix),
+        )
+
         allowed_headings = {str(code) for code in note_headings}
-        primary_measures, extra_measures = self._split_measures_by_heading(analysis, allowed_headings)
-        self._write_extra_measures(note_number, label, extra_measures)
-        self._persist(note_number, primary_measures)
+        openai_primary, openai_extra = self._split_measures_by_heading(
+            openai_result, allowed_headings
+        )
+        grok_primary, _ = self._split_measures_by_heading(
+            grok_result, allowed_headings
+        )
+
+        self._write_extra_measures(note_number, label, openai_extra)
+
+        llm_compare = _compare_llm_measures(openai_primary, grok_primary)
+        self._write_output_json(note_number, "llm_compare", llm_compare)
+
+        if not llm_compare.get("consistent"):
+            LOGGER.warning(
+                "LLM results differ for note %s; skipping DB compare and persistence",
+                label,
+            )
+            return
+
+        db_measures = self.db.fetch_measures_with_scopes_for_note(note_number)
+        db_compare = _compare_llm_db_measures(openai_primary, db_measures)
+        self._write_output_json(note_number, "db_compare", db_compare)
+
+        # self._persist(note_number, openai_primary)
 
     def _build_note_text(self, rows: Sequence[Dict[str, Any]]) -> str:
         chunks = []
@@ -668,20 +820,17 @@ class OtherChapterProcessor:
             chunks.append(f"{label}\n{content}")
         return "\n\n".join(chunks)
 
-    def _load_note_text(self, note_number: int) -> str:
-        filename = NOTE_PDF_FILES.get(note_number)
-        if not filename:
-            raise FileNotFoundError(f"no note file mapping for note {note_number}")
-        note_path = NOTE_PDF_DIR / filename
-        if not note_path.exists():
-            raise FileNotFoundError(str(note_path))
-        return note_path.read_text(encoding="utf-8").strip()
+    def _load_note_text(self, note_label: str) -> str:
+        rows = self.db.fetch_note_rows(note_label)
+        if not rows:
+            raise FileNotFoundError(f"note rows not found for {note_label}")
+        return self._build_note_text(rows).strip()
 
     def _load_note38_subvision_i_text(self) -> str:
-        if not NOTE38_SUBVISIONI_PATH.exists():
-            LOGGER.warning("Note 38 subdivision (i) file missing: %s", NOTE38_SUBVISIONI_PATH)
+        rows = self.db.fetch_note_rows("note(38)(i)")
+        if not rows:
             return ""
-        return NOTE38_SUBVISIONI_PATH.read_text(encoding="utf-8").strip()
+        return self._build_note_text(rows).strip()
 
     def _split_measures_by_heading(
         self, payload: Any, allowed_headings: set[str]
@@ -700,8 +849,8 @@ class OtherChapterProcessor:
     def _write_extra_measures(
         self, note_number: int, note_label: str, extra_measures: Sequence[Dict[str, Any]]
     ) -> None:
-        EXTRA_MEASURES_DIR.mkdir(parents=True, exist_ok=True)
-        output_path = EXTRA_MEASURES_DIR / f"note{note_number}_extra_measures.json"
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        output_path = OUTPUT_DIR / f"note{note_number}_extra_measures.json"
         payload = {
             "note_number": note_number,
             "note_label": note_label,
@@ -712,6 +861,16 @@ class OtherChapterProcessor:
             encoding="utf-8",
         )
         LOGGER.info("Wrote extra measures to %s", output_path)
+
+    def _write_output_json(self, note_number: int, suffix: str, payload: Any) -> Path:
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        output_path = OUTPUT_DIR / f"note{note_number}_{suffix}.json"
+        output_path.write_text(
+            json.dumps(payload, ensure_ascii=True, indent=2),
+            encoding="utf-8",
+        )
+        LOGGER.info("Wrote %s output to %s", suffix, output_path)
+        return output_path
 
     def _persist(self, note_number: int, payload: Any) -> None:
         measure_entries = _coerce_measure_payload(payload)
@@ -916,6 +1075,314 @@ def _parse_json_payload(raw: str) -> Dict[str, Any]:
         raise RuntimeError("LLM JSON decode failed") from exc
 
 
+def _filter_output_measures(payload: Any, prefix: Optional[str]) -> Dict[str, Any]:
+    if not prefix:
+        measures = _coerce_measure_payload(payload)
+        return {"measures": measures}
+    measures = _coerce_measure_payload(payload)
+    filtered = []
+    for measure in measures:
+        heading = _normalize_code(str(measure.get("heading") or ""))
+        if heading.startswith(prefix):
+            filtered.append(measure)
+    return {"measures": filtered}
+
+
+def _write_raw_llm_output(note_number: int, label: str, content: str) -> Path:
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    output_path = OUTPUT_DIR / f"note{note_number}_{label}_raw.txt"
+    output_path.write_text(content, encoding="utf-8")
+    return output_path
+
+
+def _filter_callable_kwargs(func: Any, candidate_kwargs: Dict[str, Any]) -> Dict[str, Any]:
+    try:
+        signature = inspect.signature(func)
+    except (TypeError, ValueError):
+        return {}
+    allowed = set(signature.parameters.keys())
+    return {key: value for key, value in candidate_kwargs.items() if key in allowed}
+
+
+
+
+def _normalize_rate_value(value: Any) -> Optional[Decimal]:
+    return _parse_rate(value)
+
+
+def _format_date_key(value: Optional[date]) -> str:
+    return value.isoformat() if value else "null"
+
+
+def _format_bool_key(value: Optional[bool]) -> str:
+    if value is None:
+        return "null"
+    return "true" if value else "false"
+
+
+def _make_measure_key(
+    heading: str,
+    country_iso2: Optional[str],
+    effective_start_date: Optional[date],
+    effective_end_date: Optional[date],
+    is_potential: Optional[bool],
+) -> str:
+    return "|".join(
+        [
+            heading or "null",
+            country_iso2 or "null",
+            _format_date_key(effective_start_date),
+            _format_date_key(effective_end_date),
+            _format_bool_key(is_potential),
+        ]
+    )
+
+
+def _normalize_scope_key_digits(value: str) -> str:
+    return "".join(ch for ch in value if ch.isdigit())
+
+
+def _normalize_relation(value: Optional[str]) -> str:
+    cleaned = (value or "include").strip().lower()
+    return cleaned or "include"
+
+
+def _collect_scope_counters(
+    scopes: Sequence[Dict[str, Any]]
+) -> Tuple[Counter, Dict[Tuple[str, str], List[str]]]:
+    counter: Counter = Counter()
+    raw_map: Dict[Tuple[str, str], List[str]] = defaultdict(list)
+    seen_pairs: set[Tuple[str, str]] = set()
+    for entry in scopes:
+        relation = _normalize_relation(entry.get("relation"))
+        keys = entry.get("keys")
+        key = entry.get("key")
+        if isinstance(keys, list):
+            raw_keys = [str(item) for item in keys if item is not None]
+        elif keys:
+            raw_keys = _split_keys(str(keys))
+        elif key:
+            raw_keys = [str(key)]
+        else:
+            raw_keys = []
+        for raw in raw_keys:
+            key_raw = _normalize_code(raw)
+            if not key_raw:
+                continue
+            key_norm = _normalize_scope_key_digits(key_raw)
+            if not key_norm:
+                continue
+            pair = (key_norm, relation)
+            if pair in seen_pairs:
+                continue
+            seen_pairs.add(pair)
+            counter[pair] += 1
+            raw_map[pair].append(key_raw)
+    return counter, raw_map
+
+
+def _normalize_measure_entry(entry: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    heading = _normalize_code(str(entry.get("heading") or ""))
+    if not heading:
+        return None
+    country_iso2 = _normalize_iso(entry.get("country_iso2"))
+    effective_start_date = _parse_date(entry.get("effective_start_date"))
+    effective_end_date = _parse_date(entry.get("effective_end_date"))
+    is_potential = _coerce_bool(entry.get("is_potential"))
+    ad_valorem_rate = _normalize_rate_value(entry.get("ad_valorem_rate"))
+    scopes = entry.get("scopes") or []
+    scope_counter, scope_raw_map = _collect_scope_counters(scopes)
+    measure_key = _make_measure_key(
+        heading,
+        country_iso2,
+        effective_start_date,
+        effective_end_date,
+        is_potential,
+    )
+    return {
+        "measure_key": measure_key,
+        "heading": heading,
+        "country_iso2": country_iso2,
+        "ad_valorem_rate": ad_valorem_rate,
+        "is_potential": is_potential,
+        "effective_start_date": effective_start_date,
+        "effective_end_date": effective_end_date,
+        "scope_counter": scope_counter,
+        "scope_raw_map": scope_raw_map,
+    }
+
+
+def _index_measures(entries: Sequence[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    index: Dict[str, Dict[str, Any]] = {}
+    for entry in entries:
+        normalized = _normalize_measure_entry(entry)
+        if not normalized:
+            continue
+        key = normalized["measure_key"]
+        if key in index:
+            LOGGER.warning("Duplicate measure key %s encountered; keeping first", key)
+            continue
+        index[key] = normalized
+    return index
+
+
+def _serialize_value(value: Any) -> Any:
+    if isinstance(value, Decimal):
+        return str(value)
+    if isinstance(value, date):
+        return value.isoformat()
+    return value
+
+
+def _values_equal(left: Any, right: Any) -> bool:
+    return left == right
+
+
+def _build_scope_entries(
+    pair: Tuple[str, str], raw_list: List[str], count: int
+) -> List[Dict[str, Any]]:
+    entries: List[Dict[str, Any]] = []
+    if raw_list:
+        for raw in raw_list[:count]:
+            entries.append(
+                {"key_raw": raw, "key_norm": pair[0], "relation": pair[1]}
+            )
+        if len(raw_list) < count:
+            for _ in range(count - len(raw_list)):
+                entries.append(
+                    {"key_raw": raw_list[0], "key_norm": pair[0], "relation": pair[1]}
+                )
+    else:
+        for _ in range(count):
+            entries.append(
+                {"key_raw": pair[0], "key_norm": pair[0], "relation": pair[1]}
+            )
+    return entries
+
+
+def _diff_scope_counters(
+    left_counter: Counter,
+    right_counter: Counter,
+    left_raw_map: Dict[Tuple[str, str], List[str]],
+    right_raw_map: Dict[Tuple[str, str], List[str]],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    only_in_left: List[Dict[str, Any]] = []
+    only_in_right: List[Dict[str, Any]] = []
+    all_pairs = set(left_counter) | set(right_counter)
+    for pair in sorted(all_pairs):
+        left_count = left_counter.get(pair, 0)
+        right_count = right_counter.get(pair, 0)
+        if left_count > right_count:
+            only_in_left.extend(
+                _build_scope_entries(pair, left_raw_map.get(pair, []), left_count - right_count)
+            )
+        elif right_count > left_count:
+            only_in_right.extend(
+                _build_scope_entries(pair, right_raw_map.get(pair, []), right_count - left_count)
+            )
+    only_in_left.sort(key=lambda item: (item["key_norm"], item["relation"], item["key_raw"]))
+    only_in_right.sort(key=lambda item: (item["key_norm"], item["relation"], item["key_raw"]))
+    return only_in_left, only_in_right
+
+
+def _compare_measure_maps(
+    left: Dict[str, Dict[str, Any]],
+    right: Dict[str, Dict[str, Any]],
+    left_label: str,
+    right_label: str,
+) -> Dict[str, Any]:
+    missing_in_left = sorted(set(right) - set(left))
+    missing_in_right = sorted(set(left) - set(right))
+    field_diffs: Dict[str, Any] = {}
+    scope_diffs: Dict[str, Any] = {}
+    matched_count = 0
+
+    for key in sorted(set(left) & set(right)):
+        left_entry = left[key]
+        right_entry = right[key]
+        diffs: Dict[str, Any] = {}
+        for field in [
+            "country_iso2",
+            "ad_valorem_rate",
+            "is_potential",
+            "effective_start_date",
+            "effective_end_date",
+        ]:
+            left_val = left_entry[field]
+            right_val = right_entry[field]
+            if not _values_equal(left_val, right_val):
+                diffs[field] = {
+                    left_label: _serialize_value(left_val),
+                    right_label: _serialize_value(right_val),
+                }
+
+        only_in_left, only_in_right = _diff_scope_counters(
+            left_entry["scope_counter"],
+            right_entry["scope_counter"],
+            left_entry["scope_raw_map"],
+            right_entry["scope_raw_map"],
+        )
+        if only_in_left or only_in_right:
+            scope_diffs[key] = {
+                f"only_in_{left_label}": only_in_left,
+                f"only_in_{right_label}": only_in_right,
+            }
+
+        if diffs:
+            field_diffs[key] = diffs
+        if not diffs and not (only_in_left or only_in_right):
+            matched_count += 1
+
+    summary = {
+        f"{left_label}_count": len(left),
+        f"{right_label}_count": len(right),
+        "matched_count": matched_count,
+    }
+    consistent = not missing_in_left and not missing_in_right and not field_diffs and not scope_diffs
+    return {
+        "consistent": consistent,
+        "summary": summary,
+        "missing_in_left": missing_in_left,
+        "missing_in_right": missing_in_right,
+        "field_diffs": field_diffs,
+        "scope_diffs": scope_diffs,
+    }
+
+
+def _compare_llm_measures(
+    openai_measures: Sequence[Dict[str, Any]],
+    grok_measures: Sequence[Dict[str, Any]],
+) -> Dict[str, Any]:
+    openai_map = _index_measures(openai_measures)
+    grok_map = _index_measures(grok_measures)
+    base = _compare_measure_maps(openai_map, grok_map, "openai", "grok")
+    return {
+        "consistent": base["consistent"],
+        "summary": base["summary"],
+        "missing_in_openai": base["missing_in_left"],
+        "missing_in_grok": base["missing_in_right"],
+        "field_diffs": base["field_diffs"],
+        "scope_diffs": base["scope_diffs"],
+    }
+
+
+def _compare_llm_db_measures(
+    llm_measures: Sequence[Dict[str, Any]],
+    db_measures: Sequence[Dict[str, Any]],
+) -> Dict[str, Any]:
+    llm_map = _index_measures(llm_measures)
+    db_map = _index_measures(db_measures)
+    base = _compare_measure_maps(llm_map, db_map, "llm", "db")
+    return {
+        "consistent": base["consistent"],
+        "summary": base["summary"],
+        "missing_in_db": base["missing_in_right"],
+        "extra_in_db": base["missing_in_left"],
+        "field_diffs": base["field_diffs"],
+        "scope_diffs": base["scope_diffs"],
+    }
+
+
 def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Process Chapter 99 notes 33/36/37/38.")
     parser.add_argument("--dsn", default=os.getenv("DATABASE_URL"), help="PostgreSQL DSN")
@@ -929,6 +1396,8 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--model", default=os.getenv("OPENAI_MODEL"))
     parser.add_argument("--base-url", default=os.getenv("OPENAI_API_BASE"))
     parser.add_argument("--api-key", default=os.getenv("OPENAI_API_KEY"))
+    parser.add_argument("--grok-model", default=os.getenv("GROK_MODEL") or os.getenv("XAI_MODEL"))
+    parser.add_argument("--grok-api-key", default=os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY"))
     parser.add_argument("--log-level", default="INFO")
     return parser
 
@@ -939,8 +1408,16 @@ def main() -> None:
     if not args.dsn:
         raise RuntimeError("DSN is required via --dsn or DATABASE_URL")
     db = OtherChapterDB(args.dsn, table_prefix=args.table_prefix)
-    llm = OtherChapterLLM(model=args.model, base_url=args.base_url, api_key=args.api_key)
-    processor = OtherChapterProcessor(db, llm)
+    openai_llm = OtherChapterLLM(
+        model=args.model,
+        base_url=args.base_url,
+        api_key=args.api_key,
+    )
+    grok_llm = OtherChapterGrokLLM(
+        model=args.grok_model,
+        api_key=args.grok_api_key,
+    )
+    processor = OtherChapterProcessor(db, openai_llm, grok_llm)
     try:
         if args.note == "all":
             for note in sorted(NOTE_LABELS):

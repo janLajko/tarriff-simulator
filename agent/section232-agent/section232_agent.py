@@ -17,13 +17,18 @@ flow is easy to follow when extending or debugging.
 from __future__ import annotations
 
 import argparse
+import importlib.util
+import inspect
 import json
 import logging
 import os
 import re
+from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
+from pathlib import Path
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, TypeVar
 
 import requests
@@ -41,10 +46,31 @@ except ImportError as exc:  # pragma: no cover - allows linting without psycopg2
 else:
     _PSYCOPG2_IMPORT_ERROR = None
 
+try:  # pragma: no cover - allows linting without openai installed
+    from openai import OpenAI
+except ImportError as exc:  # pragma: no cover
+    OpenAI = None  # type: ignore
+    _OPENAI_IMPORT_ERROR = exc
+else:
+    _OPENAI_IMPORT_ERROR = None
+
+try:  # pragma: no cover - allows linting without xai-sdk installed
+    from xai_sdk import Client as XAIClient
+    from xai_sdk.chat import system as xai_system
+    from xai_sdk.chat import user as xai_user
+except ImportError as exc:  # pragma: no cover
+    XAIClient = None  # type: ignore
+    xai_system = None  # type: ignore
+    xai_user = None  # type: ignore
+    _XAI_SDK_IMPORT_ERROR = exc
+else:
+    _XAI_SDK_IMPORT_ERROR = None
+
 
 LOGGER = logging.getLogger("section232_agent")
 BULK_QUERY_CHUNK = 50
 T = TypeVar("T")
+DEFAULT_START_DATE = date(1900, 1, 1)
 
 DEFAULT_HEADINGS = [
     "9903.81.87",
@@ -73,6 +99,104 @@ DEFAULT_HEADINGS = [
     "9903.85.69",
     "9903.85.70"
 ]
+
+NOTE_LABEL = "note(16)"
+OUTPUT_DIR = Path(__file__).resolve().parent / "output"
+
+LLM_PROMPT = '''You are a structured extractor for HTSUS Section 232 (U.S. note 16 to subchapter III of chapter 99).
+Return JSON only.
+
+Output must be a JSON object with a top-level key "measures" that is an array.
+Each element represents one Chapter 99 heading referenced in this note.
+
+Required measure fields:
+- heading
+- country_iso2
+- ad_valorem_rate
+- value_basis
+- is_potential
+- notes (object)
+- effective_start_date
+- effective_end_date
+- scopes (array)
+
+Each scope item must include:
+- key or keys (HTS heading/subheading)
+- key_type
+- relation (include/exclude)
+- country_iso2
+- source_label
+- note_label
+- text_criteria
+- effective_start_date
+- effective_end_date
+
+Rules:
+- The note text includes multiple subdivisions for multiple headings. Treat each subdivision separately.
+- Ownership-first rule: identify the owning heading of each subdivision by explicit text like “heading 9903.xx.xx”.
+  Only that heading may use that subdivision’s HTS list. If the current measure’s heading is different, ignore that subdivision entirely.
+- Only output headings in context.chapter99_headings; ignore other headings even if present in note text.
+- ad_valorem_rate must be derived ONLY from context.hts_codes[].general_rate_of_duty; if it says “the duty provided in the applicable subheading” with no percent, set 0; otherwise null.
+- country_iso2: use ISO-2; if not explicitly stated, use null (section301 default “CN”).
+- key_type must be one of: heading, hts8, hts10. No “note”.
+- Combine codes with identical attributes into one scope using "keys".
+- Output JSON only; no code fences or commentary.
+
+Context (JSON):
+{context_json}
+
+Note text:
+<<<NOTE_TEXT
+{note_text}
+NOTE_TEXT>>>
+'''
+
+_NOTES_UTILS = None
+
+
+def _load_notes_utils():
+    global _NOTES_UTILS
+    if _NOTES_UTILS is not None:
+        return _NOTES_UTILS
+    module_path = Path(__file__).resolve().parents[1] / "chapter99note-agent" / "notes_utils.py"
+    if not module_path.exists():
+        raise FileNotFoundError(f"notes_utils.py not found at {module_path}")
+    spec = importlib.util.spec_from_file_location("notes_utils", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Unable to load notes_utils module")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    _NOTES_UTILS = module
+    return module
+
+
+def _build_note_text(rows: Sequence[Dict[str, Any]]) -> str:
+    chunks = []
+    for row in rows:
+        label = row.get("label") or ""
+        content = row.get("content") or ""
+        chunks.append(f"{label}\n{content}")
+    return "\n\n".join(chunks)
+
+
+def _load_note_text(conn, label: str) -> str:
+    notes_utils = _load_notes_utils()
+    rows = notes_utils.get_note(conn, label, "SUBCHAPTER III")
+    if not rows:
+        raise FileNotFoundError(f"note rows not found for {label}")
+    return _build_note_text(rows).strip()
+
+
+def _write_output_json(note_label: str, suffix: str, payload: Any) -> Path:
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    output_name = note_label.replace("note(", "note").replace(")", "").replace(" ", "")
+    output_path = OUTPUT_DIR / f"{output_name}_{suffix}.json"
+    output_path.write_text(
+        json.dumps(payload, ensure_ascii=True, indent=2),
+        encoding="utf-8",
+    )
+    LOGGER.info("Wrote %s output to %s", suffix, output_path)
+    return output_path
 
 LLM_MEASURE_PROMPT = """You are a legal text structure analyzer for HTSUS Section 232 derivative steel measures.
 From the following text, extract:
@@ -243,6 +367,83 @@ class ScopeRecord:
     effective_end_date: Optional[date]
 
 
+@dataclass
+class ScopeMapDraft:
+    scope: ScopeRecord
+    relation: str
+    note_label: Optional[str]
+    text_criteria: Optional[str]
+    map_start: date
+    map_end: Optional[date]
+
+
+def _scope_signature(scope: ScopeRecord) -> Tuple[str, str, Optional[str], date, Optional[date]]:
+    return (
+        scope.key,
+        scope.key_type,
+        scope.country_iso2,
+        scope.effective_start_date,
+        scope.effective_end_date,
+    )
+
+
+def _expand_scope_entry(entry: Dict[str, Any]) -> List[ScopeRecord]:
+    scopes: List[ScopeRecord] = []
+    keys = entry.get("keys")
+    key = entry.get("key")
+    raw_keys: List[str] = []
+    if isinstance(keys, list):
+        raw_keys = [str(item) for item in keys if item is not None]
+    elif keys:
+        raw_keys = _split_keys(str(keys))
+    elif key:
+        raw_keys = [str(key)]
+    if not raw_keys:
+        return scopes
+    country_iso2 = _normalize_iso(entry.get("country_iso2"))
+    source_label = entry.get("source_label")
+    start = _parse_date(entry.get("effective_start_date")) or DEFAULT_START_DATE
+    end = _parse_date(entry.get("effective_end_date"))
+    key_type_raw = entry.get("key_type")
+    for raw in raw_keys:
+        cleaned = _normalize_code(raw)
+        if not cleaned:
+            continue
+        scopes.append(
+            ScopeRecord(
+                key=cleaned,
+                key_type=_normalize_key_type(key_type_raw, cleaned),
+                country_iso2=country_iso2,
+                source_label=source_label,
+                effective_start_date=start,
+                effective_end_date=end,
+            )
+        )
+    return scopes
+
+
+def _expand_scope_entries(entries: Sequence[Dict[str, Any]]) -> List[ScopeMapDraft]:
+    expanded: List[ScopeMapDraft] = []
+    for entry in entries:
+        relation = entry.get("relation") or "include"
+        note_label = entry.get("note_label")
+        text_criteria = entry.get("text_criteria")
+        map_start = _parse_date(entry.get("effective_start_date")) or DEFAULT_START_DATE
+        map_end = _parse_date(entry.get("effective_end_date"))
+        for scope in _expand_scope_entry(entry):
+            expanded.append(
+                ScopeMapDraft(
+                    scope=scope,
+                    relation=relation,
+                    note_label=note_label,
+                    text_criteria=text_criteria,
+                    map_start=map_start,
+                    map_end=map_end,
+                )
+            )
+    return expanded
+
+
 def parse_date(value: Optional[str]) -> Optional[date]:
     """Parse various date formats used in HTS texts."""
     if not value:
@@ -263,6 +464,425 @@ def parse_date(value: Optional[str]) -> Optional[date]:
         except ValueError:
             continue
     return None
+
+
+def _normalize_code(value: str) -> str:
+    return value.strip().strip(",;")
+
+
+def _parse_date(value: Optional[Any]) -> Optional[date]:
+    if not value:
+        return None
+    if isinstance(value, date):
+        return value
+    if isinstance(value, str):
+        cleaned = value.strip()
+        if not cleaned or cleaned.lower() in {"null", "none"}:
+            return None
+        parsed = parse_date(cleaned)
+        return parsed
+    return None
+
+
+def _parse_rate(value: Optional[Any]) -> Optional[Decimal]:
+    if value is None:
+        return None
+    if isinstance(value, Decimal):
+        return value
+    if isinstance(value, (int, float)):
+        return Decimal(str(value))
+    if isinstance(value, str):
+        cleaned = value.strip().replace("%", "")
+        if not cleaned:
+            return None
+        try:
+            return Decimal(cleaned)
+        except Exception:
+            return None
+    return None
+
+
+def _derive_rate_from_text(description: str) -> Decimal:
+    desc = description or ""
+    match_add = re.search(
+        r"the duty provided in the applicable subheading\s*(?:\+|plus)\s*(\d+(?:\.\d+)?)\s*(?:percent|%)",
+        desc,
+        re.IGNORECASE,
+    )
+    if match_add:
+        return Decimal(match_add.group(1)).quantize(Decimal("0.001"))
+
+    if re.search(r"the duty provided in the applicable subheading", desc, re.IGNORECASE):
+        return Decimal("0.000")
+
+    match = re.search(r"(\d+(?:\.\d+)?)\s*percent", desc, re.IGNORECASE)
+    if match:
+        return Decimal(match.group(1)).quantize(Decimal("0.001"))
+
+    fallback_num = re.search(r"(\d+(?:\.\d+)?)", desc)
+    if fallback_num:
+        value = Decimal(fallback_num.group(1)).quantize(Decimal("0.001"))
+        if value <= Decimal("999.000"):
+            return value
+        LOGGER.warning(
+            "Derived fallback rate %s exceeds numeric precision; using default 25%%",
+            value,
+        )
+
+    return Decimal("25.000")
+
+
+def _normalize_iso(value: Optional[str]) -> Optional[str]:
+    if not value:
+        return None
+    cleaned = value.strip().upper()
+    return cleaned or None
+
+
+def _split_keys(value: str) -> List[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def _coerce_bool(value: Any) -> Optional[bool]:
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        cleaned = value.strip().lower()
+        if cleaned in {"true", "yes", "1"}:
+            return True
+        if cleaned in {"false", "no", "0"}:
+            return False
+    return None
+
+
+def _infer_key_type(code: str) -> str:
+    digits = "".join(ch for ch in code if ch.isdigit())
+    if len(digits) >= 10:
+        return "hts10"
+    if len(digits) == 8:
+        return "hts8"
+    return "heading"
+
+
+def _normalize_key_type(raw: Optional[str], code: str) -> str:
+    if not raw:
+        return _infer_key_type(code)
+    cleaned = raw.strip().lower()
+    if cleaned == "hts":
+        return _infer_key_type(code)
+    if cleaned in {"heading", "hts8", "hts10"}:
+        return cleaned
+    return _infer_key_type(code)
+
+
+def _strip_json_fence(raw: str) -> str:
+    text = raw.strip()
+    if text.startswith("```"):
+        lines = text.splitlines()
+        if len(lines) >= 3:
+            return "\n".join(lines[1:-1]).strip()
+    return text
+
+
+def _parse_json_payload(raw: str) -> Dict[str, Any]:
+    cleaned = _strip_json_fence(raw)
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError as exc:
+        LOGGER.error("Failed to decode JSON from LLM: %s", cleaned)
+        raise RuntimeError("LLM JSON decode failed") from exc
+
+
+def _coerce_measure_payload(payload: Any) -> List[Dict[str, Any]]:
+    if isinstance(payload, list):
+        return payload
+    if isinstance(payload, dict):
+        measures = payload.get("measures")
+        if isinstance(measures, list):
+            return measures
+    return []
+
+
+def _format_date_key(value: Optional[date]) -> str:
+    return value.isoformat() if value else "null"
+
+
+def _format_bool_key(value: Optional[bool]) -> str:
+    if value is None:
+        return "null"
+    return "true" if value else "false"
+
+
+def _normalize_scope_key_digits(value: str) -> str:
+    return "".join(ch for ch in value if ch.isdigit())
+
+
+def _normalize_relation(value: Optional[str]) -> str:
+    cleaned = (value or "include").strip().lower()
+    return cleaned or "include"
+
+
+def _collect_scope_counters(
+    scopes: Sequence[Dict[str, Any]]
+) -> Tuple[Counter, Dict[Tuple[str, str], List[str]]]:
+    counter: Counter = Counter()
+    raw_map: Dict[Tuple[str, str], List[str]] = defaultdict(list)
+    seen_pairs: set[Tuple[str, str]] = set()
+    for entry in scopes:
+        relation = _normalize_relation(entry.get("relation"))
+        keys = entry.get("keys")
+        key = entry.get("key")
+        if isinstance(keys, list):
+            raw_keys = [str(item) for item in keys if item is not None]
+        elif keys:
+            raw_keys = _split_keys(str(keys))
+        elif key:
+            raw_keys = [str(key)]
+        else:
+            raw_keys = []
+        for raw in raw_keys:
+            key_raw = _normalize_code(raw)
+            if not key_raw:
+                continue
+            key_norm = _normalize_scope_key_digits(key_raw)
+            if not key_norm:
+                continue
+            pair = (key_norm, relation)
+            if pair in seen_pairs:
+                continue
+            seen_pairs.add(pair)
+            counter[pair] += 1
+            raw_map[pair].append(key_raw)
+    return counter, raw_map
+
+
+def _normalize_rate_value(value: Any) -> Optional[Decimal]:
+    return _parse_rate(value)
+
+
+def _make_measure_key(
+    heading: str,
+    country_iso2: Optional[str],
+    effective_start_date: Optional[date],
+    effective_end_date: Optional[date],
+    is_potential: Optional[bool],
+) -> str:
+    return "|".join(
+        [
+            heading or "null",
+            country_iso2 or "null",
+            _format_date_key(effective_start_date),
+            _format_date_key(effective_end_date),
+            _format_bool_key(is_potential),
+        ]
+    )
+
+
+def _normalize_measure_entry(entry: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    heading = _normalize_code(str(entry.get("heading") or ""))
+    if not heading:
+        return None
+    country_iso2 = _normalize_iso(entry.get("country_iso2"))
+    effective_start_date = _parse_date(entry.get("effective_start_date"))
+    effective_end_date = _parse_date(entry.get("effective_end_date"))
+    is_potential = _coerce_bool(entry.get("is_potential"))
+    ad_valorem_rate = _normalize_rate_value(entry.get("ad_valorem_rate"))
+    scopes = entry.get("scopes") or []
+    scope_counter, scope_raw_map = _collect_scope_counters(scopes)
+    measure_key = _make_measure_key(
+        heading,
+        country_iso2,
+        effective_start_date,
+        effective_end_date,
+        is_potential,
+    )
+    return {
+        "measure_key": measure_key,
+        "heading": heading,
+        "country_iso2": country_iso2,
+        "ad_valorem_rate": ad_valorem_rate,
+        "is_potential": is_potential,
+        "effective_start_date": effective_start_date,
+        "effective_end_date": effective_end_date,
+        "scope_counter": scope_counter,
+        "scope_raw_map": scope_raw_map,
+    }
+
+
+def _index_measures(entries: Sequence[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    index: Dict[str, Dict[str, Any]] = {}
+    for entry in entries:
+        normalized = _normalize_measure_entry(entry)
+        if not normalized:
+            continue
+        key = normalized["measure_key"]
+        if key in index:
+            LOGGER.warning("Duplicate measure key %s encountered; keeping first", key)
+            continue
+        index[key] = normalized
+    return index
+
+
+def _serialize_value(value: Any) -> Any:
+    if isinstance(value, Decimal):
+        return str(value)
+    if isinstance(value, date):
+        return value.isoformat()
+    return value
+
+
+def _values_equal(left: Any, right: Any) -> bool:
+    return left == right
+
+
+def _build_scope_entries(
+    pair: Tuple[str, str], raw_list: List[str], count: int
+) -> List[Dict[str, Any]]:
+    entries: List[Dict[str, Any]] = []
+    if raw_list:
+        for raw in raw_list[:count]:
+            entries.append({"key_raw": raw, "key_norm": pair[0], "relation": pair[1]})
+        if len(raw_list) < count:
+            for _ in range(count - len(raw_list)):
+                entries.append({"key_raw": raw_list[0], "key_norm": pair[0], "relation": pair[1]})
+    else:
+        for _ in range(count):
+            entries.append({"key_raw": pair[0], "key_norm": pair[0], "relation": pair[1]})
+    return entries
+
+
+def _diff_scope_counters(
+    left_counter: Counter,
+    right_counter: Counter,
+    left_raw_map: Dict[Tuple[str, str], List[str]],
+    right_raw_map: Dict[Tuple[str, str], List[str]],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    only_in_left: List[Dict[str, Any]] = []
+    only_in_right: List[Dict[str, Any]] = []
+    all_pairs = set(left_counter) | set(right_counter)
+    for pair in sorted(all_pairs):
+        left_count = left_counter.get(pair, 0)
+        right_count = right_counter.get(pair, 0)
+        if left_count > right_count:
+            only_in_left.extend(
+                _build_scope_entries(pair, left_raw_map.get(pair, []), left_count - right_count)
+            )
+        elif right_count > left_count:
+            only_in_right.extend(
+                _build_scope_entries(pair, right_raw_map.get(pair, []), right_count - left_count)
+            )
+    only_in_left.sort(key=lambda item: (item["key_norm"], item["relation"], item["key_raw"]))
+    only_in_right.sort(key=lambda item: (item["key_norm"], item["relation"], item["key_raw"]))
+    return only_in_left, only_in_right
+
+
+def _compare_measure_maps(
+    left: Dict[str, Dict[str, Any]],
+    right: Dict[str, Dict[str, Any]],
+    left_label: str,
+    right_label: str,
+) -> Dict[str, Any]:
+    missing_in_left = sorted(set(right) - set(left))
+    missing_in_right = sorted(set(left) - set(right))
+    field_diffs: Dict[str, Any] = {}
+    scope_diffs: Dict[str, Any] = {}
+    matched_count = 0
+
+    for key in sorted(set(left) & set(right)):
+        left_entry = left[key]
+        right_entry = right[key]
+        diffs: Dict[str, Any] = {}
+        for field in [
+            "country_iso2",
+            "ad_valorem_rate",
+            "is_potential",
+            "effective_start_date",
+            "effective_end_date",
+        ]:
+            left_val = left_entry[field]
+            right_val = right_entry[field]
+            if not _values_equal(left_val, right_val):
+                diffs[field] = {
+                    left_label: _serialize_value(left_val),
+                    right_label: _serialize_value(right_val),
+                }
+
+        only_in_left, only_in_right = _diff_scope_counters(
+            left_entry["scope_counter"],
+            right_entry["scope_counter"],
+            left_entry["scope_raw_map"],
+            right_entry["scope_raw_map"],
+        )
+        if only_in_left or only_in_right:
+            scope_diffs[key] = {
+                f"only_in_{left_label}": only_in_left,
+                f"only_in_{right_label}": only_in_right,
+            }
+
+        if diffs:
+            field_diffs[key] = diffs
+        if not diffs and not (only_in_left or only_in_right):
+            matched_count += 1
+
+    summary = {
+        f"{left_label}_count": len(left),
+        f"{right_label}_count": len(right),
+        "matched_count": matched_count,
+    }
+    consistent = not missing_in_left and not missing_in_right and not field_diffs and not scope_diffs
+    return {
+        "consistent": consistent,
+        "summary": summary,
+        "missing_in_left": missing_in_left,
+        "missing_in_right": missing_in_right,
+        "field_diffs": field_diffs,
+        "scope_diffs": scope_diffs,
+    }
+
+
+def _compare_llm_measures(
+    openai_measures: Sequence[Dict[str, Any]],
+    grok_measures: Sequence[Dict[str, Any]],
+) -> Dict[str, Any]:
+    openai_map = _index_measures(openai_measures)
+    grok_map = _index_measures(grok_measures)
+    base = _compare_measure_maps(openai_map, grok_map, "openai", "grok")
+    return {
+        "consistent": base["consistent"],
+        "summary": base["summary"],
+        "missing_in_openai": base["missing_in_left"],
+        "missing_in_grok": base["missing_in_right"],
+        "field_diffs": base["field_diffs"],
+        "scope_diffs": base["scope_diffs"],
+    }
+
+
+def _compare_llm_db_measures(
+    llm_measures: Sequence[Dict[str, Any]],
+    db_measures: Sequence[Dict[str, Any]],
+) -> Dict[str, Any]:
+    llm_map = _index_measures(llm_measures)
+    db_map = _index_measures(db_measures)
+    base = _compare_measure_maps(llm_map, db_map, "llm", "db")
+    return {
+        "consistent": base["consistent"],
+        "summary": base["summary"],
+        "missing_in_db": base["missing_in_right"],
+        "extra_in_db": base["missing_in_left"],
+        "field_diffs": base["field_diffs"],
+        "scope_diffs": base["scope_diffs"],
+    }
+
+
+def _filter_callable_kwargs(func: Any, candidate_kwargs: Dict[str, Any]) -> Dict[str, Any]:
+    try:
+        signature = inspect.signature(func)
+    except (TypeError, ValueError):
+        return {}
+    allowed = set(signature.parameters.keys())
+    return {key: value for key, value in candidate_kwargs.items() if key in allowed}
 
 
 def normalize_note_label(raw_label: str) -> str:
@@ -356,6 +976,79 @@ class Section232Database:
         with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(query, (heading,))
             return cur.fetchone()
+
+    def fetch_hts_codes_batch(self, headings: Sequence[str]) -> Dict[str, Dict[str, Any]]:
+        if not headings:
+            return {}
+        query = """
+            SELECT hts_number, description, status, additional_duties, general_rate_of_duty
+            FROM hts_codes
+            WHERE hts_number = ANY(%s)
+              AND COALESCE(status, '') != 'expired'
+            ORDER BY hts_number
+        """
+        with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(query, (list(headings),))
+            return {row["hts_number"]: dict(row) for row in cur.fetchall()}
+
+    def fetch_note_rows(self, label: str) -> List[Dict[str, Any]]:
+        notes_utils = _load_notes_utils()
+        rows = notes_utils.get_note(self._conn, label, "SUBCHAPTER III")
+        return rows or []
+
+    def fetch_measures_with_scopes(self, headings: Sequence[str]) -> List[Dict[str, Any]]:
+        if not headings:
+            return []
+        query = (
+            "SELECT id, heading, country_iso2, ad_valorem_rate, "
+            "effective_start_date, effective_end_date, is_potential "
+            "FROM s232_measures WHERE heading = ANY(%s)"
+        )
+        with self._conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(query, (list(headings),))
+            rows = cur.fetchall() or []
+
+        if not rows:
+            return []
+
+        measures: List[Dict[str, Any]] = []
+        measure_map: Dict[int, Dict[str, Any]] = {}
+        measure_ids: List[int] = []
+        for row in rows:
+            measure_id = int(row["id"])
+            measure_ids.append(measure_id)
+            measure_entry = {
+                "heading": row["heading"],
+                "country_iso2": row["country_iso2"],
+                "ad_valorem_rate": row["ad_valorem_rate"],
+                "effective_start_date": row["effective_start_date"],
+                "effective_end_date": row["effective_end_date"],
+                "is_potential": row["is_potential"],
+                "scopes": [],
+            }
+            measures.append(measure_entry)
+            measure_map[measure_id] = measure_entry
+
+        scope_query = (
+            "SELECT m.measure_id, s.key, m.relation "
+            "FROM s232_scope_measure_map AS m "
+            "JOIN s232_scope AS s ON s.id = m.scope_id "
+            "WHERE m.measure_id = ANY(%s)"
+        )
+        with self._conn.cursor() as cur:
+            cur.execute(scope_query, (measure_ids,))
+            for measure_id, key, relation in cur.fetchall():
+                target = measure_map.get(int(measure_id))
+                if not target:
+                    continue
+                target["scopes"].append(
+                    {
+                        "key": key,
+                        "relation": relation,
+                    }
+                )
+
+        return measures
 
     def ensure_measure(
         self,
@@ -948,39 +1641,90 @@ class Section232LLM:
         base_url: Optional[str] = None,
         timeout: int = 36000,
     ):
+        if OpenAI is None:  # pragma: no cover
+            raise RuntimeError("openai package required") from _OPENAI_IMPORT_ERROR
         self.model = model or os.getenv("OPENAI_MODEL", "gpt-5")
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.base_url = base_url or os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
         self.timeout = timeout
-
-    def _post(self, message: str) -> str:
         if not self.api_key:
             raise RuntimeError("OPENAI_API_KEY (or explicit api_key) is required for LLM calls")
+        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=self.timeout)
 
-        url = self.base_url.rstrip("/") + "/chat/completions"
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json",
-        }
-        payload = {
-            "model": self.model,
-            # "temperature": 0,
-            "response_format": {"type": "json_object"},
-            "messages": [
-                {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
-                {"role": "user", "content": message},
-            ],
-        }
-        response = requests.post(url, headers=headers, json=payload, timeout=self.timeout)
+    def _post(self, message: str) -> str:
         try:
-            response.raise_for_status()
-        except requests.HTTPError as exc:  # pragma: no cover - network error handling
-            raise RuntimeError(f"LLM HTTP error: {exc} → {response.text}") from exc
-        data = response.json()
+            response = self.client.chat.completions.create(
+                model=self.model,
+                temperature=1,
+                response_format={"type": "json_object"},
+                messages=[
+                    {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
+                    {"role": "user", "content": message},
+                ],
+                timeout=7200.0,
+            )
+        except Exception as exc:  # pragma: no cover - network error handling
+            raise RuntimeError(f"LLM SDK error: {exc}") from exc
         try:
-            return data["choices"][0]["message"]["content"]
-        except (KeyError, IndexError) as exc:  # pragma: no cover - defensive
-            raise RuntimeError(f"Unexpected LLM response structure: {data}") from exc
+            return response.choices[0].message.content
+        except (AttributeError, IndexError) as exc:  # pragma: no cover - defensive
+            raise RuntimeError(f"Unexpected LLM response structure: {response}") from exc
+
+    def extract(self, note_text: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        message = LLM_PROMPT.format(
+            note_text=note_text.strip(),
+            context_json=json.dumps(context, ensure_ascii=True),
+        )
+        raw = self._post(message)
+        return _parse_json_payload(raw)
+
+
+class Section232GrokLLM:
+    """Grok LLM client for note(16) extraction."""
+
+    def __init__(
+        self,
+        model: Optional[str] = None,
+        api_key: Optional[str] = None,
+        timeout: int = 36000,
+    ) -> None:
+        if XAIClient is None:  # pragma: no cover
+            raise RuntimeError("xai-sdk package required") from _XAI_SDK_IMPORT_ERROR
+        self.model = model or os.getenv("GROK_MODEL") or os.getenv("XAI_MODEL") or "grok-4"
+        self.api_key = api_key or os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY")
+        self.timeout = timeout
+        if not self.api_key:
+            raise RuntimeError("GROK_API_KEY or XAI_API_KEY is required for Grok LLM calls")
+        self.client = XAIClient(api_key=self.api_key, timeout=self.timeout)
+
+    def extract(self, note_text: str, context: Dict[str, Any]) -> Dict[str, Any]:
+        message = LLM_PROMPT.format(
+            note_text=note_text.strip(),
+            context_json=json.dumps(context, ensure_ascii=True),
+        )
+        LOGGER.info("Grok request for %s", NOTE_LABEL)
+        chat_kwargs = _filter_callable_kwargs(
+            self.client.chat.create,
+            {
+                "temperature": 0,
+            },
+        )
+        chat_kwargs["model"] = self.model
+        chat = self.client.chat.create(**chat_kwargs)
+        chat.append(xai_system("You are a precise legal text parser. Respond with JSON only."))
+        chat.append(xai_user(message))
+        sample_kwargs = _filter_callable_kwargs(
+            chat.sample,
+            {
+                "temperature": 0,
+            },
+        )
+        response = chat.sample(**sample_kwargs)
+        content = getattr(response, "content", None) or getattr(response, "text", None)
+        if not content:
+            raise RuntimeError("Grok response missing content")
+        LOGGER.info("Grok response length: %d chars", len(content))
+        return _parse_json_payload(content)
 
     def extract_measure(self, description: str) -> MeasureAnalysis:
         message = LLM_MEASURE_PROMPT.format(description=description.strip())
@@ -1750,6 +2494,190 @@ class Section232Agent:
         return sorted(matches)
 
 
+class Section232Note16Processor:
+    def __init__(
+        self,
+        db: Section232Database,
+        openai_llm: Section232LLM,
+        grok_llm: Section232GrokLLM,
+        *,
+        persist: bool = False,
+    ) -> None:
+        self.db = db
+        self.openai_llm = openai_llm
+        self.grok_llm = grok_llm
+        self.persist = persist
+
+    def process(self, headings: Sequence[str]) -> None:
+        if not headings:
+            LOGGER.warning("No headings provided")
+            return
+
+        hts_data = self.db.fetch_hts_codes_batch(headings)
+        if not hts_data:
+            LOGGER.warning("No HTS data found for headings")
+            return
+
+        try:
+            note_rows = self.db.fetch_note_rows(NOTE_LABEL)
+            if not note_rows:
+                LOGGER.warning("No note rows found for %s", NOTE_LABEL)
+                return
+            note_text = _build_note_text(note_rows).strip()
+        except Exception as exc:
+            LOGGER.warning("Failed to load %s: %s", NOTE_LABEL, exc)
+            return
+
+        context = self._build_context(headings, hts_data)
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            openai_future = executor.submit(self.openai_llm.extract, note_text, context)
+            grok_future = executor.submit(self.grok_llm.extract, note_text, context)
+            openai_result = openai_future.result()
+            try:
+                grok_result = grok_future.result()
+            except Exception:
+                LOGGER.exception("Grok request failed for %s; using OpenAI result", NOTE_LABEL)
+                grok_result = openai_result
+
+        openai_payload = self._normalize_payload(openai_result, headings, hts_data)
+        grok_payload = self._normalize_payload(grok_result, headings, hts_data)
+
+        _write_output_json("note16", "openai", openai_payload)
+        _write_output_json("note16", "grok", grok_payload)
+
+        llm_compare = _compare_llm_measures(
+            openai_payload["measures"],
+            grok_payload["measures"],
+        )
+        _write_output_json("note16", "llm_compare", llm_compare)
+        if not llm_compare.get("consistent"):
+            LOGGER.warning("LLM results differ for %s; skipping DB compare and persistence", NOTE_LABEL)
+            return
+
+        db_measures = self.db.fetch_measures_with_scopes(headings)
+        db_compare = _compare_llm_db_measures(openai_payload["measures"], db_measures)
+        _write_output_json("note16", "db_compare", db_compare)
+
+        if self.persist:
+            self._persist(openai_payload["measures"])
+            self.db.commit()
+
+    def _build_context(
+        self, headings: Sequence[str], hts_data: Dict[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        context_codes = []
+        for code in headings:
+            record = hts_data.get(code, {})
+            general_rate = (record.get("general_rate_of_duty") or "").strip()
+            context_codes.append(
+                {
+                    "code": code,
+                    "description": record.get("description", "") or "",
+                    "general_rate_of_duty": general_rate,
+                    "ad_valorem_rate": str(_derive_rate_from_text(general_rate)),
+                }
+            )
+        return {
+            "note_label": NOTE_LABEL,
+            "chapter99_headings": list(headings),
+            "hts_codes": context_codes,
+        }
+
+    def _normalize_payload(
+        self,
+        payload: Any,
+        allowed_headings: Sequence[str],
+        hts_data: Dict[str, Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        allowed = {_normalize_code(str(item)) for item in allowed_headings if item}
+        measures = _coerce_measure_payload(payload)
+        normalized: List[Dict[str, Any]] = []
+        rate_map: Dict[str, str] = {}
+        for code, record in hts_data.items():
+            general_rate = (record.get("general_rate_of_duty") or "").strip()
+            rate_map[_normalize_code(code)] = str(_derive_rate_from_text(general_rate))
+        for measure in measures:
+            heading = _normalize_code(str(measure.get("heading") or ""))
+            if not heading or heading not in allowed:
+                continue
+            measure["heading"] = heading
+            if measure.get("value_basis") is None:
+                measure["value_basis"] = "customs_value"
+            if measure.get("is_potential") is None:
+                measure["is_potential"] = False
+            if measure.get("ad_valorem_rate") is None and heading in rate_map:
+                measure["ad_valorem_rate"] = rate_map[heading]
+            scopes = measure.get("scopes")
+            if not isinstance(scopes, list):
+                measure["scopes"] = []
+            normalized.append(measure)
+        return {"measures": normalized}
+
+    def _persist(self, measure_entries: Sequence[Dict[str, Any]]) -> None:
+        if not measure_entries:
+            return
+        measure_ids: List[int] = []
+        scopes_by_measure: List[List[ScopeMapDraft]] = []
+        for entry in measure_entries:
+            heading = _normalize_code(entry.get("heading", ""))
+            if not heading:
+                continue
+            start = _parse_date(entry.get("effective_start_date")) or DEFAULT_START_DATE
+            end = _parse_date(entry.get("effective_end_date"))
+            notes = entry.get("notes") if isinstance(entry.get("notes"), dict) else None
+            melt_pour_origin = _normalize_iso(entry.get("melt_pour_origin_iso2"))
+            origin_exclude = entry.get("origin_exclude_iso2")
+            if not isinstance(origin_exclude, list):
+                origin_exclude = None
+            measure_id = self.db.ensure_measure(
+                heading=heading,
+                country_iso2=_normalize_iso(entry.get("country_iso2")),
+                ad_valorem_rate=_parse_rate(entry.get("ad_valorem_rate")) or Decimal("0"),
+                value_basis=entry.get("value_basis") or "customs_value",
+                melt_pour_origin_iso2=melt_pour_origin,
+                origin_exclude_iso2=origin_exclude,
+                notes=notes,
+                start_date=start,
+                end_date=end,
+                is_potential=_coerce_bool(entry.get("is_potential")) or False,
+            )
+            if not measure_id:
+                continue
+            measure_ids.append(measure_id)
+            scopes_by_measure.append(_expand_scope_entries(entry.get("scopes") or []))
+
+        if not measure_ids:
+            return
+
+        all_scopes: List[ScopeRecord] = []
+        for scope_entries in scopes_by_measure:
+            for entry in scope_entries:
+                all_scopes.append(entry.scope)
+        scope_id_map = self.db.ensure_scopes_bulk(all_scopes)
+
+        map_entries: List[Dict[str, Any]] = []
+        for measure_id, scope_entries in zip(measure_ids, scopes_by_measure):
+            for entry in scope_entries:
+                signature = _scope_signature(entry.scope)
+                scope_id = scope_id_map.get(signature)
+                if not scope_id:
+                    continue
+                map_entries.append(
+                    {
+                        "scope_id": scope_id,
+                        "measure_id": measure_id,
+                        "relation": entry.relation,
+                        "note_label": entry.note_label,
+                        "text_criteria": entry.text_criteria,
+                        "start_date": entry.map_start,
+                        "end_date": entry.map_end,
+                    }
+                )
+        if map_entries:
+            self.db.ensure_scope_measure_map_bulk(map_entries)
+
+
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="HTS Section 232 ingestion agent.")
     parser.add_argument(
@@ -1768,6 +2696,36 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         default="INFO",
         help="Logging level (default: INFO).",
     )
+    parser.add_argument(
+        "--model",
+        default=os.getenv("OPENAI_MODEL", "gpt-5"),
+        help="OpenAI model to use",
+    )
+    parser.add_argument(
+        "--base-url",
+        default=os.getenv("OPENAI_API_BASE"),
+        help="OpenAI API base URL",
+    )
+    parser.add_argument(
+        "--api-key",
+        default=os.getenv("OPENAI_API_KEY"),
+        help="OpenAI API key",
+    )
+    parser.add_argument(
+        "--grok-model",
+        default=os.getenv("GROK_MODEL") or os.getenv("XAI_MODEL"),
+        help="Grok model to use",
+    )
+    parser.add_argument(
+        "--grok-api-key",
+        default=os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY"),
+        help="Grok API key",
+    )
+    parser.add_argument(
+        "--persist",
+        action="store_true",
+        help="Persist measures/scopes after successful LLM comparison",
+    )
     return parser.parse_args(argv)
 
 
@@ -1779,12 +2737,24 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         raise SystemExit("Database DSN is required (set DATABASE_DSN or pass --dsn).")
 
     db = Section232Database(args.dsn)
-    llm = Section232LLM()
-    agent = Section232Agent(db=db, llm=llm)
+    openai_llm = Section232LLM(
+        model=args.model,
+        api_key=args.api_key,
+        base_url=args.base_url,
+    )
+    grok_llm = Section232GrokLLM(
+        model=args.grok_model,
+        api_key=args.grok_api_key,
+    )
+    processor = Section232Note16Processor(
+        db=db,
+        openai_llm=openai_llm,
+        grok_llm=grok_llm,
+        persist=args.persist,
+    )
 
     try:
-        agent.run(args.headings)
-        db.commit()
+        processor.process(args.headings)
     finally:
         db.close()
 

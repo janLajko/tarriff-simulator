@@ -1,0 +1,81 @@
+{
+  "consistent": false,
+  "summary": {
+    "openai_count": 10,
+    "grok_count": 10,
+    "matched_count": 5
+  },
+  "missing_in_openai": [
+    "9903.74.05|null|null|null|true"
+  ],
+  "missing_in_grok": [
+    "9903.74.05|null|null|null|false"
+  ],
+  "field_diffs": {},
+  "scope_diffs": {
+    "9903.74.08|null|null|null|false": {
+      "only_in_openai": [{
+        "key_raw": "8706.00.51",
+        "key_norm": "87060051",
+        "relation": "include"
+      }],
+      "only_in_grok": [
+        {
+          "key_raw": "8706.00.50",
+          "key_norm": "87060050",
+          "relation": "include"
+        },
+        {
+          "key_raw": "9029.20.4080",
+          "key_norm": "9029204080",
+          "relation": "include"
+        }
+      ]
+    },
+    "9903.74.09|null|null|null|true": {
+      "only_in_openai": [],
+      "only_in_grok": [
+        {
+          "key_raw": "8706.00.50",
+          "key_norm": "87060050",
+          "relation": "exclude"
+        },
+        {
+          "key_raw": "9029.20.4080",
+          "key_norm": "9029204080",
+          "relation": "exclude"
+        }
+      ]
+    },
+    "9903.74.10|null|null|null|true": {
+      "only_in_openai": [],
+      "only_in_grok": [
+        {
+          "key_raw": "8706.00.50",
+          "key_norm": "87060050",
+          "relation": "include"
+        },
+        {
+          "key_raw": "9029.20.4080",
+          "key_norm": "9029204080",
+          "relation": "include"
+        }
+      ]
+    },
+    "9903.74.11|null|null|null|true": {
+      "only_in_openai": [],
+      "only_in_grok": [
+        {
+          "key_raw": "8706.00.50",
+          "key_norm": "87060050",
+          "relation": "include"
+        },
+        {
+          "key_raw": "9029.20.4080",
+          "key_norm": "9029204080",
+          "relation": "include"
+        }
+      ]
+    }
+  }
+}

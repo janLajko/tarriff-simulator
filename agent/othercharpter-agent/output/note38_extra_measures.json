@@ -9,36 +9,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Semi-finished copper and copper-intensive derivative products additional duties (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Semi-finished copper products and copper-intensive derivative products",
+        "not_subject_note38": "Entries under specified medium-/heavy-duty vehicle and parts headings are not subject to this heading per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(1)",
-          "note_label": "note(38)",
-          "text_criteria": "Entries of medium- and heavy-duty vehicles are not subject to 9903.78.01.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(1)",
-          "note_label": "note(38)",
-          "text_criteria": "Entries of medium- and heavy-duty vehicle parts are not subject to 9903.78.01.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.78.01 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -51,36 +35,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on products of aluminum (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on products of aluminum",
+        "not_subject_note38": "Entries under specified medium-/heavy-duty vehicle and parts headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(2)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s additional duties.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(2)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s additional duties.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.85.02 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -93,36 +61,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on products of aluminum (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on products of aluminum",
+        "not_subject_note38": "Entries under specified medium-/heavy-duty vehicle and parts headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(2)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s additional duties.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(2)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s additional duties.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.85.12 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -135,36 +87,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative aluminum products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative aluminum products",
+        "not_subject_note38": "Entries under specified medium-/heavy-duty vehicle and parts headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.85.04 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -177,36 +113,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative aluminum products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative aluminum products",
+        "not_subject_note38": "Entries under specified medium-/heavy-duty vehicle and parts headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.85.07 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -219,36 +139,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative aluminum products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative aluminum products",
+        "not_subject_note38": "Entries under specified medium-/heavy-duty vehicle and parts headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.85.08 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -261,36 +165,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative aluminum products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative aluminum products",
+        "not_subject_note38": "Entries under specified medium-/heavy-duty vehicle and parts headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.85.13 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -303,36 +191,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative aluminum products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative aluminum products",
+        "not_subject_note38": "Entries under specified medium-/heavy-duty vehicle and parts headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.85.14 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -345,36 +217,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative aluminum products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative aluminum products",
+        "not_subject_note38": "Entries under specified medium-/heavy-duty vehicle and parts headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(3)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s additional duties on derivative aluminum products.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.85.15 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -387,23 +243,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on iron or steel products (referenced as exclusions for vehicles).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02"
-        ]
+        "description": "Additional duties on iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(4)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s iron/steel additional duties.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.87 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -416,23 +269,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on iron or steel products (referenced as exclusions for vehicles).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02"
-        ]
+        "description": "Additional duties on iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(4)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s iron/steel additional duties.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.88 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -445,23 +295,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on iron or steel products (referenced as exclusions for vehicles).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02"
-        ]
+        "description": "Additional duties on iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(4)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s iron/steel additional duties.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.94 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -474,23 +321,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on iron or steel products (referenced as exclusions for vehicles).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02"
-        ]
+        "description": "Additional duties on iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(4)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to this heading\u2019s iron/steel additional duties.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.95 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -503,36 +347,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative iron or steel products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to derivative iron/steel duties under this heading.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to derivative iron/steel duties under this heading.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.89 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -545,36 +373,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative iron or steel products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to derivative iron/steel duties under this heading.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to derivative iron/steel duties under this heading.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.90 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -587,36 +399,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative iron or steel products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to derivative iron/steel duties under this heading.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to derivative iron/steel duties under this heading.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.91 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -629,36 +425,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative iron or steel products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to derivative iron/steel duties under this heading.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to derivative iron/steel duties under this heading.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.93 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -671,36 +451,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative iron or steel products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to derivative iron/steel duties under this heading.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to derivative iron/steel duties under this heading.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.96 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -713,36 +477,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative iron or steel products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to derivative iron/steel duties under this heading.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to derivative iron/steel duties under this heading.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.97 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -755,36 +503,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative iron or steel products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to derivative iron/steel duties under this heading.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to derivative iron/steel duties under this heading.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.98 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -797,36 +529,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on derivative iron or steel products (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on derivative iron or steel products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(a)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to derivative iron/steel duties under this heading.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(5)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to derivative iron/steel duties under this heading.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.81.99 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -834,41 +550,25 @@
     },
     {
       "heading": "9903.01.10",
-      "country_iso2": null,
+      "country_iso2": "CA",
       "ad_valorem_rate": null,
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on articles the product of Canada (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on articles the product of Canada",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": "CA",
-          "source_label": "U.S. note 38(a)(6)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to 9903.01.10 (Canada additional duties).",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": "CA",
-          "source_label": "U.S. note 38(h)(6)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to 9903.01.10 (Canada additional duties).",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.01.10 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -876,41 +576,25 @@
     },
     {
       "heading": "9903.01.01",
-      "country_iso2": null,
+      "country_iso2": "MX",
       "ad_valorem_rate": null,
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on articles the product of Mexico (referenced as exclusions for vehicles and parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.01",
-          "9903.74.02",
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on articles the product of Mexico",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicles and parts under specified headings are not subject per note 38."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "keys": "9903.74.01,9903.74.02",
+          "keys": "9903.74.01,9903.74.02,9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": "MX",
-          "source_label": "U.S. note 38(a)(7)",
-          "note_label": "note(38)",
-          "text_criteria": "Vehicle entries are not subject to 9903.01.01 (Mexico additional duties).",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "keys": "9903.74.08,9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": "MX",
-          "source_label": "U.S. note 38(h)(7)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to 9903.01.01 (Mexico additional duties).",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(a),(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.01.01 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -923,34 +607,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on wood products (referenced as exclusions for medium- and heavy-duty vehicle parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on certain wood products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicle parts under specified headings are not subject per note 38(h)."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "key": "9903.74.08",
+          "keys": "9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(h)(8)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s wood products duties.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "key": "9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(8)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s wood products duties.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.76.01 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -963,34 +633,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on wood products (referenced as exclusions for medium- and heavy-duty vehicle parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on certain wood products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicle parts under specified headings are not subject per note 38(h)."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "key": "9903.74.08",
+          "keys": "9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(h)(8)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s wood products duties.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "key": "9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(8)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s wood products duties.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.76.02 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
@@ -1003,34 +659,20 @@
       "value_basis": "customs_value",
       "is_potential": false,
       "notes": {
-        "description": "Additional duties on wood products (referenced as exclusions for medium- and heavy-duty vehicle parts).",
-        "not_subject_for_goods_under_headings": [
-          "9903.74.08",
-          "9903.74.09"
-        ]
+        "description": "Additional duties on certain wood products",
+        "not_subject_note38": "Entries of medium-/heavy-duty vehicle parts under specified headings are not subject per note 38(h)."
       },
       "effective_start_date": null,
       "effective_end_date": null,
       "scopes": [
         {
-          "key": "9903.74.08",
+          "keys": "9903.74.08,9903.74.09",
           "key_type": "heading",
           "relation": "exclude",
           "country_iso2": null,
-          "source_label": "U.S. note 38(h)(8)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s wood products duties.",
-          "effective_start_date": null,
-          "effective_end_date": null
-        },
-        {
-          "key": "9903.74.09",
-          "key_type": "heading",
-          "relation": "exclude",
-          "country_iso2": null,
-          "source_label": "U.S. note 38(h)(8)",
-          "note_label": "note(38)",
-          "text_criteria": "Parts entries are not subject to this heading\u2019s wood products duties.",
+          "source_label": "HTSUS note",
+          "note_label": "note(38)(h)",
+          "text_criteria": "Entries under these headings shall not be subject to 9903.76.03 per note 38.",
           "effective_start_date": null,
           "effective_end_date": null
         }
