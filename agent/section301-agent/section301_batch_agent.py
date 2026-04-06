@@ -890,7 +890,7 @@ class Section301BatchLLM:
     ):
         if OpenAI is None:  # pragma: no cover
             raise RuntimeError("openai package required") from _OPENAI_IMPORT_ERROR
-        self.model = model or os.getenv("OPENAI_MODEL", "gpt-5")
+        self.model = model or os.getenv("OPENAI_MODEL", "gpt-5.4")
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.base_url = base_url or os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
         self.timeout = timeout
@@ -907,13 +907,14 @@ class Section301BatchLLM:
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
-                temperature=1,
+                temperature=0,
                 response_format={"type": "json_object"},
                 messages=[
                     {"role": "system", "content": "You are a precise legal text parser. Respond with JSON only."},
                     {"role": "user", "content": message},
                 ],
-                timeout=7200.0,
+                timeout=7200.0
+                # max_completion_tokens=128000
             )
         except Exception as exc:
             raise RuntimeError(f"LLM SDK error: {exc}") from exc
@@ -1862,10 +1863,10 @@ class Section301Note20Processor:
 
         LOGGER.info("Starting batch processing of %d headings", len(headings))
 
-        if len(headings) > 2:
-            LOGGER.warning("Limiting processing to first 2 headings (out of %d) for testing", len(headings))
-            headings = headings[:2]
-            LOGGER.info("Processing only: %s", headings)
+        # if len(headings) > 2:
+        #     LOGGER.warning("Limiting processing to first 2 headings (out of %d) for testing", len(headings))
+        #     headings = headings[:2]
+        #     LOGGER.info("Processing only: %s", headings)
 
         hts_data = self.db.fetch_hts_codes_batch(headings)
         LOGGER.info("Fetched %d HTS records", len(hts_data))
@@ -1887,10 +1888,10 @@ class Section301Note20Processor:
 
         with ThreadPoolExecutor(max_workers=2) as executor:
             openai_future = executor.submit(self.openai_llm.extract, note_text, context)
-            grok_future = executor.submit(self.grok_llm.extract, note_text, context)
+            # grok_future = executor.submit(self.grok_llm.extract, note_text, context)
             openai_result = openai_future.result()
             try:
-                grok_result = grok_future.result()
+                grok_result = openai_result
             except Exception:
                 LOGGER.exception("Grok request failed for %s; using OpenAI result", NOTE_LABEL)
                 grok_result = openai_result
@@ -2050,7 +2051,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--model",
-        default=os.getenv("OPENAI_MODEL", "gpt-5"),
+        default=os.getenv("OPENAI_MODEL", "gpt-5.4"),
         help="OpenAI model to use",
     )
     parser.add_argument(
